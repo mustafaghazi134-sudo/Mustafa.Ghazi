@@ -65,6 +65,27 @@ Each paid campaign gets a brief in `campaigns/<name>.json` (copy `example-paid-c
 It can override duration limits, number of candidates and framing, and holds the payout terms and
 rules so they are next to the clips. Run with `--campaign <name>`.
 
+### Campaigns with hard compliance rules
+
+`campaigns/ben-affleck-street-we-grew-up-on.json` is the template for a paid campaign with strict rules.
+What the pipeline enforces for a campaign like it:
+
+- `source_policy: library_only` - URL inputs are refused; put the official library files in
+  `source/library/<campaign>/` and pass the file path.
+- `auto_reject_topics` - every candidate window is screened by `tools/compliance.py`. Hard hits
+  (politics, religion, drugs, adult, violence, hate) are rejected before ranking and listed at the end
+  of the report with the exact matched words. Softer wording and exaggerated phrasing are flagged as
+  concerns on PASS candidates.
+- `priorities` / `focus_keywords` - reweight the discovery categories and boost campaign-relevant terms.
+- Each candidate gets viral potential /100, Tier-1 appeal /10, standalone context /10, compliance PASS/FAIL.
+- `require_approval_before_render: true` - the run stops at the report. Render with
+  `--approve 1,3,5` or `--approve all`.
+- `description_template` - a ready-to-paste `<clip_id>.description.txt` is written next to every export
+  with the mandatory wording and #ad.
+
+Not automated: speaker identification (which voice is the focus speaker), thumbnails, and the
+"original edit" judgement. Those are yours on review.
+
 ## 4. Architecture
 
 ```

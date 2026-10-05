@@ -38,11 +38,23 @@ LEXICON = {
     "story": [r"\b(?:when i was|one time|i remember|years ago|back when|so i|and then|the first time|at the time|i was \d+|growing up|my (?:dad|mom|father|mother|wife|husband|boss|friend)|true story|long story short)\b"],
     "curiosity": [r"\b(?:the thing nobody|what most people|here's why|here is why|the reason|the real reason|what happened next|you won't believe|wait until|the one thing|the biggest mistake|the difference between|nobody talks about)\b",
                   r"^(?:why|how|what if|what's the|what is the|do you know|have you ever|imagine)\b"],
+    "career": [r"\b(?:my first (?:job|movie|film|role|audition|gig)|got the part|got cast|cast me|fired|hired|audition(?:ed|s)?|callback|agent|manager|studio|producer|director|the set|on set|premiere|box office|flop(?:ped)?|bomb(?:ed)?|hit|franchise|sequel|script|screenplay|rewrite|table read|wrap(?:ped)?|shooting|filming|career)\b"],
+    "lesson": [r"\b(?:i learned|taught me|the lesson|what i realized|i realized|looking back|in hindsight|if i could go back|i wish i (?:had|knew)|advice i(?:'d| would) give|the thing i(?:'d| would) tell)\b"],
+    "failure": [r"\b(?:failed|failure|biggest mistake|screwed up|messed up|blew it|lost everything|rejected|rejection|turned down|didn't get|bombed|flopped|embarrass(?:ed|ing)|humiliat(?:ed|ing)|worst (?:moment|day|decision))\b"],
+    "success": [r"\b(?:won|winning|award|oscar|golden globe|nominated|number one|opened at|broke (?:the )?record|sold out|biggest (?:hit|movie|success)|paid off|changed my life|the moment (?:it|everything) (?:clicked|changed)|made it)\b"],
+    "quote": [r"\b(?:he (?:said|told me|goes)|she (?:said|told me|goes)|they (?:said|told me)|i said|i told (?:him|her|them)|and i(?:'m| am) like|he(?:'s| is) like|she(?:'s| is) like|looked at me and said)\b"],
+    "opinion": [r"\b(?:i (?:honestly |truly |really )?(?:think|believe|feel)|in my opinion|my take|to me|the best (?:thing|part) about|the worst (?:thing|part) about|underrated|overrated|i(?:'ll| will) say this)\b"],
 }
 _COMPILED = {k: [re.compile(p, re.I) for p in pats] for k, pats in LEXICON.items()}
 
 CATEGORY_WEIGHT = {"money": 9, "controversy": 10, "surprise": 9, "emotion": 8, "argument": 8,
-                   "funny": 6, "advice": 8, "story": 6, "curiosity": 10}
+                   "funny": 6, "advice": 8, "story": 6, "curiosity": 10,
+                   "career": 7, "lesson": 8, "failure": 8, "success": 7, "quote": 6, "opinion": 5}
+# Universal themes that travel well to US/UK/CA/AU audiences. Campaigns can extend via "focus_keywords".
+T1_THEMES = re.compile(r"\b(?:hollywood|oscar(?:s)?|movie(?:s)?|film(?:s)?|netflix|celebrit(?:y|ies)|famous|fame|money|million|dollars?|"
+                       r"family|dad|mom|father|mother|kids?|son|daughter|wife|husband|marriage|childhood|growing up|high school|college|"
+                       r"first job|boss|fired|rejected|success|failure|mistake|regret|advice|lesson|funny|laugh|embarrassing|"
+                       r"confidence|anxiety|therapy|friend(?:s|ship)?|best friend|rivalry|comeback)\b", re.I)
 
 WEAK_OPENERS = re.compile(r"^(?:and|so|but|because|or|also|then|like|um+|uh+|yeah|yes|no|okay|ok|right|well|i mean|you know|anyway|which|that's why|that is why)\b", re.I)
 DANGLING_OPENERS = re.compile(r"^(?:that|this|it|he|she|they|those|these|he's|she's|it's|they're|that's|this is|which)\b", re.I)
@@ -75,6 +87,11 @@ class Candidate:
     features: dict = field(default_factory=dict)
     rank: int = 0
     clip_id: str = ""
+    t1_appeal: int = 0
+    standalone_score: int = 0
+    compliance: str = ""
+    compliance_reason: str = ""
+    description_text: str = ""
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -185,6 +202,9 @@ def score_window(sentences: list[Sentence], cfg: dict) -> Candidate:
     duration = last.end - first.start
     reasons: list[str] = []
     features: dict = {}
+    weights = dict(CATEGORY_WEIGHT)
+    weights.update({k: float(v) for k, v in (cfg.get("priorities") or {}).items() if k in weights})
+    focus = [k.lower() for k in (cfg.get("focus_keywords") or [])]
 
     hook, hook_reasons = _hook_score(first)
     reasons += hook_reasons
@@ -194,11 +214,16 @@ def score_window(sentences: list[Sentence], cfg: dict) -> Candidate:
     minutes = max(duration / 60.0, 0.5)  # floor: no bias toward very short windows
     content = 0.0
     for cat, n in hits.items():
-        content += CATEGORY_WEIGHT[cat] * min(n, 3) / minutes * 0.33
+        content += weights[cat] * min(n, 3) / minutes * 0.33
     content += 2.0 * min(len(hits), 4)  # variety bonus
+    low = text.lower()
+    focus_hits = sum(1 for k in focus if k in low)
+    if focus_hits:
+        content += min(focus_hits, 4) * 1.5
+        reasons.append(f"campaign focus terms x{focus_hits}")
     content = min(content, 34.0)
     features["content"] = round(content, 1)
-    top_cats = sorted(hits.items(), key=lambda kv: -kv[1] * CATEGORY_WEIGHT[kv[0]])[:3]
+    top_cats = sorted(hits.items(), key=lambda kv: -kv[1] * weights[kv[0]])[:3]
     reasons += [f"{cat} signal x{n}" for cat, n in top_cats]
 
     max_gap, silence_frac, wps = _pacing(sentences)
@@ -241,11 +266,37 @@ def score_window(sentences: list[Sentence], cfg: dict) -> Candidate:
     raw = hook * 0.42 + content + pacing + ending + dur_fit + (6 if standalone else -6)
     score = int(round(max(0.0, min(100.0, raw))))
 
+    # Standalone /10: how well the clip reads with zero context from the rest of the episode.
+    sa = 5.0
+    if DANGLING_OPENERS.match(first.text):
+        sa -= 3
+    if WEAK_OPENERS.match(first.text):
+        sa -= 2
+    if STRONG_OPENERS.match(first.text) or QUESTION.search(first.text):
+        sa += 2
+    if TERMINAL.search(last.text):
+        sa += 1
+    if any(c in hits for c in ("story", "lesson", "quote", "advice")):
+        sa += 1
+    if re.search(r"\b(?:like i said|as i (?:said|mentioned)|going back to|that guy|that thing|the same thing)\b", text, re.I):
+        sa -= 2
+    if len(text.split()) < 35:
+        sa -= 1
+    features["standalone_10"] = int(max(0, min(10, round(sa))))
+
+    # Tier-1 appeal /10: universal, English-first themes + campaign focus terms + story/funny/emotion.
+    t1 = 4.0 + min(len(T1_THEMES.findall(text)), 5) * 0.7 + min(focus_hits, 4) * 0.6
+    t1 += 1.0 * sum(1 for c in ("story", "funny", "emotion", "surprise") if c in hits) * 0.5
+    if wps < 1.6:
+        t1 -= 1
+    features["t1_10"] = int(max(0, min(10, round(t1))))
+
     hook_text = _tidy_hook(first.text)
     desc = _tidy_desc(text)
     return Candidate(start=round(first.start, 2), end=round(last.end, 2), duration=round(duration, 2), text=text,
                      hook=hook_text, description=desc, score=score, reasons=reasons, categories=hits,
-                     standalone=bool(standalone), features=features)
+                     standalone=bool(standalone), features=features,
+                     t1_appeal=features["t1_10"], standalone_score=features["standalone_10"])
 
 
 def _tidy_hook(text: str, max_len: int = 90) -> str:
@@ -306,13 +357,39 @@ def rank_candidates(cands: list[Candidate], cfg: dict) -> list[Candidate]:
     return dedupe(cands, float(cfg["max_overlap"]))
 
 
-def discover(transcript: dict, cfg: dict, *, top_n: int | None = None, source_duration: float | None = None) -> list[Candidate]:
-    dcfg = cfg["discovery"]
+def discover(transcript: dict, cfg: dict, *, top_n: int | None = None, source_duration: float | None = None,
+             campaign: dict | None = None, rejected_out: list | None = None) -> list[Candidate]:
+    """rejected_out, if given, receives the strongest auto-rejected windows (deduped) with their reasons."""
+    dcfg = dict(cfg["discovery"])
+    campaign = campaign or {}
+    for key in ("priorities", "focus_keywords", "sweet_spot"):
+        if key in campaign:
+            dcfg[key] = campaign[key]
     top_n = top_n or int(dcfg["top_n"])
     sentences = build_sentences(transcript)
     LOG.info("Built %d sentences from transcript.", len(sentences))
     windows = generate_windows(sentences, dcfg)
     LOG.info("Scored %d candidate windows.", len(windows))
+    if campaign.get("auto_reject_topics") or campaign.get("prohibited"):
+        from .compliance import screen
+        kept = []
+        rejected = 0
+        for w in windows:
+            r = screen(w.text, w.hook, campaign)
+            w.compliance, w.compliance_reason = r["status"], r["reason"]
+            if r["status"] == "FAIL":
+                rejected += 1
+                if rejected_out is not None:
+                    rejected_out.append(w)
+                continue
+            kept.append(w)
+        LOG.info("Compliance: rejected %d windows, %d remain.", rejected, len(kept))
+        windows = kept
+        if rejected_out:
+            top_rej = dedupe(list(rejected_out), float(dcfg["max_overlap"]))[:10]
+            for r in top_rej:
+                r.clip_id = f"{transcript['source_id']}_{int(r.start):05d}"
+            rejected_out[:] = top_rej
     ranked = rank_candidates(windows, dcfg)[:top_n]
     lead_in, lead_out = float(dcfg["lead_in"]), float(dcfg["lead_out"])
     total = source_duration or (transcript.get("duration") or 0) or None

@@ -31,7 +31,8 @@ from tools.qc import check_export  # noqa: E402
 from tools.render import render_clip  # noqa: E402
 from tools.report import write_report  # noqa: E402
 from tools.transcribe import transcribe  # noqa: E402
-from tools.util import DIRS, load_campaign, load_config, setup_logging, slugify  # noqa: E402
+from tools.compliance import description_for  # noqa: E402
+from tools.util import DIRS, is_url, load_campaign, load_config, setup_logging, slugify  # noqa: E402
 
 
 def parse_args(argv=None):
@@ -49,6 +50,10 @@ def parse_args(argv=None):
     p.add_argument("--select", help="comma-separated ranks to render, e.g. 1,3,5 (default: all)")
     p.add_argument("--force-transcribe", action="store_true", help="ignore cached transcript")
     p.add_argument("--force-render", action="store_true", help="re-render clips that already exist")
+    p.add_argument("--approve", help="comma-separated ranks you approved for rendering (required for campaigns "
+                                     "with require_approval_before_render), or 'all'")
+    p.add_argument("--library-url", action="store_true",
+                   help="confirm that a URL input is the official campaign content library (library-only campaigns)")
     return p.parse_args(argv)
 
 
@@ -77,6 +82,18 @@ def main(argv=None) -> int:
     log_path = setup_logging(slugify(Path(args.input).stem if not args.input.startswith("http") else "url"))
     t0 = time.time()
     print(f"CLIPPING  campaign={campaign['name']}  log={log_path.name}")
+    if campaign.get("source_policy") == "library_only":
+        lib = DIRS["source"].parent / campaign.get("library_dir", "source/library/" + campaign["name"])
+        if is_url(args.input) and not args.library_url:
+            print("This campaign allows ONLY footage from the official content library. URL inputs are refused.\n"
+                  "Download the file from the library, put it in", lib, "and pass the file path, or add --library-url "
+                  "if this URL *is* the official library link.")
+            return 3
+        if not is_url(args.input):
+            src_path = Path(args.input).expanduser().resolve()
+            if lib.resolve() not in src_path.parents:
+                print(f"NOTE: library-only campaign. Make sure this file came from the official content library "
+                      f"(recommended folder: {lib}).")
 
     # 1. ingest
     source = ingest(args.input, cfg)
@@ -85,22 +102,34 @@ def main(argv=None) -> int:
     transcript = transcribe(source, cfg, force=args.force_transcribe)
 
     # 3. discover
-    cands = discover(transcript, cfg, top_n=args.top, source_duration=source["info"]["duration"])
+    rejected: list = []
+    cands = discover(transcript, cfg, top_n=args.top, source_duration=source["info"]["duration"], campaign=campaign,
+                     rejected_out=rejected)
+    rejected_dicts = [r.to_dict() for r in rejected]
     if not cands:
         print("No candidates found. Try lowering --min-duration or check the transcript in transcripts/.")
         return 2
     cand_dicts = [c.to_dict() for c in cands]
-    report_path = write_report(source, campaign, cand_dicts)
+    for c in cand_dicts:
+        c["description_text"] = description_for(c, campaign)
+    report_path = write_report(source, campaign, cand_dicts, rejected=rejected_dicts)
     print(f"\nTop candidates ({len(cands)}):")
     for c in cands:
         flag = "" if c.standalone else "  [needs context]"
-        print(f"  {c.rank:>2}. {c.score:>3}/100  {c.start:7.1f}s - {c.end:7.1f}s ({c.duration:4.0f}s)  {c.hook}{flag}")
+        comp = f"  {c.compliance}" if c.compliance else ""
+        extra = f"  T1 {c.t1_appeal}/10  SA {c.standalone_score}/10" if campaign.get("priorities") else ""
+        print(f"  {c.rank:>2}. {c.score:>3}/100{extra}{comp}  {c.start:7.1f}s - {c.end:7.1f}s ({c.duration:4.0f}s)  {c.hook}{flag}")
     print(f"Report: {report_path}")
 
-    if args.no_render:
+    gate = campaign.get("require_approval_before_render", False)
+    if args.no_render or (gate and not args.approve and not args.select):
         for c in cand_dicts:
             tracker.upsert(_track_row(campaign, source, c))
+        if gate and not args.no_render:
+            print("\nApproval gate: nothing rendered. Review the report, then re-run with --approve 1,3,5 (or --approve all).")
         return 0
+    if args.approve and not args.select:
+        args.select = None if args.approve.strip().lower() == "all" else args.approve
 
     # 4-7. render, captions, QC, tracking
     wanted = None
@@ -130,10 +159,12 @@ def main(argv=None) -> int:
                 tracker.upsert(_track_row(campaign, source, c))
                 continue
         c["exported_file"] = str(mp4)
+        if c.get("description_text"):
+            stem.with_suffix(".description.txt").write_text(c["description_text"], encoding="utf-8")
         c["qc"] = check_export(mp4, c["duration"], cfg, ass_path=ass, srt_path=srt)
         tracker.upsert(_track_row(campaign, source, c))
 
-    report_path = write_report(source, campaign, cand_dicts)
+    report_path = write_report(source, campaign, cand_dicts, rejected=rejected_dicts)
     passed = sum(1 for c in cand_dicts if c.get("qc", {}).get("pass"))
     print(f"\nDone in {time.time() - t0:.0f}s. Rendered {rendered}, QC passed {passed}/{len([c for c in cand_dicts if 'qc' in c])}.")
     print(f"Exports: {out_dir}\nReport:  {report_path}\nTracker: {tracker.TRACKER}")
@@ -144,7 +175,8 @@ def _track_row(campaign: dict, source: dict, c: dict) -> dict:
     return {"campaign": campaign["name"], "source_id": source["id"], "source_title": source.get("title", ""),
             "clip_id": c["clip_id"], "start": c["start"], "end": c["end"], "duration": c["duration"],
             "hook": c["hook"], "score": c["score"], "standalone": "yes" if c["standalone"] else "no",
-            "exported_file": c.get("exported_file", ""),
+            "exported_file": c.get("exported_file", ""), "t1_appeal": c.get("t1_appeal", ""),
+            "standalone_10": c.get("standalone_score", ""), "compliance": c.get("compliance", ""),
             "qc_pass": "" if "qc" not in c else ("yes" if c["qc"]["pass"] else "no: " + "; ".join(c["qc"]["issues"]))}
 
 
