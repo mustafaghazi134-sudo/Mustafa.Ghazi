@@ -1,0 +1,138 @@
+{
+  "name": "ben-affleck-street-we-grew-up-on",
+  "title": "Street We Grew Up On - Ben Affleck Podcast Clipping",
+  "platforms": [
+    "instagram",
+    "tiktok"
+  ],
+  "payout": {
+    "cpm_usd": 3.0,
+    "min_payout_usd": 12,
+    "max_payout_per_clip_usd": 450,
+    "t1_audience_required_pct": 60,
+    "note": "$3 per 1,000 organic views. Below 4,000 views earns nothing (min $12). Cap reached at 150,000 views. Full reward needs 60%+ Tier-1 audience."
+  },
+  "source_policy": "library_only",
+  "library_dir": "source/library/ben-affleck-street-we-grew-up-on",
+  "source_rules": [
+    "Use ONLY footage from the official campaign content library.",
+    "No random YouTube clips, third-party footage, copyrighted music, images or videos not provided or licensed."
+  ],
+  "focus_speaker": "Ben Affleck",
+  "focus_keywords": [
+    "ben",
+    "affleck",
+    "matt",
+    "damon",
+    "good will hunting",
+    "boston",
+    "cambridge",
+    "argo",
+    "batman",
+    "gone girl",
+    "the town",
+    "oscar",
+    "oscars",
+    "hollywood",
+    "director",
+    "directing",
+    "casey",
+    "jennifer",
+    "actor",
+    "acting",
+    "movie",
+    "film",
+    "audition",
+    "script",
+    "studio",
+    "set",
+    "agent",
+    "role"
+  ],
+  "min_duration": 20,
+  "max_duration": 60,
+  "sweet_spot": [
+    25,
+    50
+  ],
+  "top_n": 10,
+  "framing": "face",
+  "require_approval_before_render": true,
+  "priorities": {
+    "story": 10,
+    "surprise": 10,
+    "funny": 10,
+    "emotion": 9,
+    "career": 9,
+    "lesson": 8,
+    "failure": 9,
+    "success": 8,
+    "quote": 8,
+    "curiosity": 9,
+    "opinion": 6,
+    "money": 5,
+    "controversy": 3,
+    "argument": 2,
+    "advice": 6
+  },
+  "mandatory": [
+    "Strong hook or CTA in the first few seconds",
+    "Original edit",
+    "#ad or #sponsored in the description",
+    "Description must include: The full episode is available on YouTube and wherever you get your podcasts",
+    "Organic views only - no bots, no purchased followers, no purchased engagement"
+  ],
+  "prohibited": [
+    "adult content",
+    "violence",
+    "hateful content",
+    "political content",
+    "religious content",
+    "drug-related content",
+    "false claims",
+    "exaggerated claims",
+    "misleading titles",
+    "misleading thumbnails",
+    "unlicensed copyrighted overlays",
+    "reposting another clipper's edit"
+  ],
+  "auto_reject_topics": [
+    "politics",
+    "religion",
+    "drugs",
+    "adult",
+    "violence",
+    "hate",
+    "misleading"
+  ],
+  "description_template": "{hook}\n\nThe full episode is available on YouTube and wherever you get your podcasts.\n\n#ad #BenAffleck #StreetWeGrewUpOn #podcast",
+  "notes": "HARD COMPLIANCE RULES. Pipeline enforces: library-only sources, auto-reject on prohibited topics, approval gate before rendering, mandatory description text, no publishing. Speaker identity (Ben vs host/guest) is not detected automatically - confirm on review.",
+  "expected_speakers": 2,
+  "library_backup": {
+    "where": "Google Drive (owner backup, not used by the pipeline)",
+    "folder_url": "https://drive.google.com/drive/folders/1lwQHyEj5-_qs2wztWdYifXKg1KnJmT7Y",
+    "files": [
+      {
+        "name": "CLIP 1.mov",
+        "bytes": 571913592
+      },
+      {
+        "name": "CLIP 2.mov",
+        "bytes": 515970920
+      },
+      {
+        "name": "CLIP 3.mov",
+        "bytes": 518844730
+      },
+      {
+        "name": "CLIP 5.mov",
+        "bytes": 531021855
+      },
+      {
+        "name": "111.mov",
+        "bytes": 513696110
+      }
+    ],
+    "checked": "2026-10-05"
+  }
+}

@@ -1,0 +1,14 @@
+# Raw media never goes to GitHub (Google Drive is the backup, the laptop does the processing).
+*.mov
+*.MOV
+*.mp4
+*.MP4
+*.mkv
+*.webm
+*.m4a
+*.wav
+*.mp3
+CLIPPING/source/
+CLIPPING/exports/
+CLIPPING/submitted/
+CLIPPING/models/
