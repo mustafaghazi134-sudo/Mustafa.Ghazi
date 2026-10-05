@@ -1,0 +1,20 @@
+# Media and generated artifacts stay local; the pipeline code is what gets versioned.
+source/*
+!source/.gitkeep
+transcripts/*
+!transcripts/.gitkeep
+candidates/*
+!candidates/.gitkeep
+exports/*
+!exports/.gitkeep
+submitted/*
+!submitted/.gitkeep
+logs/*
+!logs/.gitkeep
+data/*
+!data/.gitkeep
+!data/tracker.csv
+__pycache__/
+*.pyc
+.venv/
+venv/

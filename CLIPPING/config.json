@@ -1,0 +1,62 @@
+{
+  "_comment": "Edit freely. Everything here is free/local. Paths are relative to the CLIPPING folder unless absolute.",
+
+  "ffmpeg": "ffmpeg",
+  "ffprobe": "ffprobe",
+
+  "transcription": {
+    "model": "small",
+    "_model_options": "tiny | base | small | medium | large-v3. 'small' is the best CPU trade-off. Use 'medium' or 'large-v3' on a GPU.",
+    "device": "auto",
+    "compute_type": "auto",
+    "language": "en",
+    "_language_note": "Use 'ar' for Arabic, 'auto' to let Whisper detect.",
+    "vad_filter": true,
+    "beam_size": 5
+  },
+
+  "discovery": {
+    "min_duration": 18,
+    "max_duration": 75,
+    "sweet_spot": [25, 55],
+    "top_n": 8,
+    "max_overlap": 0.35,
+    "lead_in": 0.25,
+    "lead_out": 0.45
+  },
+
+  "render": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "framing": "center",
+    "_framing_options": "center | left | right | face | blur | a decimal 0.0-1.0 = horizontal position of the crop centre",
+    "crf": 20,
+    "preset": "medium",
+    "audio_bitrate": "160k",
+    "loudness_normalize": true
+  },
+
+  "captions": {
+    "enabled": true,
+    "font": "Arial",
+    "font_size": 78,
+    "max_words_per_chunk": 3,
+    "max_chars_per_chunk": 18,
+    "uppercase": true,
+    "position": "lower",
+    "_position_options": "lower (about 72% down the frame, the standard safe spot) | middle",
+    "primary_color": "&H00FFFFFF",
+    "outline_color": "&H00000000",
+    "outline": 4,
+    "shadow": 1,
+    "margin_v_lower": 520,
+    "margin_v_middle": 900,
+    "margin_h": 110
+  },
+
+  "ingest": {
+    "copy_local_sources": true,
+    "ytdlp_format": "bv*[height<=1080][ext=mp4]+ba[ext=m4a]/bv*[height<=1080]+ba/b[height<=1080]/b"
+  }
+}

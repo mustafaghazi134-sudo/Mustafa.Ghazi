@@ -1,0 +1,9 @@
+{
+  "name": "default",
+  "platforms": ["tiktok", "reels", "shorts"],
+  "min_duration": 18,
+  "max_duration": 75,
+  "top_n": 8,
+  "framing": "center",
+  "notes": "General-purpose settings. Copy this file to campaigns/<campaign-name>.json and adjust per paid campaign (duration limits, required framing, payout terms)."
+}

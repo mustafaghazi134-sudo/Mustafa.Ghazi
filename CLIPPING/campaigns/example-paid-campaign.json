@@ -1,0 +1,11 @@
+{
+  "name": "example-paid-campaign",
+  "platforms": ["tiktok"],
+  "min_duration": 20,
+  "max_duration": 60,
+  "top_n": 10,
+  "framing": "face",
+  "payout_terms": "e.g. $1 per 1,000 views, min 10k views, cap $500 - fill in from the campaign brief",
+  "rules": "e.g. must keep creator watermark, no music, caption required - fill in from the campaign brief",
+  "notes": "Example only. Rename/duplicate per real campaign."
+}
