@@ -14,7 +14,7 @@ from .util import DIRS
 LOG = logging.getLogger("clipping.tracker")
 TRACKER = DIRS["data"] / "tracker.csv"
 COLUMNS = ["campaign", "source_id", "source_title", "clip_id", "start", "end", "duration", "hook", "score",
-           "t1_appeal", "standalone_10", "compliance", "standalone", "exported_file", "qc_pass", "platform",
+           "t1_appeal", "standalone_10", "compliance", "speaker", "standalone", "exported_file", "qc_pass", "platform",
            "submission_status", "views", "payout", "notes", "created_at", "updated_at"]
 MANUAL_FIELDS = {"platform", "submission_status", "views", "payout", "notes"}
 

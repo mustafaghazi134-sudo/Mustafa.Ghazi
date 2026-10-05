@@ -25,13 +25,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from tools import tracker  # noqa: E402
 from tools.captions import build_captions  # noqa: E402
-from tools.discover import discover  # noqa: E402
-from tools.ingest import ingest  # noqa: E402
+from tools.pipeline import analyze_source  # noqa: E402
 from tools.qc import check_export  # noqa: E402
 from tools.render import render_clip  # noqa: E402
 from tools.report import write_report  # noqa: E402
-from tools.transcribe import transcribe  # noqa: E402
-from tools.compliance import description_for  # noqa: E402
 from tools.util import DIRS, is_url, load_campaign, load_config, setup_logging, slugify  # noqa: E402
 
 
@@ -95,30 +92,23 @@ def main(argv=None) -> int:
                 print(f"NOTE: library-only campaign. Make sure this file came from the official content library "
                       f"(recommended folder: {lib}).")
 
-    # 1. ingest
-    source = ingest(args.input, cfg)
-
-    # 2. transcribe
-    transcript = transcribe(source, cfg, force=args.force_transcribe)
-
-    # 3. discover
-    rejected: list = []
-    cands = discover(transcript, cfg, top_n=args.top, source_duration=source["info"]["duration"], campaign=campaign,
-                     rejected_out=rejected)
-    rejected_dicts = [r.to_dict() for r in rejected]
+    # 1-3. ingest -> transcribe -> speakers -> discover (+compliance) -> report
+    result = analyze_source(args.input, cfg, campaign, top_n=args.top, force_transcribe=args.force_transcribe)
+    source, transcript = result["source"], result["transcript"]
+    cands = result["candidates"]
+    rejected_dicts = result["rejected"]
     if not cands:
         print("No candidates found. Try lowering --min-duration or check the transcript in transcripts/.")
         return 2
-    cand_dicts = [c.to_dict() for c in cands]
-    for c in cand_dicts:
-        c["description_text"] = description_for(c, campaign)
-    report_path = write_report(source, campaign, cand_dicts, rejected=rejected_dicts)
+    cand_dicts = cands
+    report_path = result["report"]
     print(f"\nTop candidates ({len(cands)}):")
     for c in cands:
-        flag = "" if c.standalone else "  [needs context]"
-        comp = f"  {c.compliance}" if c.compliance else ""
-        extra = f"  T1 {c.t1_appeal}/10  SA {c.standalone_score}/10" if campaign.get("priorities") else ""
-        print(f"  {c.rank:>2}. {c.score:>3}/100{extra}{comp}  {c.start:7.1f}s - {c.end:7.1f}s ({c.duration:4.0f}s)  {c.hook}{flag}")
+        flag = "" if c["standalone"] else "  [needs context]"
+        comp = f"  {c['compliance']}" if c["compliance"] else ""
+        spk = f"  [{c['speaker_status']}]" if campaign.get("focus_speaker") else ""
+        extra = f"  T1 {c['t1_appeal']}/10  SA {c['standalone_score']}/10" if campaign.get("priorities") else ""
+        print(f"  {c['rank']:>2}. {c['score']:>3}/100{extra}{comp}{spk}  {c['start']:7.1f}s - {c['end']:7.1f}s ({c['duration']:4.0f}s)  {c['hook']}{flag}")
     print(f"Report: {report_path}")
 
     gate = campaign.get("require_approval_before_render", False)
@@ -177,6 +167,7 @@ def _track_row(campaign: dict, source: dict, c: dict) -> dict:
             "hook": c["hook"], "score": c["score"], "standalone": "yes" if c["standalone"] else "no",
             "exported_file": c.get("exported_file", ""), "t1_appeal": c.get("t1_appeal", ""),
             "standalone_10": c.get("standalone_score", ""), "compliance": c.get("compliance", ""),
+            "speaker": c.get("speaker_status", ""),
             "qc_pass": "" if "qc" not in c else ("yes" if c["qc"]["pass"] else "no: " + "; ".join(c["qc"]["issues"]))}
 
 

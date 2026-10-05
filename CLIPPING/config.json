@@ -1,9 +1,7 @@
 {
   "_comment": "Edit freely. Everything here is free/local. Paths are relative to the CLIPPING folder unless absolute.",
-
   "ffmpeg": "ffmpeg",
   "ffprobe": "ffprobe",
-
   "transcription": {
     "model": "small",
     "_model_options": "tiny | base | small | medium | large-v3. 'small' is the best CPU trade-off. Use 'medium' or 'large-v3' on a GPU.",
@@ -14,17 +12,18 @@
     "vad_filter": true,
     "beam_size": 5
   },
-
   "discovery": {
     "min_duration": 18,
     "max_duration": 75,
-    "sweet_spot": [25, 55],
+    "sweet_spot": [
+      25,
+      55
+    ],
     "top_n": 8,
     "max_overlap": 0.35,
     "lead_in": 0.25,
     "lead_out": 0.45
   },
-
   "render": {
     "width": 1080,
     "height": 1920,
@@ -36,7 +35,6 @@
     "audio_bitrate": "160k",
     "loudness_normalize": true
   },
-
   "captions": {
     "enabled": true,
     "font": "Arial",
@@ -54,9 +52,14 @@
     "margin_v_middle": 900,
     "margin_h": 110
   },
-
   "ingest": {
     "copy_local_sources": true,
     "ytdlp_format": "bv*[height<=1080][ext=mp4]+ba[ext=m4a]/bv*[height<=1080]+ba/b[height<=1080]/b"
+  },
+  "speakers": {
+    "enabled": true,
+    "expected_speakers": -1,
+    "threshold": 0.5,
+    "_note": "sherpa-onnx diarization, free/local. -1 = auto speaker count. Campaigns can set expected_speakers."
   }
 }

@@ -3,3 +3,4 @@ faster-whisper>=1.1          # local speech-to-text (CTranslate2 Whisper). CPU w
 yt-dlp>=2024.8               # download public video URLs
 numpy>=1.24
 opencv-python-headless>=4.8,<5  # optional: face-aware cropping (OpenCV 5 dropped the Haar detector). Falls back to center crop if missing.
+sherpa-onnx>=1.10              # free local speaker diarization (ONNX, no torch). Models (~30 MB) auto-download from GitHub.

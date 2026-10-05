@@ -20,17 +20,17 @@ def write_report(source: dict, campaign: dict, candidates: list[dict], out_dir: 
              f"- Campaign: **{campaign['name']}**",
              f"- Length: {fmt_ts(source['info']['duration'])}  ({source['info']['width']}x{source['info']['height']})",
              f"- Candidates: {len(candidates)}", "",
-             "| # | Viral | T1 | Standalone | Compliance | Start | End | Dur | Hook | Export | QC |",
-             "|---|------:|---:|-----------:|:----------:|------:|----:|----:|------|--------|----|"]
+             "| # | Viral | T1 | Standalone | Compliance | Speaker | Start | End | Dur | Hook | Export | QC |",
+             "|---|------:|---:|-----------:|:----------:|:-------:|------:|----:|----:|------|--------|----|"]
     if campaign.get("mandatory") or campaign.get("prohibited"):
         lines[7:7] = ["**Campaign rules (hard):** " + "; ".join(campaign.get("mandatory", [])),
                       "**Prohibited:** " + ", ".join(campaign.get("prohibited", [])),
-                      "**Note:** speaker identity is not auto-detected. Confirm on review that each clip features the focus speaker.", ""]
+                      "**Speaker:** statuses come from local diarization + your voice mapping (python speakers.py). Only CONFIRMED means the focus speaker was verified.", ""]
     for c in candidates:
         exp = Path(c["exported_file"]).name if c.get("exported_file") else "-"
         qc = "-" if "qc" not in c else ("PASS" if c["qc"]["pass"] else "FAIL")
         lines.append(f"| {c['rank']} | {c['score']} | {c.get('t1_appeal', '-')}/10 | {c.get('standalone_score', '-')}/10 | "
-                     f"{c.get('compliance') or '-'} | {fmt_ts(c['start'])} | {fmt_ts(c['end'])} | {c['duration']:.0f}s | "
+                     f"{c.get('compliance') or '-'} | {c.get('speaker_status') or '-'} | {fmt_ts(c['start'])} | {fmt_ts(c['end'])} | {c['duration']:.0f}s | "
                      f"{c['hook'].replace('|', '/')} | {exp} | {qc} |")
     lines.append("")
     for c in candidates:
@@ -41,6 +41,7 @@ def write_report(source: dict, campaign: dict, candidates: list[dict], out_dir: 
                   f"**Standalone context:** {c.get('standalone_score', '-')}/10",
                   f"- **Compliance:** {c.get('compliance') or 'not screened'}" +
                   (f" - {c['compliance_reason']}" if c.get('compliance_reason') else ""),
+                  f"- **Speaker:** {c.get('speaker_status', 'NEEDS REVIEW')} (focus voice share {c.get('speaker_share', 0):.0%})",
                   f"- **Why it could work:** {', '.join(c['reasons']) or 'n/a'}",
                   f"- **Signals:** {', '.join(f'{k} x{v}' for k, v in c['categories'].items()) or 'none'}",
                   f"- **Standalone:** {'yes, understandable without the full video' if c['standalone'] else 'no, may need context'}",

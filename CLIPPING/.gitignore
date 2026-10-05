@@ -1,20 +1,27 @@
-# Media and generated artifacts stay local; the pipeline code is what gets versioned.
-source/*
-!source/.gitkeep
-transcripts/*
-!transcripts/.gitkeep
-candidates/*
-!candidates/.gitkeep
-exports/*
-!exports/.gitkeep
-submitted/*
-!submitted/.gitkeep
+# GitHub = code, configs, transcripts, reports, metadata. Raw media NEVER goes to GitHub.
+source/
+exports/
+submitted/
+models/
 logs/*
 !logs/.gitkeep
 data/*
 !data/.gitkeep
 !data/tracker.csv
+# belt and braces: no media anywhere under CLIPPING
+*.mov
+*.MOV
+*.mp4
+*.MP4
+*.mkv
+*.webm
+*.m4a
+*.wav
+*.mp3
+*.png
+*.jpg
 __pycache__/
 *.pyc
 .venv/
 venv/
+config.local.json

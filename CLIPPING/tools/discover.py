@@ -92,6 +92,10 @@ class Candidate:
     compliance: str = ""
     compliance_reason: str = ""
     description_text: str = ""
+    speaker_status: str = "NEEDS REVIEW"
+    speaker_share: float = 0.0
+    speaker_label: str = ""
+    source_file: str = ""
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -358,8 +362,10 @@ def rank_candidates(cands: list[Candidate], cfg: dict) -> list[Candidate]:
 
 
 def discover(transcript: dict, cfg: dict, *, top_n: int | None = None, source_duration: float | None = None,
-             campaign: dict | None = None, rejected_out: list | None = None) -> list[Candidate]:
-    """rejected_out, if given, receives the strongest auto-rejected windows (deduped) with their reasons."""
+             campaign: dict | None = None, rejected_out: list | None = None,
+             speaker_ctx: dict | None = None) -> list[Candidate]:
+    """rejected_out, if given, receives the strongest auto-rejected windows (deduped) with their reasons.
+    speaker_ctx (from tools.speakers.speaker_context) enables CONFIRMED/LIKELY/NEEDS REVIEW/NOT-x statuses."""
     dcfg = dict(cfg["discovery"])
     campaign = campaign or {}
     for key in ("priorities", "focus_keywords", "sweet_spot"):
@@ -385,11 +391,32 @@ def discover(transcript: dict, cfg: dict, *, top_n: int | None = None, source_du
             kept.append(w)
         LOG.info("Compliance: rejected %d windows, %d remain.", rejected, len(kept))
         windows = kept
-        if rejected_out:
-            top_rej = dedupe(list(rejected_out), float(dcfg["max_overlap"]))[:10]
-            for r in top_rej:
-                r.clip_id = f"{transcript['source_id']}_{int(r.start):05d}"
-            rejected_out[:] = top_rej
+    if speaker_ctx is not None:
+        from .speakers import judge_window
+        kept = []
+        dropped = 0
+        for w in windows:
+            words = [x for sen in sentences if sen.start >= w.start - 0.01 and sen.end <= w.end + 0.01 for x in sen.words]
+            status, share, label = judge_window(words, w.text, speaker_ctx)
+            w.speaker_status, w.speaker_share, w.speaker_label = status, round(share, 2), label
+            if status.startswith("NOT "):
+                dropped += 1
+                w.compliance_reason = (w.compliance_reason + "; " if w.compliance_reason else "") + \
+                    f"dropped: {status} ({share:.0%} of words)"
+                if rejected_out is not None:
+                    rejected_out.append(w)
+                continue
+            if status == "CONFIRMED":
+                w.score = min(100, w.score + 3)
+            kept.append(w)
+        if dropped:
+            LOG.info("Speaker filter: dropped %d windows not featuring %s.", dropped, speaker_ctx.get("focus"))
+        windows = kept
+    if rejected_out:
+        top_rej = dedupe(list(rejected_out), float(dcfg["max_overlap"]))[:10]
+        for r in top_rej:
+            r.clip_id = f"{transcript['source_id']}_{int(r.start):05d}"
+        rejected_out[:] = top_rej
     ranked = rank_candidates(windows, dcfg)[:top_n]
     lead_in, lead_out = float(dcfg["lead_in"]), float(dcfg["lead_out"])
     total = source_duration or (transcript.get("duration") or 0) or None

@@ -8,7 +8,19 @@ python clip.py "C:\videos\podcast.mp4"
 python clip.py "https://www.youtube.com/watch?v=XXXX" --campaign creator-x
 ```
 
+## 0. Where things live
+
+| Place | Holds |
+|---|---|
+| GitHub (this repo) | code, configs, campaign briefs, transcripts, reports, tracker. Never raw media (blocked by .gitignore). |
+| Google Drive | your backup of the official raw media. The pipeline never reads from it. |
+| Windows laptop | the actual processing: FFmpeg, faster-whisper, diarization, rendering. |
+
 ## 1. Setup on Windows (one time, all free)
+
+Fast path: double-click `setup_windows.bat` inside the `CLIPPING` folder. It installs FFmpeg via winget if
+missing, creates a virtual environment, installs the Python packages and runs the audit. Manual path:
+
 
 1. **Python 3.10+** - https://www.python.org/downloads/ (tick "Add python.exe to PATH").
 2. **FFmpeg** - in PowerShell: `winget install Gyan.FFmpeg` then close and reopen the terminal.
@@ -59,6 +71,35 @@ Outputs:
 | `data/tracker.csv` | one row per clip; open in Excel, edit views/payout/notes freely |
 | `logs/` | one log per run |
 
+## 2b. Campaign batch (all files at once)
+
+```
+run_campaign.bat
+```
+runs `python batch.py --campaign ben-affleck-street-we-grew-up-on --top 20`: every file in
+`source/library/ben-affleck-street-we-grew-up-on/` is verified with ffprobe, transcribed, diarized,
+screened, scored, and the candidates from all files are ranked together into
+`candidates/ben-affleck-street-we-grew-up-on/TOP20.md` (+ `.json`, `.csv`). Nothing is rendered.
+Transcripts are cached, so re-running after you map voices is fast.
+
+## 2c. Speaker confirmation (nothing is assumed to be the focus speaker)
+
+Diarization runs locally with sherpa-onnx (free, no torch; two small ONNX models auto-download from
+GitHub into `models/`). Each file gets voice labels `SPEAKER_00`, `SPEAKER_01`... and every candidate
+carries a status:
+
+| Status | Meaning |
+|---|---|
+| CONFIRMED | you mapped the label to the focus speaker and that voice carries >= 70% of the clip |
+| LIKELY | unmapped, but the clip's dominant voice is the file's dominant voice and it is first-person talk |
+| NEEDS REVIEW | anything else, or diarization unavailable - listen before using |
+| NOT BEN | mapped and the focus speaker has < 50% of the words - the candidate is dropped |
+
+To map voices: `python speakers.py --all ben-affleck-street-we-grew-up-on` prints sample lines with
+timestamps per label for every file. Listen, then e.g.
+`python speakers.py "source\library\ben-affleck-street-we-grew-up-on\CLIP 1.mov" --map SPEAKER_01="Ben Affleck" SPEAKER_00=Host`
+and re-run `run_campaign.bat`.
+
 ## 3. Campaigns
 
 Each paid campaign gets a brief in `campaigns/<name>.json` (copy `example-paid-campaign.json`).
@@ -83,8 +124,8 @@ What the pipeline enforces for a campaign like it:
 - `description_template` - a ready-to-paste `<clip_id>.description.txt` is written next to every export
   with the mandatory wording and #ad.
 
-Not automated: speaker identification (which voice is the focus speaker), thumbnails, and the
-"original edit" judgement. Those are yours on review.
+Not automated: thumbnails and the "original edit" judgement. Speaker identity is diarized locally but
+the label-to-person mapping is yours (see 2c); nothing is marked CONFIRMED without it.
 
 ## 4. Architecture
 
@@ -99,8 +140,13 @@ tools/render.py         4. FFmpeg: 9:16 crop/blur/face framing, H.264 + AAC, lou
 tools/captions.py       5. short word chunks -> .ass (burned in via libass) + .srt
 tools/qc.py             6. ffprobe + full decode pass + subtitle presence
 tools/tracker.py        7. CSV upsert, never overwrites hand-entered views/payout/notes
+tools/speakers.py       speaker diarization (sherpa-onnx) + label mapping + CONFIRMED/LIKELY/NEEDS REVIEW
+tools/pipeline.py       analyze_source(): the shared ingest->transcribe->diarize->discover->report chain
 tools/report.py         report.md + candidates.json
 tools/audit_env.py      environment check (stdlib only)
+batch.py                whole campaign library -> cross-file TOP-N report
+speakers.py             voice mapping CLI
+run_campaign.bat / setup_windows.bat   one-click Windows wrappers
 ```
 
 Clip discovery is rule-based (no LLM): hook strength of the first sentence, keyword signals
