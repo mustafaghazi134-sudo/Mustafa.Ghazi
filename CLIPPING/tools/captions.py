@@ -67,7 +67,9 @@ def _ass_escape(text: str) -> str:
     return text.replace("{", "(").replace("}", ")").replace("\\", "/").replace("\n", "\\N")
 
 
-def write_ass(chunks: list[dict], path: Path, ccfg: dict, clip_start: float, width: int, height: int) -> None:
+def write_ass(chunks: list[dict], path: Path, ccfg: dict, clip_start: float, width: int, height: int,
+              banner: str | None = None, clip_end: float | None = None) -> None:
+    """banner: optional small text pinned to the top of the frame for the whole clip (used for review drafts)."""
     margin_v = int(ccfg["margin_v_middle"] if ccfg.get("position") == "middle" else ccfg["margin_v_lower"])
     style = (f"Style: Default,{ccfg['font']},{int(ccfg['font_size'])},{ccfg['primary_color']},&H000000FF,"
              f"{ccfg['outline_color']},&H80000000,-1,0,0,0,100,100,0,0,1,{int(ccfg['outline'])},{int(ccfg['shadow'])},"
@@ -78,8 +80,14 @@ def write_ass(chunks: list[dict], path: Path, ccfg: dict, clip_start: float, wid
              "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, "
              "Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, "
              "MarginR, MarginV, Encoding",
-             style, "",
-             "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
+             style]
+    if banner:
+        lines.append(f"Style: Banner,{ccfg['font']},34,&H0000D7FF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,2,0,"
+                     f"8,{int(ccfg['margin_h'])},{int(ccfg['margin_h'])},220,1")
+    lines += ["", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
+    if banner:
+        end = (clip_end - clip_start) if clip_end else (max((c["end"] for c in chunks), default=clip_start) - clip_start + 5)
+        lines.append(f"Dialogue: 1,{fmt_ass(0)},{fmt_ass(end)},Banner,,0,0,0,,{_ass_escape(banner)}")
     upper = bool(ccfg.get("uppercase", True))
     for c in chunks:
         text = c["text"].upper() if upper else c["text"]
@@ -94,14 +102,14 @@ def write_srt(chunks: list[dict], path: Path, clip_start: float) -> None:
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def build_captions(transcript: dict, start: float, end: float, out_stem: Path, cfg: dict) -> dict:
+def build_captions(transcript: dict, start: float, end: float, out_stem: Path, cfg: dict, banner: str | None = None) -> dict:
     ccfg = cfg["captions"]
     rcfg = cfg["render"]
     words = words_in_range(transcript, start, end)
     chunks = chunk_words(words, int(ccfg["max_words_per_chunk"]), int(ccfg["max_chars_per_chunk"]))
     ass_path = out_stem.with_suffix(".ass")
     srt_path = out_stem.with_suffix(".srt")
-    write_ass(chunks, ass_path, ccfg, start, int(rcfg["width"]), int(rcfg["height"]))
+    write_ass(chunks, ass_path, ccfg, start, int(rcfg["width"]), int(rcfg["height"]), banner=banner, clip_end=end)
     write_srt(chunks, srt_path, start)
     LOG.info("Captions: %d chunks -> %s", len(chunks), ass_path.name)
     return {"ass": ass_path, "srt": srt_path, "chunks": len(chunks)}

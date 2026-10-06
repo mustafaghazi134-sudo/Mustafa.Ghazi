@@ -82,6 +82,18 @@ screened, scored, and the candidates from all files are ranked together into
 `candidates/ben-affleck-street-we-grew-up-on/TOP20.md` (+ `.json`, `.csv`). Nothing is rendered.
 Transcripts are cached, so re-running after you map voices is fast.
 
+## 2b-ii. Review previews for an approved shortlist
+
+```
+make_previews.bat                 (uses the approved ranks 1,3,4,5,8,9,10,13,18,19)
+make_previews.bat 2,6,7           (any other global ranks from TOP20.md)
+```
+runs `python preview.py --campaign ... --ranks ...`: cuts 9:16 REVIEW DRAFTS of exactly those ranks from
+the local source files using the existing renderer and cached transcripts (no Whisper, no diarization,
+no downloads). Every preview carries a top banner "REVIEW DRAFT - NOT FOR SUBMISSION" and is listed
+in `exports/<campaign>/REVIEW_PREVIEWS/REVIEW_MANIFEST.md` with speaker status NEEDS REVIEW.
+Final submission files are rendered later with `clip.py --approve` once you have watched the drafts.
+
 ## 2c. Speaker confirmation (nothing is assumed to be the focus speaker)
 
 Diarization runs locally with sherpa-onnx (free, no torch; two small ONNX models auto-download from
