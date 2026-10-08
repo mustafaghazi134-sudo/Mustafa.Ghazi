@@ -25,6 +25,9 @@ def add(file: Path, title: str, clip_id: str, url: str, status: str, project_id:
     if url and (url in existing or (vid and vid in video_ids(existing))):
         print("already logged (duplicate video id):", url)
         return
+    if clip_id and clip_id != "manual" and is_clip_published(file, clip_id):
+        print("already logged (duplicate clip id):", clip_id)
+        return
     n = len(re.findall(r"^\d+\. ", existing, re.M)) + 1
     meta = json.dumps({"clip_id": clip_id, "project_id": project_id, "platform": platform, "status": status,
                        "logged_at": time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())}, ensure_ascii=False)
@@ -48,6 +51,13 @@ def is_published(file: Path, url_or_id: str) -> bool:
         return False
     vid = video_id(url_or_id) or url_or_id
     return vid in video_ids(file.read_text(encoding="utf-8"))
+
+
+def is_clip_published(file: Path, clip_id: str) -> bool:
+    """True if this OpusClip clip id already appears in the log's metadata. Use before any publish."""
+    if not file.exists() or not clip_id:
+        return False
+    return bool(re.search(r'"clip_id": "%s"' % re.escape(clip_id), file.read_text(encoding="utf-8")))
 
 
 def listing(file: Path) -> list[str]:
