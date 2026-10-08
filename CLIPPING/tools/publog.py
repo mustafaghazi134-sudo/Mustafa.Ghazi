@@ -21,8 +21,9 @@ def add(file: Path, title: str, clip_id: str, url: str, status: str, project_id:
     if not file.exists():
         file.write_text(HEADER, encoding="utf-8")
     existing = file.read_text(encoding="utf-8")
-    if url and url in existing:
-        print("already logged:", url)
+    vid = video_id(url)
+    if url and (url in existing or (vid and vid in video_ids(existing))):
+        print("already logged (duplicate video id):", url)
         return
     n = len(re.findall(r"^\d+\. ", existing, re.M)) + 1
     meta = json.dumps({"clip_id": clip_id, "project_id": project_id, "platform": platform, "status": status,
@@ -30,6 +31,23 @@ def add(file: Path, title: str, clip_id: str, url: str, status: str, project_id:
     with open(file, "a", encoding="utf-8") as f:
         f.write(f"{n}. {title} — {url}  <!-- {meta} -->\n")
     print(f"logged #{n}: {title} — {url}")
+
+
+def video_id(url: str) -> str:
+    m = re.search(r"(?:shorts/|watch\?v=|youtu\.be/)([A-Za-z0-9_-]{6,})", url or "")
+    return m.group(1) if m else ""
+
+
+def video_ids(text: str) -> set[str]:
+    return set(re.findall(r"(?:shorts/|watch\?v=|youtu\.be/)([A-Za-z0-9_-]{6,})", text))
+
+
+def is_published(file: Path, url_or_id: str) -> bool:
+    """True if this YouTube video id already appears in the log. Use before any publish."""
+    if not file.exists():
+        return False
+    vid = video_id(url_or_id) or url_or_id
+    return vid in video_ids(file.read_text(encoding="utf-8"))
 
 
 def listing(file: Path) -> list[str]:
