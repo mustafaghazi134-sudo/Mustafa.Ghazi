@@ -50,10 +50,10 @@
     "role"
   ],
   "min_duration": 20,
-  "max_duration": 60,
+  "max_duration": 180,
   "sweet_spot": [
     25,
-    50
+    90
   ],
   "top_n": 10,
   "framing": "face",
@@ -134,5 +134,6 @@
       }
     ],
     "checked": "2026-10-05"
-  }
+  },
+  "_duration_note": "No campaign-imposed maximum. 180 s is the Instagram Reels / YouTube Shorts ceiling; TikTok allows longer."
 }
