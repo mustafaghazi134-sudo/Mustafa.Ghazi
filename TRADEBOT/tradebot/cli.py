@@ -70,8 +70,15 @@ def cmd_run(args) -> int:
     if settings.is_live:
         logging.getLogger(__name__).warning("*** LIVE MODE: real funds will be traded without per-trade approval ***")
     bot.run_forever(max_cycles=args.cycles)
-    prices = {s: t.price for s, t in bot.provider.get_tickers(bot.symbols).items()}
+    try:
+        prices = {s: t.price for s, t in bot.provider.get_tickers(bot.symbols).items()}
+    except Exception as e:  # noqa: BLE001 - report with last known prices if the feed is down
+        logging.getLogger(__name__).error("market data unavailable for final report: %s", e)
+        prices = {}
     print(format_report(performance_report(bot.ledger, prices)))
+    errors = [e for e in bot.ledger.events(20) if e["kind"] == "error"]
+    if errors:
+        print(f"\n{len(errors)} recent errors; last: {errors[0]['message']}  (run `tradebot preflight`)")
     return 0
 
 
@@ -206,6 +213,42 @@ def cmd_disarm_live(args) -> int:
     return 0
 
 
+def cmd_preflight(args) -> int:
+    from .preflight import preflight
+    settings = load_settings(args.config)
+    rows = preflight(settings)
+    worst = 0
+    for check, status, detail in rows:
+        print(f"{status:<5} {check:<22} {detail}")
+        worst = max(worst, {"OK": 0, "WARN": 1, "FAIL": 2}[status])
+    print("\nresult:", ["all checks passed", "warnings (see above)", "FAILURES: live market data unavailable"][worst])
+    return worst
+
+
+def cmd_quote(args) -> int:
+    from .preflight import format_quote, jupiter_quote
+    settings = load_settings(args.config)
+    try:
+        rep = jupiter_quote(settings, args.input, args.output, args.amount, args.slippage_bps, wallet=args.wallet)
+    except Exception as e:  # noqa: BLE001
+        print(f"quote failed: {type(e).__name__}: {e}")
+        return 2
+    print(format_quote(rep))
+    return 0
+
+
+def cmd_wallet(args) -> int:
+    from .preflight import format_wallet, wallet_balances
+    settings = load_settings(args.config)
+    try:
+        bal = wallet_balances(settings, args.address)
+    except Exception as e:  # noqa: BLE001
+        print(f"balance lookup failed: {type(e).__name__}: {e}")
+        return 2
+    print(format_wallet(bal, args.sol_price))
+    return 0
+
+
 def cmd_fetch_data(args) -> int:
     settings = load_settings(args.config)
     from .data.csv_replay import write_candles_csv
@@ -250,6 +293,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--confirm", required=True, help="exact confirmation phrase from [engine].live_confirm_phrase")
     p.add_argument("--force", action="store_true", help="skip the minimum paper-record requirement"); p.set_defaults(fn=cmd_arm_live)
     p = sub.add_parser("disarm-live", help="remove the armed file"); p.set_defaults(fn=cmd_disarm_live)
+    p = sub.add_parser("preflight", help="read-only checks: network reachability, API key, kill switch, live gate"); p.set_defaults(fn=cmd_preflight)
+    p = sub.add_parser("quote", help="read-only Jupiter quote with fee/rent/slippage breakdown (signs nothing)")
+    p.add_argument("--input", default="SOL"); p.add_argument("--output", default="USDC"); p.add_argument("--amount", type=float, required=True)
+    p.add_argument("--slippage-bps", type=int, default=None); p.add_argument("--wallet", default=None, help="public key to check affordability")
+    p.set_defaults(fn=cmd_quote)
+    p = sub.add_parser("wallet", help="read-only balances for a public key"); p.add_argument("--address", required=True)
+    p.add_argument("--sol-price", type=float, default=None); p.set_defaults(fn=cmd_wallet)
     p = sub.add_parser("fetch-data", help="download candles to CSV for offline backtests/replay")
     p.add_argument("--symbols", default=None); p.add_argument("--interval", default="1h"); p.add_argument("--bars", type=int, default=1000)
     p.set_defaults(fn=cmd_fetch_data)
