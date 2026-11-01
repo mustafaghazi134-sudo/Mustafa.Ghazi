@@ -2,8 +2,7 @@
 from __future__ import annotations
 
 import math
-
-import numpy as np
+import random
 
 from ..models import Candle, Ticker, TokenInfo
 from .base import MarketDataProvider, interval_seconds
@@ -12,7 +11,7 @@ _BASE_PRICES = {"SOL": 150.0, "JUP": 0.9, "RAY": 2.5, "BONK": 0.00002, "WIF": 1.
 
 
 def generate_series(seed: int, n: int, start_price: float, interval_sec: int, start_ts: float) -> list[Candle]:
-    rng = np.random.default_rng(seed)
+    rng = random.Random(seed)
     candles: list[Candle] = []
     price = start_price
     regime_left = 0
@@ -20,17 +19,17 @@ def generate_series(seed: int, n: int, start_price: float, interval_sec: int, st
     sigma = 0.02
     for i in range(n):
         if regime_left <= 0:
-            regime_left = int(rng.integers(40, 160))
-            mu = float(rng.choice([-0.0015, 0.0, 0.0, 0.002]))
-            sigma = float(rng.choice([0.01, 0.02, 0.035]))
+            regime_left = rng.randint(40, 159)
+            mu = rng.choice([-0.0015, 0.0, 0.0, 0.002])
+            sigma = rng.choice([0.01, 0.02, 0.035])
         regime_left -= 1
-        ret = mu + sigma * rng.standard_normal()
+        ret = mu + sigma * rng.gauss(0.0, 1.0)
         o = price
         c = o * math.exp(ret)
-        wick = abs(rng.standard_normal()) * sigma * o * 0.6
+        wick = abs(rng.gauss(0.0, 1.0)) * sigma * o * 0.6
         h = max(o, c) + wick
         lo = max(min(o, c) - wick, 1e-12)
-        vol = float(abs(rng.normal(1.0, 0.4)) * 1_000_000 * (1 + 3 * abs(ret) / max(sigma, 1e-9)))
+        vol = abs(rng.gauss(1.0, 0.4)) * 1_000_000 * (1 + 3 * abs(ret) / max(sigma, 1e-9))
         candles.append(Candle(ts=start_ts + i * interval_sec, open=o, high=h, low=lo, close=c, volume=vol))
         price = c
     return candles

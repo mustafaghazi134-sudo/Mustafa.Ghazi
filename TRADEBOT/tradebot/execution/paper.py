@@ -2,8 +2,7 @@
 from __future__ import annotations
 
 import logging
-
-import numpy as np
+import random
 
 from ..data.base import MarketDataProvider
 from ..models import Fill, OrderRequest, Side
@@ -20,7 +19,7 @@ class PaperBroker(Broker):
         self.provider = provider
         self.fee_bps = fee_bps
         self.slippage_bps = slippage_bps
-        self.rng = np.random.default_rng(seed)
+        self.rng = random.Random(seed)
         self.clock = clock
 
     def _price(self, symbol: str) -> float:

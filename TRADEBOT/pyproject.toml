@@ -11,13 +11,13 @@ dependencies = [
     "anthropic>=1.0",
     "httpx>=0.27",
     "pydantic>=2.6",
-    "numpy>=1.26",
     "solders>=0.21",
     "base58>=2.1",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+research = ["numpy>=1.26", "pandas>=2.2"]   # research_lab only; the live bot is pure Python + httpx/pydantic/solders
 
 [project.scripts]
 tradebot = "tradebot.cli:main"

@@ -1,8 +1,6 @@
 """RSI + Bollinger mean reversion: buy oversold re-entries, exit on RSI recovery / mid-band."""
 from __future__ import annotations
 
-import numpy as np
-
 from ..models import Candle, Position, Side, Signal
 from . import indicators as ind
 from .base import Strategy
@@ -17,16 +15,16 @@ class MeanReversionStrategy(Strategy):
     def min_bars(self) -> int:
         return max(int(self.params["rsi_period"]), int(self.params["bb_period"])) + 5
 
-    def compute(self, candles: list[Candle]) -> dict[str, np.ndarray]:
+    def compute(self, candles: list[Candle]) -> dict[str, list[float]]:
         c = ind.closes(candles)
         lower, mid, _ = ind.bollinger(c, int(self.params["bb_period"]), float(self.params["bb_std"]))
         return {"c": c, "rsi": ind.rsi(c, int(self.params["rsi_period"])), "lower": lower, "mid": mid}
 
-    def entry_at(self, symbol: str, candles: list[Candle], a: dict[str, np.ndarray], i: int) -> Signal | None:
+    def entry_at(self, symbol: str, candles: list[Candle], a: dict[str, list[float]], i: int) -> Signal | None:
         if i < 1:
             return None
         c, r, lower, mid = a["c"], a["rsi"], a["lower"], a["mid"]
-        if np.isnan([r[i], lower[i], lower[i - 1], mid[i]]).any():
+        if ind.isnan(r[i], lower[i], lower[i - 1], mid[i]):
             return None
         # Oversold and closing back above the lower band after being below it: a re-entry, not a falling knife.
         if r[i] < self.params["rsi_buy"] and c[i - 1] < lower[i - 1] and c[i] >= lower[i]:
@@ -38,8 +36,8 @@ class MeanReversionStrategy(Strategy):
                           take_profit=float(mid[i]), max_hold_sec=float(self.params["max_hold_bars"] * bar_sec), ts=candles[i].ts)
         return None
 
-    def exit_at(self, candles: list[Candle], a: dict[str, np.ndarray], i: int, position: Position) -> str | None:
+    def exit_at(self, candles: list[Candle], a: dict[str, list[float]], i: int, position: Position) -> str | None:
         r = a["rsi"][i]
-        if not np.isnan(r) and r > self.params["rsi_exit"]:
+        if not ind.isnan(r) and r > self.params["rsi_exit"]:
             return "rsi_recovered"
         return None

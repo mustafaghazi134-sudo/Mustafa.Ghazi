@@ -1,7 +1,6 @@
 anthropic>=1.0
 httpx>=0.27
 pydantic>=2.6
-numpy>=1.26
 solders>=0.21
 base58>=2.1
 pytest>=8

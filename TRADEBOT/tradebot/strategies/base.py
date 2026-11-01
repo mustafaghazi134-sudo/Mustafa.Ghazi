@@ -3,8 +3,6 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
 
-import numpy as np
-
 from ..models import Candle, Position, Signal
 
 
@@ -15,7 +13,7 @@ class Precomputed:
         self.strategy = strategy
         self.symbol = symbol
         self.candles = candles
-        self.arrays: dict[str, np.ndarray] = strategy.compute(candles) if len(candles) >= strategy.min_bars else {}
+        self.arrays: dict[str, list[float]] = strategy.compute(candles) if len(candles) >= strategy.min_bars else {}
 
     def entry(self, i: int) -> Signal | None:
         if not self.arrays or i < self.strategy.min_bars - 1:
@@ -41,13 +39,13 @@ class Strategy(ABC):
 
     # ---- vectorised core (implemented by subclasses) --------------------------------------------
     @abstractmethod
-    def compute(self, candles: list[Candle]) -> dict[str, np.ndarray]:
+    def compute(self, candles: list[Candle]) -> dict[str, list[float]]:
         """Indicator arrays aligned with candles."""
 
     @abstractmethod
-    def entry_at(self, symbol: str, candles: list[Candle], a: dict[str, np.ndarray], i: int) -> Signal | None: ...
+    def entry_at(self, symbol: str, candles: list[Candle], a: dict[str, list[float]], i: int) -> Signal | None: ...
 
-    def exit_at(self, candles: list[Candle], a: dict[str, np.ndarray], i: int, position: Position) -> str | None:
+    def exit_at(self, candles: list[Candle], a: dict[str, list[float]], i: int, position: Position) -> str | None:
         return None
 
     # ---- convenience API used by the live engine ----------------------------------------------
