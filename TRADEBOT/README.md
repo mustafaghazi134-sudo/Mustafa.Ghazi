@@ -54,6 +54,7 @@ tradebot run                       # paper trading on live market data, forever
 Read-only diagnostics (nothing is signed or sent):
 
 ```bash
+tradebot selftest                                    # offline: paper fills, risk approvals, limits, kill switch
 tradebot preflight                                   # network reachability per host, API key, kill switch, gate
 tradebot quote --amount 0.001 --wallet <PUBKEY>      # real Jupiter SOL->USDC quote + fee/rent/slippage breakdown
 tradebot wallet --address <PUBKEY>                   # SOL and SPL balances by public key

@@ -254,6 +254,14 @@ def cmd_wallet(args) -> int:
     return 0
 
 
+def cmd_selftest(args) -> int:
+    from .selftest import format_checks, run_selftest
+    logging.disable(logging.CRITICAL)
+    checks = run_selftest(cycles=args.cycles)
+    print(format_checks(checks))
+    return 0 if all(c.ok for c in checks) else 1
+
+
 def cmd_fetch_data(args) -> int:
     settings = load_settings(args.config)
     from .data.csv_replay import write_candles_csv
@@ -305,6 +313,8 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(fn=cmd_quote)
     p = sub.add_parser("wallet", help="read-only balances for a public key"); p.add_argument("--address", required=True)
     p.add_argument("--sol-price", type=float, default=None); p.set_defaults(fn=cmd_wallet)
+    p = sub.add_parser("selftest", help="offline execution self-test: risk approvals, fills, limits, kill switch")
+    p.add_argument("--cycles", type=int, default=700); p.set_defaults(fn=cmd_selftest)
     p = sub.add_parser("fetch-data", help="download candles to CSV for offline backtests/replay")
     p.add_argument("--symbols", default=None); p.add_argument("--interval", default="1h"); p.add_argument("--bars", type=int, default=1000)
     p.set_defaults(fn=cmd_fetch_data)
