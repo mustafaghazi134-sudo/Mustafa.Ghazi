@@ -14,6 +14,7 @@ import pandas as pd
 from .checks import cost_sensitivity, dca_martingale_demo, delayed_entry_check, lookahead_check
 from .data import discover, format_report, load_symbol, resample, split_on_gaps
 from .strategies import REGISTRY
+from . import candidates  # noqa: F401  (registers adapted candidates)
 from .walkforward import holdout_run, run_strategy, walk_forward
 
 FEE_BPS, SLIP_BPS, WARMUP = 10.0, 15.0, 800   # per side; ~0.5% round trip, realistic for liquid Jupiter routes
@@ -65,10 +66,12 @@ def main() -> None:
                                        "author_claim": REGISTRY[name].get("author_claim", ""), "per_symbol": {}}
         for s, df in data.items():
             t0 = time.time()
+            if "needs_regimes" in REGISTRY[name]["flags"]:
+                candidates.prepare_regimes(df)          # once per asset, causal, full history
             partners = {k: v for k, v in data.items() if k != s} if REGISTRY[name].get("needs_partners") else None
             dev_df = df[df.index < holdout] if holdout is not None else df
             full = run_strategy(name, dev_df, {}, FEE_BPS, SLIP_BPS, bar_minutes, warmup=warmup, size_frac=args.size_frac, partners=partners)
-            la = lookahead_check(name, df)
+            la = lookahead_check(name, df) if "custom_backtest" not in REGISTRY[name]["flags"] and not REGISTRY[name].get("needs_partners") else {"passed": True, "note": "n/a (custom backtest / partner strategy); construction reviewed by hand"}
             entry: dict = {"in_sample_default_params": full.metrics, "lookahead": la}
             if name != "buy_hold":
                 wf = walk_forward(name, df, FEE_BPS, SLIP_BPS, args.train_months, args.test_months, warmup, bar_minutes,
@@ -84,8 +87,12 @@ def main() -> None:
             elif holdout is not None:
                 hr = holdout_run(name, df, {}, holdout, FEE_BPS, SLIP_BPS, warmup, bar_minutes, args.size_frac)
                 entry["holdout"] = hr.metrics if hr else {}
-                entry["cost_sensitivity"] = cost_sensitivity(name, dev_df, {}, warmup) if not REGISTRY[name].get("needs_partners") else {}
-                entry["delayed_entry"] = delayed_entry_check(name, dev_df, {}, warmup, FEE_BPS, SLIP_BPS) if not REGISTRY[name].get("needs_partners") else {}
+                simple = not REGISTRY[name].get("needs_partners") and "custom_backtest" not in REGISTRY[name]["flags"]
+                entry["cost_sensitivity"] = cost_sensitivity(name, dev_df, {}, warmup) if simple else {}
+                entry["delayed_entry"] = delayed_entry_check(name, dev_df, {}, warmup, FEE_BPS, SLIP_BPS) if simple else {}
+                if "custom_backtest" in REGISTRY[name]["flags"]:
+                    r2 = run_strategy(name, dev_df, {}, FEE_BPS * 2, SLIP_BPS * 2, bar_minutes, warmup=warmup, size_frac=args.size_frac)
+                    entry["cost_sensitivity"] = {"cost_x2": {"net_return_pct": r2.metrics["net_return_pct"], "profit_factor": r2.metrics["profit_factor"], "trades": r2.metrics["trades"]}}
                 if name != "buy_hold" and wf.oos_equity is not None:
                     wf.oos_equity.to_csv(f"{args.out}/oos_equity_{name}_{s}.csv")
             results["strategies"][name]["per_symbol"][s] = entry

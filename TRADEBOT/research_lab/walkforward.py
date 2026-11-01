@@ -37,6 +37,8 @@ def run_strategy(name: str, df: pd.DataFrame, params: dict, fee_bps: float, slip
                  warmup: int = 800, size_frac: float = 1.0, partners: dict[str, pd.DataFrame] | None = None) -> Result:
     fn = REGISTRY[name]["fn"]
     p = {**REGISTRY[name]["default"], **params}
+    if "custom_backtest" in REGISTRY[name].get("flags", ()):
+        return fn(df, p, fee_bps=fee_bps, slippage_bps=slippage_bps, size_frac=size_frac, bar_minutes=bar_minutes, warmup=warmup)
     if REGISTRY[name].get("needs_partners"):
         # partner series aligned to this frame's index (no future bars: reindex + ffill only backwards in time)
         p["_partners"] = {k: v.reindex(df.index, method="ffill") for k, v in (partners or {}).items()}
