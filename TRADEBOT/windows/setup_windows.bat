@@ -35,7 +35,7 @@ if not defined PY (
 if not defined PY (
   echo Python 3.11 or newer was not found.
   choice /M "Install Python 3.12 now via winget (system change)"
-  if errorlevel 2 (echo Skipped. Install Python 3.12 from https://www.python.org/downloads/ (tick "Add to PATH") and re-run. & pause & exit /b 1)
+  if errorlevel 2 (echo Skipped. Install Python 3.12 from https://www.python.org/downloads/ and tick Add to PATH, then re-run. & pause & exit /b 1)
   winget install -e --id Python.Python.3.12 --accept-source-agreements --accept-package-agreements
   if errorlevel 1 (echo winget could not install Python. Install it manually and re-run. & pause & exit /b 1)
   echo Python installed. Close this window, open a NEW terminal, and run setup_windows.bat again so PATH refreshes.
