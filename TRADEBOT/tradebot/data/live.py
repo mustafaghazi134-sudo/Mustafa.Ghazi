@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 _BINANCE_INTERVALS = {"1m", "5m", "15m", "30m", "1h", "4h", "1d"}
 _COINGECKO_IDS = {"BTC": "bitcoin", "ETH": "ethereum", "SOL": "solana", "JUP": "jupiter-exchange-solana", "RAY": "raydium", "BONK": "bonk",
                   "WIF": "dogwifcoin", "PYTH": "pyth-network", "JTO": "jito-governance-token"}
-_STABLES = {"USDC", "USDT", "USDS", "PYUSD", "USDE", "DAI", "FDUSD", "USD1", "UXD", "USDH"}
+_STABLES = {"USDC", "USDT", "USDS", "USDG", "PYUSD", "USDE", "DAI", "FDUSD", "USD1", "UXD", "USDH", "USDY", "EURC", "USDP", "TUSD", "CASH"}
 
 
 class _Http:
@@ -212,9 +212,11 @@ class LiveProvider(MarketDataProvider):
             st = t.get("stats24h") or {}
             return float(st.get("buyVolume") or 0.0) + float(st.get("sellVolume") or 0.0)
 
+        known_mints = set(self.mints.values())
         for t in sorted(tokens, key=vol, reverse=True):
             sym = str(t.get("symbol", "")).upper()
-            if not sym or sym in self.mints or sym in _STABLES or not t.get("isVerified"):
+            # identity is the mint (skill): a configured asset must not re-enter under its own ticker (e.g. cbBTC as "CBBTC")
+            if not sym or sym in self.mints or t.get("id") in known_mints or sym in _STABLES or not t.get("isVerified"):
                 continue
             if (t.get("audit") or {}).get("isSus") is True:   # skill: flagged tokens; key present only when true
                 continue

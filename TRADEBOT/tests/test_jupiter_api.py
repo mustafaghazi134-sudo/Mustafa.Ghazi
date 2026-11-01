@@ -29,6 +29,10 @@ TOKENS_V2 = [
      "stats24h": {"buyVolume": 30_000_000, "sellVolume": 25_000_000, "priceChange": 4.0}},
 ]
 VERIFIED = TOKENS_V2 + [
+    {"id": "cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij", "symbol": "cbBTC", "decimals": 8, "liquidity": 4e7, "isVerified": True,
+     "organicScore": 90, "stats24h": {"buyVolume": 5e8, "sellVolume": 5e8}},      # already configured as BTC: must not re-enter as CBBTC
+    {"id": "Mint5555555555555555555555555555555555555555", "symbol": "USDG", "decimals": 6, "liquidity": 9e8, "isVerified": True,
+     "organicScore": 99, "stats24h": {"buyVolume": 9e9, "sellVolume": 9e9}},
     {"id": "Mint1111111111111111111111111111111111111111", "symbol": "GOOD", "decimals": 6, "liquidity": 3_000_000, "isVerified": True,
      "organicScore": 80, "stats24h": {"buyVolume": 5e6, "sellVolume": 4e6}},
     {"id": "Mint2222222222222222222222222222222222222222", "symbol": "SCAM", "decimals": 6, "liquidity": 9_000_000, "isVerified": True,
@@ -89,6 +93,7 @@ def test_sus_tokens_are_excluded_everywhere():
         VERIFIED if url.endswith("/tokens/v2/search") else {"Mint4444444444444444444444444444444444444444": {"usdPrice": 1.0}})
     syms = [t.symbol for t in p.get_universe(20)]
     assert "GOOD" in syms and "SUS" not in syms and "SCAM" not in syms and "USDT" not in syms
+    assert "CBBTC" not in syms and "USDG" not in syms and syms.count("BTC") == 1
     p.mints["SUS"] = "Mint4444444444444444444444444444444444444444"
     assert "SUS" not in p.get_tickers(["SUS"])
 

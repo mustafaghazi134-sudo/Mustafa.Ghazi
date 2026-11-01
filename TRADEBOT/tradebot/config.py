@@ -282,7 +282,7 @@ tp_mult = 0.0
 trailing = false
 
 [claude]
-enabled = true
+enabled = false              # Anthropic API calls OFF: deterministic strategies only. Set true (and ANTHROPIC_API_KEY) to enable.
 model = "claude-opus-5-5"
 effort = "medium"
 research_enabled = true
