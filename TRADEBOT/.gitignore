@@ -1,0 +1,9 @@
+data/
+.env
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+__pycache__/
+*.egg-info/
+.pytest_cache/
+config.toml

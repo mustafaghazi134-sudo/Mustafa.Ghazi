@@ -1,0 +1,10 @@
+services:
+  tradebot:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    env_file: ../.env            # ANTHROPIC_API_KEY (+ live-only vars when you deliberately go live)
+    volumes:
+      - ../data:/app/data        # config.toml, ledger.sqlite, KILL, LIVE_ARMED, reports/
+    stop_grace_period: 90s       # let an in-flight cycle finish and the ledger flush
