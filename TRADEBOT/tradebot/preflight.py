@@ -24,8 +24,7 @@ def hosts(settings: Settings) -> dict[str, str]:
     return {
         "jupiter_price_v3": f"{jup.price}?ids={SOL_MINT}",
         "jupiter_tokens_v2": f"{jup.tokens}/search?query={SOL_MINT}",
-        "jupiter_swap_quote": f"{jup.swap}/quote?inputMint={SOL_MINT}&outputMint={USDC_MINT}&amount=1000000&slippageBps=50",
-        "jupiter_ultra_order": f"{jup.ultra}/order?inputMint={SOL_MINT}&outputMint={USDC_MINT}&amount=1000000",
+        "jupiter_swap_v2_order": f"{jup.swap}/order?inputMint={SOL_MINT}&outputMint={USDC_MINT}&amount=1000000&slippageBps=50",
         "binance_klines": f"{settings.data.binance_base_url}/api/v3/klines?symbol=SOLUSDT&interval=1h&limit=1",
         "dexscreener": f"{settings.data.dexscreener_base_url}/latest/dex/tokens/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
         "coingecko": f"{settings.data.coingecko_base_url}/ping",
@@ -59,13 +58,16 @@ def preflight(settings: Settings) -> list[tuple[str, str, str]]:
     rows.append(("ANTHROPIC_API_KEY", "OK" if key else "WARN",
                  "set" if key else "missing: Claude research/vetting disabled, deterministic strategies still run"))
     jup = jupiter_endpoints(settings.data, settings.execution)
-    rows.append(("jupiter_base", "OK", f"{jup.base} ({'API key set' if jup.headers else 'free tier, no key'})"))
+    rows.append(("jupiter_api_key", "OK" if jup.has_key else "FAIL",
+                 f"{jup.base} (x-api-key set)" if jup.has_key else "missing: Jupiter REST requires an x-api-key (free at developers.jup.ag); set JUPITER_API_KEY"))
     for name, url in hosts(settings).items():
         code, detail = _get(url, headers=jup.headers if name.startswith("jupiter") else None)
         if code is None:
             rows.append((f"net:{name}", "FAIL", detail))
         elif name == "anthropic" and code == 401:
             rows.append((f"net:{name}", "OK", "reachable (401 without key is expected)"))
+        elif name.startswith("jupiter") and code == 401 and not jup.has_key:
+            rows.append((f"net:{name}", "WARN", "reachable, but 401 without x-api-key"))
         elif 200 <= code < 300:
             rows.append((f"net:{name}", "OK", f"HTTP {code}"))
         else:
@@ -103,7 +105,7 @@ class QuoteReport:
     wallet_sol: float | None = None
     wallet_has_out_ata: bool | None = None
     context_slot: int | None = None
-    ultra: dict | None = None   # Ultra order fee breakdown when available
+    order_info: dict | None = None   # Swap v2 order details: router, mode, fee bps, network fee estimates
 
 
 def jupiter_quote(settings: Settings, in_symbol: str, out_symbol: str, amount: float, slippage_bps: int | None = None,
@@ -114,48 +116,37 @@ def jupiter_quote(settings: Settings, in_symbol: str, out_symbol: str, amount: f
     slip = slippage_bps if slippage_bps is not None else settings.execution.live_slippage_bps
     raw_in = int(round(amount * 10 ** decs[in_symbol]))
     jup = jupiter_endpoints(settings.data, settings.execution)
-    r = httpx.get(f"{jup.swap}/quote", timeout=settings.data.request_timeout_sec, headers=jup.headers,
-                  params={"inputMint": mints[in_symbol], "outputMint": mints[out_symbol], "amount": str(raw_in),
-                          "slippageBps": slip, "restrictIntermediateTokens": "true"})
+    if not jup.has_key:
+        raise RuntimeError("JUPITER_API_KEY is required for Jupiter quotes (free key at developers.jup.ag)")
+    # Swap API v2: GET /order WITHOUT taker is the read-only quote (transaction is null). /swap/v1/quote is deprecated.
+    r = httpx.get(f"{jup.swap}/order", timeout=settings.data.jupiter_quote_timeout_sec, headers=jup.headers,
+                  params={"inputMint": mints[in_symbol], "outputMint": mints[out_symbol], "amount": str(raw_in), "slippageBps": slip})
     r.raise_for_status()
     q = r.json()
+    if q.get("error"):
+        raise RuntimeError(f"order error: {q['error']}")
     by_mint = {m: s for s, m in mints.items()}
     route = []
     for hop in q.get("routePlan", []):
         si = hop.get("swapInfo", {})
-        fee_mint = si.get("feeMint")
-        fee_sym = by_mint.get(fee_mint, (fee_mint or "")[:6])
-        fee_dec = decs.get(fee_sym, 6)
-        route.append({"label": si.get("label"), "percent": hop.get("percent"),
+        fee_sym = by_mint.get(si.get("feeMint"), str(si.get("feeMint") or "")[:6])
+        route.append({"label": si.get("label"), "percent": (hop.get("bps", 0) / 100) if "bps" in hop else hop.get("percent"),
                       "in": int(si.get("inAmount", 0)) / 10 ** decs.get(by_mint.get(si.get("inputMint"), ""), 6),
                       "out": int(si.get("outAmount", 0)) / 10 ** decs.get(by_mint.get(si.get("outputMint"), ""), 6),
-                      "lp_fee": int(si.get("feeAmount", 0)) / 10 ** fee_dec, "lp_fee_symbol": fee_sym})
+                      "lp_fee": int(si.get("feeAmount", 0)) / 10 ** decs.get(fee_sym, 6), "lp_fee_symbol": fee_sym})
     rep = QuoteReport(in_symbol=in_symbol, out_symbol=out_symbol, in_amount=int(q["inAmount"]) / 10 ** decs[in_symbol],
                       out_amount=int(q["outAmount"]) / 10 ** decs[out_symbol],
                       min_out_amount=int(q.get("otherAmountThreshold", q["outAmount"])) / 10 ** decs[out_symbol],
                       price_impact_pct=float(q.get("priceImpactPct") or 0.0), slippage_bps=int(q.get("slippageBps", slip)),
-                      route=route, platform_fee=q.get("platformFee"), priority_fee_sol=settings.execution.priority_fee_lamports / LAMPORTS,
+                      route=route, platform_fee=None, priority_fee_sol=int(q.get("prioritizationFeeLamports") or 0) / LAMPORTS,
                       context_slot=q.get("contextSlot"))
-    # SOL price from the quote itself when one side is SOL and the other USDC
+    rep.order_info = {"router": q.get("router"), "mode": q.get("mode"), "swap_type": q.get("swapType"), "fee_bps": q.get("feeBps"),
+                 "signature_fee_sol": int(q.get("signatureFeeLamports") or BASE_FEE_LAMPORTS) / LAMPORTS,
+                 "priority_fee_sol": int(q.get("prioritizationFeeLamports") or 0) / LAMPORTS,
+                 "rent_fee_sol": int(q.get("rentFeeLamports") or 0) / LAMPORTS, "out_amount": rep.out_amount,
+                 "price_impact_pct": rep.price_impact_pct, "gasless": q.get("gasless"), "error": None}
     if {in_symbol, out_symbol} == {"SOL", "USDC"} and rep.in_amount > 0:
         rep.sol_price_usd = rep.out_amount / rep.in_amount if in_symbol == "SOL" else rep.in_amount / rep.out_amount
-    # Ultra order (read-only: nothing is signed or executed) reports Jupiter's own fee estimate incl. rent & priority fee.
-    try:
-        params = {"inputMint": mints[in_symbol], "outputMint": mints[out_symbol], "amount": str(raw_in), "slippageBps": slip}
-        if wallet:
-            params["taker"] = wallet
-        ro = httpx.get(f"{jup.ultra}/order", timeout=settings.data.request_timeout_sec, headers=jup.headers, params=params)
-        ro.raise_for_status()
-        o = ro.json()
-        rep.ultra = {"router": o.get("router"), "swap_type": o.get("swapType"), "fee_bps": o.get("feeBps"),
-                     "signature_fee_sol": int(o.get("signatureFeeLamports") or 0) / LAMPORTS,
-                     "priority_fee_sol": int(o.get("prioritizationFeeLamports") or 0) / LAMPORTS,
-                     "rent_fee_sol": int(o.get("rentFeeLamports") or 0) / LAMPORTS,
-                     "out_amount": int(o["outAmount"]) / 10 ** decs[out_symbol] if o.get("outAmount") else None,
-                     "price_impact_pct": float(o.get("priceImpactPct") or 0.0), "gasless": o.get("gasless"),
-                     "error": o.get("errorMessage")}
-    except (httpx.HTTPError, ValueError, KeyError) as e:
-        rep.ultra = {"error": f"{type(e).__name__}: {e}"}
     if wallet:
         bal = wallet_balances(settings, wallet)
         rep.wallet_sol = bal["SOL"]
@@ -174,22 +165,17 @@ def format_quote(rep: QuoteReport) -> str:
     L.append("Route:")
     for h in rep.route:
         L.append(f"  {h['label']:<22} {h['percent']:>3}%  {h['in']:.9g} -> {h['out']:.9g}   LP fee {h['lp_fee']:.9g} {h['lp_fee_symbol']}")
-    L.append(f"Jupiter platform fee (Swap API): {rep.platform_fee or 'none'}")
-    if rep.ultra:
-        u = rep.ultra
-        if u.get("error") and u.get("out_amount") is None:
-            L.append(f"Ultra order estimate: unavailable ({u['error']})")
-        else:
-            L.append(f"Ultra order estimate ({u.get('router')}, {u.get('swap_type')}): out {u['out_amount']:.9g} {rep.out_symbol}, "
-                     f"Jupiter fee {u.get('fee_bps')} bps, signature fee {u['signature_fee_sol']:.9f} SOL, "
-                     f"priority fee {u['priority_fee_sol']:.9f} SOL, rent {u['rent_fee_sol']:.9f} SOL, impact {u['price_impact_pct']*100:.4f}%")
+    if rep.order_info:
+        u = rep.order_info
+        L.append(f"Swap v2 order: router {u.get('router')} mode {u.get('mode')} type {u.get('swap_type')}, Jupiter fee {u.get('fee_bps')} bps, "
+                 f"signature fee {u['signature_fee_sol']:.9f} SOL, priority fee {u['priority_fee_sol']:.9f} SOL, rent {u['rent_fee_sol']:.9f} SOL, gasless={u.get('gasless')}")
     px = rep.sol_price_usd or 0.0
     usd = (lambda sol: f" (~${sol*px:.4f})" if px else "")
     needs_ata = rep.wallet_has_out_ata is not True
     ata = rep.ata_rent_sol if needs_ata else 0.0
     L += ["Network costs (payer side, in SOL):",
           f"  base tx fee            {rep.base_fee_sol:.9f}{usd(rep.base_fee_sol)}",
-          f"  priority fee (config)  {rep.priority_fee_sol:.9f}{usd(rep.priority_fee_sol)}",
+          f"  priority fee (order)  {rep.priority_fee_sol:.9f}{usd(rep.priority_fee_sol)}",
           f"  {rep.out_symbol} token account rent  {rep.ata_rent_sol:.9f}{usd(rep.ata_rent_sol)}  "
           + ("(wallet already has one: not charged)" if rep.wallet_has_out_ata else "(charged once if the wallet has no such account; refundable on close)"),
           f"  wallet rent-exempt floor to keep  {rep.keep_min_sol:.9f}{usd(rep.keep_min_sol)}"]
@@ -206,24 +192,8 @@ def format_quote(rep: QuoteReport) -> str:
 
 # ----------------------------------------------------------------------------- wallet
 def wallet_balances(settings: Settings, address: str) -> dict:
-    """Balances by public key. Tries the RPC-free Jupiter Ultra balances endpoint first, then the RPC."""
-    jup = jupiter_endpoints(settings.data, settings.execution)
+    """Balances by public key via the Solana RPC (the Jupiter Ultra balances endpoint is deprecated)."""
     by_mint = {m: s for s, m in settings.universe.mints.items()}
-    try:
-        r = httpx.get(f"{jup.ultra}/balances/{address}", timeout=settings.data.request_timeout_sec, headers=jup.headers)
-        r.raise_for_status()
-        data = r.json()
-        sol = data.get("SOL", {})
-        out = {"address": address, "SOL": float(sol.get("uiAmount") or 0.0), "lamports": int(sol.get("amount") or 0),
-               "token_accounts": {}, "source": "jupiter_ultra"}
-        for mint, v in data.items():
-            if mint == "SOL":
-                continue
-            out["token_accounts"][by_mint.get(mint, mint[:8] + "…")] = {"amount": float(v.get("uiAmount") or 0.0), "mint": mint,
-                                                                         "rent_locked_sol": TOKEN_ACCOUNT_RENT_LAMPORTS / LAMPORTS}
-        return out
-    except (httpx.HTTPError, ValueError) as e:
-        pass
     rpc = settings.execution.rpc_url
     lamports = _rpc(rpc, "getBalance", [address])["value"]
     out = {"address": address, "SOL": lamports / LAMPORTS, "lamports": lamports, "token_accounts": {}, "source": "rpc"}
@@ -256,6 +226,9 @@ def verify_assets(settings: Settings, symbols: list[str] | None = None, equity_u
     from .data.live import LiveProvider
     jup = jupiter_endpoints(settings.data, settings.execution)
     prov = LiveProvider(settings.data, settings.universe, settings.execution)
+    if not jup.has_key:
+        return [{"symbol": sym, "status": "FAIL", "problems": ["JUPITER_API_KEY missing: Jupiter REST requires an x-api-key (free at developers.jup.ag)"],
+                 "order_usd": 0.0} for sym in (symbols or settings.universe.symbols)]
     eq = equity_usd or settings.initial_capital_usd
     notional = min(eq * settings.risk.max_position_pct / 100, settings.risk.max_order_notional_usd)
     usdc = settings.universe.mints["USDC"]
@@ -293,15 +266,21 @@ def verify_assets(settings: Settings, symbols: list[str] | None = None, equity_u
             r["problems"].append(f"candles: {type(e).__name__}: {e}")
         # round-trip quotes at the real order size
         try:
-            q_buy = httpx.get(f"{jup.swap}/quote", timeout=settings.data.request_timeout_sec, headers=jup.headers,
+            # read-only quotes: Swap v2 /order without taker (transaction null)
+            q_buy = httpx.get(f"{jup.swap}/order", timeout=settings.data.jupiter_quote_timeout_sec, headers=jup.headers,
                               params={"inputMint": usdc, "outputMint": mint, "amount": str(int(notional * 1e6)),
-                                      "slippageBps": settings.execution.live_slippage_bps, "restrictIntermediateTokens": "true"})
+                                      "slippageBps": settings.execution.live_slippage_bps})
             q_buy.raise_for_status(); qb = q_buy.json()
+            if qb.get("error"):
+                raise RuntimeError(qb["error"])
             out_qty = int(qb["outAmount"]) / 10 ** dec
-            q_sell = httpx.get(f"{jup.swap}/quote", timeout=settings.data.request_timeout_sec, headers=jup.headers,
+            q_sell = httpx.get(f"{jup.swap}/order", timeout=settings.data.jupiter_quote_timeout_sec, headers=jup.headers,
                                params={"inputMint": mint, "outputMint": usdc, "amount": str(int(out_qty * 10 ** dec)),
-                                       "slippageBps": settings.execution.live_slippage_bps, "restrictIntermediateTokens": "true"})
+                                       "slippageBps": settings.execution.live_slippage_bps})
             q_sell.raise_for_status(); qs = q_sell.json()
+            if qs.get("error"):
+                raise RuntimeError(qs["error"])
+            r["jupiter_fee_bps"] = qb.get("feeBps"); r["router"] = qb.get("router")
             back_usd = int(qs["outAmount"]) / 1e6
             r["buy_impact_bps"] = round(float(qb.get("priceImpactPct") or 0) * 1e4, 1)
             r["sell_impact_bps"] = round(float(qs.get("priceImpactPct") or 0) * 1e4, 1)

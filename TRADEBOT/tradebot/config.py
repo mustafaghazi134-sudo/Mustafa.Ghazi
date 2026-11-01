@@ -62,10 +62,13 @@ class DataConfig(BaseModel):
     csv_dir: str = "data/csv"
     synthetic_seed: int = 42
     synthetic_symbols: list[str] = Field(default_factory=lambda: ["SOL", "JUP", "RAY", "BONK", "WIF"])
-    # Jupiter: lite-api.jup.ag is free (no key, low rate limits); api.jup.ag needs an API key from portal.jup.ag.
-    # Leave jupiter_base_url empty to pick automatically from whether a key is configured (or env JUPITER_API_KEY).
+    # Jupiter REST (api.jup.ag) requires an x-api-key from https://developers.jup.ag (free tier available), per the
+    # official `integrating-jupiter` skill. Set [data].jupiter_api_key or env JUPITER_API_KEY. jupiter_base_url is an
+    # override for proxies/testing only.
     jupiter_base_url: str = ""
     jupiter_api_key: str = ""
+    jupiter_quote_timeout_sec: float = 5.0      # skill: 5s for quotes
+    jupiter_execute_timeout_sec: float = 30.0   # skill: 30s for executions
     binance_base_url: str = "https://api.binance.com"
     dexscreener_base_url: str = "https://api.dexscreener.com"
     coingecko_base_url: str = "https://api.coingecko.com/api/v3"
@@ -106,17 +109,20 @@ class ExecutionConfig(BaseModel):
     paper_slippage_bps: float = 15.0
     live_slippage_bps: int = 50
     rpc_url: str = "https://api.mainnet-beta.solana.com"
-    engine: Literal["swap", "ultra"] = Field("swap", description="swap: Swap API v1 + own RPC send; ultra: Ultra API order/execute (Jupiter broadcasts, no RPC needed)")
-    jupiter_swap_base_url: str = Field("", description="override for the Swap API base (default: <jupiter base>/swap/v1)")
-    confirm_timeout_sec: float = 60.0
-    priority_fee_lamports: int = Field(100_000, description="max priority fee per swap (Swap API priorityLevelWithMaxLamports)")
-    priority_level: Literal["medium", "high", "veryHigh"] = "high"
+    # Execution uses Swap API v2 order -> sign -> execute (Jupiter submits and confirms; no RPC needed for swaps).
+    jupiter_swap_base_url: str = Field("", description="override for the Swap API base (default: <jupiter base>/swap/v2)")
+    execute_max_retries: int = Field(2, ge=0, description="re-quote + retry on retryable /execute codes (-1, -1000, -1001, -1004, -2000..-2004)")
 
 
 class JupiterEndpoints(BaseModel):
+    """Current Jupiter API surface (official jup-ag/agent-skills `integrating-jupiter`): Price v3, Tokens v2, Swap v2."""
     base: str
     headers: dict[str, str] = Field(default_factory=dict)
     swap_override: str = ""
+
+    @property
+    def has_key(self) -> bool:
+        return "x-api-key" in self.headers
 
     @property
     def price(self) -> str:
@@ -128,16 +134,12 @@ class JupiterEndpoints(BaseModel):
 
     @property
     def swap(self) -> str:
-        return self.swap_override or f"{self.base}/swap/v1"
-
-    @property
-    def ultra(self) -> str:
-        return f"{self.base}/ultra/v1"
+        return self.swap_override or f"{self.base}/swap/v2"
 
 
 def jupiter_endpoints(data: "DataConfig", execution: "ExecutionConfig | None" = None) -> JupiterEndpoints:
     key = data.jupiter_api_key or os.environ.get("JUPITER_API_KEY", "")
-    base = data.jupiter_base_url.rstrip("/") or ("https://api.jup.ag" if key else "https://lite-api.jup.ag")
+    base = data.jupiter_base_url.rstrip("/") or "https://api.jup.ag"
     return JupiterEndpoints(base=base, headers={"x-api-key": key} if key else {},
                             swap_override=(execution.jupiter_swap_base_url.rstrip("/") if execution else ""))
 
@@ -293,7 +295,7 @@ fail_open = true
 provider = "live"            # "synthetic" or "csv" for offline testing
 candle_interval = "4h"       # the validated timeframe; 1h churns away the edge at realistic costs
 candle_history = 1000        # >= 30d lookback (180 bars) + 100d EMA (600 bars) at 4h
-jupiter_api_key = ""         # optional; from portal.jup.ag. With a key the bot uses api.jup.ag, else lite-api.jup.ag
+jupiter_api_key = ""         # REQUIRED for live market data and quotes: free key from https://developers.jup.ag (or env JUPITER_API_KEY)
 
 [universe]                   # validated exposure: BTC (as cbBTC), ETH (as Wormhole WETH), SOL. See `tradebot verify-assets`.
 symbols = ["BTC", "ETH", "SOL"]
@@ -304,9 +306,7 @@ max_symbols = 12
 paper_fee_bps = 30
 paper_slippage_bps = 15
 live_slippage_bps = 50
-rpc_url = "https://api.mainnet-beta.solana.com"
-engine = "swap"              # "swap" (Swap API v1, sends via rpc_url) or "ultra" (Ultra API, Jupiter broadcasts)
-priority_level = "high"
+rpc_url = "https://api.mainnet-beta.solana.com"   # balances only; swaps execute via Jupiter Swap API v2
 
 [engine]
 scan_interval_sec = 60

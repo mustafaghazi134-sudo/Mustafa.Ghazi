@@ -26,7 +26,7 @@ def _resp(payload):
 
 def test_verify_assets_round_trip_and_limits(tmp_path, monkeypatch):
     s = Settings(data_dir=str(tmp_path), initial_capital_usd=1000.0)   # order size = 10% = $100
-    s.universe.symbols = ["BTC"]
+    s.universe.symbols = ["BTC"]; s.data.jupiter_api_key = "k"
     price = 100_000.0
     # LiveProvider HTTP (price v3 + tokens v2 + binance klines)
     import tradebot.data.live as live
@@ -47,11 +47,11 @@ def test_verify_assets_round_trip_and_limits(tmp_path, monkeypatch):
     monkeypatch.setattr(live._Http, "get_json", fake_get_json)
 
     def fake_httpx_get(url, timeout=None, headers=None, params=None):
-        assert "/swap/v1/quote" in url
+        assert url.endswith("/swap/v2/order") and "taker" not in params and headers == {"x-api-key": "k"}
         if params["inputMint"] == USDC:
             out = int(100 / (price * 1.001) * 1e8 * 0.998)
-            return _resp({"inAmount": params["amount"], "outAmount": str(out), "priceImpactPct": "0.0005",
-                          "routePlan": [{"swapInfo": {"label": "Whirlpool"}}]})
+            return _resp({"inAmount": params["amount"], "outAmount": str(out), "priceImpactPct": "0.0005", "feeBps": 10, "router": "metis",
+                          "transaction": None, "routePlan": [{"swapInfo": {"label": "Whirlpool"}, "bps": 10000}]})
         qty = int(params["amount"]) / 1e8
         return _resp({"inAmount": params["amount"], "outAmount": str(int(qty * price * 0.999 * 1e6)), "priceImpactPct": "0.0004",
                       "routePlan": [{"swapInfo": {"label": "Whirlpool"}}]})
@@ -62,13 +62,13 @@ def test_verify_assets_round_trip_and_limits(tmp_path, monkeypatch):
     assert r["status"] == "OK", r["problems"]
     assert r["mint"] == CBBTC and r["candles"] == 1000 and r["order_usd"] == 100.0
     assert abs(r["basis_pct"] - 0.1) < 0.01
-    assert 0 < r["round_trip_cost_bps"] < 50 and r["buy_impact_bps"] == 5.0
+    assert 0 < r["round_trip_cost_bps"] < 50 and r["buy_impact_bps"] == 5.0 and r["jupiter_fee_bps"] == 10
     assert "all assets executable" in format_assets(rows)
 
 
 def test_verify_assets_flags_thin_liquidity_and_high_impact(tmp_path, monkeypatch):
     s = Settings(data_dir=str(tmp_path), initial_capital_usd=1000.0)
-    s.universe.symbols = ["ETH"]
+    s.universe.symbols = ["ETH"]; s.data.jupiter_api_key = "k"
     import tradebot.data.live as live
     monkeypatch.setattr(live._Http, "get_json", lambda self, url, params=None, headers=None, retries=2:
                         {WETH: {"usdPrice": 3000.0}} if url.endswith("/price/v3") else
@@ -81,3 +81,10 @@ def test_verify_assets_flags_thin_liquidity_and_high_impact(tmp_path, monkeypatc
     assert r["status"] in ("WARN", "FAIL")
     joined = " ".join(r["problems"])
     assert "liquidity" in joined and "price impact" in joined
+
+
+def test_verify_assets_fails_fast_without_api_key(tmp_path, monkeypatch):
+    monkeypatch.delenv("JUPITER_API_KEY", raising=False)
+    s = Settings(data_dir=str(tmp_path))
+    rows = verify_assets(s)
+    assert rows and all(r["status"] == "FAIL" and "JUPITER_API_KEY" in r["problems"][0] for r in rows)

@@ -86,46 +86,25 @@ No market access (CI, sandbox)? `tradebot run --provider synthetic --cycles 1000
 system on deterministic synthetic data; results land in the separate `replay` ledger
 (`tradebot report --mode replay`) and never count toward the live gate.
 
-## Jupiter integration (current API)
+## Jupiter integration (aligned with the official `jup-ag/agent-skills`)
+
+Reviewed against Jupiter's official agent skills `integrating-jupiter` (v1.2.0) and `jupiter-swap-migration` (v1.1.0).
 
 | Purpose | Endpoint | Notes |
 |---|---|---|
-| Spot prices, 24h change | `GET {base}/price/v3?ids=<mints>` | Price v2 is deprecated and no longer used |
-| Liquidity, volume, verification, decimals | `GET {base}/tokens/v2/search?query=<mints>` | Tokens v1 is deprecated; DexScreener is only a fallback |
-| Universe scan | `GET {base}/tokens/v2/tag?query=verified` | verified, organic score ≥ 50, stables excluded |
-| Quote / swap (engine `swap`) | `GET {base}/swap/v1/quote`, `POST {base}/swap/v1/swap` | `priorityLevelWithMaxLamports`, `dynamicComputeUnitLimit`, simulation errors abort before signing, expiry via `lastValidBlockHeight` |
-| Order / execute (engine `ultra`) | `GET {base}/ultra/v1/order?taker=…`, `POST {base}/ultra/v1/execute` | Jupiter broadcasts; no RPC needed |
-| Wallet balances | `GET {base}/ultra/v1/balances/{pubkey}` | RPC fallback |
+| Spot prices, 24h change | `GET https://api.jup.ag/price/v3?ids=<mints>` | a mint missing from the response is treated as unpriced (fail closed) |
+| Liquidity, volume, verification, decimals | `GET /tokens/v2/search?query=<mints>` | tokens flagged `audit.isSus` are excluded |
+| Universe scan (optional) | `GET /tokens/v2/tag?query=verified` | verified, organic score >= 50, not `isSus`, stables excluded |
+| Read-only quote | `GET /swap/v2/order` **without** `taker` | `transaction` is null; `/swap/v1/quote` is deprecated |
+| Live execution | `GET /swap/v2/order?taker=…` -> sign locally -> `POST /swap/v2/execute` | Jupiter submits and confirms; actual amounts from `inputAmountResult`/`outputAmountResult`; retryable codes re-quote |
+| Wallet balances | Solana RPC | the Ultra balances endpoint is deprecated |
 
-`{base}` is `https://lite-api.jup.ag` (free tier, no key) or `https://api.jup.ag` when `[data].jupiter_api_key`
-or env `JUPITER_API_KEY` is set (header `x-api-key`). Set `[execution].engine = "ultra"` to let Jupiter
-handle broadcasting; the default `swap` engine sends through your `rpc_url`.
+An `x-api-key` from https://developers.jup.ag (free tier) is required for every Jupiter call; set `JUPITER_API_KEY`
+or `[data].jupiter_api_key`. Quotes use a 5 s timeout, executes 30 s, HTTP 429 gets exponential backoff with jitter.
 
-> The build sandbox had no route to any Jupiter, Solana or exchange host, so these integrations were
-> verified against the documented response shapes with mocked HTTP (`tests/test_jupiter_api.py`), not
-> against the live endpoints. Run `tradebot preflight` on a machine with internet access first.
-
-## Validated strategy (read `research_lab/RESULTS.md` before changing it)
-
-The default configuration is the outcome of an independent research pass over real Binance history
-(BTC 2019-2026, ETH 2019-2025, SOL 2022-2025) with pessimistic execution, ~0.5% round-trip costs, rolling
-walk-forward validation, lookahead/cost/delay checks and a random-entry control:
-
-- **Primary: `tsmom`**: daily-evaluated 30-day time-series momentum with a 100-day EMA regime filter and a 25%
-  disaster stop, on 4h candles. Out of sample it was profitable on BTC, ETH and both SOL blocks, beat buy-and-hold
-  BTC on return (+1132% vs +1065%) with half the drawdown (-39% vs -77%), and survived doubled costs and one-bar-late
-  fills. Win rate is about 33%; the average win is about 6x the average loss. Only ~45% of 3-month windows are
-  positive, so expect long flat stretches.
-- **Secondary: `momentum`**: EMA 12/26 cross above EMA 100 with a 2.5-ATR stop and no take-profit, 4h.
-- **Whole-bot replay** (paper broker + risk engine, both strategies, costs on) of real BTC/ETH 4h history 2019-06 to
-  2024-08: +483% with a 27% maximum drawdown, profit factor 1.72, 204 trades, two daily-loss halts handled
-  automatically. Buy-and-hold over the same span drew down 77-81%.
-- **Rejected:** every "90-95% win rate" strategy we could reproduce (Freqtrade ROI-table strategies, BB/RSI scalps
-  without stops, martingale/DCA). They win 60-100% of trades and still lose money after costs or hide catastrophic
-  tail risk. 1h variants of all trend systems also lose after costs.
-
-`research_lab/` holds the data loader (six cross-checked sources), the engine, 19 candidates, walk-forward, bias
-checks and the report generator. It needs `pip install -e ".[research]"` (NumPy/pandas) and is not imported by the bot.
+> The build sandbox had no route to any Jupiter, Solana or exchange host, so these integrations were verified
+> against the skills' documented request/response shapes with mocked HTTP (`tests/test_jupiter_api.py`), not
+> against the live endpoints. Run `tradebot preflight` and `tradebot verify-assets` on a connected machine first.
 
 ## Assets: how BTC/ETH exposure is traded on Solana
 

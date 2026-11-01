@@ -5,7 +5,7 @@ Jupiter (current API surface):
   * Tokens API v2     GET {base}/tokens/v2/search?query=<mint,...> -> [ {id, symbol, decimals, liquidity, usdPrice, isVerified,
                                                                          organicScore, stats24h{buyVolume, sellVolume, priceChange}, ...} ]
                       GET {base}/tokens/v2/tag?query=verified      -> same shape, the verified list
-  base = https://api.jup.ag with an API key (x-api-key), else https://lite-api.jup.ag (free tier).
+  base = https://api.jup.ag; an x-api-key (free at developers.jup.ag) is required for every call.
   (Price v2 and Tokens v1 are deprecated and no longer served.)
 Binance public klines provide OHLCV history; CoinGecko OHLC is the fallback. DexScreener is a secondary
 source for liquidity/volume if the Jupiter token endpoint fails.
@@ -15,6 +15,7 @@ All HTTP goes through httpx with short timeouts; failures raise so the engine ca
 from __future__ import annotations
 
 import logging
+import random
 import time
 from typing import Any
 
@@ -42,8 +43,9 @@ class _Http:
         for attempt in range(retries + 1):
             try:
                 r = self.client.get(url, params=params, headers=headers)
-                if r.status_code == 429:
-                    time.sleep(1.5 * (attempt + 1))
+                if r.status_code == 429:   # skill: exponential backoff with jitter, 10s sliding window
+                    retry_after = float(r.headers.get("Retry-After") or 0)
+                    time.sleep(min(max(retry_after, 1.0 * 2 ** attempt) + random.random() * 0.5, 10.0))
                     continue
                 r.raise_for_status()
                 return r.json()
@@ -104,7 +106,8 @@ class LiveProvider(MarketDataProvider):
             out[s] = {"liquidity_usd": float(t.get("liquidity") or 0.0),
                       "volume_24h_usd": float(st.get("buyVolume") or 0.0) + float(st.get("sellVolume") or 0.0),
                       "change_24h_pct": float(st.get("priceChange") or 0.0), "price": float(t.get("usdPrice") or 0.0),
-                      "verified": 1.0 if t.get("isVerified") else 0.0, "organic_score": float(t.get("organicScore") or 0.0)}
+                      "verified": 1.0 if t.get("isVerified") else 0.0, "organic_score": float(t.get("organicScore") or 0.0),
+                      "is_sus": 1.0 if (t.get("audit") or {}).get("isSus") is True else 0.0}
             if t.get("decimals") is not None:
                 self.decimals[s] = int(t["decimals"])
         self._token_cache = (now, {**self._token_cache[1], **out})
@@ -149,6 +152,9 @@ class LiveProvider(MarketDataProvider):
             st = stats.get(s, {})
             px = prices.get(s, {}).get("price") or st.get("price")
             if not px:
+                continue
+            if st.get("is_sus"):
+                log.warning("%s flagged audit.isSus by Jupiter; excluded from tickers (fail closed)", s)
                 continue
             liq, vol = float(st.get("liquidity_usd", 0.0)), float(st.get("volume_24h_usd", 0.0))
             if s == "SOL":  # SOL depth is effectively unbounded relative to our sizes
@@ -209,6 +215,8 @@ class LiveProvider(MarketDataProvider):
         for t in sorted(tokens, key=vol, reverse=True):
             sym = str(t.get("symbol", "")).upper()
             if not sym or sym in self.mints or sym in _STABLES or not t.get("isVerified"):
+                continue
+            if (t.get("audit") or {}).get("isSus") is True:   # skill: flagged tokens; key present only when true
                 continue
             if float(t.get("organicScore") or 0.0) < 50 or float(t.get("liquidity") or 0.0) < self.universe_cfg_min_liquidity():
                 continue
