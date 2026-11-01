@@ -39,6 +39,17 @@ market data ─► universe ─► strategies ─► signals ─► Claude vet (
 | Engine | `tradebot/engine/bot.py` | 24/7 loop, exits, entries, research cadence, daily reports, flatten-on-kill |
 | CLI | `tradebot/cli.py` | `init run backtest research report status kill resume arm-live disarm-live fetch-data` |
 
+## Windows one-click setup
+
+Download [`windows/setup_windows.bat`](windows/setup_windows.bat) into your trading folder and double-click
+it. It checks Git and Python (asking before installing either via winget), clones or updates this branch
+into `Mustafa.Ghazi\`, creates `.venv`, installs dependencies, runs the test suite and `selftest`, writes
+`config.toml`, and runs `preflight` against the live market hosts. Then:
+
+- `windows\run_paper.bat` starts continuous paper trading with real prices and auto-restarts. It sets
+  `TRADEBOT_FORCE_PAPER=1` and blanks the live-trading variables, so it can never send a real order.
+- `windows\status.bat` shows state and the 7-day report. `windows\kill_switch.bat` is the emergency stop.
+
 ## Quick start (paper trading)
 
 ```bash
