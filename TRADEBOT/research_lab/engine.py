@@ -165,6 +165,10 @@ def compute_metrics(res: Result, initial: float, bar_minutes: int) -> dict:
     wins = [x.pnl for x in t if x.pnl > 0]
     losses = [x.pnl for x in t if x.pnl <= 0]
     gw, gl = sum(wins), -sum(losses)
+    streak = cur = 0
+    for x in t:
+        cur = cur + 1 if x.pnl <= 0 else 0
+        streak = max(streak, cur)
     exposure = float((eq != eq.shift(1)).mean()) if len(eq) else 0.0
     return {
         "trades": len(t),
@@ -183,5 +187,7 @@ def compute_metrics(res: Result, initial: float, bar_minutes: int) -> dict:
         "sharpe": round(sharpe, 2),
         "calmar": round(((final / initial) ** (1 / years) - 1) * 100 / abs(dd), 2) if dd < 0 and final > 0 else 0.0,
         "avg_bars_held": round(float(np.mean([x.bars_held for x in t])), 1) if t else 0.0,
+        "longest_losing_streak": streak,
+        "avg_win_over_avg_loss": round((gw / len(wins)) / (gl / len(losses)), 2) if wins and losses else 0.0,
         "years": round(years, 2),
     }

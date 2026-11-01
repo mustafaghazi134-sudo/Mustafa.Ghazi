@@ -19,9 +19,11 @@ Strat = Callable[[pd.DataFrame, dict], tuple[pd.Series, pd.Series | None, ExitSp
 REGISTRY: dict[str, dict] = {}
 
 
-def register(name: str, grid: dict, default: dict, source: str, note: str = "", flags: tuple[str, ...] = ()):
+def register(name: str, grid: dict, default: dict, source: str, note: str = "", flags: tuple[str, ...] = (),
+             needs_partners: bool = False, author_claim: str = ""):
     def deco(fn: Strat):
-        REGISTRY[name] = {"fn": fn, "grid": grid, "default": default, "source": source, "note": note, "flags": flags}
+        REGISTRY[name] = {"fn": fn, "grid": grid, "default": default, "source": source, "note": note, "flags": flags,
+                          "needs_partners": needs_partners, "author_claim": author_claim}
         return fn
     return deco
 

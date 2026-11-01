@@ -112,7 +112,7 @@ class ExecutionConfig(BaseModel):
     # Execution uses Swap API v2 order -> sign -> execute (Jupiter submits and confirms; no RPC needed for swaps).
     jupiter_swap_base_url: str = Field("", description="override for the Swap API base (default: <jupiter base>/swap/v2)")
     execute_max_retries: int = Field(2, ge=0, description="re-quote + retry on retryable /execute codes (-1, -1000, -1001, -1004, -2000..-2004)")
-    intent_expiry_sec: float = Field(150.0, gt=0, description="a signed-but-unconfirmed intent older than this is treated as expired (blockhash validity ~2 min)")
+    intent_stale_warn_sec: float = Field(600.0, gt=0, description="log CRITICAL while an intent stays UNKNOWN longer than this (it never auto-expires on time alone)")
     reconcile_on_start: bool = Field(True, description="live: compare ledger with on-chain balances at startup; mismatch trips the kill switch")
     balance_tolerance_pct: float = Field(2.0, ge=0, description="allowed shortfall of wallet vs ledger before tripping")
 

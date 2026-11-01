@@ -184,10 +184,11 @@ class TradingBot:
         self.book.apply_fill(fill, signal=signal, exit_reason=exit_reason)
         return True
 
-    def reconcile_pending(self, expiry_sec: float | None = None) -> dict[str, int]:
-        """Settle intents left pending by a crash or timeout. Signed/submitted rows are checked on-chain by
-        signature; confirmed ones are booked exactly once from the persisted quote; expired ones are closed."""
-        expiry = expiry_sec if expiry_sec is not None else self.s.execution.intent_expiry_sec
+    def reconcile_pending(self) -> dict[str, int]:
+        """Settle intents left pending by a crash or timeout, on evidence only:
+        confirmed on-chain -> booked exactly once from the persisted quote; failed on-chain -> closed;
+        not found AND blockhash expired -> expired (it can never land); otherwise it stays UNKNOWN (pending),
+        blocks new orders for that symbol, and is re-checked every cycle. Time alone never resolves an intent."""
         counts = {"confirmed": 0, "failed": 0, "expired": 0, "abandoned": 0, "pending": 0}
         for row in self.ledger.pending_intents():
             age = self.clock() - row["ts"]
@@ -196,11 +197,12 @@ class TradingBot:
                 counts["abandoned"] += 1
                 continue
             try:
-                status = self.broker.lookup_signature(row["tx_signature"])
+                ev = self.broker.transaction_status(row["tx_signature"], row["signed_tx"])
             except Exception as e:  # noqa: BLE001
-                log.error("reconcile: lookup failed for %s: %s", row["tx_signature"], e)
+                log.error("reconcile: status lookup failed for %s: %s (stays UNKNOWN)", row["tx_signature"], e)
                 counts["pending"] += 1
                 continue
+            status, valid = ev.get("status"), ev.get("blockhash_valid")
             if status == "confirmed":
                 side = Side(row["side"])
                 qty, notional = float(row["qty"]), float(row["notional_usd"])
@@ -214,10 +216,15 @@ class TradingBot:
             elif status == "failed":
                 self.ledger.update_intent(row["id"], state="failed", result="on-chain failure")
                 counts["failed"] += 1
-            elif age > expiry:
-                self.ledger.update_intent(row["id"], state="expired", result=f"not found after {age:.0f}s (> blockhash validity)")
+            elif status == "not_found" and valid is False:
+                self.ledger.update_intent(row["id"], state="expired", result=f"not found and blockhash expired after {age:.0f}s")
                 counts["expired"] += 1
             else:
+                self.ledger.update_intent(row["id"], result=f"UNKNOWN: status={status} blockhash_valid={valid} age={age:.0f}s")
+                if age > self.s.execution.intent_stale_warn_sec:
+                    log.critical("intent %s for %s UNKNOWN for %.0fs; trading in %s is blocked until it resolves "
+                                 "(or `tradebot resolve-intent %s expired|confirmed` after manual verification)",
+                                 row["id"], row["symbol"], age, row["symbol"], row["id"])
                 counts["pending"] += 1
         if any(counts.values()):
             log.warning("reconciled pending intents: %s", counts)
@@ -505,7 +512,9 @@ def build_bot(settings: Settings, provider: MarketDataProvider | None = None) ->
         broker: Broker = JupiterLiveBroker(risk, settings, provider, load_keypair(), gate)
     else:
         broker = PaperBroker(risk, provider, fee_bps=settings.execution.paper_fee_bps,
-                             slippage_bps=settings.execution.paper_slippage_bps, clock=clock)
+                             slippage_bps=settings.execution.paper_slippage_bps, clock=clock,
+                             quote_timeout_sec=settings.data.jupiter_quote_timeout_sec,
+                             live_slippage_bps=settings.execution.live_slippage_bps)
     bot = TradingBot(settings, provider, ledger, risk, kill, broker, book, strategies, analyst, clock)
     if settings.is_live and settings.execution.reconcile_on_start:
         problems = bot.reconcile_balances()

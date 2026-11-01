@@ -202,3 +202,15 @@ class Ledger:
 
     def intents(self, limit: int = 50) -> list[sqlite3.Row]:
         return self._exec("SELECT * FROM intents WHERE mode=? ORDER BY ts DESC LIMIT ?", (self.mode, limit)).fetchall()
+
+    def resolve_intent_manually(self, iid: str, state: str, note: str) -> sqlite3.Row:
+        if state not in ("expired", "failed", "confirmed"):
+            raise ValueError("state must be expired, failed or confirmed")
+        row = self.get_intent(iid)
+        if row is None:
+            raise KeyError(iid)
+        if row["state"] not in self.PENDING_STATES:
+            raise ValueError(f"intent {iid} is already {row['state']}")
+        self.update_intent(iid, state=state, result=f"MANUAL: {note}")
+        self.log_event("intent_manual_resolution", f"{iid} {row['symbol']} {row['side']} -> {state}: {note}")
+        return self.get_intent(iid)

@@ -56,6 +56,9 @@ class CrashingBroker(Broker):
     def lookup_signature(self, tx_signature):
         return self.lookup
 
+    def transaction_status(self, tx_signature, signed_tx_b64):
+        return {"status": self.lookup, "blockhash_valid": getattr(self, "blockhash_valid", None)}
+
     def get_balances(self):
         return getattr(self, "balances", {})
 
@@ -108,15 +111,38 @@ def test_crash_after_sign_then_confirmed_on_restart_books_exactly_once(tmp_path)
     assert bot2.book.positions["SOL"].qty == pytest.approx(row["qty"])
 
 
-def test_crash_after_sign_then_not_found_expires_without_position(tmp_path):
+def test_not_found_stays_unknown_until_blockhash_expiry_is_proven(tmp_path):
     bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "crash_after_sign"))
     _buy(bot, prov)
     bot2, ledger2, broker2, prov2 = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "ok", lookup="not_found"))
-    assert ledger2.pending_intents() != [] and not bot2.book.positions   # too young to expire: still pending
-    prov2.cursor += 1                                                     # +1h of replay clock > 150s expiry
+    # evidence incomplete (blockhash validity unknown): stays UNKNOWN no matter how much time passes
+    for _ in range(30):
+        prov2.cursor += 1                                               # +30h of replay clock
+    counts = bot2.reconcile_pending()
+    assert counts["pending"] == 1 and counts["expired"] == 0 and ledger2.pending_intents() != [] and not bot2.book.positions
+    assert "UNKNOWN" in ledger2.pending_intents()[0]["result"]
+    broker2.blockhash_valid = True                                       # blockhash still valid: could still land -> UNKNOWN
+    assert bot2.reconcile_pending()["pending"] == 1
+    broker2.blockhash_valid = False                                      # proven: can never land -> expired, no position, cash intact
     counts = bot2.reconcile_pending()
     assert counts["expired"] == 1 and ledger2.pending_intents() == [] and not bot2.book.positions
     assert bot2.book.cash == pytest.approx(1000.0)
+
+
+def test_unknown_intent_blocks_symbol_and_manual_resolution_is_logged(tmp_path):
+    bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "crash_after_sign"))
+    _buy(bot, prov)
+    broker.mode = "ok"
+    ok, _ = _buy(bot, prov)
+    assert ok is False                                                   # blocked while UNKNOWN
+    iid = ledger.pending_intents("SOL")[0]["id"]
+    with pytest.raises(ValueError):
+        ledger.resolve_intent_manually(iid, "cancelled", "bad state")
+    row = ledger.resolve_intent_manually(iid, "expired", "checked explorer: no such tx")
+    assert row["state"] == "expired" and ledger.pending_intents() == []
+    assert any(e["kind"] == "intent_manual_resolution" for e in ledger.events(5))
+    ok, _ = _buy(bot, prov)
+    assert ok is True                                                    # symbol unblocked after resolution
 
 
 def test_pending_intent_blocks_duplicate_order_for_symbol(tmp_path):
@@ -150,6 +176,20 @@ def test_balance_mismatch_at_startup_trips_kill_switch(tmp_path):
     bot.kill.reset()
     broker.balances = {"SOL": bot.book.positions["SOL"].qty, "USDC": bot.book.cash}
     assert bot.reconcile_balances() == [] and not bot.kill.is_tripped()
+
+
+def test_balance_reconciliation_never_clears_a_manual_or_drawdown_kill(tmp_path):
+    bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "ok"))
+    _buy(bot, prov)
+    broker.balances = {"SOL": bot.book.positions["SOL"].qty, "USDC": bot.book.cash}   # balances are perfect
+    bot.kill.trip("manual kill", source="cli")
+    assert bot.reconcile_balances() == [] and bot.kill.is_tripped() and bot.kill.reason() == "manual kill"
+    bot.kill.reset()
+    bot.kill.trip("drawdown 12% >= limit 10%", source="risk_engine")
+    bot.reconcile_pending(); bot.reconcile_balances()
+    assert bot.kill.is_tripped() and "drawdown" in bot.kill.reason()
+    assert not bot._execute_with_intent.__self__.risk.evaluate(
+        OrderRequest(symbol="SOL", side=Side.BUY, notional_usd=10), bot.book.risk_state({"SOL": 1.0}), MarketState(1.0, 1e9, 1e9, bot.clock())).approved
 
 
 def test_paper_broker_intents_go_created_signed_confirmed(tmp_path):

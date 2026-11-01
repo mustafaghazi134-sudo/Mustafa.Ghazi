@@ -34,12 +34,16 @@ def score(m: dict, min_trades: int = 8) -> float:
 
 
 def run_strategy(name: str, df: pd.DataFrame, params: dict, fee_bps: float, slippage_bps: float, bar_minutes: int = 60,
-                 warmup: int = 800) -> Result:
+                 warmup: int = 800, size_frac: float = 1.0, partners: dict[str, pd.DataFrame] | None = None) -> Result:
     fn = REGISTRY[name]["fn"]
-    entries, exits, spec = fn(df, {**REGISTRY[name]["default"], **params})
+    p = {**REGISTRY[name]["default"], **params}
+    if REGISTRY[name].get("needs_partners"):
+        # partner series aligned to this frame's index (no future bars: reindex + ffill only backwards in time)
+        p["_partners"] = {k: v.reindex(df.index, method="ffill") for k, v in (partners or {}).items()}
+    entries, exits, spec = fn(df, p)
     # never trade during the indicator warm-up
     entries = entries.copy(); entries.iloc[:warmup] = False
-    return run_backtest(df, entries, exits, spec, fee_bps=fee_bps, slippage_bps=slippage_bps, bar_minutes=bar_minutes)
+    return run_backtest(df, entries, exits, spec, fee_bps=fee_bps, slippage_bps=slippage_bps, bar_minutes=bar_minutes, size_frac=size_frac)
 
 
 @dataclass
@@ -51,12 +55,17 @@ class WFResult:
     oos_metrics: dict = field(default_factory=dict)
     oos_trades: int = 0
     param_stability: float = 0.0   # fraction of windows that chose the modal parameter set
+    final_params: dict = field(default_factory=dict)   # parameters chosen by the last development window (frozen for the holdout)
 
 
 def walk_forward(name: str, df: pd.DataFrame, fee_bps: float, slippage_bps: float, train_months: int = 12,
-                 test_months: int = 3, warmup: int = 800, bar_minutes: int = 60) -> WFResult:
+                 test_months: int = 3, warmup: int = 800, bar_minutes: int = 60, size_frac: float = 1.0,
+                 partners: dict[str, pd.DataFrame] | None = None, end_at: pd.Timestamp | None = None) -> WFResult:
+    """end_at: last timestamp the walk-forward may see (development period). Data after it is reserved for the holdout."""
     grid = param_grid(REGISTRY[name]["grid"])
     res = WFResult(name, "")
+    if end_at is not None:
+        df = df[df.index <= end_at]
     start = df.index[0]
     end = df.index[-1]
     t0 = start + pd.DateOffset(months=train_months)
@@ -74,11 +83,11 @@ def walk_forward(name: str, df: pd.DataFrame, fee_bps: float, slippage_bps: floa
             continue
         best, best_s, best_m = None, -1e18, None
         for p in grid:
-            r = run_strategy(name, train, p, fee_bps, slippage_bps, bar_minutes, warmup=min(warmup, len(train) // 3))
+            r = run_strategy(name, train, p, fee_bps, slippage_bps, bar_minutes, warmup=min(warmup, len(train) // 3), size_frac=size_frac, partners=partners)
             s = score(r.metrics)
             if s > best_s:
                 best, best_s, best_m = p, s, r.metrics
-        oos = run_strategy(name, test, best, fee_bps, slippage_bps, bar_minutes, warmup=warmup)
+        oos = run_strategy(name, test, best, fee_bps, slippage_bps, bar_minutes, warmup=warmup, size_frac=size_frac, partners=partners)
         oos_eq = oos.equity.iloc[warmup:]
         scale = (eq_parts[-1].iloc[-1] / oos_eq.iloc[0]) if eq_parts else (10_000.0 / oos_eq.iloc[0])
         eq_parts.append(oos_eq * scale)
@@ -97,4 +106,20 @@ def walk_forward(name: str, df: pd.DataFrame, fee_bps: float, slippage_bps: floa
         if chosen:
             modal = max(set(chosen), key=chosen.count)
             res.param_stability = round(chosen.count(modal) / len(chosen), 2)
+            res.final_params = dict(chosen[-1])
     return res
+
+
+def holdout_run(name: str, df: pd.DataFrame, params: dict, holdout_start: pd.Timestamp, fee_bps: float, slippage_bps: float,
+                warmup: int, bar_minutes: int, size_frac: float = 1.0, partners: dict[str, pd.DataFrame] | None = None) -> Result | None:
+    """Frozen-parameter run on the untouched final period: history before holdout_start is used only as indicator warm-up."""
+    pos = df.index.searchsorted(holdout_start)
+    seg = df.iloc[max(0, pos - warmup):]
+    if len(seg) <= warmup + 10:
+        return None
+    r = run_strategy(name, seg, params, fee_bps, slippage_bps, bar_minutes, warmup=warmup, size_frac=size_frac, partners=partners)
+    # metrics over the holdout bars only
+    r.equity = r.equity.iloc[warmup:]
+    r.trades = [t for t in r.trades if t.entry_i >= warmup]
+    r.metrics = compute_metrics(r, float(r.equity.iloc[0]) if len(r.equity) else 10_000.0, bar_minutes)
+    return r

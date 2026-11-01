@@ -14,7 +14,7 @@ import pandas as pd
 from .checks import cost_sensitivity, dca_martingale_demo, delayed_entry_check, lookahead_check
 from .data import discover, format_report, load_symbol, resample, split_on_gaps
 from .strategies import REGISTRY
-from .walkforward import run_strategy, walk_forward
+from .walkforward import holdout_run, run_strategy, walk_forward
 
 FEE_BPS, SLIP_BPS, WARMUP = 10.0, 15.0, 800   # per side; ~0.5% round trip, realistic for liquid Jupiter routes
 
@@ -28,14 +28,22 @@ def main() -> None:
     ap.add_argument("--train-months", type=int, default=12)
     ap.add_argument("--test-months", type=int, default=3)
     ap.add_argument("--timeframe", default="1h", choices=["1h", "4h", "1D"], help="resample hourly data before testing")
+    ap.add_argument("--holdout-start", default=None, help="YYYY-MM-DD: walk-forward develops before this date; frozen params are then run on the untouched period after it")
+    ap.add_argument("--size-frac", type=float, default=1.0, help="fraction of equity per position (deployment: max_position_pct/100)")
+    ap.add_argument("--fee-bps", type=float, default=None); ap.add_argument("--slip-bps", type=float, default=None)
     args = ap.parse_args()
+    global FEE_BPS, SLIP_BPS
+    if args.fee_bps is not None: FEE_BPS = args.fee_bps
+    if args.slip_bps is not None: SLIP_BPS = args.slip_bps
+    holdout = pd.Timestamp(args.holdout_start, tz="UTC") if args.holdout_start else None
     bar_minutes = {"1h": 60, "4h": 240, "1D": 1440}[args.timeframe]
     warmup = {"1h": WARMUP, "4h": 300, "1D": 120}[args.timeframe]
     os.makedirs(args.out, exist_ok=True)
     files = discover(args.data_dirs)
     symbols = args.symbols.split(",")
     names = args.strategies.split(",") if args.strategies else list(REGISTRY)
-    results: dict = {"costs": {"fee_bps_per_side": FEE_BPS, "slippage_bps_per_side": SLIP_BPS}, "timeframe": args.timeframe, "data": {}, "strategies": {}}
+    results: dict = {"costs": {"fee_bps_per_side": FEE_BPS, "slippage_bps_per_side": SLIP_BPS}, "timeframe": args.timeframe,
+                     "size_frac": args.size_frac, "holdout_start": args.holdout_start, "data": {}, "strategies": {}}
     data = {}
     for s in symbols:
         if s not in files:
@@ -53,20 +61,32 @@ def main() -> None:
                 print(f"  block {key}: {len(b)} bars")
     t_start = time.time()
     for name in names:
-        results["strategies"][name] = {"source": REGISTRY[name]["source"], "note": REGISTRY[name]["note"], "flags": REGISTRY[name]["flags"], "per_symbol": {}}
+        results["strategies"][name] = {"source": REGISTRY[name]["source"], "note": REGISTRY[name]["note"], "flags": REGISTRY[name]["flags"],
+                                       "author_claim": REGISTRY[name].get("author_claim", ""), "per_symbol": {}}
         for s, df in data.items():
             t0 = time.time()
-            full = run_strategy(name, df, {}, FEE_BPS, SLIP_BPS, bar_minutes, warmup=warmup)
+            partners = {k: v for k, v in data.items() if k != s} if REGISTRY[name].get("needs_partners") else None
+            dev_df = df[df.index < holdout] if holdout is not None else df
+            full = run_strategy(name, dev_df, {}, FEE_BPS, SLIP_BPS, bar_minutes, warmup=warmup, size_frac=args.size_frac, partners=partners)
             la = lookahead_check(name, df)
             entry: dict = {"in_sample_default_params": full.metrics, "lookahead": la}
             if name != "buy_hold":
-                wf = walk_forward(name, df, FEE_BPS, SLIP_BPS, args.train_months, args.test_months, warmup, bar_minutes)
+                wf = walk_forward(name, df, FEE_BPS, SLIP_BPS, args.train_months, args.test_months, warmup, bar_minutes,
+                                  size_frac=args.size_frac, partners=partners, end_at=holdout)
                 entry["walk_forward_oos"] = wf.oos_metrics
                 entry["wf_segments"] = wf.segments
                 entry["wf_param_stability"] = wf.param_stability
-                entry["cost_sensitivity"] = cost_sensitivity(name, df, {}, warmup)
-                entry["delayed_entry"] = delayed_entry_check(name, df, {}, warmup, FEE_BPS, SLIP_BPS)
-                if wf.oos_equity is not None:
+                entry["final_params"] = wf.final_params
+                if holdout is not None and len(df[df.index >= holdout]) > 10:
+                    hr = holdout_run(name, df, wf.final_params, holdout, FEE_BPS, SLIP_BPS, warmup, bar_minutes, args.size_frac, partners)
+                    entry["holdout"] = hr.metrics if hr else {"note": "insufficient holdout data"}
+                    entry["holdout_span"] = [str(holdout)[:10], str(df.index[-1])[:10]]
+            elif holdout is not None:
+                hr = holdout_run(name, df, {}, holdout, FEE_BPS, SLIP_BPS, warmup, bar_minutes, args.size_frac)
+                entry["holdout"] = hr.metrics if hr else {}
+                entry["cost_sensitivity"] = cost_sensitivity(name, dev_df, {}, warmup) if not REGISTRY[name].get("needs_partners") else {}
+                entry["delayed_entry"] = delayed_entry_check(name, dev_df, {}, warmup, FEE_BPS, SLIP_BPS) if not REGISTRY[name].get("needs_partners") else {}
+                if name != "buy_hold" and wf.oos_equity is not None:
                     wf.oos_equity.to_csv(f"{args.out}/oos_equity_{name}_{s}.csv")
             results["strategies"][name]["per_symbol"][s] = entry
             print(f"{name:<26} {s:<8} IS ret {full.metrics['net_return_pct']:>8.1f}%  trades {full.metrics['trades']:>4}  "

@@ -294,6 +294,29 @@ def cmd_apply_profile(args) -> int:
     return 0
 
 
+def cmd_resolve_intent(args) -> int:
+    """Manually settle an UNKNOWN intent after verifying the transaction yourself (explorer / wallet).
+    'confirmed' books the fill from the persisted quote; 'expired'/'failed' closes it without a fill."""
+    settings = load_settings(args.config)
+    ledger = Ledger(settings.db_path, mode=settings.mode)
+    try:
+        row = ledger.resolve_intent_manually(args.intent_id, args.state, args.note)
+    except (KeyError, ValueError) as e:
+        print(f"refused: {e}")
+        return 2
+    if args.state == "confirmed":
+        from .models import Fill, Side
+        from .portfolio.accounting import PortfolioBook
+        book = PortfolioBook(ledger, settings.initial_capital_usd, time.time)
+        qty, notional = float(row["qty"]), float(row["notional_usd"])
+        fill = Fill(order_id=row["order_id"], symbol=row["symbol"], side=Side(row["side"]), qty=qty, price=notional / qty if qty else 0.0,
+                    notional_usd=notional, fee_usd=0.0, tx_signature=row["tx_signature"])
+        book.apply_fill(fill, exit_reason="manual_reconcile" if row["side"] == "sell" else "")
+        print(f"booked {row['side']} {row['symbol']} qty {qty:.6g} from the persisted quote")
+    print(f"intent {args.intent_id} -> {args.state} (logged)")
+    return 0
+
+
 def cmd_fetch_data(args) -> int:
     settings = load_settings(args.config)
     from .data.csv_replay import write_candles_csv
@@ -351,6 +374,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--symbols", default=None); p.add_argument("--equity", type=float, default=None); p.set_defaults(fn=cmd_verify_assets)
     p = sub.add_parser("apply-profile", help="update an existing config.toml to the validated settings, preserving everything else (backup first)")
     p.add_argument("--no-backup", action="store_true"); p.set_defaults(fn=cmd_apply_profile)
+    p = sub.add_parser("resolve-intent", help="manually settle an UNKNOWN order intent after verifying it yourself")
+    p.add_argument("intent_id"); p.add_argument("state", choices=["expired", "failed", "confirmed"]); p.add_argument("--note", required=True)
+    p.set_defaults(fn=cmd_resolve_intent)
     p = sub.add_parser("fetch-data", help="download candles to CSV for offline backtests/replay")
     p.add_argument("--symbols", default=None); p.add_argument("--interval", default="1h"); p.add_argument("--bars", type=int, default=1000)
     p.set_defaults(fn=cmd_fetch_data)

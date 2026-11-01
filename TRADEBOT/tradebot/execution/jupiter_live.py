@@ -95,6 +95,22 @@ class JupiterLiveBroker(Broker):
         signed = VersionedTransaction(tx.message, [self.kp])
         return base64.b64encode(bytes(signed)).decode(), str(signed.signatures[0])
 
+    def transaction_status(self, tx_signature: str, signed_tx_b64: str | None) -> dict:
+        """Signature status plus whether the transaction's blockhash is still valid. A not-found transaction whose
+        blockhash has expired cannot land any more; one whose blockhash is still valid (or unknown) stays UNKNOWN."""
+        status = self.lookup_signature(tx_signature)
+        valid = None
+        if status == "not_found" and signed_tx_b64:
+            try:
+                tx = VersionedTransaction.from_bytes(base64.b64decode(signed_tx_b64))
+                bh = str(tx.message.recent_blockhash)
+                res = self._rpc("isBlockhashValid", [bh, {"commitment": "confirmed"}])
+                valid = bool(res.get("value")) if isinstance(res, dict) else bool(res)
+            except Exception as e:  # noqa: BLE001 - unknown stays unknown
+                log.warning("blockhash validity check failed for %s: %s", tx_signature, e)
+                valid = None
+        return {"status": status, "blockhash_valid": valid}
+
     def lookup_signature(self, tx_signature: str) -> str:
         res = self._rpc("getSignatureStatuses", [[tx_signature], {"searchTransactionHistory": True}])
         st = (res.get("value") or [None])[0]

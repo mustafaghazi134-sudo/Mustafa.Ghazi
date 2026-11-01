@@ -64,3 +64,8 @@ class Broker(ABC):
     def lookup_signature(self, tx_signature: str) -> str:
         """'confirmed' | 'failed' | 'not_found' for a previously signed transaction. Used by startup reconciliation."""
         return "not_found"
+
+    def transaction_status(self, tx_signature: str, signed_tx_b64: str | None) -> dict:
+        """Evidence for reconciliation: {"status": confirmed|failed|not_found, "blockhash_valid": True|False|None}.
+        blockhash_valid False means the transaction can no longer land (safe to expire); None means unknown."""
+        return {"status": self.lookup_signature(tx_signature), "blockhash_valid": None}
