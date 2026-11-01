@@ -167,6 +167,10 @@ def cmd_status(args) -> int:
     print(f"cash:          ${ledger.get('cash', settings.initial_capital_usd):,.2f}")
     pos = ledger.load_positions()
     print(f"positions:     {len(pos)}" + (" -> " + ", ".join(f"{p.symbol} {p.qty:.6g}@{p.avg_cost:.6g}" for p in pos.values()) if pos else ""))
+    pend = ledger.pending_intents()
+    print(f"pending intents: {len(pend)}" + ("  <- unresolved orders; the bot reconciles these before trading" if pend else ""))
+    for i in ledger.intents(5):
+        print(f"  intent {time.strftime('%Y-%m-%d %H:%M', time.gmtime(i['ts']))} {i['symbol']} {i['side']} {i['state']} sig={(i['tx_signature'] or '')[:12]}")
     for e in ledger.events(5):
         print(f"  event {time.strftime('%Y-%m-%d %H:%M', time.gmtime(e['ts']))} {e['kind']}: {e['message']}")
     return 0

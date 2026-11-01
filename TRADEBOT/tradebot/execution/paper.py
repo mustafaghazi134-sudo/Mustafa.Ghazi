@@ -21,6 +21,7 @@ class PaperBroker(Broker):
         self.slippage_bps = slippage_bps
         self.rng = random.Random(seed)
         self.clock = clock
+        self._confirmed: set[str] = set()
 
     def _price(self, symbol: str) -> float:
         t = self.provider.get_tickers([symbol]).get(symbol)
@@ -40,14 +41,21 @@ class PaperBroker(Broker):
         fee = gross * self.fee_bps / 1e4
         return Quote(symbol, side, px, slip_bps, fee, amount, gross - fee)
 
+    def lookup_signature(self, tx_signature: str) -> str:
+        return "confirmed" if tx_signature in self._confirmed else "not_found"
+
     def _execute(self, order: OrderRequest, qty: float, q: Quote) -> Fill:
         ts = self.clock() if self.clock else None
+        sig = f"paper-{order.id}"
+        if self.presubmit_hook:
+            self.presubmit_hook({"request_id": f"paper-req-{order.id}", "tx_signature": sig, "signed_tx": ""})
+        self._confirmed.add(sig)
         if order.side == Side.BUY:
             fill = Fill(order_id=order.id, symbol=order.symbol, side=order.side, qty=q.out_amount, price=q.price,
-                        notional_usd=q.in_amount, fee_usd=q.fee_usd, slippage_bps=q.expected_slippage_bps, tx_signature="paper")
+                        notional_usd=q.in_amount, fee_usd=q.fee_usd, slippage_bps=q.expected_slippage_bps, tx_signature=sig)
         else:
             fill = Fill(order_id=order.id, symbol=order.symbol, side=order.side, qty=qty, price=q.price,
-                        notional_usd=qty * q.price, fee_usd=q.fee_usd, slippage_bps=q.expected_slippage_bps, tx_signature="paper")
+                        notional_usd=qty * q.price, fee_usd=q.fee_usd, slippage_bps=q.expected_slippage_bps, tx_signature=sig)
         if ts is not None:
             fill.ts = ts
         log.info("PAPER FILL %s %s qty=%.6g px=%.6g notional=$%.2f fee=$%.2f", fill.side.value.upper(), fill.symbol,

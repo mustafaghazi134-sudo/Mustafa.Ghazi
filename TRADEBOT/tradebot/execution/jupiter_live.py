@@ -21,7 +21,7 @@ from ..config import Settings, jupiter_endpoints
 from ..data.live import LiveProvider
 from ..models import Fill, OrderRequest, Side
 from ..risk.engine import RiskEngine
-from .base import Broker, ExecutionError, Quote
+from .base import Broker, ExecutionError, Quote, SubmittedUnknownError
 from .live_gate import LiveGate
 from .wallet import redact
 
@@ -89,10 +89,20 @@ class JupiterLiveBroker(Broker):
             raise ExecutionError(f"rpc {method}: {data['error']}")
         return data["result"]
 
-    def _sign(self, tx_b64: str) -> str:
+    def _sign(self, tx_b64: str) -> tuple[str, str]:
+        """Returns (signed tx base64, transaction signature). The signature is known before broadcast."""
         tx = VersionedTransaction.from_bytes(base64.b64decode(tx_b64))
         signed = VersionedTransaction(tx.message, [self.kp])
-        return base64.b64encode(bytes(signed)).decode()
+        return base64.b64encode(bytes(signed)).decode(), str(signed.signatures[0])
+
+    def lookup_signature(self, tx_signature: str) -> str:
+        res = self._rpc("getSignatureStatuses", [[tx_signature], {"searchTransactionHistory": True}])
+        st = (res.get("value") or [None])[0]
+        if not st:
+            return "not_found"
+        if st.get("err"):
+            return "failed"
+        return "confirmed" if st.get("confirmationStatus") in ("confirmed", "finalized") else "not_found"
 
     def order_params(self, in_mint: str, out_mint: str, raw_in: int, taker: str | None) -> dict:
         p = {"inputMint": in_mint, "outputMint": out_mint, "amount": str(raw_in), "slippageBps": self.s.execution.live_slippage_bps}
@@ -131,8 +141,16 @@ class JupiterLiveBroker(Broker):
         order = q.raw
         res = None
         for attempt in range(self.s.execution.execute_max_retries + 1):
-            res = self._request(self.exec_http, "POST", f"{self.jup.swap}/execute",
-                                json={"signedTransaction": self._sign(order["transaction"]), "requestId": order["requestId"]})
+            signed_tx, local_sig = self._sign(order["transaction"])
+            if self.presubmit_hook:                      # durable record BEFORE anything can reach the network
+                self.presubmit_hook({"request_id": order["requestId"], "tx_signature": local_sig, "signed_tx": signed_tx})
+            try:
+                # _request resends the SAME signedTransaction+requestId on network errors (idempotent for ~2 min per the
+                # skill); it never builds a new order on a timeout.
+                res = self._request(self.exec_http, "POST", f"{self.jup.swap}/execute",
+                                    json={"signedTransaction": signed_tx, "requestId": order["requestId"]})
+            except ExecutionError as e:
+                raise SubmittedUnknownError(f"execute outcome unknown: {e}", local_sig, order["requestId"]) from e
             if res.get("status") == "Success":
                 break
             code = int(res.get("code") or 0)

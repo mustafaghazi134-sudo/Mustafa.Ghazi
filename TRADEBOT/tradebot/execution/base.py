@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Callable
 
 from ..models import Fill, OrderRequest, Side
 from ..risk.engine import RiskApproval, RiskEngine
@@ -9,6 +10,16 @@ from ..risk.engine import RiskApproval, RiskEngine
 
 class ExecutionError(RuntimeError):
     pass
+
+
+class SubmittedUnknownError(ExecutionError):
+    """The transaction may have been broadcast but the outcome is unknown (timeout, connection drop).
+    Carries what is needed to reconcile later. Callers must NOT resubmit a new order for the symbol."""
+
+    def __init__(self, message: str, tx_signature: str | None, request_id: str | None):
+        super().__init__(message)
+        self.tx_signature = tx_signature
+        self.request_id = request_id
 
 
 @dataclass
@@ -28,6 +39,9 @@ class Broker(ABC):
 
     def __init__(self, risk: RiskEngine):
         self.risk = risk
+        # Called with {"request_id", "tx_signature", "signed_tx"} AFTER signing and BEFORE submission so the
+        # engine can persist the intent durably; a crash between the two can then be reconciled on restart.
+        self.presubmit_hook: Callable[[dict], None] | None = None
 
     @abstractmethod
     def quote(self, symbol: str, side: Side, amount: float) -> Quote:
@@ -46,3 +60,7 @@ class Broker(ABC):
 
     def get_balances(self) -> dict[str, float]:
         return {}
+
+    def lookup_signature(self, tx_signature: str) -> str:
+        """'confirmed' | 'failed' | 'not_found' for a previously signed transaction. Used by startup reconciliation."""
+        return "not_found"

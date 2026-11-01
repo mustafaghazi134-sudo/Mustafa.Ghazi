@@ -9,7 +9,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
-from ..models import ClosedTrade, EquityPoint, Fill, OrderRequest, Position, Side
+from ..models import ClosedTrade, EquityPoint, Fill, OrderRequest, Position, Side, new_id
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS orders (id TEXT PRIMARY KEY, ts REAL, mode TEXT, symbol TEXT, side TEXT, notional_usd REAL,
@@ -26,6 +26,9 @@ CREATE TABLE IF NOT EXISTS events (ts REAL, mode TEXT, kind TEXT, message TEXT);
 CREATE TABLE IF NOT EXISTS api_costs (ts REAL, mode TEXT, model TEXT, purpose TEXT, input_tokens INTEGER,
     output_tokens INTEGER, cost_usd REAL);
 CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT);
+CREATE TABLE IF NOT EXISTS intents (id TEXT PRIMARY KEY, mode TEXT, ts REAL, updated_ts REAL, order_id TEXT, symbol TEXT, side TEXT,
+    qty REAL, notional_usd REAL, state TEXT, request_id TEXT, tx_signature TEXT, signed_tx TEXT, quote TEXT, result TEXT);
+CREATE INDEX IF NOT EXISTS idx_intents_state ON intents(mode, state);
 CREATE INDEX IF NOT EXISTS idx_fills_ts ON fills(ts);
 CREATE INDEX IF NOT EXISTS idx_trades_exit ON trades(exit_ts);
 CREATE INDEX IF NOT EXISTS idx_equity_ts ON equity(ts);
@@ -161,3 +164,41 @@ class Ledger:
     def total_api_cost(self, since: float = 0.0) -> float:
         r = self._exec("SELECT COALESCE(SUM(cost_usd),0) s FROM api_costs WHERE mode=? AND ts>=?", (self.mode, since)).fetchone()
         return float(r["s"])
+
+    # ---- order intents (crash protection) ---------------------------------------------------------
+    # Lifecycle: created -> signed (requestId + signature + signed tx persisted BEFORE submission) -> submitted
+    # (sent, outcome unknown) -> confirmed | failed | expired | abandoned. Anything not terminal is "pending".
+    PENDING_STATES = ("created", "signed", "submitted")
+
+    def create_intent(self, order: OrderRequest, qty: float, notional_usd: float, quote: dict | None = None,
+                      ts: float | None = None) -> str:
+        """ts should be the engine clock (replay-safe); defaults to wall time."""
+        iid = new_id("int")
+        now = ts if ts is not None else time.time()
+        self._exec("INSERT INTO intents VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                   (iid, self.mode, now, now, order.id, order.symbol, order.side.value, qty, notional_usd, "created",
+                    None, None, None, json.dumps(quote or {}, default=str), None))
+        return iid
+
+    def update_intent(self, iid: str, state: str | None = None, **fields: Any) -> None:
+        cols = {k: v for k, v in fields.items() if k in ("request_id", "tx_signature", "signed_tx", "result", "quote")}
+        if state:
+            cols["state"] = state
+        if "result" in cols and not isinstance(cols["result"], str):
+            cols["result"] = json.dumps(cols["result"], default=str)
+        cols["updated_ts"] = time.time()
+        sets = ", ".join(f"{k}=?" for k in cols)
+        self._exec(f"UPDATE intents SET {sets} WHERE id=?", (*cols.values(), iid))
+
+    def get_intent(self, iid: str) -> sqlite3.Row | None:
+        return self._exec("SELECT * FROM intents WHERE id=?", (iid,)).fetchone()
+
+    def pending_intents(self, symbol: str | None = None) -> list[sqlite3.Row]:
+        q = f"SELECT * FROM intents WHERE mode=? AND state IN ({','.join('?' * len(self.PENDING_STATES))})"
+        args: list = [self.mode, *self.PENDING_STATES]
+        if symbol:
+            q += " AND symbol=?"; args.append(symbol)
+        return self._exec(q + " ORDER BY ts", tuple(args)).fetchall()
+
+    def intents(self, limit: int = 50) -> list[sqlite3.Row]:
+        return self._exec("SELECT * FROM intents WHERE mode=? ORDER BY ts DESC LIMIT ?", (self.mode, limit)).fetchall()

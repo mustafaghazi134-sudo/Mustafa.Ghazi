@@ -16,10 +16,10 @@ from ..config import Settings, StrategyConfig
 from ..data.base import MarketDataProvider
 from ..data.csv_replay import CsvReplayProvider
 from ..data.synthetic import SyntheticProvider
-from ..execution.base import Broker, ExecutionError
+from ..execution.base import Broker, ExecutionError, SubmittedUnknownError
 from ..execution.live_gate import LiveGate
 from ..execution.paper import PaperBroker
-from ..models import OrderRequest, Side, Signal, Ticker
+from ..models import Fill, OrderRequest, Side, Signal, Ticker
 from ..portfolio.accounting import PortfolioBook
 from ..portfolio.ledger import Ledger
 from ..portfolio.reporting import format_report, performance_report
@@ -60,6 +60,7 @@ class TradingBot:
         self._apply_saved_overrides()
         kill.on_trip(lambda reason: ledger.log_event("kill_switch", reason, ts=self.clock()))
         risk.on_daily_halt(self._on_daily_halt)
+        self.reconcile_pending()                     # settle anything a previous process left unresolved
 
     def _on_daily_halt(self, reason: str) -> None:
         self.ledger.log_event("daily_halt", reason, ts=self.clock())
@@ -130,6 +131,8 @@ class TradingBot:
             return
         self._flattened_after_kill = False
 
+        if self.ledger.pending_intents():
+            self.reconcile_pending()
         self._manage_positions(tickers)
         self._scan_entries(tickers)
         if not self._signals_this_cycle and not self.provider.is_replay:
@@ -144,6 +147,107 @@ class TradingBot:
                 self.ledger.log_event("error", f"research: {e}", ts=now)
             self.last_research_ts = now
             self.ledger.set("last_research_ts", now)
+
+    # ------------------------------------------------------------------ durable execution (crash protection)
+    def _execute_with_intent(self, order: OrderRequest, qty: float, decision, signal: Signal | None = None,
+                             exit_reason: str = "") -> bool:
+        """Every order goes through here. The intent is persisted before signing, updated with requestId and
+        signature before submission, and resolved afterwards. A crash at any point leaves a row that
+        reconcile_pending() can settle on restart; a pending row blocks new orders for the symbol."""
+        if self.ledger.pending_intents(order.symbol):
+            self.ledger.record_order(order, "rejected", "pending intent for symbol awaiting reconciliation")
+            log.warning("blocked %s %s: an earlier order for this symbol is still unresolved", order.side.value, order.symbol)
+            return False
+        intent_id = self.ledger.create_intent(order, qty, decision.adjusted_notional_usd, quote={"approval": decision.approval.token[:8]}, ts=self.clock())
+        self.broker.presubmit_hook = lambda info: self.ledger.update_intent(intent_id, state="signed", **info)
+        try:
+            fill = self.broker.execute(order, qty, decision.approval)
+        except SubmittedUnknownError as e:
+            self.ledger.update_intent(intent_id, state="submitted", tx_signature=e.tx_signature, request_id=e.request_id, result=str(e))
+            self.ledger.record_order(order, "unknown", str(e))
+            self.ledger.log_event("execution_unknown", f"{order.symbol} {order.side.value} sig={e.tx_signature}", ts=self.clock())
+            self.risk.on_execution_error(str(e))
+            log.error("outcome unknown for %s %s; will reconcile: %s", order.side.value, order.symbol, e)
+            return False
+        except Exception as e:  # noqa: BLE001 - includes PermissionError / ExecutionError / network errors before signing
+            self.ledger.update_intent(intent_id, state="failed", result=str(e))
+            self.ledger.record_order(order, "failed", str(e))
+            self.risk.on_execution_error(str(e))
+            log.error("%s failed for %s: %s", order.side.value, order.symbol, e)
+            return False
+        finally:
+            self.broker.presubmit_hook = None
+        self.ledger.update_intent(intent_id, state="confirmed", tx_signature=fill.tx_signature,
+                                  result={"fill_id": fill.id, "qty": fill.qty, "price": fill.price, "notional_usd": fill.notional_usd})
+        self.risk.on_execution_success()
+        self.ledger.record_order(order, "filled")
+        self.book.apply_fill(fill, signal=signal, exit_reason=exit_reason)
+        return True
+
+    def reconcile_pending(self, expiry_sec: float | None = None) -> dict[str, int]:
+        """Settle intents left pending by a crash or timeout. Signed/submitted rows are checked on-chain by
+        signature; confirmed ones are booked exactly once from the persisted quote; expired ones are closed."""
+        expiry = expiry_sec if expiry_sec is not None else self.s.execution.intent_expiry_sec
+        counts = {"confirmed": 0, "failed": 0, "expired": 0, "abandoned": 0, "pending": 0}
+        for row in self.ledger.pending_intents():
+            age = self.clock() - row["ts"]
+            if row["state"] == "created" or not row["tx_signature"]:
+                self.ledger.update_intent(row["id"], state="abandoned", result="never signed")   # nothing could have been broadcast
+                counts["abandoned"] += 1
+                continue
+            try:
+                status = self.broker.lookup_signature(row["tx_signature"])
+            except Exception as e:  # noqa: BLE001
+                log.error("reconcile: lookup failed for %s: %s", row["tx_signature"], e)
+                counts["pending"] += 1
+                continue
+            if status == "confirmed":
+                side = Side(row["side"])
+                qty, notional = float(row["qty"]), float(row["notional_usd"])
+                price = notional / qty if qty else 0.0
+                fill = Fill(order_id=row["order_id"], symbol=row["symbol"], side=side, qty=qty, price=price, notional_usd=notional,
+                            fee_usd=0.0, ts=self.clock(), tx_signature=row["tx_signature"])
+                self.ledger.update_intent(row["id"], state="confirmed", result={"reconciled_from_quote": True, "fill_id": fill.id})
+                self.book.apply_fill(fill, exit_reason="reconciled" if side == Side.SELL else "")
+                self.ledger.log_event("reconciled", f"{row['symbol']} {row['side']} booked from persisted intent sig={row['tx_signature']}", ts=self.clock())
+                counts["confirmed"] += 1
+            elif status == "failed":
+                self.ledger.update_intent(row["id"], state="failed", result="on-chain failure")
+                counts["failed"] += 1
+            elif age > expiry:
+                self.ledger.update_intent(row["id"], state="expired", result=f"not found after {age:.0f}s (> blockhash validity)")
+                counts["expired"] += 1
+            else:
+                counts["pending"] += 1
+        if any(counts.values()):
+            log.warning("reconciled pending intents: %s", counts)
+        return counts
+
+    def reconcile_balances(self, tolerance_pct: float | None = None) -> list[str]:
+        """Live only: compare ledger positions and cash with on-chain balances. Any mismatch beyond tolerance
+        trips the kill switch, because trading on a wrong book is how real money gets lost."""
+        tol = (tolerance_pct if tolerance_pct is not None else self.s.execution.balance_tolerance_pct) / 100
+        try:
+            onchain = self.broker.get_balances()
+        except Exception as e:  # noqa: BLE001
+            msg = f"balance reconciliation failed: {e}"
+            self.kill.trip(msg, source="reconcile")
+            return [msg]
+        problems = []
+        for sym, pos in self.book.positions.items():
+            have = onchain.get(sym, 0.0)
+            if have < pos.qty * (1 - tol):
+                problems.append(f"{sym}: ledger {pos.qty:.6g} but wallet holds {have:.6g}")
+        usdc = onchain.get(self.s.universe.quote_symbol)
+        if usdc is not None and usdc < self.book.cash * (1 - tol) - 1.0:
+            problems.append(f"cash: ledger ${self.book.cash:.2f} but wallet holds ${usdc:.2f} {self.s.universe.quote_symbol}")
+        for p in problems:
+            self.ledger.log_event("balance_mismatch", p, ts=self.clock())
+        if problems:
+            self.kill.trip("ledger/wallet mismatch: " + "; ".join(problems), source="reconcile")
+        else:
+            self.ledger.log_event("reconciled_balances", f"ok: {len(self.book.positions)} positions, cash ${self.book.cash:.2f}", ts=self.clock())
+        return problems
 
     # ------------------------------------------------------------------ exits
     def _manage_positions(self, tickers: dict[str, Ticker]) -> None:
@@ -171,16 +275,7 @@ class TradingBot:
         if not decision.approved or decision.approval is None:
             self.ledger.record_order(order, "rejected", "; ".join(decision.reasons))
             return
-        try:
-            fill = self.broker.execute(order, decision.adjusted_qty or pos.qty, decision.approval)
-        except (ExecutionError, PermissionError, Exception) as e:  # noqa: BLE001
-            self.ledger.record_order(order, "failed", str(e))
-            self.risk.on_execution_error(str(e))
-            log.error("exit failed for %s: %s", sym, e)
-            return
-        self.risk.on_execution_success()
-        self.ledger.record_order(order, "filled")
-        self.book.apply_fill(fill, exit_reason=reason)
+        self._execute_with_intent(order, decision.adjusted_qty or pos.qty, decision, exit_reason=reason)
 
     def flatten_all(self, reason: str) -> None:
         log.warning("FLATTENING all positions: %s", reason)
@@ -253,16 +348,7 @@ class TradingBot:
             self.ledger.record_order(order, "rejected", "; ".join(decision.reasons))
             log.info("risk rejected %s %s: %s", sig.strategy, sig.symbol, decision.reasons)
             return
-        try:
-            fill = self.broker.execute(order, decision.adjusted_qty or 0.0, decision.approval)
-        except (ExecutionError, PermissionError, Exception) as e:  # noqa: BLE001
-            self.ledger.record_order(order, "failed", str(e))
-            self.risk.on_execution_error(str(e))
-            log.error("entry failed for %s: %s", sig.symbol, e)
-            return
-        self.risk.on_execution_success()
-        self.ledger.record_order(order, "filled")
-        self.book.apply_fill(fill, signal=sig)
+        self._execute_with_intent(order, decision.adjusted_qty or 0.0, decision, signal=sig)
 
     def _strategy_stats(self, name: str) -> dict:
         since = self.clock() - 7 * 86400
@@ -421,6 +507,10 @@ def build_bot(settings: Settings, provider: MarketDataProvider | None = None) ->
         broker = PaperBroker(risk, provider, fee_bps=settings.execution.paper_fee_bps,
                              slippage_bps=settings.execution.paper_slippage_bps, clock=clock)
     bot = TradingBot(settings, provider, ledger, risk, kill, broker, book, strategies, analyst, clock)
+    if settings.is_live and settings.execution.reconcile_on_start:
+        problems = bot.reconcile_balances()
+        if problems:
+            log.critical("startup balance reconciliation failed; kill switch tripped: %s", problems)
     if settings.universe.auto_scan and not provider.is_replay:
         try:
             discovered = provider.get_universe(settings.universe.max_symbols)

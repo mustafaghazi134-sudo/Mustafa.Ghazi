@@ -146,7 +146,7 @@ def test_execute_success_uses_actual_amounts_and_requestid(tmp_path, monkeypatch
         return {"status": "Success", "code": 0, "signature": "sig123", "inputAmountResult": "100000000", "outputAmountResult": "553000000"}
 
     b._request = fake_request
-    b._sign = lambda tx: "signed-" + tx
+    b._sign = lambda tx: ("signed-" + tx, "SIG1")
     q = Quote("SOL", Side.BUY, 180.0, 1.0, 0.02, 100.0, 0.554, raw=ORDER)
     fill = b._execute(OrderRequest(symbol="SOL", side=Side.BUY, notional_usd=100), 0.554, q)
     assert posted == {"signedTransaction": "signed-AAAA", "requestId": "req-1"}
@@ -165,7 +165,7 @@ def test_execute_retryable_code_requotes_then_non_retryable_raises(tmp_path, mon
         return {"status": "Failed", "code": -1, "error": "expired"} if len([c for c in calls if c[1] == "execute"]) == 1 else \
                {"status": "Success", "code": 0, "signature": "sig2", "inputAmountResult": "100000000", "outputAmountResult": "554000000"}
 
-    b._request = fake_request; b._sign = lambda tx: "s"
+    b._request = fake_request; b._sign = lambda tx: ("s", "SIG2")
     monkeypatch.setattr("tradebot.execution.jupiter_live.time.sleep", lambda *_: None)
     fill = b._execute(OrderRequest(symbol="SOL", side=Side.BUY, notional_usd=100), 0.554, Quote("SOL", Side.BUY, 180.0, 1.0, 0.02, 100.0, 0.554, raw=ORDER))
     assert [c[1] for c in calls] == ["execute", "order", "execute"] and fill.tx_signature == "sig2"

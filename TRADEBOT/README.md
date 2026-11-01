@@ -166,6 +166,18 @@ Every order needs an HMAC approval token minted by `RiskEngine.evaluate` for tha
 quantity and time (30 s TTL). Brokers verify it before quoting. Risk-reducing exits are always
 allowed so the kill switch can flatten.
 
+## Crash protection (execution infrastructure)
+
+Every order is recorded as a durable **intent** in the ledger before anything is signed; the Jupiter `requestId`,
+the transaction signature (known locally before broadcast) and the exact signed payload are persisted before the
+first submission. A network timeout after broadcast is reported as *outcome unknown*, never retried as a new order
+(the same payload is resent, which Jupiter treats idempotently for ~2 minutes). On start and on every cycle the bot
+settles pending intents by signature: confirmed on-chain gets booked exactly once from the persisted quote, failed
+is closed, not-found after `intent_expiry_sec` (150 s, longer than blockhash validity) is expired. While an intent is
+pending, new orders for that symbol are blocked. In live mode the ledger is reconciled against on-chain balances at
+startup (`reconcile_on_start`); a shortfall beyond `balance_tolerance_pct` trips the kill switch. Failure-injection
+tests: `tests/test_crash_protection.py`.
+
 ## Going live (owner action, deliberately multi-step)
 
 The bot cannot click Phantom. It needs its own signing key:
