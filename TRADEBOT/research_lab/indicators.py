@@ -74,6 +74,9 @@ def supertrend(df: pd.DataFrame, period: int = 10, mult: float = 3.0) -> pd.Seri
     for i in range(1, n):
         if np.isnan(a[i]):
             continue
+        if np.isnan(fu[i - 1]) or np.isnan(fd[i - 1]):   # first valid bar: initialise the final bands
+            fu[i], fd[i] = up[i], dn[i]
+            continue
         fu[i] = up[i] if (up[i] > fu[i - 1] or c[i - 1] < fu[i - 1]) else fu[i - 1]
         fd[i] = dn[i] if (dn[i] < fd[i - 1] or c[i - 1] > fd[i - 1]) else fd[i - 1]
         if trend[i - 1] == 1:
@@ -93,3 +96,17 @@ def cross_up(a: pd.Series, b) -> pd.Series:
 def cross_down(a: pd.Series, b) -> pd.Series:
     b = b if isinstance(b, pd.Series) else pd.Series(b, index=a.index)
     return (a < b) & (a.shift(1) >= b.shift(1))
+
+
+def adx(df: pd.DataFrame, n: int = 14) -> pd.Series:
+    """Wilder's ADX (causal)."""
+    h, l, c = df["high"], df["low"], df["close"]
+    up = h.diff(); dn = -l.diff()
+    plus_dm = up.where((up > dn) & (up > 0), 0.0)
+    minus_dm = dn.where((dn > up) & (dn > 0), 0.0)
+    tr = pd.concat([h - l, (h - c.shift(1)).abs(), (l - c.shift(1)).abs()], axis=1).max(axis=1)
+    atr_ = tr.ewm(alpha=1 / n, adjust=False, min_periods=n).mean()
+    pdi = 100 * plus_dm.ewm(alpha=1 / n, adjust=False, min_periods=n).mean() / atr_
+    mdi = 100 * minus_dm.ewm(alpha=1 / n, adjust=False, min_periods=n).mean() / atr_
+    dx = 100 * (pdi - mdi).abs() / (pdi + mdi).replace(0, np.nan)
+    return dx.ewm(alpha=1 / n, adjust=False, min_periods=n).mean()

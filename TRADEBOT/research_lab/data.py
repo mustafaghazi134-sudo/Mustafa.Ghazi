@@ -34,18 +34,25 @@ class LoadReport:
 
 
 def _read_month(path: str) -> pd.DataFrame:
+    """Accepts the official headerless Binance dump, the 2025+ dump with a header, and re-exported
+    variants with datetime strings (e.g. 'Open_Time,Open,High,Low,Close,Volume')."""
     with open(path) as f:
         first = f.readline()
-    header = 0 if first.lower().startswith("open_time") else None
-    df = pd.read_csv(path, header=header, names=None if header == 0 else COLS, usecols=range(6) if header is None else None)
+    has_header = bool(re.match(r"^\s*[A-Za-z_]", first))
+    df = pd.read_csv(path, header=0 if has_header else None, names=None if has_header else COLS, dtype={0: str})
     df = df.iloc[:, :6]
     df.columns = ["open_time", "open", "high", "low", "close", "volume"]
-    ot = df["open_time"].astype("int64")
-    if ot.iloc[0] > 1e14:      # microseconds (2025+ dumps)
-        ot = ot // 1000
-    df["ts"] = pd.to_datetime(ot, unit="ms", utc=True)
-    df = df.drop(columns=["open_time"]).set_index("ts").astype(float)
-    return df
+    ot = df["open_time"].astype(str).str.strip()
+    num = pd.to_numeric(ot, errors="coerce")
+    if num.notna().all():
+        num = num.astype("int64")
+        unit = "us" if num.iloc[0] > 1e14 else ("ms" if num.iloc[0] > 1e11 else "s")
+        ts = pd.to_datetime(num, unit=unit, utc=True)
+    else:
+        ts = pd.to_datetime(ot, utc=True)
+    df["ts"] = ts
+    df = df.drop(columns=["open_time"]).set_index("ts")
+    return df.apply(pd.to_numeric, errors="coerce").astype(float)
 
 
 def discover(source_dirs: list[str]) -> dict[str, dict[str, dict[str, str]]]:
@@ -115,3 +122,12 @@ def format_report(rep: LoadReport) -> str:
     return (f"{rep.symbol}: {rep.bars} bars {rep.start} .. {rep.end} from {rep.months} monthly files "
             f"{rep.sources}; gaps={len(rep.gaps)} [{gaps}]; cross-source max close dev {rep.max_overlap_close_dev_pct}% "
             f"over {rep.overlap_months_checked} overlapping months; OHLC sanity errors dropped={rep.sanity_errors}")
+
+
+def split_on_gaps(df: pd.DataFrame, max_gap_hours: int = 72, min_bars: int = 24 * 365) -> list[pd.DataFrame]:
+    """Split a series into contiguous blocks wherever data is missing for more than max_gap_hours.
+    Indicators must never be computed across a multi-month hole. Blocks shorter than min_bars are dropped."""
+    diffs = df.index.to_series().diff()
+    cut_idx = [0] + [df.index.get_loc(ts) for ts, d in diffs.items() if d > pd.Timedelta(hours=max_gap_hours)] + [len(df)]
+    blocks = [df.iloc[a:b] for a, b in zip(cut_idx, cut_idx[1:])]
+    return [b for b in blocks if len(b) >= min_bars]

@@ -8,7 +8,9 @@ from .base import Strategy
 
 class MomentumStrategy(Strategy):
     name = "momentum"
-    default_params = {"fast": 12, "slow": 26, "trend": 100, "atr_period": 14, "atr_mult": 2.5, "tp_mult": 4.0}
+    # tp_mult / trailing default to 0 = disabled: the walk-forward-validated variant (research_lab) uses only the
+    # ATR stop and the cross-down exit. Set tp_mult > 0 or trailing = true to re-enable the older exits.
+    default_params = {"fast": 12, "slow": 26, "trend": 100, "atr_period": 14, "atr_mult": 2.5, "tp_mult": 0.0, "trailing": False}
 
     @property
     def min_bars(self) -> int:
@@ -27,11 +29,12 @@ class MomentumStrategy(Strategy):
             return None
         if fast[i - 1] <= slow[i - 1] and fast[i] > slow[i] and c[i] > trend[i]:
             spread = (fast[i] - slow[i]) / c[i]
+            tp = float(c[i] + self.params["tp_mult"] * atr[i]) if self.params.get("tp_mult", 0) else None
+            trail = float(self.params["atr_mult"] * atr[i] / c[i] * 100) if self.params.get("trailing") else None
             return Signal(symbol=symbol, side=Side.BUY, strategy=self.name, strength=float(min(1.0, 0.5 + spread * 50)),
                           reason=f"EMA{self.params['fast']}>EMA{self.params['slow']} cross above EMA{self.params['trend']}",
                           price=float(c[i]), stop_loss=float(c[i] - self.params["atr_mult"] * atr[i]),
-                          take_profit=float(c[i] + self.params["tp_mult"] * atr[i]),
-                          trailing_stop_pct=float(self.params["atr_mult"] * atr[i] / c[i] * 100), ts=candles[i].ts)
+                          take_profit=tp, trailing_stop_pct=trail, ts=candles[i].ts)
         return None
 
     def exit_at(self, candles: list[Candle], a: dict[str, list[float]], i: int, position: Position) -> str | None:

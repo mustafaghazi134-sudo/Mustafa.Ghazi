@@ -29,8 +29,8 @@ def register(name: str, grid: dict, default: dict, source: str, note: str = "", 
 # ---------------------------------------------------------------- benchmarks / controls
 @register("buy_hold", {}, {}, "benchmark", "Buy on first bar, hold to the end. Every candidate must beat this on risk-adjusted terms.")
 def buy_hold(df, p):
-    e = pd.Series(False, index=df.index); e.iloc[0] = True
-    return e, None, ExitSpec()
+    # entry signal on every bar: the engine opens one position at the first tradable bar and never exits
+    return pd.Series(True, index=df.index), None, ExitSpec()
 
 
 @register("random_entry_atr_exits", {"seed": [1, 2, 3]}, {"seed": 1}, "control",
@@ -74,13 +74,18 @@ def macd_trend(df, p):
     return I.cross_up(line, sig) & (df["close"] > t), I.cross_down(line, sig), ExitSpec(atr_stop_mult=p["atr_mult"])
 
 
+def _bars_per_day(df) -> int:
+    step = (df.index[1] - df.index[0]).total_seconds() / 60 if len(df) > 1 else 60
+    return max(1, int(round(1440 / step)))
+
+
 @register("tsmom_30d", {"lookback_days": [20, 30, 60], "vol_stop_pct": [15.0, 25.0]}, {"lookback_days": 30, "vol_stop_pct": 25.0},
           "time-series momentum (Moskowitz, Ooi, Pedersen 2012), daily-evaluated",
           "Long when the trailing N-day return is positive, evaluated once a day at 00:00 UTC; exit when negative. Wide disaster stop only.")
 def tsmom(df, p):
-    c = df["close"]; lb = p["lookback_days"] * 24
+    c = df["close"]; bpd = _bars_per_day(df); lb = p["lookback_days"] * bpd
     mom = c / c.shift(lb) - 1
-    daily = pd.Series(df.index.hour == 0, index=df.index)
+    daily = pd.Series(df.index.hour == 0, index=df.index) if bpd > 1 else pd.Series(True, index=df.index)
     return (mom > 0) & daily, (mom < 0) & daily, ExitSpec(stop_loss_pct=p["vol_stop_pct"])
 
 
@@ -153,3 +158,72 @@ def ft_strategy003(df, p):
     x = (c < I.ema(c, 10)) & (fisher > 0.3)
     k = p["roi_scale"]
     return e, x, ExitSpec(stop_loss_pct=p["stop_pct"], minimal_roi={0: 4.0, 20 * k: 3.0, 30 * k: 2.0, 60 * k: 1.0})
+
+
+# ---------------------------------------------------------------- Freqtrade community ports from the catalog shortlist
+@register("ft_bbandrsi", {"stop_pct": [25.0], "roi_pct": [10.0]}, {"stop_pct": 25.0, "roi_pct": 10.0},
+          "freqtrade-strategies/berlinguyinca/BbandRsi.py (1h)",
+          "RSI(14)<30 & close<BB(20,2) lower -> enter; exit RSI>70; minimal_roi 10%; stoploss -25%. ROI-vs-stop asymmetry = high win rate, hidden tail.",
+          flags=("roi_tail_profile",))
+def ft_bbandrsi(df, p):
+    c = df["close"]; r = I.rsi(c); lo, _, _ = I.bbands(c)
+    return (r < 30) & (c < lo), r > 70, ExitSpec(stop_loss_pct=p["stop_pct"], take_profit_pct=p["roi_pct"])
+
+
+@register("ft_adx_smas", {"adx_thr": [25, 30], "stop_pct": [10.0, 25.0]}, {"adx_thr": 25, "stop_pct": 25.0},
+          "freqtrade-strategies/berlinguyinca/AdxSmas.py (1h)",
+          "ADX>25 & SMA3 crosses above SMA6 -> enter; ADX<25 & SMA6 crosses above SMA3 -> exit; stoploss -25%, minimal_roi 10%.")
+def ft_adx_smas(df, p):
+    c = df["close"]; a = I.adx(df); s3, s6 = I.sma(c, 3), I.sma(c, 6)
+    return (a > p["adx_thr"]) & I.cross_up(s3, s6), (a < p["adx_thr"]) & I.cross_up(s6, s3), ExitSpec(stop_loss_pct=p["stop_pct"], take_profit_pct=10.0)
+
+
+@register("ft_adx_momentum", {"stop_pct": [25.0], "roi_pct": [1.0]}, {"stop_pct": 25.0, "roi_pct": 1.0},
+          "freqtrade-strategies/berlinguyinca/ADXMomentum.py (1h)",
+          "ADX>25 & +DI>25 & +DI>-DI & MOM>0 -> enter; exit ADX>25 & -DI>25 & -DI>+DI & MOM<0; minimal_roi 1%; stoploss -25%. "
+          "The purest 'take 1%, risk 25%' construction: expect a very high win rate and a ruinous tail.",
+          flags=("roi_tail_profile",))
+def ft_adx_momentum(df, p):
+    h, l, c = df["high"], df["low"], df["close"]
+    up = h.diff(); dn = -l.diff()
+    pdm = up.where((up > dn) & (up > 0), 0.0); mdm = dn.where((dn > up) & (dn > 0), 0.0)
+    tr = pd.concat([h - l, (h - c.shift(1)).abs(), (l - c.shift(1)).abs()], axis=1).max(axis=1)
+    atr_ = tr.ewm(alpha=1 / 14, adjust=False, min_periods=14).mean()
+    pdi = 100 * pdm.ewm(alpha=1 / 14, adjust=False, min_periods=14).mean() / atr_
+    mdi = 100 * mdm.ewm(alpha=1 / 14, adjust=False, min_periods=14).mean() / atr_
+    a = I.adx(df); mom = c.diff(14)
+    e = (a > 25) & (pdi > 25) & (pdi > mdi) & (mom > 0)
+    x = (a > 25) & (mdi > 25) & (mdi > pdi) & (mom < 0)
+    return e, x, ExitSpec(stop_loss_pct=p["stop_pct"], take_profit_pct=p["roi_pct"])
+
+
+# ---------------------------------------------------------------- time-series momentum variants (added after the first pass; all reported)
+@register("tsmom_vote", {"lookbacks": [(20, 60), (30, 90), (20, 60, 120)], "vol_stop_pct": [20.0, 30.0]},
+          {"lookbacks": (30, 90), "vol_stop_pct": 25.0}, "TSMOM multi-horizon vote (Moskowitz et al.; Hurst, Ooi, Pedersen 2017)",
+          "Long when the trailing return is positive on ALL listed horizons (days), evaluated once a day; exit when any turns negative. Disaster stop only.")
+def tsmom_vote(df, p):
+    c = df["close"]; bpd = _bars_per_day(df)
+    moms = [c / c.shift(d * bpd) - 1 for d in p["lookbacks"]]
+    daily = pd.Series(df.index.hour == 0, index=df.index) if bpd > 1 else pd.Series(True, index=df.index)
+    all_up = pd.concat([m > 0 for m in moms], axis=1).all(axis=1)
+    any_dn = pd.concat([m < 0 for m in moms], axis=1).any(axis=1)
+    return all_up & daily, any_dn & daily, ExitSpec(stop_loss_pct=p["vol_stop_pct"])
+
+
+@register("tsmom_trail", {"lookback_days": [30, 60], "trail_pct": [15.0, 25.0]}, {"lookback_days": 30, "trail_pct": 20.0},
+          "TSMOM + trailing stop", "Daily TSMOM entry/exit plus a trailing stop from the high-water mark to cap give-back.")
+def tsmom_trail(df, p):
+    c = df["close"]; bpd = _bars_per_day(df); lb = p["lookback_days"] * bpd
+    mom = c / c.shift(lb) - 1
+    daily = pd.Series(df.index.hour == 0, index=df.index) if bpd > 1 else pd.Series(True, index=df.index)
+    return (mom > 0) & daily, (mom < 0) & daily, ExitSpec(trailing_stop_pct=p["trail_pct"])
+
+
+@register("tsmom_ema_filter", {"lookback_days": [30, 60], "ema_days": [50, 100], "vol_stop_pct": [25.0]},
+          {"lookback_days": 30, "ema_days": 100, "vol_stop_pct": 25.0}, "TSMOM with long-term EMA regime filter",
+          "Daily TSMOM, but only long while close is above a long EMA (regime filter); exit when momentum turns negative or close drops below the EMA.")
+def tsmom_ema(df, p):
+    c = df["close"]; bpd = _bars_per_day(df); lb = p["lookback_days"] * bpd
+    mom = c / c.shift(lb) - 1; e = I.ema(c, p["ema_days"] * bpd)
+    daily = pd.Series(df.index.hour == 0, index=df.index) if bpd > 1 else pd.Series(True, index=df.index)
+    return (mom > 0) & (c > e) & daily, ((mom < 0) | (c < e)) & daily, ExitSpec(stop_loss_pct=p["vol_stop_pct"])

@@ -57,8 +57,8 @@ class ClaudeConfig(BaseModel):
 
 class DataConfig(BaseModel):
     provider: Literal["live", "synthetic", "csv"] = "live"
-    candle_interval: str = "1h"
-    candle_history: int = 400
+    candle_interval: str = "4h"
+    candle_history: int = 1000
     csv_dir: str = "data/csv"
     synthetic_seed: int = 42
     synthetic_symbols: list[str] = Field(default_factory=lambda: ["SOL", "JUP", "RAY", "BONK", "WIF"])
@@ -150,10 +150,13 @@ class Settings(BaseModel):
     data_dir: str = "data"
     log_level: str = "INFO"
     risk: RiskLimits = Field(default_factory=RiskLimits)
+    # Defaults follow research_lab/RESULTS.md: TSMOM with a 100-day EMA regime filter (primary) and the EMA-cross
+    # trend strategy (secondary) on 4h candles. mean_reversion and breakout lost money out of sample after costs.
     strategies: list[StrategyConfig] = Field(default_factory=lambda: [
-        StrategyConfig(name="momentum"),
-        StrategyConfig(name="mean_reversion"),
-        StrategyConfig(name="breakout"),
+        StrategyConfig(name="tsmom", params={"lookback_days": 30, "ema_filter_days": 100, "stop_pct": 25.0}),
+        StrategyConfig(name="momentum", params={"fast": 12, "slow": 26, "trend": 100, "atr_mult": 2.5, "tp_mult": 0.0, "trailing": False}),
+        StrategyConfig(name="mean_reversion", enabled=False),
+        StrategyConfig(name="breakout", enabled=False),
     ])
     claude: ClaudeConfig = Field(default_factory=ClaudeConfig)
     data: DataConfig = Field(default_factory=DataConfig)
@@ -232,7 +235,17 @@ max_consecutive_errors = 5
 allowlist = []
 denylist = []
 
-[[strategies]]
+# Strategy selection follows research_lab/RESULTS.md (walk-forward validated on BTC/ETH/SOL, 2019-2026).
+[[strategies]]                 # PRIMARY: daily-evaluated time-series momentum with a 100-day EMA regime filter
+name = "tsmom"
+enabled = true
+[strategies.params]
+lookback_days = 30
+ema_filter_days = 100
+stop_pct = 25.0               # disaster stop between daily checks
+trail_pct = 0.0               # 20.0 enables the "tsmom_trail" variant
+
+[[strategies]]                 # SECONDARY: EMA 12/26 cross above EMA 100, 2.5-ATR stop, no take-profit (validated form)
 name = "momentum"
 enabled = true
 [strategies.params]
@@ -240,24 +253,23 @@ fast = 12
 slow = 26
 trend = 100
 atr_mult = 2.5
+tp_mult = 0.0
+trailing = false
 
-[[strategies]]
+[[strategies]]                 # REJECTED in research (loses after costs); kept for experimentation only
 name = "mean_reversion"
-enabled = true
-[strategies.params]
-rsi_period = 14
-rsi_buy = 30
-rsi_exit = 55
-bb_period = 20
-bb_std = 2.0
+enabled = false
 
-[[strategies]]
+[[strategies]]                 # REJECTED on 1h/4h; the daily Donchian variant looked good but on too few trades
 name = "breakout"
-enabled = true
+enabled = false
 [strategies.params]
-channel = 20
-volume_mult = 1.5
+channel = 55
+exit_channel = 20
+volume_mult = 0
 atr_mult = 2.0
+tp_mult = 0.0
+trailing = false
 
 [claude]
 enabled = true
@@ -271,8 +283,8 @@ fail_open = true
 
 [data]
 provider = "live"            # "synthetic" or "csv" for offline testing
-candle_interval = "1h"
-candle_history = 400
+candle_interval = "4h"       # the validated timeframe; 1h churns away the edge at realistic costs
+candle_history = 1000        # >= 30d lookback (180 bars) + 100d EMA (600 bars) at 4h
 jupiter_api_key = ""         # optional; from portal.jup.ag. With a key the bot uses api.jup.ag, else lite-api.jup.ag
 
 [universe]

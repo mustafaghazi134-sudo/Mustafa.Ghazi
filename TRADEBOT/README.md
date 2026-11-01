@@ -30,7 +30,7 @@ market data ─► universe ─► strategies ─► signals ─► Claude vet (
 | Config | `tradebot/config.py` | TOML + env; `mode="paper"` default; env `TRADEBOT_FORCE_PAPER=1` can force paper, nothing can force live |
 | Market data | `tradebot/data/live.py` | Jupiter prices + verified token list, Binance klines (OHLCV), DexScreener liquidity/volume, CoinGecko fallback |
 | Offline data | `tradebot/data/synthetic.py`, `csv_replay.py` | Deterministic regime-switching series and CSV replay for tests and sandboxes |
-| Strategies | `tradebot/strategies/` | Momentum (EMA cross + trend filter + ATR stop), mean reversion (RSI + Bollinger re-entry), breakout (Donchian + volume) |
+| Strategies | `tradebot/strategies/` | `tsmom` (validated, default), `momentum` (EMA cross, default), `mean_reversion` and `breakout` (rejected in research, disabled) |
 | Research | `tradebot/research/` | Event-driven backtester (next-open fills, intrabar stops, fees, slippage), metrics, walk-forward grid optimizer, Claude analyst |
 | Risk | `tradebot/risk/engine.py` | Position/exposure/order caps, daily-loss halt, drawdown kill, trade-rate cap, loss streak cooldown, liquidity/volume/slippage floors, allow/deny lists, stale-data and error-streak kills, HMAC approval tokens |
 | Kill switch | `tradebot/risk/kill_switch.py` | `data/KILL` file, `TRADEBOT_KILL=1`, `tradebot kill`, or auto; flattens to USDC; manual reset only |
@@ -55,7 +55,7 @@ into `Mustafa.Ghazi\`, creates `.venv`, installs dependencies, runs the test sui
 ```bash
 cd TRADEBOT
 python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
+pip install -e ".[dev]"             # the bot is pure Python + httpx/pydantic/solders (no NumPy: Windows Application Control blocks numpy's _pcg64)
 tradebot init                      # writes config.toml and .env.example
 cp .env.example .env               # add ANTHROPIC_API_KEY
 set -a; source .env; set +a
@@ -104,6 +104,25 @@ handle broadcasting; the default `swap` engine sends through your `rpc_url`.
 > The build sandbox had no route to any Jupiter, Solana or exchange host, so these integrations were
 > verified against the documented response shapes with mocked HTTP (`tests/test_jupiter_api.py`), not
 > against the live endpoints. Run `tradebot preflight` on a machine with internet access first.
+
+## Validated strategy (read `research_lab/RESULTS.md` before changing it)
+
+The default configuration is the outcome of an independent research pass over real Binance history
+(BTC 2019-2026, ETH 2019-2025, SOL 2022-2025) with pessimistic execution, ~0.5% round-trip costs, rolling
+walk-forward validation, lookahead/cost/delay checks and a random-entry control:
+
+- **Primary: `tsmom`**: daily-evaluated 30-day time-series momentum with a 100-day EMA regime filter and a 25%
+  disaster stop, on 4h candles. Out of sample it was profitable on BTC, ETH and both SOL blocks, beat buy-and-hold
+  BTC on return (+1132% vs +1065%) with half the drawdown (-39% vs -77%), and survived doubled costs and one-bar-late
+  fills. Win rate is about 33%; the average win is about 6x the average loss. Only ~45% of 3-month windows are
+  positive, so expect long flat stretches.
+- **Secondary: `momentum`**: EMA 12/26 cross above EMA 100 with a 2.5-ATR stop and no take-profit, 4h.
+- **Rejected:** every "90-95% win rate" strategy we could reproduce (Freqtrade ROI-table strategies, BB/RSI scalps
+  without stops, martingale/DCA). They win 60-100% of trades and still lose money after costs or hide catastrophic
+  tail risk. 1h variants of all trend systems also lose after costs.
+
+`research_lab/` holds the data loader (six cross-checked sources), the engine, 19 candidates, walk-forward, bias
+checks and the report generator. It needs `pip install -e ".[research]"` (NumPy/pandas) and is not imported by the bot.
 
 ## How Claude is used, and how it is bounded
 

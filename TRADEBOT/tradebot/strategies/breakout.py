@@ -8,8 +8,10 @@ from .base import Strategy
 
 class BreakoutStrategy(Strategy):
     name = "breakout"
-    default_params = {"channel": 20, "volume_mult": 1.5, "volume_period": 20, "atr_period": 14, "atr_mult": 2.0,
-                      "tp_mult": 3.0}
+    # volume_mult 0 disables the volume filter; tp_mult 0 disables the take-profit; trailing False disables the trail.
+    # The research_lab Donchian variant uses entry channel N, exit channel M (exit_channel), ATR stop only.
+    default_params = {"channel": 20, "exit_channel": 10, "volume_mult": 1.5, "volume_period": 20, "atr_period": 14, "atr_mult": 2.0,
+                      "tp_mult": 3.0, "trailing": True}
 
     @property
     def min_bars(self) -> int:
@@ -19,7 +21,7 @@ class BreakoutStrategy(Strategy):
         c = ind.closes(candles)
         v = ind.volumes(candles)
         up, _ = ind.donchian(candles, int(self.params["channel"]))
-        _, dn_exit = ind.donchian(candles, max(5, int(self.params["channel"]) // 2))
+        _, dn_exit = ind.donchian(candles, max(5, int(self.params.get("exit_channel") or int(self.params["channel"]) // 2)))
         return {"c": c, "v": v, "up": up, "dn_exit": dn_exit, "vavg": ind.sma(v, int(self.params["volume_period"])),
                 "atr": ind.atr(candles, int(self.params["atr_period"]))}
 
@@ -27,12 +29,13 @@ class BreakoutStrategy(Strategy):
         c, v, up, vavg, atr = a["c"], a["v"], a["up"], a["vavg"], a["atr"]
         if ind.isnan(up[i], vavg[i], atr[i]) or vavg[i] <= 0:
             return None
-        if c[i] > up[i] and v[i] >= self.params["volume_mult"] * vavg[i]:
+        if c[i] > up[i] and (not self.params["volume_mult"] or v[i] >= self.params["volume_mult"] * vavg[i]):
+            tp = float(c[i] + self.params["tp_mult"] * atr[i]) if self.params.get("tp_mult", 0) else None
+            trail = float(self.params["atr_mult"] * atr[i] / c[i] * 100) if self.params.get("trailing") else None
             return Signal(symbol=symbol, side=Side.BUY, strategy=self.name, strength=float(min(1.0, 0.5 + (c[i] / up[i] - 1) * 20)),
                           reason=f"close {c[i]:.6g} broke {self.params['channel']}-bar high {up[i]:.6g} on {v[i]/vavg[i]:.1f}x volume",
                           price=float(c[i]), stop_loss=float(c[i] - self.params["atr_mult"] * atr[i]),
-                          take_profit=float(c[i] + self.params["tp_mult"] * atr[i]),
-                          trailing_stop_pct=float(self.params["atr_mult"] * atr[i] / c[i] * 100), ts=candles[i].ts)
+                          take_profit=tp, trailing_stop_pct=trail, ts=candles[i].ts)
         return None
 
     def exit_at(self, candles: list[Candle], a: dict[str, list[float]], i: int, position: Position) -> str | None:

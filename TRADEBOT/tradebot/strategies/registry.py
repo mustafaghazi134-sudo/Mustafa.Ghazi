@@ -7,11 +7,13 @@ from .base import Strategy
 from .breakout import BreakoutStrategy
 from .mean_reversion import MeanReversionStrategy
 from .momentum import MomentumStrategy
+from .tsmom import TsmomStrategy
 
 STRATEGY_CLASSES: dict[str, type[Strategy]] = {
     MomentumStrategy.name: MomentumStrategy,
     MeanReversionStrategy.name: MeanReversionStrategy,
     BreakoutStrategy.name: BreakoutStrategy,
+    TsmomStrategy.name: TsmomStrategy,
 }
 
 # Search spaces used by the optimizer / research loop.
@@ -19,6 +21,7 @@ PARAM_GRIDS: dict[str, dict[str, list[Any]]] = {
     "momentum": {"fast": [8, 12, 20], "slow": [26, 50], "trend": [100, 200], "atr_mult": [2.0, 3.0]},
     "mean_reversion": {"rsi_buy": [25, 30, 35], "rsi_exit": [50, 55, 60], "bb_std": [2.0, 2.5], "stop_pct": [5.0, 8.0]},
     "breakout": {"channel": [20, 40], "volume_mult": [1.2, 1.5, 2.0], "atr_mult": [2.0, 3.0]},
+    "tsmom": {"lookback_days": [30, 60], "stop_pct": [25.0], "trail_pct": [0.0, 20.0], "ema_filter_days": [0, 50, 100]},
 }
 
 
