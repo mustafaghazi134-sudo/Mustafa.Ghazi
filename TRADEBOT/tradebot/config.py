@@ -62,7 +62,9 @@ class DataConfig(BaseModel):
     csv_dir: str = "data/csv"
     synthetic_seed: int = 42
     synthetic_symbols: list[str] = Field(default_factory=lambda: ["SOL", "JUP", "RAY", "BONK", "WIF"])
-    jupiter_base_url: str = "https://lite-api.jup.ag"
+    # Jupiter: lite-api.jup.ag is free (no key, low rate limits); api.jup.ag needs an API key from portal.jup.ag.
+    # Leave jupiter_base_url empty to pick automatically from whether a key is configured (or env JUPITER_API_KEY).
+    jupiter_base_url: str = ""
     jupiter_api_key: str = ""
     binance_base_url: str = "https://api.binance.com"
     dexscreener_base_url: str = "https://api.dexscreener.com"
@@ -96,9 +98,40 @@ class ExecutionConfig(BaseModel):
     paper_slippage_bps: float = 15.0
     live_slippage_bps: int = 50
     rpc_url: str = "https://api.mainnet-beta.solana.com"
-    jupiter_swap_base_url: str = "https://lite-api.jup.ag/swap/v1"
+    engine: Literal["swap", "ultra"] = Field("swap", description="swap: Swap API v1 + own RPC send; ultra: Ultra API order/execute (Jupiter broadcasts, no RPC needed)")
+    jupiter_swap_base_url: str = Field("", description="override for the Swap API base (default: <jupiter base>/swap/v1)")
     confirm_timeout_sec: float = 60.0
-    priority_fee_lamports: int = 100_000
+    priority_fee_lamports: int = Field(100_000, description="max priority fee per swap (Swap API priorityLevelWithMaxLamports)")
+    priority_level: Literal["medium", "high", "veryHigh"] = "high"
+
+
+class JupiterEndpoints(BaseModel):
+    base: str
+    headers: dict[str, str] = Field(default_factory=dict)
+    swap_override: str = ""
+
+    @property
+    def price(self) -> str:
+        return f"{self.base}/price/v3"
+
+    @property
+    def tokens(self) -> str:
+        return f"{self.base}/tokens/v2"
+
+    @property
+    def swap(self) -> str:
+        return self.swap_override or f"{self.base}/swap/v1"
+
+    @property
+    def ultra(self) -> str:
+        return f"{self.base}/ultra/v1"
+
+
+def jupiter_endpoints(data: "DataConfig", execution: "ExecutionConfig | None" = None) -> JupiterEndpoints:
+    key = data.jupiter_api_key or os.environ.get("JUPITER_API_KEY", "")
+    base = data.jupiter_base_url.rstrip("/") or ("https://api.jup.ag" if key else "https://lite-api.jup.ag")
+    return JupiterEndpoints(base=base, headers={"x-api-key": key} if key else {},
+                            swap_override=(execution.jupiter_swap_base_url.rstrip("/") if execution else ""))
 
 
 class EngineConfig(BaseModel):
@@ -240,6 +273,7 @@ fail_open = true
 provider = "live"            # "synthetic" or "csv" for offline testing
 candle_interval = "1h"
 candle_history = 400
+jupiter_api_key = ""         # optional; from portal.jup.ag. With a key the bot uses api.jup.ag, else lite-api.jup.ag
 
 [universe]
 symbols = ["SOL", "JUP", "RAY", "BONK", "WIF", "PYTH", "JTO"]
@@ -251,6 +285,8 @@ paper_fee_bps = 30
 paper_slippage_bps = 15
 live_slippage_bps = 50
 rpc_url = "https://api.mainnet-beta.solana.com"
+engine = "swap"              # "swap" (Swap API v1, sends via rpc_url) or "ultra" (Ultra API, Jupiter broadcasts)
+priority_level = "high"
 
 [engine]
 scan_interval_sec = 60

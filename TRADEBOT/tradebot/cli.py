@@ -35,13 +35,18 @@ def _setup_logging(level: str, data_dir: Path) -> None:
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
-def _prices_for_report(settings: Settings) -> dict[str, float]:
+def _prices_for_report(settings: Settings, ledger: Ledger) -> dict[str, float]:
+    """Live prices when the feed is reachable; otherwise the last prices the bot recorded (always for replay)."""
+    stored = ledger.get("last_prices", {}) or {}
+    if settings.data.provider != "live":
+        return stored
     try:
         from .engine.bot import build_provider
         p = build_provider(settings)
-        return {s: t.price for s, t in p.get_tickers(settings.universe.symbols).items()}
+        live = {s: t.price for s, t in p.get_tickers(settings.universe.symbols).items()}
+        return {**stored, **live} if live else stored
     except Exception:  # noqa: BLE001
-        return {}
+        return stored
 
 
 def cmd_init(args) -> int:
@@ -139,7 +144,7 @@ def cmd_report(args) -> int:
     settings = load_settings(args.config)
     ledger = Ledger(settings.db_path, mode=args.mode or settings.mode)
     since = time.time() - args.days * 86400 if args.days else 0.0
-    print(format_report(performance_report(ledger, _prices_for_report(settings), since_ts=since)))
+    print(format_report(performance_report(ledger, _prices_for_report(settings, ledger), since_ts=since)))
     if args.decisions:
         print("\nRecent decisions:")
         for d in ledger.decisions(limit=args.decisions):
@@ -253,7 +258,7 @@ def cmd_fetch_data(args) -> int:
     settings = load_settings(args.config)
     from .data.csv_replay import write_candles_csv
     from .data.live import LiveProvider
-    p = LiveProvider(settings.data, settings.universe)
+    p = LiveProvider(settings.data, settings.universe, settings.execution)
     out_dir = settings.data_path / "csv"
     for s in (args.symbols.split(",") if args.symbols else settings.universe.symbols):
         try:

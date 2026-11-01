@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
-from .config import Settings
+from .config import Settings, jupiter_endpoints
 
 LAMPORTS = 1_000_000_000
 BASE_FEE_LAMPORTS = 5_000                 # per signature
@@ -15,14 +15,22 @@ TOKEN_ACCOUNT_RENT_LAMPORTS = 2_039_280   # rent-exempt minimum for a 165-byte S
 SYSTEM_ACCOUNT_MIN_LAMPORTS = 890_880     # a wallet left non-zero but below this fails "insufficient funds for rent"
 TOKEN_PROGRAM = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
 
-HOSTS = {
-    "jupiter_quote": "https://lite-api.jup.ag/swap/v1/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=1000000&slippageBps=50",
-    "jupiter_price": "https://lite-api.jup.ag/price/v2?ids=So11111111111111111111111111111111111111112",
-    "binance_klines": "https://api.binance.com/api/v3/klines?symbol=SOLUSDT&interval=1h&limit=1",
-    "dexscreener": "https://api.dexscreener.com/latest/dex/tokens/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
-    "coingecko": "https://api.coingecko.com/api/v3/ping",
-    "anthropic": "https://api.anthropic.com/v1/models",
-}
+SOL_MINT = "So11111111111111111111111111111111111111112"
+USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+
+
+def hosts(settings: Settings) -> dict[str, str]:
+    jup = jupiter_endpoints(settings.data, settings.execution)
+    return {
+        "jupiter_price_v3": f"{jup.price}?ids={SOL_MINT}",
+        "jupiter_tokens_v2": f"{jup.tokens}/search?query={SOL_MINT}",
+        "jupiter_swap_quote": f"{jup.swap}/quote?inputMint={SOL_MINT}&outputMint={USDC_MINT}&amount=1000000&slippageBps=50",
+        "jupiter_ultra_order": f"{jup.ultra}/order?inputMint={SOL_MINT}&outputMint={USDC_MINT}&amount=1000000",
+        "binance_klines": f"{settings.data.binance_base_url}/api/v3/klines?symbol=SOLUSDT&interval=1h&limit=1",
+        "dexscreener": f"{settings.data.dexscreener_base_url}/latest/dex/tokens/JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+        "coingecko": f"{settings.data.coingecko_base_url}/ping",
+        "anthropic": "https://api.anthropic.com/v1/models",
+    }
 
 
 def _get(url: str, timeout: float = 12.0, headers: dict | None = None) -> tuple[int | None, str]:
@@ -50,8 +58,10 @@ def preflight(settings: Settings) -> list[tuple[str, str, str]]:
     key = os.environ.get("ANTHROPIC_API_KEY")
     rows.append(("ANTHROPIC_API_KEY", "OK" if key else "WARN",
                  "set" if key else "missing: Claude research/vetting disabled, deterministic strategies still run"))
-    for name, url in HOSTS.items():
-        code, detail = _get(url)
+    jup = jupiter_endpoints(settings.data, settings.execution)
+    rows.append(("jupiter_base", "OK", f"{jup.base} ({'API key set' if jup.headers else 'free tier, no key'})"))
+    for name, url in hosts(settings).items():
+        code, detail = _get(url, headers=jup.headers if name.startswith("jupiter") else None)
         if code is None:
             rows.append((f"net:{name}", "FAIL", detail))
         elif name == "anthropic" and code == 401:
@@ -93,6 +103,7 @@ class QuoteReport:
     wallet_sol: float | None = None
     wallet_has_out_ata: bool | None = None
     context_slot: int | None = None
+    ultra: dict | None = None   # Ultra order fee breakdown when available
 
 
 def jupiter_quote(settings: Settings, in_symbol: str, out_symbol: str, amount: float, slippage_bps: int | None = None,
@@ -102,8 +113,8 @@ def jupiter_quote(settings: Settings, in_symbol: str, out_symbol: str, amount: f
         raise ValueError(f"unknown symbol; known: {sorted(mints)}")
     slip = slippage_bps if slippage_bps is not None else settings.execution.live_slippage_bps
     raw_in = int(round(amount * 10 ** decs[in_symbol]))
-    headers = {"x-api-key": settings.data.jupiter_api_key} if settings.data.jupiter_api_key else {}
-    r = httpx.get(f"{settings.execution.jupiter_swap_base_url}/quote", timeout=settings.data.request_timeout_sec, headers=headers,
+    jup = jupiter_endpoints(settings.data, settings.execution)
+    r = httpx.get(f"{jup.swap}/quote", timeout=settings.data.request_timeout_sec, headers=jup.headers,
                   params={"inputMint": mints[in_symbol], "outputMint": mints[out_symbol], "amount": str(raw_in),
                           "slippageBps": slip, "restrictIntermediateTokens": "true"})
     r.raise_for_status()
@@ -128,6 +139,23 @@ def jupiter_quote(settings: Settings, in_symbol: str, out_symbol: str, amount: f
     # SOL price from the quote itself when one side is SOL and the other USDC
     if {in_symbol, out_symbol} == {"SOL", "USDC"} and rep.in_amount > 0:
         rep.sol_price_usd = rep.out_amount / rep.in_amount if in_symbol == "SOL" else rep.in_amount / rep.out_amount
+    # Ultra order (read-only: nothing is signed or executed) reports Jupiter's own fee estimate incl. rent & priority fee.
+    try:
+        params = {"inputMint": mints[in_symbol], "outputMint": mints[out_symbol], "amount": str(raw_in), "slippageBps": slip}
+        if wallet:
+            params["taker"] = wallet
+        ro = httpx.get(f"{jup.ultra}/order", timeout=settings.data.request_timeout_sec, headers=jup.headers, params=params)
+        ro.raise_for_status()
+        o = ro.json()
+        rep.ultra = {"router": o.get("router"), "swap_type": o.get("swapType"), "fee_bps": o.get("feeBps"),
+                     "signature_fee_sol": int(o.get("signatureFeeLamports") or 0) / LAMPORTS,
+                     "priority_fee_sol": int(o.get("prioritizationFeeLamports") or 0) / LAMPORTS,
+                     "rent_fee_sol": int(o.get("rentFeeLamports") or 0) / LAMPORTS,
+                     "out_amount": int(o["outAmount"]) / 10 ** decs[out_symbol] if o.get("outAmount") else None,
+                     "price_impact_pct": float(o.get("priceImpactPct") or 0.0), "gasless": o.get("gasless"),
+                     "error": o.get("errorMessage")}
+    except (httpx.HTTPError, ValueError, KeyError) as e:
+        rep.ultra = {"error": f"{type(e).__name__}: {e}"}
     if wallet:
         bal = wallet_balances(settings, wallet)
         rep.wallet_sol = bal["SOL"]
@@ -146,7 +174,15 @@ def format_quote(rep: QuoteReport) -> str:
     L.append("Route:")
     for h in rep.route:
         L.append(f"  {h['label']:<22} {h['percent']:>3}%  {h['in']:.9g} -> {h['out']:.9g}   LP fee {h['lp_fee']:.9g} {h['lp_fee_symbol']}")
-    L.append(f"Jupiter platform fee: {rep.platform_fee or 'none'}")
+    L.append(f"Jupiter platform fee (Swap API): {rep.platform_fee or 'none'}")
+    if rep.ultra:
+        u = rep.ultra
+        if u.get("error") and u.get("out_amount") is None:
+            L.append(f"Ultra order estimate: unavailable ({u['error']})")
+        else:
+            L.append(f"Ultra order estimate ({u.get('router')}, {u.get('swap_type')}): out {u['out_amount']:.9g} {rep.out_symbol}, "
+                     f"Jupiter fee {u.get('fee_bps')} bps, signature fee {u['signature_fee_sol']:.9f} SOL, "
+                     f"priority fee {u['priority_fee_sol']:.9f} SOL, rent {u['rent_fee_sol']:.9f} SOL, impact {u['price_impact_pct']*100:.4f}%")
     px = rep.sol_price_usd or 0.0
     usd = (lambda sol: f" (~${sol*px:.4f})" if px else "")
     needs_ata = rep.wallet_has_out_ata is not True
@@ -170,11 +206,28 @@ def format_quote(rep: QuoteReport) -> str:
 
 # ----------------------------------------------------------------------------- wallet
 def wallet_balances(settings: Settings, address: str) -> dict:
+    """Balances by public key. Tries the RPC-free Jupiter Ultra balances endpoint first, then the RPC."""
+    jup = jupiter_endpoints(settings.data, settings.execution)
+    by_mint = {m: s for s, m in settings.universe.mints.items()}
+    try:
+        r = httpx.get(f"{jup.ultra}/balances/{address}", timeout=settings.data.request_timeout_sec, headers=jup.headers)
+        r.raise_for_status()
+        data = r.json()
+        sol = data.get("SOL", {})
+        out = {"address": address, "SOL": float(sol.get("uiAmount") or 0.0), "lamports": int(sol.get("amount") or 0),
+               "token_accounts": {}, "source": "jupiter_ultra"}
+        for mint, v in data.items():
+            if mint == "SOL":
+                continue
+            out["token_accounts"][by_mint.get(mint, mint[:8] + "…")] = {"amount": float(v.get("uiAmount") or 0.0), "mint": mint,
+                                                                         "rent_locked_sol": TOKEN_ACCOUNT_RENT_LAMPORTS / LAMPORTS}
+        return out
+    except (httpx.HTTPError, ValueError) as e:
+        pass
     rpc = settings.execution.rpc_url
     lamports = _rpc(rpc, "getBalance", [address])["value"]
-    out = {"address": address, "SOL": lamports / LAMPORTS, "lamports": lamports, "token_accounts": {}}
+    out = {"address": address, "SOL": lamports / LAMPORTS, "lamports": lamports, "token_accounts": {}, "source": "rpc"}
     res = _rpc(rpc, "getTokenAccountsByOwner", [address, {"programId": TOKEN_PROGRAM}, {"encoding": "jsonParsed"}])
-    by_mint = {m: s for s, m in settings.universe.mints.items()}
     for acc in res.get("value", []):
         info = acc["account"]["data"]["parsed"]["info"]
         sym = by_mint.get(info["mint"], info["mint"][:8] + "…")

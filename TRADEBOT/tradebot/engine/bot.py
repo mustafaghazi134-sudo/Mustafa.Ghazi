@@ -386,7 +386,7 @@ def build_provider(settings: Settings) -> MarketDataProvider:
         return CsvReplayProvider(Path(settings.data_dir) / "csv" if d.csv_dir == "data/csv" else d.csv_dir,
                                  settings.universe.symbols, interval=d.candle_interval, history=d.candle_history)
     from ..data.live import LiveProvider
-    return LiveProvider(d, settings.universe)
+    return LiveProvider(d, settings.universe, settings.execution)
 
 
 def build_bot(settings: Settings, provider: MarketDataProvider | None = None) -> TradingBot:

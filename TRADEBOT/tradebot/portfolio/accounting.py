@@ -99,6 +99,8 @@ class PortfolioBook:
             self.peak_equity = eq
             self.ledger.set("peak_equity", eq)
         day_start_ts = dt.datetime.strptime(self.day_key, "%Y-%m-%d").replace(tzinfo=dt.UTC).timestamp()
+        if prices:
+            self.ledger.set("last_prices", {k: float(v) for k, v in prices.items()})
         pt = EquityPoint(ts=now, equity_usd=eq, cash_usd=self.cash, exposure_usd=self.exposure(prices),
                          realized_pnl_usd=self.ledger.realized_pnl_since(day_start_ts), unrealized_pnl_usd=self.unrealized(prices))
         self.ledger.add_equity(pt)

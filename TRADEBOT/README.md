@@ -74,6 +74,25 @@ No market access (CI, sandbox)? `tradebot run --provider synthetic --cycles 1000
 system on deterministic synthetic data; results land in the separate `replay` ledger
 (`tradebot report --mode replay`) and never count toward the live gate.
 
+## Jupiter integration (current API)
+
+| Purpose | Endpoint | Notes |
+|---|---|---|
+| Spot prices, 24h change | `GET {base}/price/v3?ids=<mints>` | Price v2 is deprecated and no longer used |
+| Liquidity, volume, verification, decimals | `GET {base}/tokens/v2/search?query=<mints>` | Tokens v1 is deprecated; DexScreener is only a fallback |
+| Universe scan | `GET {base}/tokens/v2/tag?query=verified` | verified, organic score ≥ 50, stables excluded |
+| Quote / swap (engine `swap`) | `GET {base}/swap/v1/quote`, `POST {base}/swap/v1/swap` | `priorityLevelWithMaxLamports`, `dynamicComputeUnitLimit`, simulation errors abort before signing, expiry via `lastValidBlockHeight` |
+| Order / execute (engine `ultra`) | `GET {base}/ultra/v1/order?taker=…`, `POST {base}/ultra/v1/execute` | Jupiter broadcasts; no RPC needed |
+| Wallet balances | `GET {base}/ultra/v1/balances/{pubkey}` | RPC fallback |
+
+`{base}` is `https://lite-api.jup.ag` (free tier, no key) or `https://api.jup.ag` when `[data].jupiter_api_key`
+or env `JUPITER_API_KEY` is set (header `x-api-key`). Set `[execution].engine = "ultra"` to let Jupiter
+handle broadcasting; the default `swap` engine sends through your `rpc_url`.
+
+> The build sandbox had no route to any Jupiter, Solana or exchange host, so these integrations were
+> verified against the documented response shapes with mocked HTTP (`tests/test_jupiter_api.py`), not
+> against the live endpoints. Run `tradebot preflight` on a machine with internet access first.
+
 ## How Claude is used, and how it is bounded
 
 Claude is called through the Anthropic SDK with structured JSON outputs, adaptive thinking, and
