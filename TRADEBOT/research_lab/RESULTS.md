@@ -37,6 +37,21 @@ from any strategy's author was accepted; where a claim exists in the source it i
 Risk controls are unchanged (independent risk engine, daily-loss halt, drawdown kill, kill switch).
 Live trading stays disabled until paper trading on live prices confirms behaviour and the owner arms it.
 
+## Bot-level replay of the selected configuration
+
+The complete bot (`tradebot run`, paper broker, independent risk engine, both default strategies, 10 bps fee +
+15 bps slippage per side, research loop off, max position 40%, max exposure 80%) replayed real BTC and ETH 4h
+history through the CSV provider:
+
+| Span | Net profit | Max DD | Sharpe | PF | Trades | Win rate | By strategy | Risk events |
+|---|---|---|---|---|---|---|---|---|
+| 2019-06-17 → 2024-08-31 | **+483%** ($10,000 → $58,299, fees $5,010 paid) | **−27%** | 1.34 | 1.72 | 204 | 32.8% | tsmom 103 trades +$39,501; momentum 101 trades +$8,798 | 2 daily-loss halts (flattened, resumed next day), 4 orders rejected by the risk engine, 0 kill-switch trips |
+
+Buy-and-hold over the same span: BTC ≈ +530% with −77% max drawdown, ETH ≈ +830% with −81%. The bot gave up
+some raw return for roughly one third of the drawdown while never exceeding 80% exposure. The in-run figures are
+not out-of-sample in the walk-forward sense (default parameters throughout) and are shown to confirm that the
+live code path reproduces the research, not as an additional validation.
+
 ## Method
 
 - **Data**: Binance 1h klines from six independent GitHub mirrors of the official dumps; BTC 2019-01 → 2026-09

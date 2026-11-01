@@ -49,3 +49,13 @@ def test_tsmom_trailing_variant_sets_trailing_stop():
     pre = s.precompute("X", up)
     sig = next(pre.entry(i) for i in range(len(up)) if pre.entry(i) is not None)
     assert sig.trailing_stop_pct == 20.0 and sig.stop_loss is None
+
+
+def test_tsmom_fires_on_4h_bars_with_1000_bar_history():
+    # Regression: the requirement must scale with the bar size (30d*6 = 180 bars at 4h, not 720).
+    s = build_strategy("tsmom", {"lookback_days": 30, "ema_filter_days": 100})
+    start = dt.datetime(2024, 1, 1, tzinfo=dt.UTC).timestamp()
+    c = [Candle(ts=start + i * 14400, open=100 + i * 0.05, high=100.2 + i * 0.05, low=99.9 + i * 0.05, close=100.1 + i * 0.05, volume=1.0) for i in range(1000)]
+    assert s.required_bars(c) == 602
+    pre = s.precompute("X", c)
+    assert any(pre.entry(i) is not None for i in range(len(c)))

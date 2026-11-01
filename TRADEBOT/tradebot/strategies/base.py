@@ -13,15 +13,16 @@ class Precomputed:
         self.strategy = strategy
         self.symbol = symbol
         self.candles = candles
-        self.arrays: dict[str, list[float]] = strategy.compute(candles) if len(candles) >= strategy.min_bars else {}
+        self.required = strategy.required_bars(candles)
+        self.arrays: dict[str, list[float]] = strategy.compute(candles) if len(candles) >= self.required else {}
 
     def entry(self, i: int) -> Signal | None:
-        if not self.arrays or i < self.strategy.min_bars - 1:
+        if not self.arrays or i < self.required - 1:
             return None
         return self.strategy.entry_at(self.symbol, self.candles, self.arrays, i)
 
     def exit(self, i: int, position: Position) -> str | None:
-        if not self.arrays or i < self.strategy.min_bars - 1:
+        if not self.arrays or i < self.required - 1:
             return None
         return self.strategy.exit_at(self.candles, self.arrays, i, position)
 
@@ -36,6 +37,10 @@ class Strategy(ABC):
     @property
     def min_bars(self) -> int:
         return 50
+
+    def required_bars(self, candles: list[Candle]) -> int:
+        """Bars needed before the first signal. Override when the requirement depends on the bar size."""
+        return self.min_bars
 
     # ---- vectorised core (implemented by subclasses) --------------------------------------------
     @abstractmethod
@@ -54,12 +59,12 @@ class Strategy(ABC):
 
     def entry_signal(self, symbol: str, candles: list[Candle]) -> Signal | None:
         """BUY signal on the latest closed bar, or None."""
-        if len(candles) < self.min_bars:
+        if len(candles) < self.required_bars(candles):
             return None
         return self.entry_at(symbol, candles, self.compute(candles), len(candles) - 1)
 
     def exit_signal(self, symbol: str, candles: list[Candle], position: Position) -> str | None:
-        if len(candles) < self.min_bars:
+        if len(candles) < self.required_bars(candles):
             return None
         return self.exit_at(candles, self.compute(candles), len(candles) - 1, position)
 

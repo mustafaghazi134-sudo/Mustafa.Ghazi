@@ -26,7 +26,7 @@ class BacktestResult:
 def backtest(strategy: Strategy, candles: list[Candle], symbol: str, initial_cash: float = 10_000.0,
              fee_bps: float = 30.0, slippage_bps: float = 15.0, position_pct: float = 100.0,
              warmup: int | None = None) -> BacktestResult:
-    warm = warmup if warmup is not None else strategy.min_bars
+    warm = warmup if warmup is not None else strategy.required_bars(candles)
     cash = initial_cash
     pos: Position | None = None
     pending = None  # signal to fill at next open

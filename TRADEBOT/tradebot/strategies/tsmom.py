@@ -29,7 +29,11 @@ class TsmomStrategy(Strategy):
 
     @property
     def min_bars(self) -> int:
+        # worst case (hourly bars); required_bars() gives the exact need for the actual bar size
         return int(max(self.params["lookback_days"], self.params["ema_filter_days"]) * 24) + 2
+
+    def required_bars(self, candles: list[Candle]) -> int:
+        return int(max(self.params["lookback_days"], self.params["ema_filter_days"]) * _bars_per_day(candles)) + 2
 
     def compute(self, candles: list[Candle]) -> dict[str, list[float]]:
         c = ind.closes(candles)

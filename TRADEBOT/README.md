@@ -117,6 +117,9 @@ walk-forward validation, lookahead/cost/delay checks and a random-entry control:
   fills. Win rate is about 33%; the average win is about 6x the average loss. Only ~45% of 3-month windows are
   positive, so expect long flat stretches.
 - **Secondary: `momentum`**: EMA 12/26 cross above EMA 100 with a 2.5-ATR stop and no take-profit, 4h.
+- **Whole-bot replay** (paper broker + risk engine, both strategies, costs on) of real BTC/ETH 4h history 2019-06 to
+  2024-08: +483% with a 27% maximum drawdown, profit factor 1.72, 204 trades, two daily-loss halts handled
+  automatically. Buy-and-hold over the same span drew down 77-81%.
 - **Rejected:** every "90-95% win rate" strategy we could reproduce (Freqtrade ROI-table strategies, BB/RSI scalps
   without stops, martingale/DCA). They win 60-100% of trades and still lose money after costs or hide catastrophic
   tail risk. 1h variants of all trend systems also lose after costs.

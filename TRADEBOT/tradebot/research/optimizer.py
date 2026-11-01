@@ -65,11 +65,11 @@ def optimize(strategy: str, candles_by_symbol: dict[str, list[Candle]], grid: di
         strat = build_strategy(strategy, full)
         is_rows, oos_rows = [], []
         for sym, candles in candles_by_symbol.items():
-            if len(candles) < strat.min_bars * 2 + 20:
+            if len(candles) < strat.required_bars(candles) * 2 + 20:
                 continue
             split = int(len(candles) * train_frac)
             # out-of-sample segment includes warmup overlap so indicators are defined from its first bar
-            oos_start = max(0, split - strat.min_bars)
+            oos_start = max(0, split - strat.required_bars(candles))
             is_rows.append(backtest(strat, candles[:split], sym, fee_bps=fee_bps, slippage_bps=slippage_bps).metrics)
             oos_rows.append(backtest(strat, candles[oos_start:], sym, fee_bps=fee_bps, slippage_bps=slippage_bps).metrics)
         if not is_rows:
