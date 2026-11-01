@@ -270,6 +270,26 @@ def cmd_verify_assets(args) -> int:
     return 0 if all(r["status"] == "OK" for r in rows) else (1 if any(r["status"] == "FAIL" for r in rows) else 0)
 
 
+def cmd_apply_profile(args) -> int:
+    """Edit the EXISTING config.toml in place (backup first): Claude off, BTC/ETH/SOL, no auto-scan, 4h, tsmom+momentum."""
+    from .profile import apply_validated_profile
+    from pathlib import Path
+    try:
+        changes = apply_validated_profile(Path(args.config), backup=not args.no_backup)
+    except FileNotFoundError as e:
+        print(e)
+        return 2
+    print(f"applied validated profile to {args.config}" + ("" if args.no_backup else " (backup written alongside)"))
+    for c in changes:
+        print("  -", c)
+    if not changes:
+        print("  (already up to date)")
+    s = load_settings(args.config)
+    print(f"now: mode={s.mode} claude={s.claude.enabled} symbols={s.universe.symbols} auto_scan={s.universe.auto_scan} "
+          f"interval={s.data.candle_interval} strategies={[c.name for c in s.strategies if c.enabled]}")
+    return 0
+
+
 def cmd_fetch_data(args) -> int:
     settings = load_settings(args.config)
     from .data.csv_replay import write_candles_csv
@@ -325,6 +345,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--cycles", type=int, default=700); p.set_defaults(fn=cmd_selftest)
     p = sub.add_parser("verify-assets", help="read-only: can each universe symbol be executed via Jupiter at the bot's order size within limits?")
     p.add_argument("--symbols", default=None); p.add_argument("--equity", type=float, default=None); p.set_defaults(fn=cmd_verify_assets)
+    p = sub.add_parser("apply-profile", help="update an existing config.toml to the validated settings, preserving everything else (backup first)")
+    p.add_argument("--no-backup", action="store_true"); p.set_defaults(fn=cmd_apply_profile)
     p = sub.add_parser("fetch-data", help="download candles to CSV for offline backtests/replay")
     p.add_argument("--symbols", default=None); p.add_argument("--interval", default="1h"); p.add_argument("--bars", type=int, default=1000)
     p.set_defaults(fn=cmd_fetch_data)

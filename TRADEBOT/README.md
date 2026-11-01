@@ -46,6 +46,10 @@ it. It checks Git and Python (asking before installing either via winget), clone
 into `Mustafa.Ghazi\`, creates `.venv`, installs dependencies, runs the test suite and `selftest`, writes
 `config.toml`, and runs `preflight` against the live market hosts. Then:
 
+- `windows\update.bat` (or `scripts/update.sh` on Linux/macOS) updates an existing install: backs up `config.toml`
+  and `.env`, pulls this branch, updates dependencies, runs `tradebot apply-profile` (edits only the validated keys in
+  your config, preserving API keys and limits, with a backup), then tests, preflight, asset verification and 3 paper
+  cycles. Trade history in `data/` is untouched.
 - `windows\run_paper.bat` starts continuous paper trading with real prices and auto-restarts. It sets
   `TRADEBOT_FORCE_PAPER=1` and blanks the live-trading variables, so it can never send a real order.
 - `windows\status.bat` shows state and the 7-day report. `windows\kill_switch.bat` is the emergency stop.

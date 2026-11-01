@@ -56,6 +56,7 @@ class TradingBot:
         self.last_equity_snapshot_ts: float = 0.0
         self.last_report_day: str | None = ledger.get("last_report_day")
         self.cycles = 0
+        self._signals_this_cycle = 0
         self._apply_saved_overrides()
         kill.on_trip(lambda reason: ledger.log_event("kill_switch", reason, ts=self.clock()))
         risk.on_daily_halt(self._on_daily_halt)
@@ -109,6 +110,10 @@ class TradingBot:
         data_ts = max(t.ts for t in tickers.values())
         self.risk.on_data(data_ts)
         prices = {s: t.price for s, t in tickers.items()}
+        self._signals_this_cycle = 0
+        log.info("cycle %d prices: %s | positions: %s", self.cycles + 1,
+                 ", ".join(f"{s}={p:.6g}" for s, p in prices.items()),
+                 ", ".join(f"{p.symbol}({p.qty:.4g})" for p in self.book.positions.values()) or "none")
 
         if now - self.last_equity_snapshot_ts >= self.s.engine.equity_snapshot_interval_sec or self.provider.is_replay:
             pt = self.book.snapshot(prices)
@@ -127,6 +132,9 @@ class TradingBot:
 
         self._manage_positions(tickers)
         self._scan_entries(tickers)
+        if not self._signals_this_cycle and not self.provider.is_replay:
+            log.info("cycle %d: no entry signals from %s (expected most cycles for a daily-evaluated 4h trend system)",
+                     self.cycles + 1, [st.name for st in self.strategies])
         self._maybe_daily_report(prices)
         if self.s.claude.research_enabled and (now - self.last_research_ts) >= self.s.claude.research_interval_hours * 3600:
             try:
@@ -204,6 +212,7 @@ class TradingBot:
                 if sig is None:
                     continue
                 sig.ts = self.clock()
+                self._signals_this_cycle += 1
                 self.ledger.log_decision("signal", {"side": sig.side.value, "strength": sig.strength, "reason": sig.reason,
                                                     "price": sig.price, "stop": sig.stop_loss, "tp": sig.take_profit}, sym, strat.name, ts=sig.ts)
                 self._try_enter(sig, t, prices)
