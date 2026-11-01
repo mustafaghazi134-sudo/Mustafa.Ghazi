@@ -127,6 +127,20 @@ walk-forward validation, lookahead/cost/delay checks and a random-entry control:
 `research_lab/` holds the data loader (six cross-checked sources), the engine, 19 candidates, walk-forward, bias
 checks and the report generator. It needs `pip install -e ".[research]"` (NumPy/pandas) and is not imported by the bot.
 
+## Assets: how BTC/ETH exposure is traded on Solana
+
+The validated strategies were tested on BTC and ETH spot prices (Binance history). On Solana the bot takes that
+exposure through wrapped assets routed by Jupiter: **BTC = cbBTC** (Coinbase Wrapped BTC,
+`cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij`) and **ETH = WETH** (Wormhole,
+`7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs`), plus native SOL. Signals come from Binance candles
+(`[universe].candle_symbols`), fills from the wrapped token's Jupiter price, so the small basis between the two
+is visible in the paper ledger. `auto_scan` is off by default so no untested token is added.
+
+```bash
+tradebot verify-assets          # read-only: mint, decimals, Jupiter price, liquidity vs limits, Binance candles,
+                                # buy+sell quotes at the bot's real order size, round-trip cost, Jupiter/Binance basis
+```
+
 ## How Claude is used, and how it is bounded
 
 Claude is called through the Anthropic SDK with structured JSON outputs, adaptive thinking, and

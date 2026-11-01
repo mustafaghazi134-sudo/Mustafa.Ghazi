@@ -27,7 +27,7 @@ from .base import MarketDataProvider, interval_seconds
 log = logging.getLogger(__name__)
 
 _BINANCE_INTERVALS = {"1m", "5m", "15m", "30m", "1h", "4h", "1d"}
-_COINGECKO_IDS = {"SOL": "solana", "JUP": "jupiter-exchange-solana", "RAY": "raydium", "BONK": "bonk",
+_COINGECKO_IDS = {"BTC": "bitcoin", "ETH": "ethereum", "SOL": "solana", "JUP": "jupiter-exchange-solana", "RAY": "raydium", "BONK": "bonk",
                   "WIF": "dogwifcoin", "PYTH": "pyth-network", "JTO": "jito-governance-token"}
 _STABLES = {"USDC", "USDT", "USDS", "PYUSD", "USDE", "DAI", "FDUSD", "USD1", "UXD", "USDH"}
 
@@ -161,8 +161,9 @@ class LiveProvider(MarketDataProvider):
     def _binance_klines(self, symbol: str, interval: str, limit: int) -> list[Candle]:
         if interval not in _BINANCE_INTERVALS:
             raise ValueError(f"interval {interval} not supported by binance klines")
+        pair = self.universe_cfg.candle_symbols.get(symbol, f"{symbol}USDT")
         data = self.http.get_json(f"{self.cfg.binance_base_url}/api/v3/klines",
-                                  params={"symbol": f"{symbol}USDT", "interval": interval, "limit": min(limit, 1000)})
+                                  params={"symbol": pair, "interval": interval, "limit": min(limit, 1000)})
         return [Candle(ts=k[0] / 1000.0, open=float(k[1]), high=float(k[2]), low=float(k[3]), close=float(k[4]),
                        volume=float(k[5])) for k in data]
 

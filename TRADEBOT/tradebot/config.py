@@ -73,14 +73,19 @@ class DataConfig(BaseModel):
 
 
 class UniverseConfig(BaseModel):
-    symbols: list[str] = Field(default_factory=lambda: ["SOL", "JUP", "RAY", "BONK", "WIF", "PYTH", "JTO"])
-    auto_scan: bool = True
+    # Research-validated exposure (research_lab/RESULTS.md): BTC and ETH price exposure, traded on Solana via
+    # wrapped assets (cbBTC by Coinbase, WETH by Wormhole), plus SOL. auto_scan stays off so untested tokens are
+    # never added automatically; enable it deliberately if you want the bot to pick up other verified tokens.
+    symbols: list[str] = Field(default_factory=lambda: ["BTC", "ETH", "SOL"])
+    auto_scan: bool = False
     max_symbols: int = 12
     quote_symbol: str = "USDC"
     # Known mints for live trading; auto-scan may add verified Jupiter tokens.
     mints: dict[str, str] = Field(default_factory=lambda: {
         "USDC": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
         "SOL": "So11111111111111111111111111111111111111112",
+        "BTC": "cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij",   # cbBTC (Coinbase Wrapped BTC), 8 decimals
+        "ETH": "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",   # WETH (Wormhole, Ethereum), 8 decimals
         "JUP": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
         "RAY": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
         "BONK": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
@@ -88,8 +93,11 @@ class UniverseConfig(BaseModel):
         "PYTH": "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3",
         "JTO": "jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL",
     })
+    # Candle/price-history symbol per traded symbol (Binance spot klines drive the signals; the wrapped token's
+    # Jupiter price drives fills). Defaults to <symbol>USDT.
+    candle_symbols: dict[str, str] = Field(default_factory=lambda: {"BTC": "BTCUSDT", "ETH": "ETHUSDT", "SOL": "SOLUSDT"})
     decimals: dict[str, int] = Field(default_factory=lambda: {
-        "USDC": 6, "SOL": 9, "JUP": 6, "RAY": 6, "BONK": 5, "WIF": 6, "PYTH": 6, "JTO": 9,
+        "USDC": 6, "SOL": 9, "BTC": 8, "ETH": 8, "JUP": 6, "RAY": 6, "BONK": 5, "WIF": 6, "PYTH": 6, "JTO": 9,
     })
 
 
@@ -287,9 +295,9 @@ candle_interval = "4h"       # the validated timeframe; 1h churns away the edge 
 candle_history = 1000        # >= 30d lookback (180 bars) + 100d EMA (600 bars) at 4h
 jupiter_api_key = ""         # optional; from portal.jup.ag. With a key the bot uses api.jup.ag, else lite-api.jup.ag
 
-[universe]
-symbols = ["SOL", "JUP", "RAY", "BONK", "WIF", "PYTH", "JTO"]
-auto_scan = true
+[universe]                   # validated exposure: BTC (as cbBTC), ETH (as Wormhole WETH), SOL. See `tradebot verify-assets`.
+symbols = ["BTC", "ETH", "SOL"]
+auto_scan = false            # true lets the bot add other verified Jupiter tokens (untested exposure)
 max_symbols = 12
 
 [execution]

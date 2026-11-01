@@ -262,6 +262,14 @@ def cmd_selftest(args) -> int:
     return 0 if all(c.ok for c in checks) else 1
 
 
+def cmd_verify_assets(args) -> int:
+    from .preflight import format_assets, verify_assets
+    settings = load_settings(args.config)
+    rows = verify_assets(settings, args.symbols.split(",") if args.symbols else None, args.equity)
+    print(format_assets(rows))
+    return 0 if all(r["status"] == "OK" for r in rows) else (1 if any(r["status"] == "FAIL" for r in rows) else 0)
+
+
 def cmd_fetch_data(args) -> int:
     settings = load_settings(args.config)
     from .data.csv_replay import write_candles_csv
@@ -315,6 +323,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--sol-price", type=float, default=None); p.set_defaults(fn=cmd_wallet)
     p = sub.add_parser("selftest", help="offline execution self-test: risk approvals, fills, limits, kill switch")
     p.add_argument("--cycles", type=int, default=700); p.set_defaults(fn=cmd_selftest)
+    p = sub.add_parser("verify-assets", help="read-only: can each universe symbol be executed via Jupiter at the bot's order size within limits?")
+    p.add_argument("--symbols", default=None); p.add_argument("--equity", type=float, default=None); p.set_defaults(fn=cmd_verify_assets)
     p = sub.add_parser("fetch-data", help="download candles to CSV for offline backtests/replay")
     p.add_argument("--symbols", default=None); p.add_argument("--interval", default="1h"); p.add_argument("--bars", type=int, default=1000)
     p.set_defaults(fn=cmd_fetch_data)

@@ -247,3 +247,92 @@ def format_wallet(bal: dict, sol_price_usd: float | None = None) -> str:
     spendable = bal["SOL"] - SYSTEM_ACCOUNT_MIN_LAMPORTS / LAMPORTS
     L.append(f"SOL above rent-exempt floor: {max(0.0, spendable):.9f}")
     return "\n".join(L)
+
+
+# ----------------------------------------------------------------------------- asset verification
+def verify_assets(settings: Settings, symbols: list[str] | None = None, equity_usd: float | None = None) -> list[dict]:
+    """Read-only check that each traded symbol can actually be executed through Jupiter at the bot's order size,
+    within the risk limits, and that its signal data (Binance candles) is available. Nothing is signed or sent."""
+    from .data.live import LiveProvider
+    jup = jupiter_endpoints(settings.data, settings.execution)
+    prov = LiveProvider(settings.data, settings.universe, settings.execution)
+    eq = equity_usd or settings.initial_capital_usd
+    notional = min(eq * settings.risk.max_position_pct / 100, settings.risk.max_order_notional_usd)
+    usdc = settings.universe.mints["USDC"]
+    rows = []
+    for sym in symbols or settings.universe.symbols:
+        r: dict = {"symbol": sym, "order_usd": round(notional, 2), "status": "OK", "problems": []}
+        mint = settings.universe.mints.get(sym); dec = settings.universe.decimals.get(sym)
+        r["mint"] = mint; r["decimals"] = dec
+        if not mint or dec is None:
+            r["problems"].append("no mint/decimals configured"); r["status"] = "FAIL"; rows.append(r); continue
+        # tickers: price + liquidity + volume (Jupiter price v3 + tokens v2, dexscreener fallback)
+        try:
+            t = prov.get_tickers([sym]).get(sym)
+            if t is None:
+                raise RuntimeError("no ticker")
+            r["price"] = t.price; r["liquidity_usd"] = round(t.liquidity_usd); r["volume_24h_usd"] = round(t.volume_24h_usd)
+            if t.liquidity_usd < settings.risk.min_liquidity_usd:
+                r["problems"].append(f"liquidity ${t.liquidity_usd:,.0f} < min ${settings.risk.min_liquidity_usd:,.0f}")
+            if t.volume_24h_usd < settings.risk.min_volume_24h_usd:
+                r["problems"].append(f"24h volume ${t.volume_24h_usd:,.0f} < min ${settings.risk.min_volume_24h_usd:,.0f}")
+        except Exception as e:  # noqa: BLE001
+            r["problems"].append(f"ticker: {type(e).__name__}: {e}")
+        # candles for signals
+        try:
+            c = prov.get_candles(sym, settings.data.candle_interval, settings.data.candle_history)
+            r["candles"] = len(c); r["last_candle_close"] = c[-1].close if c else None
+            need = max(s.required_bars(c) for s in _strategies(settings)) if c else 0
+            if len(c) < need:
+                r["problems"].append(f"only {len(c)} candles, strategies need {need}")
+            if c and r.get("price"):
+                r["basis_pct"] = round((r["price"] / c[-1].close - 1) * 100, 3)
+                if abs(r["basis_pct"]) > 2.0:
+                    r["problems"].append(f"Jupiter price vs Binance close basis {r['basis_pct']}% (> 2%)")
+        except Exception as e:  # noqa: BLE001
+            r["problems"].append(f"candles: {type(e).__name__}: {e}")
+        # round-trip quotes at the real order size
+        try:
+            q_buy = httpx.get(f"{jup.swap}/quote", timeout=settings.data.request_timeout_sec, headers=jup.headers,
+                              params={"inputMint": usdc, "outputMint": mint, "amount": str(int(notional * 1e6)),
+                                      "slippageBps": settings.execution.live_slippage_bps, "restrictIntermediateTokens": "true"})
+            q_buy.raise_for_status(); qb = q_buy.json()
+            out_qty = int(qb["outAmount"]) / 10 ** dec
+            q_sell = httpx.get(f"{jup.swap}/quote", timeout=settings.data.request_timeout_sec, headers=jup.headers,
+                               params={"inputMint": mint, "outputMint": usdc, "amount": str(int(out_qty * 10 ** dec)),
+                                       "slippageBps": settings.execution.live_slippage_bps, "restrictIntermediateTokens": "true"})
+            q_sell.raise_for_status(); qs = q_sell.json()
+            back_usd = int(qs["outAmount"]) / 1e6
+            r["buy_impact_bps"] = round(float(qb.get("priceImpactPct") or 0) * 1e4, 1)
+            r["sell_impact_bps"] = round(float(qs.get("priceImpactPct") or 0) * 1e4, 1)
+            r["round_trip_cost_bps"] = round((1 - back_usd / notional) * 1e4, 1)
+            r["route"] = "+".join(h["swapInfo"]["label"] for h in qb.get("routePlan", []))[:60]
+            if max(r["buy_impact_bps"], r["sell_impact_bps"]) > settings.risk.max_slippage_bps:
+                r["problems"].append(f"price impact > max_slippage_bps {settings.risk.max_slippage_bps}")
+            if r["round_trip_cost_bps"] > 2 * (settings.execution.paper_fee_bps + settings.execution.paper_slippage_bps):
+                r["problems"].append(f"round-trip cost {r['round_trip_cost_bps']} bps exceeds the cost assumed in research ({2*(settings.execution.paper_fee_bps+settings.execution.paper_slippage_bps):.0f} bps)")
+        except Exception as e:  # noqa: BLE001
+            r["problems"].append(f"quote: {type(e).__name__}: {e}")
+        if r["problems"]:
+            r["status"] = "FAIL" if any(p.startswith(("quote", "ticker", "candles", "no mint")) for p in r["problems"]) else "WARN"
+        rows.append(r)
+    return rows
+
+
+def _strategies(settings: Settings):
+    from .strategies.registry import build_strategies
+    return build_strategies(settings.strategies)
+
+
+def format_assets(rows: list[dict]) -> str:
+    L = ["=== asset verification (read-only, nothing signed) ==="]
+    for r in rows:
+        L.append(f"{r['status']:<5}{r['symbol']:<6} mint {str(r.get('mint'))[:10]}… dec {r.get('decimals')}  price {r.get('price', 'n/a')}  "
+                 f"liq ${r.get('liquidity_usd', 0):,}  vol24h ${r.get('volume_24h_usd', 0):,}  candles {r.get('candles', 'n/a')}  "
+                 f"basis {r.get('basis_pct', 'n/a')}%  order ${r['order_usd']}: impact {r.get('buy_impact_bps', 'n/a')}/{r.get('sell_impact_bps', 'n/a')} bps, "
+                 f"round trip {r.get('round_trip_cost_bps', 'n/a')} bps via {r.get('route', 'n/a')}")
+        for p in r["problems"]:
+            L.append(f"        - {p}")
+    worst = max((["OK", "WARN", "FAIL"].index(r["status"]) for r in rows), default=0)
+    L.append("result: " + ["all assets executable within limits", "warnings: review before paper trading", "FAIL: some assets cannot be traded as configured"][worst])
+    return "\n".join(L)
