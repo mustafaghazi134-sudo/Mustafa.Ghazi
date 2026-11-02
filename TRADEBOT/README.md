@@ -213,6 +213,10 @@ ledger (`data/fast.db`) and it shares the kill switch file (`data/KILL`), so one
    every rejection with its reason. `tradebot fast-report` prints trades with timestamps and net results, win rate,
    fees, drawdown, trading frequency, latency percentiles and rejection counts.
 
+**Strategy status (independent audit, `docs/STRATEGY_AUDIT_GO_NOGO.md`): NO-GO for live trading.** The fast
+engine's 1-minute rule, and every 1m–1h strategy tested, lose money after realistic costs on Jupiter and on an
+exchange as a taker. The engine stays paper-only, useful for measuring live Jupiter costs and latency.
+
 Reliability layer (details and test evidence: `docs/FAST_ENGINE_RELIABILITY.md`): per-API rate limits with
 exponential backoff, jitter and Retry-After; WebSocket heartbeat, stall detection and reconnect backoff; an all-in
 cost estimate for every entry and exit; a separate deterministic pre-trade gateway (`[fast_risk]`); enforced
