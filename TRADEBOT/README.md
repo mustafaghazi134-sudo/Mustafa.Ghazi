@@ -37,7 +37,7 @@ market data ─► universe ─► strategies ─► signals ─► Claude vet (
 | Execution | `tradebot/execution/` | `PaperBroker`; `JupiterLiveBroker` (quote → swap → local sign with `solders` → send → confirm); `LiveGate`; wallet loading |
 | Portfolio | `tradebot/portfolio/` | SQLite ledger (orders, fills, positions, trades, equity, decisions, events, API cost), accounting, reports |
 | Engine | `tradebot/engine/bot.py` | 24/7 loop, exits, entries, research cadence, daily reports, flatten-on-kill |
-| CLI | `tradebot/cli.py` | `init run backtest research report status kill resume arm-live disarm-live fetch-data` |
+| CLI | `tradebot/cli.py` | `init run backtest research report status kill resume arm-live disarm-live fetch-data live-preflight live-dry-run live-status live-halt live-resume` |
 
 ## Windows one-click setup
 
@@ -283,27 +283,36 @@ pending, new orders for that symbol are blocked. In live mode the ledger is reco
 startup (`reconcile_on_start`); a shortfall beyond `balance_tolerance_pct` trips the kill switch. Failure-injection
 tests: `tests/test_crash_protection.py`.
 
-## Going live (owner action, deliberately multi-step)
+## Going live (owner action, deliberately multi-step; currently DISABLED in this build)
 
-The bot cannot click Phantom. It needs its own signing key:
+Live execution goes through `tradebot/execution/jupiter_adapter.py` (Jupiter Swap v2 `/order` → verify → simulate →
+sign → `/execute`). The trading process **never** holds the private key: a separate signer service
+(`python -m tradebot_signer`, run as its own Windows account) holds it and signs only what its own policy,
+activation and simulation allow. Real submission is also switched off at build level
+(`tradebot/execution/submission.py`). Design, gates, outcome handling, deployment, monitoring, stopping, recovery and
+the readiness checklist are in [`docs/LIVE_EXECUTION_ADAPTER.md`](docs/LIVE_EXECUTION_ADAPTER.md).
 
-1. In Phantom, **create a new, dedicated account** for the bot. Fund it with USDC you can afford to
-   lose plus ~0.05 SOL for fees. You watch its activity in Phantom like any other account.
-2. Export that account's private key (Settings → Manage Accounts → account → Show Private Key) and
-   put it in `.env` as `SOLANA_PRIVATE_KEY=...`. Never share this key or commit `.env`.
-3. Paper trade first. `arm-live` refuses until the paper ledger shows at least
-   `min_paper_trades_before_live` closed trades over `min_paper_days_before_live` days
-   (defaults 30 trades / 14 days) unless you pass `--force`.
-4. Arm with the exact phrase from `[engine].live_confirm_phrase`:
-   ```bash
-   tradebot arm-live --confirm "I UNDERSTAND THIS TRADES REAL MONEY WITHOUT APPROVAL"
-   ```
-   This writes `data/LIVE_ARMED` containing a hash of your `[risk]` section. Editing risk limits
-   afterwards disarms automatically.
-5. Set `mode = "live"` in `config.toml` and `TRADEBOT_LIVE_TRADING=I_ACCEPT_THE_RISK` in the env.
-6. `tradebot run`. The live broker re-checks the gate on every single order.
+Read-only checks you can run now, which sign and submit nothing:
 
-Stop at any time: `tradebot kill`, or `touch data/KILL`, or `TRADEBOT_KILL=1`, or `tradebot disarm-live`.
+```bash
+tradebot live-preflight
+```
+
+```bash
+tradebot live-dry-run --symbol SOL --side buy --amount 5
+```
+
+Do **not** put a private key in `.env`: `SOLANA_PRIVATE_KEY` is no longer read by the bot, and preflight warns if it is set.
+Activation requires, in order: positive forward-paper evidence, a reviewed commit that turns the build switch on with the
+owner's written authorisation, the signer deployed and activated by the owner (at most 24 h at a time), `tradebot arm-live`
+with the confirmation phrase, `mode = "live"` and `TRADEBOT_LIVE_TRADING=I_ACCEPT_THE_RISK`.
+
+Stop at any time with any of these:
+
+- `tradebot live-halt`
+- `python -m tradebot_signer halt --home <signer home>`
+- `tradebot kill`
+- `tradebot disarm-live`
 
 ## Deployment
 

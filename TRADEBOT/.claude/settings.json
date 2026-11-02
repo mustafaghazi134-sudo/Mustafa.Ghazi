@@ -14,7 +14,16 @@
       "Read(**/*keypair*.json)",
       "Read(./data/LIVE_ARMED)",
       "Edit(./data/LIVE_ARMED)",
-      "Bash(*arm-live*)"
+      "Bash(*arm-live*)",
+      "Bash(*tradebot_signer*)",
+      "Read(**/activation_secret)",
+      "Read(**/client_secret)",
+      "Edit(**/activation_secret)",
+      "Edit(**/client_secret)",
+      "Read(**/ACTIVATION.json)",
+      "Edit(**/ACTIVATION.json)",
+      "Edit(./tradebot/execution/submission.py)",
+      "Bash(*MAINNET_SUBMISSION_ENABLED*)"
     ]
   }
 }

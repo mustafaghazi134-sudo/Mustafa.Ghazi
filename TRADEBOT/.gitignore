@@ -16,3 +16,10 @@ config.toml.*
 !.env.example
 *keypair*.json
 *.lock
+
+# signer service files (must live outside the repo, in the signer account's own home)
+activation_secret
+client_secret
+ACTIVATION.json
+signing_log.sqlite
+/signer_home/

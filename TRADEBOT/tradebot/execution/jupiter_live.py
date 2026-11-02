@@ -1,4 +1,7 @@
-"""Live execution via the Jupiter Swap API v2 (official `integrating-jupiter` / `jupiter-swap-migration` skills).
+"""LEGACY (not used by the engine): superseded by jupiter_adapter.JupiterExecutionAdapter, which keeps the key in
+the separate signer service and verifies every transaction before signing. Kept only for its existing tests.
+
+Live execution via the Jupiter Swap API v2 (official `integrating-jupiter` / `jupiter-swap-migration` skills).
 
 Flow per order: LiveGate.assert_armed -> RiskEngine.verify -> GET /swap/v2/order?taker=<wallet> -> sign the
 returned VersionedTransaction locally -> POST /swap/v2/execute {signedTransaction, requestId}. Jupiter submits
@@ -41,6 +44,8 @@ RETRYABLE_EXECUTE_CODES = NEVER_ACCEPTED_CODES      # kept for compatibility: th
 
 
 class JupiterLiveBroker(Broker):
+    kind = "live_legacy"
+
     def __init__(self, risk: RiskEngine, settings: Settings, provider: LiveProvider, keypair: Keypair, gate: LiveGate):
         super().__init__(risk)
         self.s = settings

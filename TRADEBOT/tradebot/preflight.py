@@ -81,7 +81,9 @@ def preflight(settings: Settings) -> list[tuple[str, str, str]]:
                  "TRIPPED (file present)" if settings.kill_file.exists() else "clear"))
     rows.append(("live_gate", "WARN" if settings.armed_file.exists() else "OK",
                  "armed file present" if settings.armed_file.exists() else "not armed (paper only)"))
-    rows.append(("SOLANA_PRIVATE_KEY", "OK", "set (not displayed)" if os.environ.get("SOLANA_PRIVATE_KEY") else "not set (fine for paper)"))
+    rows.append(("SOLANA_PRIVATE_KEY", "WARN" if os.environ.get("SOLANA_PRIVATE_KEY") else "OK",
+                 "SET in the trading environment (value not displayed): remove it; only the signer service may hold the key"
+                 if os.environ.get("SOLANA_PRIVATE_KEY") else "not set (correct: the key belongs to the signer service)"))
     return rows
 
 

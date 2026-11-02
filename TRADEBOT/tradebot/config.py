@@ -233,6 +233,38 @@ class FastRiskConfig(BaseModel):
     max_reference_age_sec: float = Field(10.0, gt=0)     # Binance reference (WebSocket or REST)
 
 
+class LiveExecutionConfig(BaseModel):
+    """Jupiter live-execution adapter (tradebot/execution/jupiter_adapter.py). Micro-live defaults; these only
+    tighten what [risk] allows. The trading process holds the wallet's PUBLIC key only; signing happens in the
+    separate signer service (tradebot_signer), which applies its own, owner-controlled caps as well."""
+    wallet_pubkey: str = ""
+    signer_url: str = "http://127.0.0.1:8787"
+    signer_secret_file: str = ""                    # client_secret copied from the signer home (or env TRADEBOT_SIGNER_SECRET)
+    allowed_routers: list[str] = Field(default_factory=lambda: ["metis", "jupiterz"])
+    allowed_symbols: list[str] = Field(default_factory=lambda: ["SOL", "BTC", "ETH"])
+    max_order_usd: float = Field(10.0, gt=0)
+    max_wallet_exposure_usd: float = Field(25.0, gt=0)     # non-USDC holdings + in-flight buys
+    max_daily_loss_usd: float = Field(5.0, gt=0)
+    max_daily_notional_usd: float = Field(50.0, gt=0)
+    max_orders_per_day: int = Field(10, ge=1)
+    max_fee_bps: float = Field(25.0, ge=0)
+    max_price_impact_bps: float = Field(30.0, ge=0)
+    max_total_cost_bps: float = Field(100.0, gt=0)          # min-out vs reference value: fee + impact + slippage
+    max_slippage_bps: int = Field(50, ge=1, le=300)
+    max_priority_fee_lamports: int = Field(500_000, ge=0)
+    max_external_sol_outflow_lamports: int = Field(500_000, ge=0)
+    max_rent_lamports: int = Field(4_078_560, ge=0)
+    max_sol_cost_lamports: int = Field(5_000_000, ge=0)    # fees + tips + rent per transaction, checked by simulation
+    min_sol_reserve_lamports: int = Field(20_000_000, ge=0)
+    min_blocks_remaining: int = Field(30, ge=1)
+    min_rfq_seconds_remaining: float = Field(5.0, ge=0)
+    max_quote_age_sec: float = Field(8.0, gt=0)
+    execute_timeout_sec: float = Field(30.0, gt=0)
+    confirm_timeout_sec: float = Field(60.0, gt=0)
+    max_reference_age_sec: float = Field(30.0, gt=0)
+    require_simulation: bool = True
+
+
 class Settings(BaseModel):
     mode: Literal["paper", "live"] = "paper"
     scanner: ScannerConfig = Field(default_factory=ScannerConfig)
@@ -255,6 +287,7 @@ class Settings(BaseModel):
     universe: UniverseConfig = Field(default_factory=UniverseConfig)
     execution: ExecutionConfig = Field(default_factory=ExecutionConfig)
     engine: EngineConfig = Field(default_factory=EngineConfig)
+    live: LiveExecutionConfig = Field(default_factory=LiveExecutionConfig)
 
     @field_validator("mode", mode="before")
     @classmethod
@@ -280,6 +313,10 @@ class Settings(BaseModel):
     @property
     def armed_file(self) -> Path:
         return self.data_path / "LIVE_ARMED"
+
+    @property
+    def live_halt_file(self) -> Path:
+        return self.data_path / "LIVE_HALT"
 
     @property
     def is_live(self) -> bool:

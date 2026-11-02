@@ -18,8 +18,10 @@ from .risk.kill_switch import KillSwitch
 ENV_EXAMPLE = """# Copy to .env and `set -a; source .env; set +a` (or use your process manager's env file).
 ANTHROPIC_API_KEY=sk-ant-...
 # --- live trading only (leave unset for paper) ---
-# Dedicated Phantom bot account private key (Phantom -> Settings -> Manage Accounts -> Show Private Key)
-# SOLANA_PRIVATE_KEY=
+# The trading process NEVER holds the wallet's private key. The key lives only in the separate signer service
+# (python -m tradebot_signer, run as its own OS user); see docs/LIVE_EXECUTION_ADAPTER.md.
+# Client secret copied from the signer home (hex), if not using [live] signer_secret_file:
+# TRADEBOT_SIGNER_SECRET=
 # Second independent gate; must be exactly this value for any live order to be sent.
 # TRADEBOT_LIVE_TRADING=I_ACCEPT_THE_RISK
 # Emergency stop from the environment (also: `tradebot kill`, or create data/KILL)
@@ -218,7 +220,7 @@ def cmd_arm_live(args) -> int:
     print('  1. config.toml has mode = "live"')
     print("  2. env TRADEBOT_LIVE_TRADING=I_ACCEPT_THE_RISK")
     print(f"  3. {settings.armed_file} exists with the current risk-limits hash (editing [risk] disarms)")
-    print("  4. SOLANA_PRIVATE_KEY is set for the dedicated bot wallet")
+    print("  4. the signer service is running, activated by the owner, and the build allows submission")
     return 0
 
 
@@ -490,6 +492,95 @@ def cmd_fetch_data(args) -> int:
     return 0
 
 
+
+# ---------------------------------------------------------------------- live adapter (read-only / dry-run / halt)
+def _live_parts(settings: Settings, with_controls: bool = True):
+    from .data.live import LiveProvider
+    from .execution.jupiter_adapter import JupiterExecutionAdapter
+    from .execution.live_controls import LiveControls
+    from .execution.signer_protocol import SignerClient, load_client_secret
+    from .risk.engine import RiskEngine
+    provider = LiveProvider(settings.data, settings.universe, settings.execution)
+    ledger = Ledger(settings.db_path, mode="live")
+    kill = KillSwitch(settings.kill_file)
+    controls = LiveControls(settings.live, ledger, kill, settings.live_halt_file) if with_controls else None
+    signer = None
+    try:
+        signer = SignerClient(settings.live.signer_url, load_client_secret(settings.live.signer_secret_file))
+    except Exception:  # noqa: BLE001 - preflight reports it
+        signer = None
+    adapter = JupiterExecutionAdapter(RiskEngine(settings.risk, kill), settings, provider, controls=controls, signer=None, dry_run=True)
+    return adapter, signer, ledger
+
+
+def cmd_live_preflight(args) -> int:
+    from .execution.live_preflight import live_preflight
+    settings = load_settings(args.config)
+    adapter = signer = None
+    try:
+        adapter, signer, _ = _live_parts(settings)
+    except Exception as e:  # noqa: BLE001
+        print(f"FAIL  adapter                {type(e).__name__}: {e}")
+    worst = 0
+    for check, status, detail in live_preflight(settings, adapter, signer):
+        print(f"{status:<5} {check:<26} {detail}")
+        worst = max(worst, {"OK": 0, "WARN": 1, "FAIL": 2}[status])
+    print("\nread-only: nothing was signed or submitted. result:", ["all checks passed", "warnings", "FAILURES"][worst])
+    return 0 if worst < 2 else 1
+
+
+def cmd_live_dry_run(args) -> int:
+    from .models import Side
+    settings = load_settings(args.config)
+    if args.wallet:
+        settings.live.wallet_pubkey = args.wallet
+    adapter, _, _ = _live_parts(settings)
+    rep = adapter.dry_run_order(args.symbol, Side(args.side), args.amount)
+    print(json.dumps(rep, indent=1, default=str))
+    print("\nDRY RUN " + ("PASSED: built, verified and simulated" if rep.get("ok") else "REFUSED (see problems)")
+          + ". No signature was requested and nothing was submitted.")
+    return 0 if rep.get("ok") else 1
+
+
+def cmd_live_status(args) -> int:
+    from .execution.submission import submission_enabled
+    settings = load_settings(args.config)
+    ledger = Ledger(settings.db_path, mode="live")
+    st = LiveGate(settings).status()
+    halt = settings.live_halt_file
+    print(f"build submission switch: {'ENABLED' if submission_enabled() else 'disabled'}")
+    print(f"live gate:  armed={st['armed']} mode={settings.mode} env_ok={st['env_ok']} armed_file={st['armed_file']} limits_match={st['limits_match']}")
+    print(f"live halt:  {halt.read_text() if halt.exists() else 'clear'}")
+    print(f"kill:       {'TRIPPED' if settings.kill_file.exists() else 'clear'}")
+    pend = ledger.pending_intents()
+    print(f"unresolved live intents: {len(pend)}")
+    for r in pend:
+        print(f"  {r['id']} {r['symbol']} {r['side']} {r['state']} sig={(r['tx_signature'] or '-')} age={time.time() - r['ts']:.0f}s")
+    for r in ledger.intents(10):
+        print(f"  intent {time.strftime('%Y-%m-%d %H:%M', time.gmtime(r['ts']))} {r['symbol']} {r['side']} {r['state']} sig={(r['tx_signature'] or '')[:16]}")
+    return 0
+
+
+def cmd_live_halt(args) -> int:
+    from .execution.live_controls import LiveControls
+    settings = load_settings(args.config)
+    LiveControls(settings.live, Ledger(settings.db_path, mode="live"), KillSwitch(settings.kill_file), settings.live_halt_file).halt(args.reason, source="cli")
+    print(f"LIVE HALT written ({settings.live_halt_file}): every live order is refused. Also halt the signer: "
+          "python -m tradebot_signer halt --home <signer home>")
+    return 0
+
+
+def cmd_live_resume(args) -> int:
+    from .execution.live_controls import LiveControls
+    settings = load_settings(args.config)
+    ledger = Ledger(settings.db_path, mode="live")
+    if ledger.pending_intents():
+        print("REFUSED: unresolved live intents exist; reconcile them first (tradebot live-status)")
+        return 2
+    LiveControls(settings.live, ledger, KillSwitch(settings.kill_file), settings.live_halt_file).resume()
+    print("live halt removed (the build switch, live gate, signer activation and limits still apply)")
+    return 0
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="tradebot", description="Autonomous Solana trading bot (paper by default)")
     ap.add_argument("--config", default=os.environ.get("TRADEBOT_CONFIG", "config.toml"))
@@ -555,6 +646,16 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("resolve-intent", help="manually settle an UNKNOWN order intent after verifying it yourself")
     p.add_argument("intent_id"); p.add_argument("state", choices=["expired", "failed", "confirmed"]); p.add_argument("--note", required=True)
     p.set_defaults(fn=cmd_resolve_intent)
+    p = sub.add_parser("live-preflight", help="READ-ONLY live-adapter checks: build switch, gate, Jupiter quotes, RPC, wallet, signer health")
+    p.set_defaults(fn=cmd_live_preflight)
+    p = sub.add_parser("live-dry-run", help="build + verify + simulate one live order WITHOUT signing or submitting")
+    p.add_argument("--symbol", default="SOL"); p.add_argument("--side", choices=["buy", "sell"], default="buy")
+    p.add_argument("--amount", type=float, required=True, help="USD for buys, token quantity for sells")
+    p.add_argument("--wallet", default=None, help="public key to build for (default [live] wallet_pubkey)"); p.set_defaults(fn=cmd_live_dry_run)
+    p = sub.add_parser("live-status", help="live build switch, gate, halt, unresolved intents"); p.set_defaults(fn=cmd_live_status)
+    p = sub.add_parser("live-halt", help="EMERGENCY: refuse every live order (data/LIVE_HALT)"); p.add_argument("--reason", default="manual")
+    p.set_defaults(fn=cmd_live_halt)
+    p = sub.add_parser("live-resume", help="remove data/LIVE_HALT (refused while intents are unresolved)"); p.set_defaults(fn=cmd_live_resume)
     p = sub.add_parser("fetch-data", help="download candles to CSV for offline backtests/replay")
     p.add_argument("--symbols", default=None); p.add_argument("--interval", default="1h"); p.add_argument("--bars", type=int, default=1000)
     p.set_defaults(fn=cmd_fetch_data)

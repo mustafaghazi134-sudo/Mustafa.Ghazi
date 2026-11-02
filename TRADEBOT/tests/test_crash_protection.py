@@ -44,12 +44,14 @@ class CrashingBroker(Broker):
 
     def _execute(self, order, qty, q):
         self.executions += 1
+        if self.mode == "fail_before_sign":           # fails before anything is signed or persisted
+            raise ExecutionError("order error: no route")
         if self.presubmit_hook:
             self.presubmit_hook({"request_id": f"req-{order.id}", "tx_signature": f"SIG-{order.id}", "signed_tx": "AAAA"})
         if self.mode == "crash_after_sign":
             raise SubmittedUnknownError("timeout after broadcast", f"SIG-{order.id}", f"req-{order.id}")
-        if self.mode == "fail_before_sign":
-            raise ExecutionError("order error: no route")
+        if self.mode == "plain_error_after_sign":     # a bug or unexpected error after the signature was persisted
+            raise KeyError("unexpected response field")
         return Fill(order_id=order.id, symbol=order.symbol, side=order.side, qty=q.out_amount, price=q.price,
                     notional_usd=q.in_amount, fee_usd=q.fee_usd, tx_signature=f"SIG-{order.id}")
 
@@ -257,3 +259,29 @@ def test_live_timeout_resends_same_payload_and_reports_unknown_not_new_order(tmp
     assert len(sent) == 3 and len({s_["signedTransaction"] for s_ in sent}) == 1 and all(s_["requestId"] == "req-9" for s_ in sent)
     assert hooks and hooks[0]["request_id"] == "req-9" and hooks[0]["tx_signature"] == ei.value.tx_signature
     assert sent[0]["signedTransaction"] == hooks[0]["signed_tx"]           # persisted payload == submitted payload
+
+
+def test_unexpected_error_after_signing_is_never_recorded_as_failed(tmp_path):
+    """A signature was persisted, so the transaction may be on chain: a plain exception is not evidence of failure."""
+    bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "plain_error_after_sign", lookup="not_found"))
+    ok, order = _buy(bot, prov)
+    assert ok is False
+    row = ledger.get_intent(ledger.intents(1)[0]["id"])
+    assert row["state"] == "submitted" and row["tx_signature"] == f"SIG-{order.id}"
+    broker.blockhash_valid = None                       # unknown: must stay pending
+    bot.reconcile_pending()
+    assert ledger.get_intent(row["id"])["state"] == "submitted"
+    broker.lookup = "confirmed"                         # chain evidence decides
+    bot.reconcile_pending()
+    assert ledger.get_intent(row["id"])["state"] == "confirmed" and "SOL" in bot.book.positions
+
+
+def test_unknown_outcome_without_signature_never_erases_the_persisted_one(tmp_path):
+    class NoSigUnknown(CrashingBroker):
+        def _execute(self, order, qty, q):
+            self.presubmit_hook({"request_id": f"req-{order.id}", "tx_signature": f"SIG-{order.id}", "signed_tx": "AAAA"})
+            raise SubmittedUnknownError("no answer", None, None)
+    bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: NoSigUnknown(r, p))
+    ok, order = _buy(bot, prov)
+    row = ledger.get_intent(ledger.intents(1)[0]["id"])
+    assert row["state"] == "submitted" and row["tx_signature"] == f"SIG-{order.id}" and row["request_id"] == f"req-{order.id}"

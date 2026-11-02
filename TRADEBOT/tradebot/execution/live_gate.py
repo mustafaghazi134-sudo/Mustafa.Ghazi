@@ -3,7 +3,7 @@
 1. config.mode == "live"
 2. env TRADEBOT_LIVE_TRADING == "I_ACCEPT_THE_RISK"
 3. an armed file written by `tradebot arm-live`, which embeds a hash of the risk limits
-   (changing limits disarms) and required a minimum paper-trading record (or --force).
+   (changing [risk] or [live] limits disarms) and required a minimum paper-trading record (or --force).
 """
 from __future__ import annotations
 
@@ -32,7 +32,8 @@ class LiveGate:
         self.ledger = ledger
 
     def limits_hash(self) -> str:
-        payload = json.dumps(self.s.risk.model_dump(), sort_keys=True).encode()
+        # [risk] and [live] limits: editing either disarms.
+        payload = json.dumps({"risk": self.s.risk.model_dump(), "live": self.s.live.model_dump()}, sort_keys=True).encode()
         return hashlib.sha256(payload).hexdigest()
 
     def status(self) -> dict:

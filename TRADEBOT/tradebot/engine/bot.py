@@ -167,13 +167,23 @@ class TradingBot:
         try:
             fill = self.broker.execute(order, qty, decision.approval)
         except SubmittedUnknownError as e:
-            self.ledger.update_intent(intent_id, state="submitted", tx_signature=e.tx_signature, request_id=e.request_id, result=str(e))
+            known = {k: v for k, v in (("tx_signature", e.tx_signature), ("request_id", e.request_id)) if v}   # never erase persisted evidence
+            self.ledger.update_intent(intent_id, state="submitted", result=str(e), **known)
             self.ledger.record_order(order, "unknown", str(e))
             self.ledger.log_event("execution_unknown", f"{order.symbol} {order.side.value} sig={e.tx_signature}", ts=self.clock())
             self.risk.on_execution_error(str(e))
             log.error("outcome unknown for %s %s; will reconcile: %s", order.side.value, order.symbol, e)
             return False
         except Exception as e:  # noqa: BLE001 - includes PermissionError / ExecutionError / network errors before signing
+            row = self.ledger.get_intent(intent_id)
+            if row is not None and row["tx_signature"]:
+                # A signature was persisted, so the transaction may have been broadcast: an exception now is NOT
+                # evidence of failure. Leave it pending for chain-evidence reconciliation.
+                self.ledger.update_intent(intent_id, state="submitted", result=f"outcome unknown after signing: {e}")
+                self.ledger.record_order(order, "unknown", str(e))
+                self.risk.on_execution_error(str(e))
+                log.error("outcome unknown for %s %s after signing; will reconcile: %s", order.side.value, order.symbol, e)
+                return False
             self.ledger.update_intent(intent_id, state="failed", result=str(e))
             self.ledger.record_order(order, "failed", str(e))
             self.risk.on_execution_error(str(e))
@@ -213,9 +223,21 @@ class TradingBot:
         for row in self.ledger.pending_intents():
             age = self.clock() - row["ts"]
             if row["state"] == "created" or not row["tx_signature"]:
-                self.ledger.update_intent(row["id"], state="abandoned", result="never signed")   # nothing could have been broadcast
-                counts["abandoned"] += 1
-                continue
+                # Ask the venue whether anything was signed for this order but never persisted (separate signer).
+                # Only a definite "nothing" abandons; an unreachable signer leaves the intent pending.
+                try:
+                    signed = self.broker.signature_for_order(row["order_id"])
+                except Exception as e:  # noqa: BLE001
+                    log.error("reconcile: signer lookup for %s failed: %s (stays pending)", row["id"], e)
+                    counts["pending"] += 1
+                    continue
+                if not signed:
+                    self.ledger.update_intent(row["id"], state="abandoned", result="never signed")   # nothing could have been broadcast
+                    counts["abandoned"] += 1
+                    continue
+                self.ledger.update_intent(row["id"], state="signed", tx_signature=signed["signature"], signed_tx=signed.get("signed_tx"),
+                                          result="signature recovered from the signer log")
+                row = self.ledger.get_intent(row["id"])
             try:
                 ev = self.broker.transaction_status(row["tx_signature"], row["signed_tx"])
             except Exception as e:  # noqa: BLE001
@@ -229,10 +251,17 @@ class TradingBot:
                 counts["confirmed"] += 1
             elif status == "confirmed":
                 side = Side(row["side"])
-                qty, notional = float(row["qty"]), float(row["notional_usd"])
-                price = notional / qty if qty else 0.0
-                fill = Fill(order_id=row["order_id"], symbol=row["symbol"], side=side, qty=qty, price=price, notional_usd=notional,
-                            fee_usd=0.0, ts=self.clock(), tx_signature=row["tx_signature"])
+                try:
+                    fill = self.broker.chain_fill(row)      # live: actual amounts from the transaction's balance changes
+                except Exception as e:  # noqa: BLE001
+                    log.critical("reconcile: %s confirmed on chain but its fill could not be read (%s); stays pending", row["id"], e)
+                    counts["pending"] += 1
+                    continue
+                if fill is None:                            # venues without a chain record: book from the persisted intent
+                    qty, notional = float(row["qty"]), float(row["notional_usd"])
+                    price = notional / qty if qty else 0.0
+                    fill = Fill(order_id=row["order_id"], symbol=row["symbol"], side=side, qty=qty, price=price, notional_usd=notional,
+                                fee_usd=0.0, ts=self.clock(), tx_signature=row["tx_signature"])
                 try:
                     with self.ledger.atomic():
                         self.book.apply_fill(fill, exit_reason="reconciled" if side == Side.SELL else "")
@@ -575,14 +604,20 @@ def build_bot(settings: Settings, provider: MarketDataProvider | None = None) ->
     analyst = ClaudeAnalyst(settings.claude, ledger)
     strategies = [build_strategy(c.name, c.params) for c in settings.strategies if c.enabled]
     if settings.is_live:
+        # The trading process never loads a private key: signing happens in the separate signer service
+        # (tradebot_signer), and real submission is additionally disabled at build level (execution/submission.py).
         from ..data.live import LiveProvider
-        from ..execution.jupiter_live import JupiterLiveBroker
-        from ..execution.wallet import load_keypair
+        from ..execution.jupiter_adapter import JupiterExecutionAdapter
+        from ..execution.live_controls import LiveControls
+        from ..execution.signer_protocol import SignerClient, load_client_secret
         gate = LiveGate(settings, ledger)
         gate.assert_armed()                       # refuse to even construct a live bot unless armed
         if not isinstance(provider, LiveProvider):
             raise RuntimeError("live mode requires the live data provider")
-        broker: Broker = JupiterLiveBroker(risk, settings, provider, load_keypair(), gate)
+        controls = LiveControls(settings.live, ledger, kill, settings.live_halt_file, clock=clock)
+        signer = SignerClient(settings.live.signer_url, load_client_secret(settings.live.signer_secret_file))
+        broker: Broker = JupiterExecutionAdapter(risk, settings, provider, gate=gate, controls=controls, signer=signer,
+                                                 dry_run=False, clock=clock)
     else:
         broker = PaperBroker(risk, provider, fee_bps=settings.execution.paper_fee_bps,
                              slippage_bps=settings.execution.paper_slippage_bps, clock=clock,
