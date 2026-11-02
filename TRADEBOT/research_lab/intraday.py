@@ -174,9 +174,15 @@ def main() -> None:
     ap.add_argument("--fee-bps", type=float, default=10.0); ap.add_argument("--slip-bps", type=float, default=15.0)
     ap.add_argument("--train-days", type=int, default=30); ap.add_argument("--test-days", type=int, default=7)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--start", default=None, help="YYYY-MM-DD: drop bars before this (unseen-period test)")
+    ap.add_argument("--end", default=None)
     args = ap.parse_args()
     files = sorted(f for g in args.files for f in glob.glob(g))
     m1 = load_1m(files)
+    if args.start:
+        m1 = m1[m1.index >= pd.Timestamp(args.start, tz="UTC")]
+    if args.end:
+        m1 = m1[m1.index < pd.Timestamp(args.end, tz="UTC")]
     frames = {"1min": m1, "5min": resample(m1, "5min"), "4h": resample(m1, "4h")}
     span = (str(m1.index[0])[:16], str(m1.index[-1])[:16])
     print(f"{args.symbol}: {len(m1)} 1m bars {span[0]} .. {span[1]}; 5m {len(frames['5min'])}; 4h {len(frames['4h'])}; capital ${args.capital:g}")
