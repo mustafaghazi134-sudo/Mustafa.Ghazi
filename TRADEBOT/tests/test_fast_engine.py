@@ -63,7 +63,9 @@ def test_automatic_buy_then_take_profit_sell(tmp_path):
     pos = eng.book.positions["SOL"]
     assert pos.stop_loss < pos.avg_cost < pos.take_profit
     buys = ledger.fills_since(0)
-    assert len(buys) == 1 and buys[0]["side"] == "buy" and abs(buys[0]["notional_usd"] - 50.0) < 1e-6
+    # cash debited = the $50 swap plus the network fee charged in USD (all-in, not just the swap amount)
+    assert len(buys) == 1 and buys[0]["side"] == "buy" and abs(buys[0]["notional_usd"] - (50.0 + buys[0]["fee_usd"])) < 1e-9
+    assert buys[0]["fee_usd"] > 0
     risk = [json.loads(d["payload"]) for d in ledger.decisions(kind="risk", limit=5)]
     assert risk and risk[0]["approved"] is True
     lat = json.loads(ledger.decisions(kind="latency", limit=1)[0]["payload"])
@@ -76,7 +78,8 @@ def test_automatic_buy_then_take_profit_sell(tmp_path):
     assert len(trades) == 1 and trades[0].exit_reason == "take_profit" and trades[0].pnl_usd > 0 and trades[0].fees_usd > 0
     assert trades[0].exit_ts > trades[0].entry_ts
     txt = fast_report(ledger, store, since_hours=0)
-    assert "BUY" in txt and "SELL" in txt and "take_profit" in txt and "signal->order" in txt
+    assert "BUY" in txt and "SELL" in txt and "take_profit" in txt and "signal_to_order_ms" in txt
+    assert "ledger self-check: OK" in txt and "order intents: confirmed=2" in txt
 
 
 def test_stop_loss_and_max_hold_exits(tmp_path):
@@ -100,11 +103,16 @@ def test_edge_vanished_at_execution_quote_is_rejected(tmp_path):
     now, _ = _clock()
     feed = FakeFeed({SOL: 98.0, BAD: 1.0}, {"SOLUSDT": 100.0}, _facts(), cost_bps_per_leg=5.0)
     s = _settings(tmp_path)
-    s.execution.paper_slippage_bps = 400           # the broker's execution quote is far worse than the scanner's quote
     s.risk.max_slippage_bps = 10_000
     eng, ledger, store, kill = _engine(tmp_path, feed, s, clock=now)
-    eng.provider.jup = None                        # force the parametric execution quote
-    eng.broker._jup = None
+    real_order = feed.order
+
+    def worsening_order(*a):                       # the scanner's two quotes are fine; the pre-execution re-quote is not
+        if len(feed.order_calls) >= 2:
+            feed.cost = 400.0
+        return real_order(*a)
+
+    feed.order = worsening_order
     out = eng.poll()
     assert out["opened"] == 0 and not eng.book.positions
     reasons = [r for d in ledger.decisions(kind="fast_reject", limit=10) for r in json.loads(d["payload"])["reasons"]]
@@ -116,6 +124,8 @@ def test_risk_engine_blocks_entries_and_kill_switch_flattens(tmp_path):
     feed = FakeFeed({SOL: 98.0, BAD: 1.0}, {"SOLUSDT": 100.0}, _facts())
     s = _settings(tmp_path)
     s.risk.max_trades_per_day = 1
+    s.fast_risk.symbol_cooldown_sec = 0              # let the shared risk engine's trade cap be what refuses
+    s.fast_risk.min_seconds_between_entries = 0
     eng, ledger, store, kill = _engine(tmp_path, feed, s, clock=now)
     eng.poll(); assert "SOL" in eng.book.positions
     # kill switch tripped externally (file) -> position flattened, no new entries

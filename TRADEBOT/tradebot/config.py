@@ -205,12 +205,39 @@ class FastConfig(BaseModel):
     max_hold_mult: float = 2.0                  # exit at signal horizon x this if neither stop nor target hit
     flatten_on_kill: bool = True
     ws_reference: bool = False                  # Binance WebSocket for reference prices (needs `pip install websockets`)
+    max_quote_age_sec: float = 2.0              # a quote older than this is re-fetched before execution
+    data_outage_alert_sec: float = 30.0         # no venue prices for this long -> alert
+    unknown_intent_alert_sec: float = 300.0     # an unresolved order intent older than this -> alert
+    halt_on_balance_mismatch: bool = True       # ledger self-check failure -> emergency halt (data/FAST_HALT)
+
+
+class FastRiskConfig(BaseModel):
+    """Pre-trade gateway limits for the fast engine (USD). Conservative versus the $1,000 paper capital."""
+    max_capital_usd: float = Field(300.0, gt=0)          # total the fast engine may have deployed (incl. in flight)
+    max_position_usd: float = Field(100.0, gt=0)
+    max_total_exposure_usd: float = Field(200.0, gt=0)
+    max_open_positions: int = Field(2, ge=1)
+    min_notional_usd: float = Field(5.0, gt=0)
+    max_loss_per_trade_usd: float = Field(2.0, gt=0)     # size x (stop % + worst round-trip cost)
+    daily_loss_limit_usd: float = Field(15.0, gt=0)      # realized + unrealized since 00:00 UTC
+    max_drawdown_usd: float = Field(40.0, gt=0)          # from the fast book's peak equity
+    max_consecutive_losses: int = Field(3, ge=1)
+    loss_streak_pause_sec: float = Field(3600.0, ge=0)
+    max_trades_per_hour: int = Field(4, ge=1)
+    max_trades_per_day: int = Field(20, ge=1)
+    min_seconds_between_entries: float = Field(60.0, ge=0)
+    symbol_cooldown_sec: float = Field(300.0, ge=0)
+    max_entry_cost_bps: float = Field(150.0, gt=0)       # worst-case all-in round trip
+    max_price_age_sec: float = Field(15.0, gt=0)         # local age of the last Jupiter price change
+    max_quote_age_sec: float = Field(3.0, gt=0)
+    max_reference_age_sec: float = Field(10.0, gt=0)     # Binance reference (WebSocket or REST)
 
 
 class Settings(BaseModel):
     mode: Literal["paper", "live"] = "paper"
     scanner: ScannerConfig = Field(default_factory=ScannerConfig)
     fast: FastConfig = Field(default_factory=FastConfig)
+    fast_risk: FastRiskConfig = Field(default_factory=FastRiskConfig)
     initial_capital_usd: float = 1000.0
     data_dir: str = "data"
     log_level: str = "INFO"

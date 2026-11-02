@@ -15,6 +15,13 @@ from dataclasses import dataclass, asdict
 NETWORK_FEE_USD_PER_TX = 0.01     # same assumption as the paper broker (SOLANA_TX_FEE_USD)
 
 
+def _int_or_none(v) -> int | None:
+    try:
+        return int(v) if v is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
 @dataclass
 class Quote:
     in_amount: int
@@ -26,6 +33,9 @@ class Quote:
     route: str = ""
     latency_ms: float = 0.0
     ts: float = 0.0
+    signature_fee_lamports: int | None = None      # Swap v2 /order fee fields, when the response carries them
+    priority_fee_lamports: int | None = None
+    rent_fee_lamports: int | None = None
 
     @classmethod
     def from_order(cls, payload: dict, latency_ms: float = 0.0, ts: float = 0.0) -> "Quote":
@@ -37,7 +47,10 @@ class Quote:
                    price_impact_pct=float(payload.get("priceImpactPct") or 0.0), fee_bps=payload.get("feeBps"),
                    router=str(payload.get("router") or ""),
                    route="+".join(h.get("swapInfo", {}).get("label", "?") for h in payload.get("routePlan", []))[:80],
-                   latency_ms=latency_ms, ts=ts)
+                   latency_ms=latency_ms, ts=ts,
+                   signature_fee_lamports=_int_or_none(payload.get("signatureFeeLamports")),
+                   priority_fee_lamports=_int_or_none(payload.get("prioritizationFeeLamports")),
+                   rent_fee_lamports=_int_or_none(payload.get("rentFeeLamports")))
 
 
 @dataclass

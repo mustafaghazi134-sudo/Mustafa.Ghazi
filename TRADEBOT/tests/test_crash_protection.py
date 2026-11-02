@@ -170,7 +170,8 @@ def test_failure_before_signing_is_abandoned_not_booked(tmp_path):
     row = ledger.get_intent(ledger.intents(1)[0]["id"])
     assert row["state"] == "failed" and not bot.book.positions
     # a 'created' row with no signature (crash before signing) is abandoned on restart, never booked
-    iid = ledger.create_intent(order, 1.0, 50.0, ts=bot.clock())
+    fresh = OrderRequest(symbol=order.symbol, side=order.side, notional_usd=order.notional_usd, strategy="t")  # new id: one intent per order id
+    iid = ledger.create_intent(fresh, 1.0, 50.0, ts=bot.clock())
     bot.reconcile_pending()
     assert ledger.get_intent(iid)["state"] == "abandoned"
 

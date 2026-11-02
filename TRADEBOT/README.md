@@ -213,6 +213,14 @@ ledger (`data/fast.db`) and it shares the kill switch file (`data/KILL`), so one
    every rejection with its reason. `tradebot fast-report` prints trades with timestamps and net results, win rate,
    fees, drawdown, trading frequency, latency percentiles and rejection counts.
 
+Reliability layer (details and test evidence: `docs/FAST_ENGINE_RELIABILITY.md`): per-API rate limits with
+exponential backoff, jitter and Retry-After; WebSocket heartbeat, stall detection and reconnect backoff; an all-in
+cost estimate for every entry and exit; a separate deterministic pre-trade gateway (`[fast_risk]`); enforced
+order-intent lifecycle with unique order ids; evidence-based restart recovery and a ledger self-check after every
+fill; JSON event log `data/fast_events.jsonl`; deduplicated alerts; and an emergency halt for this engine only
+(`tradebot fast-halt` / `tradebot fast-resume`, file `data/FAST_HALT`). Feed outages raise alerts and never trip the
+shared kill switch; `tradebot kill` still stops both engines.
+
 Event-driven data: `--ws` (or `fast.ws_reference=true`, needs `pip install "tradebot[fast]"`) streams Binance trades
 over WebSocket for the reference leg and measures exchange-to-local latency; the Jupiter leg has no public price
 stream and stays polled. Claude is not in this loop; research stays on the weekly cadence described above.

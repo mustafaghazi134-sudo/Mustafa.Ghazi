@@ -106,7 +106,7 @@ def test_reconcile_never_books_an_order_that_already_has_a_fill(tmp_path):
     ok, order = _buy(bot, prov)
     assert ok
     iid = ledger.intents(1)[0]["id"]
-    ledger.update_intent(iid, state="signed")                # as if the confirm write were lost after the booking
+    ledger._exec("UPDATE intents SET state='signed' WHERE id=?", (iid,))   # as if the confirm write were lost (raw: the lifecycle forbids it)
     broker.lookup = "confirmed"
     before = (bot.book.positions["SOL"].qty, bot.book.cash)
     assert bot.reconcile_pending()["confirmed"] == 1

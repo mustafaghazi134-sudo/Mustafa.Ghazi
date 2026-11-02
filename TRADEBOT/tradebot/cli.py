@@ -363,7 +363,7 @@ def cmd_fast(args) -> int:
         settings.scanner.poll_sec = 60.0; settings.scanner.probe_interval_sec = 1e12; settings.scanner.check_slot = False
         settings.universe.symbols = syms
         eng = FastEngine(settings, store, feed, ledger, kill, clock=feed.now)
-        eng.ledger.log_event("start", f"replay of real 1m bars, parametric fills: {','.join(syms)}", ts=feed.now())
+        eng.ledger.log_event("start", f"replay of real 1m bars, quote-model fills: {','.join(syms)}", ts=feed.now())
         n = 0
         while not feed.finished() and (args.max_bars is None or n < args.max_bars):
             eng.poll(); feed.advance(); n += 1
@@ -378,11 +378,12 @@ def cmd_fast(args) -> int:
     if settings.fast.ws_reference or args.ws:
         from .fast.ws import BinanceTradeWS, WSReferenceFeed
         pairs = [settings.universe.candle_symbols[s] for s in settings.universe.symbols if s in settings.universe.candle_symbols]
-        ws = BinanceTradeWS(pairs)
+        ws = BinanceTradeWS(pairs)                     # pings every 20 s, reconnects with backoff, stall timeout 30 s
         if ws.start():
-            feed = WSReferenceFeed(feed, ws)
+            feed = WSReferenceFeed(feed, ws, max_age_sec=settings.fast_risk.max_reference_age_sec)
             settings.fast.ws_reference = True
-    eng = FastEngine(settings, store, feed, ledger, kill)
+    from .fast.ratelimit import RateLimiter
+    eng = FastEngine(settings, store, feed, ledger, kill, limiter=RateLimiter())   # per-API budgets + backoff
     try:
         eng.run(minutes=args.minutes)
     finally:
@@ -395,6 +396,28 @@ def cmd_fast(args) -> int:
 def fast_report_text(settings: Settings, ledger, store, hours: float) -> str:
     from .fast.engine import fast_report
     return fast_report(ledger, store, since_hours=hours, min_edge_bps=settings.scanner.min_net_edge_bps)
+
+
+def cmd_fast_halt(args) -> int:
+    """Emergency halt of the FAST engine only (file data/FAST_HALT): it opens nothing and flattens what it holds."""
+    from .fast.telemetry import FastHalt
+    settings = load_settings(args.config)
+    h = FastHalt(Path(settings.data_dir) / "FAST_HALT")
+    h.trip(args.reason, source="cli")
+    print(f"fast engine halted: {h.path}. It flattens open fast positions on its next poll. The 4h engine is not affected "
+          f"(use `tradebot kill` to stop both).")
+    return 0
+
+
+def cmd_fast_resume(args) -> int:
+    from .fast.telemetry import FastHalt
+    settings = load_settings(args.config)
+    h = FastHalt(Path(settings.data_dir) / "FAST_HALT")
+    if not h.own_tripped():
+        print("fast engine is not halted"); return 0
+    h.reset()
+    print("fast halt cleared; the fast engine resumes on its next poll (the shared kill switch, if tripped, still applies)")
+    return 0
 
 
 def cmd_fast_report(args) -> int:
@@ -519,6 +542,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--symbols", default=None, help="with --replay: symbols matching the globs, e.g. SOL,BTC")
     p.add_argument("--start", default=None); p.add_argument("--max-bars", type=int, default=None)
     p.set_defaults(fn=cmd_fast)
+    p = sub.add_parser("fast-halt", help="emergency halt of the fast engine only (flattens, opens nothing)")
+    p.add_argument("--reason", default="manual halt"); p.set_defaults(fn=cmd_fast_halt)
+    p = sub.add_parser("fast-resume", help="clear the fast engine's emergency halt (data/FAST_HALT)")
+    p.set_defaults(fn=cmd_fast_resume)
     p = sub.add_parser("fast-report", help="fast engine: trades with timestamps and net results, win rate, fees, drawdown, latency, rejections")
     p.add_argument("--hours", type=float, default=24.0); p.set_defaults(fn=cmd_fast_report)
     p = sub.add_parser("scan-report", help="summarise the scanner database: sources, refresh, costs, candidates, false positives, missed")

@@ -27,6 +27,7 @@ class FeedResult:
     status: int
     ok: bool
     nbytes: int = 0
+    retry_after: float | None = None     # seconds, from a 429/503 Retry-After header
 
 
 class Feed(Protocol):
@@ -54,7 +55,13 @@ class LiveFeed:
             r = self.client.get(url, params=params, headers=headers)
             lat = (time.perf_counter() - t0) * 1000
             ok = r.status_code == 200
-            return FeedResult(r.json() if ok else None, lat, r.status_code, ok, len(r.content))
+            ra = None
+            if r.status_code in (429, 503):
+                try:
+                    ra = float(r.headers.get("Retry-After") or 0) or None
+                except ValueError:
+                    ra = None
+            return FeedResult(r.json() if ok else None, lat, r.status_code, ok, len(r.content), ra)
         except (httpx.HTTPError, ValueError) as e:
             return FeedResult(None, (time.perf_counter() - t0) * 1000, 0, False, 0) if not isinstance(e, ValueError) else \
                 FeedResult(None, (time.perf_counter() - t0) * 1000, 200, False, 0)

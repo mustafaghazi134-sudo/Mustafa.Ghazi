@@ -1,0 +1,25 @@
+=== fast engine (PAPER) ===
+equity $1000.00  cash $1000.00  net profit $+0.00 (+0.00%)  fees $0.00  max DD 0.00%  trades 0  win rate 0.0%  PF 0.00
+ledger self-check: OK (cash from fills $1000.0000; positions from fills none)
+trading frequency: 0.000 closed trades/day over 92.0 days (0 trades)
+order intents: none
+latency by stage: poll_ms p50 1.14 / p95 1.91 ms (n=2000); price_feed_ms p50 0.0 / p95 0.0 ms (n=2000); quote_ms p50 0.36 / p95 0.49 ms (n=2000)
+alerts: 0
+rejections: net_edge<20bps=3257
+-- last trades (UTC) --
+  (no closed trades)
+
+=== scanner report (last 1e+06 h, read-only paper scanner) ===
+last poll: 2026-09-30 23:59:00 UTC  polls=132480  universe=1  requests/min=2
+-- data sources: latency / reliability / achieved rate
+  binance_ticker_price         n=132480 ok=100.0%  429s=0    avg 0.0 ms  p95 0.0 ms  max 0 ms  1.0 req/min
+  jupiter_order_quote          n=6514   ok=100.0%  429s=0    avg 0.0 ms  p95 0.0 ms  max 0 ms  0.05 req/min
+  jupiter_price_v3             n=132480 ok=100.0%  429s=0    avg 0.0 ms  p95 0.0 ms  max 0 ms  1.0 req/min
+  jupiter_tokens_v2            n=13248  ok=100.0%  429s=0    avg 0.0 ms  p95 0.0 ms  max 0 ms  0.1 req/min
+-- price refresh actually achieved
+  BTC      ticks=132480 median gap 60.0 s  price changed 94.9% of polls  block advanced 100.0%
+-- round-trip cost probes (USDC->token->USDC, two read-only quotes, incl. 2 network fees)
+-- candidates (hypothetical; nothing executed)
+  dip_reversion_1m   candidates=2651  opened=0    closed=0    win rate None%  avg realized None bps  false positives=0  rejected=2651  missed(profitable after cost)=2
+  breakout_5m        candidates=606   opened=0    closed=0    win rate None%  avg realized None bps  false positives=0  rejected=606  missed(profitable after cost)=6
+  rejection reasons: net_edge<20bps=3257
