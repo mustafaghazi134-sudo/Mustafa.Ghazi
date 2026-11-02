@@ -29,6 +29,11 @@ class PortfolioBook:
         self.day_key: str = ledger.get("day_key", _day_key(clock()))
         self.day_start_equity: float = ledger.get("day_start_equity", initial_cash)
 
+    def reload(self) -> None:
+        """Re-read positions and cash from the ledger (after a rolled-back booking left memory ahead of disk)."""
+        self.positions = self.ledger.load_positions()
+        self.cash = self.ledger.get("cash", self.initial_capital)
+
     # ---- fills ---------------------------------------------------------------------------------
     def apply_fill(self, fill: Fill, signal: Signal | None = None, exit_reason: str = "") -> ClosedTrade | None:
         self.ledger.record_fill(fill)
@@ -110,7 +115,10 @@ class PortfolioBook:
         now = self.clock()
         day_start_ts = dt.datetime.strptime(self.day_key, "%Y-%m-%d").replace(tzinfo=dt.UTC).timestamp()
         losses, last_loss = self.ledger.consecutive_losses()
-        return PortfolioState(equity_usd=self.equity(prices), cash_usd=self.cash, positions=dict(self.positions),
+        pending = [r for r in self.ledger.pending_intents() if r["side"] == "buy"]
+        reserved = sum(float(r["notional_usd"] or 0.0) for r in pending)
+        return PortfolioState(equity_usd=self.equity(prices), cash_usd=self.cash - reserved, positions=dict(self.positions),
+                              pending_buy_usd=reserved, pending_buy_symbols=frozenset(r["symbol"] for r in pending),
                               trades_today=self.ledger.count_buy_fills_since(day_start_ts),
                               realized_pnl_today_usd=self.ledger.realized_pnl_since(day_start_ts),
                               consecutive_losses=losses, last_loss_ts=last_loss, peak_equity_usd=self.peak_equity,

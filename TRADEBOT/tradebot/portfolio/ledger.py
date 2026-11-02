@@ -5,6 +5,7 @@ import json
 import sqlite3
 import threading
 import time
+from contextlib import contextmanager
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
@@ -54,6 +55,23 @@ class Ledger:
         with self._lock:
             return self.conn.execute(sql, params)
 
+    @contextmanager
+    def atomic(self):
+        """All writes inside commit together or not at all (a crash or exception mid-way rolls them back).
+        Used to book a fill and mark its intent confirmed as one unit, so a restart can never see one without the
+        other. Re-entrant: a nested block joins the outer transaction."""
+        with self._lock:
+            if self.conn.in_transaction:
+                yield
+                return
+            self.conn.execute("BEGIN IMMEDIATE")
+            try:
+                yield
+            except BaseException:
+                self.conn.execute("ROLLBACK")
+                raise
+            self.conn.execute("COMMIT")
+
     # ---- kv -----------------------------------------------------------------------------------
     def get(self, key: str, default: Any = None) -> Any:
         row = self._exec("SELECT value FROM kv WHERE key=?", (f"{self.mode}:{key}",)).fetchone()
@@ -72,6 +90,9 @@ class Ledger:
         self._exec("INSERT OR REPLACE INTO fills VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
                    (f.id, f.order_id, f.ts, self.mode, f.symbol, f.side.value, f.qty, f.price, f.notional_usd, f.fee_usd,
                     f.slippage_bps, f.tx_signature))
+
+    def fill_for_order(self, order_id: str) -> sqlite3.Row | None:
+        return self._exec("SELECT * FROM fills WHERE mode=? AND order_id=? LIMIT 1", (self.mode, order_id)).fetchone()
 
     def fills_since(self, ts: float) -> list[sqlite3.Row]:
         return self._exec("SELECT * FROM fills WHERE mode=? AND ts>=? ORDER BY ts", (self.mode, ts)).fetchall()

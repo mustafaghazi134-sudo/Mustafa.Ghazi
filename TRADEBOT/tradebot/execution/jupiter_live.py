@@ -3,8 +3,10 @@
 Flow per order: LiveGate.assert_armed -> RiskEngine.verify -> GET /swap/v2/order?taker=<wallet> -> sign the
 returned VersionedTransaction locally -> POST /swap/v2/execute {signedTransaction, requestId}. Jupiter submits
 and confirms the transaction; the response carries the actual on-chain amounts (inputAmountResult /
-outputAmountResult), which are used for the fill. Retryable execute codes trigger a fresh order (orders
-expire after ~2 minutes). The RPC is used only for balance reconciliation.
+outputAmountResult), which are used for the fill. Only codes meaning the transaction was never accepted (-1 cached
+order expired, -2003 RFQ quote expired) trigger a fresh order; malformed-transaction codes fail; every ambiguous code
+(failed landing, unknown error) raises SubmittedUnknownError so chain evidence, not a second signature, decides.
+The RPC is used for signature/blockhash checks during reconciliation and for balance reconciliation.
 """
 from __future__ import annotations
 
@@ -27,7 +29,15 @@ from .wallet import redact
 
 log = logging.getLogger(__name__)
 
-RETRYABLE_EXECUTE_CODES = {-1, -1000, -1001, -1004, -2000, -2001, -2003, -2004}
+# Jupiter /swap/v2/execute codes (official `integrating-jupiter` skill error table), split by what they say about the
+# signed transaction we just sent:
+NEVER_ACCEPTED_CODES = {-1, -2003}                   # cached order missing/expired, RFQ quote expired: not broadcast,
+                                                     # so a fresh order + new signature cannot duplicate it
+REJECTED_CODES = {-2, -3, -1002, -1003, -2002}       # invalid / unsigned transaction or payload: rejected outright
+# Every other non-success code (-1000/-2000 failed landing, -1001/-2001 unknown, -1004 block height, -2004 swap
+# rejected, or anything new) is AMBIGUOUS: the transaction may still land while its blockhash is valid. Those raise
+# SubmittedUnknownError so reconciliation decides from chain evidence; no second transaction is ever signed for them.
+RETRYABLE_EXECUTE_CODES = NEVER_ACCEPTED_CODES      # kept for compatibility: the only codes retried in place
 
 
 class JupiterLiveBroker(Broker):
@@ -170,8 +180,13 @@ class JupiterLiveBroker(Broker):
             if res.get("status") == "Success":
                 break
             code = int(res.get("code") or 0)
-            log.error("execute failed (code %s): %s [requestId=%s]", code, res.get("error"), order.get("requestId"))
-            if code not in RETRYABLE_EXECUTE_CODES or attempt == self.s.execution.execute_max_retries:
+            log.error("execute failed (code %s): %s [requestId=%s sig=%s]", code, res.get("error"), order.get("requestId"), local_sig)
+            if code in REJECTED_CODES:
+                raise ExecutionError(f"swap execute rejected: code={code} {res.get('error')}")
+            if code not in NEVER_ACCEPTED_CODES:
+                raise SubmittedUnknownError(f"execute returned code={code} ({res.get('error')}); outcome left to chain evidence",
+                                            local_sig, order.get("requestId"))
+            if attempt == self.s.execution.execute_max_retries:
                 raise ExecutionError(f"swap execute failed: code={code} {res.get('error')}")
             time.sleep(min(2 ** attempt + random.random() * 0.5, 10.0))
             order, out_dec = self._order(order_req.symbol, order_req.side, q.in_amount)   # re-quote: orders expire (~2 min)

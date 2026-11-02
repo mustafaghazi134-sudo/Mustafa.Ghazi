@@ -85,12 +85,16 @@ def _bot(tmp_path, broker_factory, clock_start=1_700_000_000.0):
     return bot, ledger, broker, prov
 
 
-def _buy(bot, prov, notional=50.0):
+def _decide(bot, prov, notional=50.0):
     t = prov.get_tickers(["SOL"])["SOL"]
     order = OrderRequest(symbol="SOL", side=Side.BUY, notional_usd=notional, strategy="t")
     order.ts = bot.clock()
-    decision = bot.risk.evaluate(order, bot.book.risk_state({"SOL": t.price}), MarketState(t.price, t.liquidity_usd, t.volume_24h_usd, t.ts))
-    assert decision.approved
+    return order, bot.risk.evaluate(order, bot.book.risk_state({"SOL": t.price}), MarketState(t.price, t.liquidity_usd, t.volume_24h_usd, t.ts))
+
+
+def _buy(bot, prov, notional=50.0):
+    order, decision = _decide(bot, prov, notional)
+    assert decision.approved, decision.reasons
     return bot._execute_with_intent(order, decision.adjusted_qty, decision), order
 
 
@@ -133,8 +137,8 @@ def test_unknown_intent_blocks_symbol_and_manual_resolution_is_logged(tmp_path):
     bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "crash_after_sign"))
     _buy(bot, prov)
     broker.mode = "ok"
-    ok, _ = _buy(bot, prov)
-    assert ok is False                                                   # blocked while UNKNOWN
+    _, d2 = _decide(bot, prov)
+    assert not d2.approved and "in flight" in d2.reasons[0]              # risk engine refuses while UNKNOWN
     iid = ledger.pending_intents("SOL")[0]["id"]
     with pytest.raises(ValueError):
         ledger.resolve_intent_manually(iid, "cancelled", "bad state")
@@ -147,9 +151,14 @@ def test_unknown_intent_blocks_symbol_and_manual_resolution_is_logged(tmp_path):
 
 def test_pending_intent_blocks_duplicate_order_for_symbol(tmp_path):
     bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "crash_after_sign"))
+    order2, early = _decide(bot, prov)            # approval minted BEFORE the first order is in flight
     _buy(bot, prov)
     broker.mode = "ok"
-    ok, order2 = _buy(bot, prov)
+    # layer 1: the risk engine now refuses a second buy while the first is unresolved
+    _, d = _decide(bot, prov)
+    assert not d.approved and "in flight" in d.reasons[0]
+    # layer 2: an approval minted earlier is still stopped by the intent guard before reaching the broker
+    ok = bot._execute_with_intent(order2, early.adjusted_qty, early)
     assert ok is False and broker.executions == 1
     assert ledger._exec("SELECT status, detail FROM orders WHERE id=?", (order2.id,)).fetchone()["detail"].startswith("pending intent")
 

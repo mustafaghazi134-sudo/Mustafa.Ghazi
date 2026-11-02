@@ -71,6 +71,12 @@ def cmd_run(args) -> int:
         settings.mode = "paper"
     _setup_logging(settings.log_level, settings.data_path)
     from .engine.bot import build_bot
+    from .instance_lock import AlreadyRunningError, lock_for
+    try:
+        lock = lock_for(settings.db_path).acquire()          # one engine per ledger: no duplicate orders from a 2nd process
+    except AlreadyRunningError as e:
+        print(f"refusing to start: {e}")
+        return 3
     bot = build_bot(settings)
     if settings.is_live:
         logging.getLogger(__name__).warning("*** LIVE MODE: real funds will be traded without per-trade approval ***")
@@ -81,6 +87,7 @@ def cmd_run(args) -> int:
         logging.getLogger(__name__).error("market data unavailable for final report: %s", e)
         prices = {}
     print(format_report(performance_report(bot.ledger, prices)))
+    lock.release()
     errors = [e for e in bot.ledger.events(20) if e["kind"] == "error"]
     if errors:
         print(f"\n{len(errors)} recent errors; last: {errors[0]['message']}  (run `tradebot preflight`)")
@@ -329,6 +336,12 @@ def cmd_fast(args) -> int:
     _setup_logging(settings.log_level, Path(settings.data_dir))
     if settings.mode == "live" or os.environ.get("TRADEBOT_LIVE_TRADING"):
         print("fast engine is paper-only; refusing to start with live settings in place"); return 2
+    from .instance_lock import AlreadyRunningError, lock_for
+    try:
+        _fast_lock = lock_for(Path(settings.data_dir) / "fast.db").acquire()   # held for the life of this process
+    except AlreadyRunningError as e:
+        print(f"refusing to start: {e}")
+        return 3
     FastEngine, ledger, store, kill = _fast_components(settings)
     if args.poll:
         settings.scanner.poll_sec = args.poll

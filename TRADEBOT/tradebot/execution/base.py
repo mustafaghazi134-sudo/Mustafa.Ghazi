@@ -51,7 +51,8 @@ class Broker(ABC):
     def _execute(self, order: OrderRequest, qty: float, quote: Quote) -> Fill: ...
 
     def execute(self, order: OrderRequest, qty: float, approval: RiskApproval) -> Fill:
-        self.risk.verify(approval, order, qty)       # raises PermissionError
+        self.risk.verify(approval, order, qty)       # raises PermissionError; consumes the approval (single use)
+        self.risk.guard_execution(order)             # kill switch / daily halt re-checked right before quoting
         amount = approval.notional_usd if order.side == Side.BUY else qty
         q = self.quote(order.symbol, order.side, amount)
         if q.expected_slippage_bps > self.risk.limits.max_slippage_bps:

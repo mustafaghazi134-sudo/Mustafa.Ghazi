@@ -31,6 +31,10 @@ class PortfolioState:
     last_loss_ts: float | None
     peak_equity_usd: float
     day_start_equity_usd: float
+    # In-flight BUY orders (intents created/signed/submitted but not yet booked or resolved). Their notional is
+    # already removed from cash_usd by the book and counts toward exposure and the open-position limit here.
+    pending_buy_usd: float = 0.0
+    pending_buy_symbols: frozenset = frozenset()
 
 
 @dataclass
@@ -76,6 +80,7 @@ class RiskEngine:
         self.daily_halt_day: str | None = None     # UTC day key while daily-loss halt is active
         self.daily_halt_reason: str | None = None
         self._halt_listeners: list = []
+        self._consumed: dict[str, float] = {}         # order_id -> time the approval was used
 
     def on_daily_halt(self, fn) -> None:
         self._halt_listeners.append(fn)
@@ -110,6 +115,25 @@ class RiskEngine:
         expected = self._sign(approval.order_id, approval.symbol, approval.side, approval.qty, approval.notional_usd, approval.issued_ts)
         if not hmac.compare_digest(expected, approval.token):
             raise PermissionError("risk approval token invalid")
+        # Single use: one approval authorises exactly one execution. A second execute() with the same approval
+        # (a retry loop, a duplicated call, a replay within the TTL) is refused instead of trading twice.
+        if approval.order_id in self._consumed:
+            raise PermissionError("risk approval already used")
+        self._consumed[approval.order_id] = now
+        if len(self._consumed) > 10_000:                  # forget approvals far past their TTL
+            cutoff = now - 10 * self.limits.approval_ttl_sec
+            self._consumed = {k: v for k, v in self._consumed.items() if v >= cutoff}
+
+    def guard_execution(self, order: OrderRequest) -> None:
+        """Last check immediately before a broker quotes/signs: entries are refused if the kill switch or the
+        daily halt became active after the approval was minted (another process, the CLI or the risk monitor
+        may trip it in between). Risk-reducing exits are always allowed so positions can still be closed."""
+        if order.side == Side.SELL and order.reduce_only:
+            return
+        if self.kill.is_tripped():
+            raise PermissionError(f"kill switch tripped before execution: {self.kill.reason()}")
+        if self.is_daily_halted():
+            raise PermissionError(f"daily-loss halt active before execution: {self.daily_halt_reason}")
 
     def _mint(self, order: OrderRequest, qty: float, notional: float) -> RiskApproval:
         ts = self.clock()
@@ -199,10 +223,13 @@ class RiskEngine:
             reasons.append(f"{pf.consecutive_losses} consecutive losses; entries paused for {remaining/60:.0f} more min")
         if pf.last_loss_ts is not None and now - pf.last_loss_ts < L.loss_cooldown_sec:
             reasons.append("in post-loss cooldown")
+        open_count = len(pf.positions) + len(set(pf.pending_buy_symbols) - set(pf.positions))
         if sym in pf.positions and pf.positions[sym].qty > 0:
             reasons.append("already holding this symbol")
-        elif len(pf.positions) >= L.max_open_positions:
-            reasons.append(f"max open positions {L.max_open_positions} reached")
+        elif sym in pf.pending_buy_symbols:
+            reasons.append("an order for this symbol is still in flight")
+        elif open_count >= L.max_open_positions:
+            reasons.append(f"max open positions {L.max_open_positions} reached (incl. {len(pf.pending_buy_symbols)} in flight)")
         if pf.day_start_equity_usd > 0:
             daily_loss_pct = (pf.day_start_equity_usd - pf.equity_usd) / pf.day_start_equity_usd * 100
             if daily_loss_pct >= L.max_daily_loss_pct:
@@ -211,7 +238,7 @@ class RiskEngine:
             return RiskDecision(False, reasons)
 
         # Size down to the tightest constraint instead of rejecting outright.
-        exposure = sum(p.qty * mkt.price if p.symbol == sym else p.cost_basis_usd for p in pf.positions.values())
+        exposure = sum(p.qty * mkt.price if p.symbol == sym else p.cost_basis_usd for p in pf.positions.values()) + pf.pending_buy_usd
         caps = {
             "requested": order.notional_usd,
             "max_position": pf.equity_usd * L.max_position_pct / 100,

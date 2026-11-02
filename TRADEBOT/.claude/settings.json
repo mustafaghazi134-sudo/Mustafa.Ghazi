@@ -7,7 +7,14 @@
       "mcp__alpaca__place_option_order",
       "mcp__ibkr",
       "Bash(*trader-broker*)",
-      "Bash(*ticket.py*)"
+      "Bash(*ticket.py*)",
+      "Read(./.env)",
+      "Read(**/.env)",
+      "Read(./backups/**)",
+      "Read(**/*keypair*.json)",
+      "Read(./data/LIVE_ARMED)",
+      "Edit(./data/LIVE_ARMED)",
+      "Bash(*arm-live*)"
     ]
   }
 }

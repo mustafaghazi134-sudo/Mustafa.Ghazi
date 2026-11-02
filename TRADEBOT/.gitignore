@@ -8,3 +8,11 @@ __pycache__/
 .pytest_cache/
 config.toml
 /trader/
+# secrets in backup copies (update scripts and apply-profile write these; they contain API keys)
+/backups/
+config.toml.bak-*
+config.toml.*
+.env.*
+!.env.example
+*keypair*.json
+*.lock

@@ -96,7 +96,7 @@ class FastEngine(OpportunityScanner):
         if self.kill.is_tripped():
             if self.fc.flatten_on_kill and not self._flattened_after_kill and self.book.positions:
                 self._flatten_all(f"kill switch: {self.kill.reason()}")
-            self._flattened_after_kill = True
+            self._flattened_after_kill = not self.book.positions or not self.fc.flatten_on_kill   # retry until flat
         else:
             self._flattened_after_kill = False
         return out
@@ -208,11 +208,18 @@ class FastEngine(OpportunityScanner):
             log.error("%s failed for %s: %s", order.side.value, order.symbol, e); return False
         finally:
             self.broker.presubmit_hook = None
-        self.ledger.update_intent(iid, state="confirmed", tx_signature=fill.tx_signature,
-                                  result={"fill_id": fill.id, "qty": fill.qty, "price": fill.price, "notional_usd": fill.notional_usd})
         self.risk.on_execution_success()
-        self.ledger.record_order(order, "filled")
-        self.book.apply_fill(fill, signal=signal, exit_reason=exit_reason)
+        try:                                     # fill + position + cash + trade + intent: one transaction
+            with self.ledger.atomic():
+                self.book.apply_fill(fill, signal=signal, exit_reason=exit_reason)
+                self.ledger.record_order(order, "filled")
+                self.ledger.update_intent(iid, state="confirmed", tx_signature=fill.tx_signature,
+                                          result={"fill_id": fill.id, "qty": fill.qty, "price": fill.price, "notional_usd": fill.notional_usd})
+        except Exception as e:  # noqa: BLE001
+            self.book.reload()
+            log.critical("booking of %s %s failed (%s); nothing was recorded", order.side.value, order.symbol, e)
+            self.ledger.log_event("booking_failed", f"{iid} {order.symbol} {order.side.value}: {e}", ts=self.clock())
+            return False
         return True
 
     # ------------------------------------------------------------------ MANAGE / SELL

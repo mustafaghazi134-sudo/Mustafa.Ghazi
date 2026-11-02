@@ -125,7 +125,10 @@ class TradingBot:
         if self.kill.is_tripped():
             if self.s.engine.flatten_on_kill and not self._flattened_after_kill and self.book.positions:
                 self.flatten_all(f"kill switch: {self.kill.reason()}")
-            self._flattened_after_kill = True
+            # done only when the book is actually flat: a failed or unpriced exit is retried on the next cycle
+            self._flattened_after_kill = not self.book.positions or not self.s.engine.flatten_on_kill
+            if not self._flattened_after_kill:
+                log.error("kill switch: %d position(s) still open after flatten attempt; retrying next cycle", len(self.book.positions))
             if self.cycles % 10 == 0:
                 log.warning("HALTED by kill switch (%s). Run `tradebot resume` after review.", self.kill.reason())
             return
@@ -178,11 +181,27 @@ class TradingBot:
             return False
         finally:
             self.broker.presubmit_hook = None
-        self.ledger.update_intent(intent_id, state="confirmed", tx_signature=fill.tx_signature,
-                                  result={"fill_id": fill.id, "qty": fill.qty, "price": fill.price, "notional_usd": fill.notional_usd})
         self.risk.on_execution_success()
-        self.ledger.record_order(order, "filled")
-        self.book.apply_fill(fill, signal=signal, exit_reason=exit_reason)
+        if not self._book_fill(intent_id, order, fill, signal, exit_reason):
+            return False
+        return True
+
+    def _book_fill(self, intent_id: str, order: OrderRequest, fill: Fill, signal: Signal | None, exit_reason: str) -> bool:
+        """Fill, position, cash, trade, order status and intent=confirmed are written in ONE transaction. If anything
+        fails (or the process dies) none of it is kept and the intent stays pending with its signature, so
+        reconcile_pending books it exactly once from chain evidence. Memory is reloaded from disk on failure."""
+        try:
+            with self.ledger.atomic():
+                self.book.apply_fill(fill, signal=signal, exit_reason=exit_reason)
+                self.ledger.record_order(order, "filled")
+                self.ledger.update_intent(intent_id, state="confirmed", tx_signature=fill.tx_signature,
+                                          result={"fill_id": fill.id, "qty": fill.qty, "price": fill.price, "notional_usd": fill.notional_usd})
+        except Exception as e:  # noqa: BLE001
+            self.book.reload()
+            log.critical("booking of %s %s failed (%s); intent %s stays pending and will be reconciled", order.side.value,
+                         order.symbol, e, intent_id)
+            self.ledger.log_event("booking_failed", f"{intent_id} {order.symbol} {order.side.value}: {e}", ts=self.clock())
+            return False
         return True
 
     def reconcile_pending(self) -> dict[str, int]:
@@ -204,14 +223,25 @@ class TradingBot:
                 counts["pending"] += 1
                 continue
             status, valid = ev.get("status"), ev.get("blockhash_valid")
-            if status == "confirmed":
+            if status == "confirmed" and self.ledger.fill_for_order(row["order_id"]) is not None:
+                # already booked (e.g. the booking committed but the process died before anything else): never twice
+                self.ledger.update_intent(row["id"], state="confirmed", result="already booked; confirmed by reconciliation")
+                counts["confirmed"] += 1
+            elif status == "confirmed":
                 side = Side(row["side"])
                 qty, notional = float(row["qty"]), float(row["notional_usd"])
                 price = notional / qty if qty else 0.0
                 fill = Fill(order_id=row["order_id"], symbol=row["symbol"], side=side, qty=qty, price=price, notional_usd=notional,
                             fee_usd=0.0, ts=self.clock(), tx_signature=row["tx_signature"])
-                self.ledger.update_intent(row["id"], state="confirmed", result={"reconciled_from_quote": True, "fill_id": fill.id})
-                self.book.apply_fill(fill, exit_reason="reconciled" if side == Side.SELL else "")
+                try:
+                    with self.ledger.atomic():
+                        self.book.apply_fill(fill, exit_reason="reconciled" if side == Side.SELL else "")
+                        self.ledger.update_intent(row["id"], state="confirmed", result={"reconciled_from_quote": True, "fill_id": fill.id})
+                except Exception as e:  # noqa: BLE001
+                    self.book.reload()
+                    log.critical("reconcile: booking %s failed (%s); stays pending", row["id"], e)
+                    counts["pending"] += 1
+                    continue
                 self.ledger.log_event("reconciled", f"{row['symbol']} {row['side']} booked from persisted intent sig={row['tx_signature']}", ts=self.clock())
                 counts["confirmed"] += 1
             elif status == "failed":
