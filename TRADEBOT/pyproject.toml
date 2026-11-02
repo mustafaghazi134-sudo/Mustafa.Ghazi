@@ -22,9 +22,10 @@ fast = ["websockets>=12"]                    # optional Binance WebSocket refere
 
 [project.scripts]
 tradebot = "tradebot.cli:main"
+tradebot-lab = "opportunity_lab.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["tradebot*"]
+include = ["tradebot*", "opportunity_lab*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

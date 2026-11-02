@@ -23,3 +23,6 @@ client_secret
 ACTIVATION.json
 signing_log.sqlite
 /signer_home/
+
+# Opportunity Lab local config (copy of lab.toml.example)
+lab.toml

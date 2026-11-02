@@ -238,6 +238,40 @@ tradebot fast --replay "data/1m/SOLUSDT_1m_2026-*.csv" --symbols SOL --start 202
 Live money is not reachable from this engine: it refuses to construct with `mode = "live"` and only ever builds a
 `PaperBroker`. Its trades do not count toward the 4h engine's live gate.
 
+## Opportunity Lab (experimental, paper only, separate process)
+
+A four-agent Solana opportunity-discovery experiment: scanner, security analyst, deterministic trade analyst and paper
+executor. It has its own config (`lab.toml`), ledger (`data/lab/lab.sqlite`) and halt file, and no access to keys,
+the signer or the live adapter. It honours the main bot's `data/KILL`. Optional Grok/Claude scoring runs in shadow
+mode only and is off by default.
+
+**Current evidence:** a pre-registered study on real historical memecoin data rejected every tested signal after
+costs, and live forward evidence has not been collected yet. See:
+
+- `docs/OPPORTUNITY_LAB_ARCHITECTURE.md`
+- `docs/OPPORTUNITY_LAB_RESULTS.md`
+- `docs/OPPORTUNITY_LAB_DEPLOYMENT.md`
+- `docs/OPPORTUNITY_LAB_ROADMAP.md`
+- `docs/GROK_STYLE_RESEARCH.md`
+
+Read-only scan:
+
+```bash
+python -m opportunity_lab scan --minutes 10
+```
+
+Continuous paper loop:
+
+```bash
+python -m opportunity_lab run --source live
+```
+
+Results:
+
+```bash
+python -m opportunity_lab report
+```
+
 ## Vendored research skill (Claude Code)
 
 `.claude/skills/trader-timemachine/` is the Time Machine from
