@@ -1,0 +1,34 @@
+{
+  "comment": "Third-party Claude Code skills vendored into this project after a security review (research_lab/DAY_TRADER_SKILL_REVIEW.md). tests/test_vendored_skills.py fails if any file drifts from these hashes. To upgrade: re-review the new upstream commit, copy byte-identical files, update commit and hashes here.",
+  "skills": {
+    "trader-timemachine": {
+      "source": "https://github.com/Jakeschincariol/day-trader-skill",
+      "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+      "commit_date": "2026-10-20T09:17:50-05:00",
+      "plugin_version": "2.0.0",
+      "license": "MIT (copied as LICENSE)",
+      "reviewed": "2026-11-02",
+      "files": {
+        "SKILL.md": "394e025b2584fee9e485c1c3ff5255ff8efefc816cad72c2a1b97e30107701dc",
+        "timemachine.py": "5e73d566c78e5e42142371319491eef6257b6fc31fab5a87aa62506d03e9b5a1",
+        "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c"
+      },
+      "network": ["https://query2.finance.yahoo.com", "https://query1.finance.yahoo.com"],
+      "writes": ["trader/timemachine.json (only with --write)"],
+      "credentials": "none",
+      "can_place_orders": false
+    }
+  },
+  "rejected": {
+    "trader-broker": "order path to an external brokerage MCP server (Alpaca via unpinned `uvx alpaca-mcp-server`) with API keys; violates the no-credentials, no-order-permission rule",
+    "trader-risk": "blocks every non-US-stock ticker (crypto explicitly); duplicates tradebot/risk/engine.py",
+    "trader-budget": "whole-share stock sizing to Alpaca order JSON, 75% default position cap, no fees; duplicates RiskEngine sizing",
+    "trader-scanner": "Nasdaq Trader stock universe, ticker regex rejects crypto, NYSE session; duplicates tradebot/scanner",
+    "trader-entry": "NYSE 9:30 opening-range timer on Yahoo stock bars; duplicates tradebot strategies/scanner signals",
+    "trader-exit": "NYSE flat-by and cent-rounded stock stops; duplicates TRADEBOT stops/targets",
+    "trader-alerts": "NYSE hours and stock quotes; TRADEBOT manages exits and the kill switch itself",
+    "trader-news": "Yahoo stock headlines plus SEC 8-K filings; stock-specific, not needed in the trading loop",
+    "trader-analyst": "SEC XBRL company financials; not applicable to SOL/BTC/ETH",
+    "trader-pelosi": "US House stock-trade disclosures; not applicable; also shells out to a local pdftotext binary"
+  }
+}

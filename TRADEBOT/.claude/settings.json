@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__alpaca",
+      "mcp__alpaca__place_stock_order",
+      "mcp__alpaca__place_crypto_order",
+      "mcp__alpaca__place_option_order",
+      "mcp__ibkr",
+      "Bash(*trader-broker*)",
+      "Bash(*ticket.py*)"
+    ]
+  }
+}

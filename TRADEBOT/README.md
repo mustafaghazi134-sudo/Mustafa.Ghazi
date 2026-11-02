@@ -226,6 +226,16 @@ tradebot fast --replay "data/1m/SOLUSDT_1m_2026-*.csv" --symbols SOL --start 202
 Live money is not reachable from this engine: it refuses to construct with `mode = "live"` and only ever builds a
 `PaperBroker`. Its trades do not count toward the 4h engine's live gate.
 
+## Vendored research skill (Claude Code)
+
+`.claude/skills/trader-timemachine/` is the Time Machine from
+[Jakeschincariol/day-trader-skill](https://github.com/Jakeschincariol/day-trader-skill), pinned to the reviewed commit
+`3d0f4ef` by `.claude/skills.lock.json` and hash-checked by `tests/test_vendored_skills.py`. It replays a single
+trade plan 10,000 times from the asset's own 5-minute bars, offline, as a research reality check. It has no
+credentials, cannot place orders and is not imported by either engine. The other ten skills in that pack were
+reviewed and rejected (stock-only, duplicate TRADEBOT, or an order path to a brokerage); `.claude/settings.json`
+denies brokerage connectors in this project. Review, crypto caveats and usage: `research_lab/DAY_TRADER_SKILL_REVIEW.md`.
+
 ## Risk controls (defaults in `config.toml`)
 
 | Control | Default | Effect |
