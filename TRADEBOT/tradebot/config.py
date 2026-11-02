@@ -193,9 +193,24 @@ class ScannerConfig(BaseModel):
     max_requests_per_min: int = 50              # stay inside the free-tier budget; probes/quotes are skipped first
 
 
+class FastConfig(BaseModel):
+    """Fast engine (`tradebot fast`): scanner detection wired to the risk engine and the PAPER broker, own ledger
+    data/fast.db, shares the kill switch file with the 4h engine. Paper only; a live broker is not constructible here."""
+    initial_capital_usd: float = 1000.0
+    size_usd: float = 50.0                      # per position, also capped by risk.max_position_pct of fast equity
+    stop_pct: float = 1.0                       # hard stop below the worst-case entry price
+    take_profit_frac: float = 1.0               # take profit at expected_move x this (never below cost + min_take_profit_bps)
+    min_take_profit_bps: float = 10.0
+    trailing_pct: float = 0.0                   # 0 = off
+    max_hold_mult: float = 2.0                  # exit at signal horizon x this if neither stop nor target hit
+    flatten_on_kill: bool = True
+    ws_reference: bool = False                  # Binance WebSocket for reference prices (needs `pip install websockets`)
+
+
 class Settings(BaseModel):
     mode: Literal["paper", "live"] = "paper"
     scanner: ScannerConfig = Field(default_factory=ScannerConfig)
+    fast: FastConfig = Field(default_factory=FastConfig)
     initial_capital_usd: float = 1000.0
     data_dir: str = "data"
     log_level: str = "INFO"

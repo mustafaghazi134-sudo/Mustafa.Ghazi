@@ -18,6 +18,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8"]
 research = ["numpy>=1.26", "pandas>=2.2"]   # research_lab only; the live bot is pure Python + httpx/pydantic/solders
+fast = ["websockets>=12"]                    # optional Binance WebSocket reference feed for the fast engine
 
 [project.scripts]
 tradebot = "tradebot.cli:main"

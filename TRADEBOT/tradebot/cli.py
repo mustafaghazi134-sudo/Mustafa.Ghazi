@@ -311,6 +311,89 @@ def cmd_scan_report(args) -> int:
     return 0
 
 
+def _fast_components(settings: Settings):
+    from .fast.engine import FastEngine
+    from .portfolio.ledger import Ledger
+    from .risk.kill_switch import KillSwitch
+    from .scanner.store import ScannerStore
+    data = Path(settings.data_dir); data.mkdir(parents=True, exist_ok=True)
+    ledger = Ledger(data / "fast.db", mode="paper")
+    store = ScannerStore(data / "scanner.db")
+    kill = KillSwitch(data / "KILL")                 # shared with the 4h engine: one switch stops both
+    return FastEngine, ledger, store, kill
+
+
+def cmd_fast(args) -> int:
+    """Fast engine: scanner detection -> risk engine -> PAPER broker -> position management, own ledger data/fast.db."""
+    settings = load_settings(args.config)
+    _setup_logging(settings.log_level, Path(settings.data_dir))
+    if settings.mode == "live" or os.environ.get("TRADEBOT_LIVE_TRADING"):
+        print("fast engine is paper-only; refusing to start with live settings in place"); return 2
+    FastEngine, ledger, store, kill = _fast_components(settings)
+    if args.poll:
+        settings.scanner.poll_sec = args.poll
+    if args.size:
+        settings.fast.size_usd = args.size
+    if args.min_edge is not None:
+        settings.scanner.min_net_edge_bps = args.min_edge
+    if args.replay:
+        from .fast.replay import ReplayFeed, load_bars
+        syms = (args.symbols or ",".join(settings.universe.symbols)).split(",")
+        series = {}
+        for sym, pattern in zip(syms, args.replay):
+            bars = load_bars([pattern])
+            if not bars:
+                print(f"no bars for {sym} from {pattern}"); return 1
+            series[sym] = bars
+        start_ts = time.mktime(time.strptime(args.start, "%Y-%m-%d")) - time.timezone if args.start else None
+        feed = ReplayFeed(series, {s: settings.universe.mints[s] for s in syms}, settings.universe.decimals, start_ts=start_ts)
+        settings.scanner.poll_sec = 60.0; settings.scanner.probe_interval_sec = 1e12; settings.scanner.check_slot = False
+        settings.universe.symbols = syms
+        eng = FastEngine(settings, store, feed, ledger, kill, clock=feed.now)
+        n = 0
+        while not feed.finished() and (args.max_bars is None or n < args.max_bars):
+            eng.poll(); feed.advance(); n += 1
+        eng.ledger.log_event("stop", f"replay: {n} bars", ts=feed.now())
+        print(fast_report_text(settings, ledger, store, 0))
+        return 0
+    from .scanner.scanner import LiveFeed
+    try:
+        feed = LiveFeed(settings)
+    except RuntimeError as e:
+        print(e); return 2
+    if settings.fast.ws_reference or args.ws:
+        from .fast.ws import BinanceTradeWS, WSReferenceFeed
+        pairs = [settings.universe.candle_symbols[s] for s in settings.universe.symbols if s in settings.universe.candle_symbols]
+        ws = BinanceTradeWS(pairs)
+        if ws.start():
+            feed = WSReferenceFeed(feed, ws)
+            settings.fast.ws_reference = True
+    eng = FastEngine(settings, store, feed, ledger, kill)
+    try:
+        eng.run(minutes=args.minutes)
+    finally:
+        if settings.fast.ws_reference and hasattr(feed, "ws"):
+            print("websocket:", feed.ws.stats()); feed.ws.stop()
+    print(fast_report_text(settings, ledger, store, args.minutes / 60 if args.minutes else 24.0))
+    return 0
+
+
+def fast_report_text(settings: Settings, ledger, store, hours: float) -> str:
+    from .fast.engine import fast_report
+    return fast_report(ledger, store, since_hours=hours, min_edge_bps=settings.scanner.min_net_edge_bps)
+
+
+def cmd_fast_report(args) -> int:
+    settings = load_settings(args.config)
+    data = Path(settings.data_dir)
+    if not (data / "fast.db").exists():
+        print(f"no fast ledger at {data / 'fast.db'}; run `tradebot fast` first"); return 1
+    from .portfolio.ledger import Ledger
+    from .scanner.store import ScannerStore
+    print(fast_report_text(settings, Ledger(data / "fast.db", mode="paper"), ScannerStore(data / "scanner.db"), args.hours))
+    return 0
+
+
 def cmd_apply_profile(args) -> int:
     """Edit the EXISTING config.toml in place (backup first): Claude off, BTC/ETH/SOL, no auto-scan, 4h, tsmom+momentum."""
     from .profile import apply_validated_profile
@@ -414,6 +497,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--poll", type=float, default=None); p.add_argument("--size", type=float, default=None, help="hypothetical size in USD")
     p.add_argument("--discover", default=None, help="widen universe from Jupiter Tokens v2, e.g. toptraded")
     p.set_defaults(fn=cmd_scan)
+    p = sub.add_parser("fast", help="PAPER fast engine: scan -> detect -> cost -> risk -> buy -> manage -> sell -> record (own ledger data/fast.db)")
+    p.add_argument("--minutes", type=float, default=None); p.add_argument("--poll", type=float, default=None)
+    p.add_argument("--size", type=float, default=None); p.add_argument("--min-edge", type=float, default=None, help="min net edge bps after worst-case cost")
+    p.add_argument("--ws", action="store_true", help="Binance WebSocket reference prices (needs websockets package)")
+    p.add_argument("--replay", nargs="+", default=None, help="offline: one 1m CSV/zip glob per symbol (real historical bars, parametric fills)")
+    p.add_argument("--symbols", default=None, help="with --replay: symbols matching the globs, e.g. SOL,BTC")
+    p.add_argument("--start", default=None); p.add_argument("--max-bars", type=int, default=None)
+    p.set_defaults(fn=cmd_fast)
+    p = sub.add_parser("fast-report", help="fast engine: trades with timestamps and net results, win rate, fees, drawdown, latency, rejections")
+    p.add_argument("--hours", type=float, default=24.0); p.set_defaults(fn=cmd_fast_report)
     p = sub.add_parser("scan-report", help="summarise the scanner database: sources, refresh, costs, candidates, false positives, missed")
     p.add_argument("--hours", type=float, default=24.0); p.set_defaults(fn=cmd_scan_report)
     p = sub.add_parser("apply-profile", help="update an existing config.toml to the validated settings, preserving everything else (backup first)")

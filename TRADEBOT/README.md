@@ -191,6 +191,41 @@ module, and no `taker` on any Jupiter request (a test asserts this from the modu
 `tradebot scan-report` summarises all of it. Claude is nowhere in this loop. Design notes, benchmark of the
 existing engine, external-system review and the trades-per-day economics are in `research_lab/REALTIME_SCANNER_EVAL.md`.
 
+## Fast engine (paper): scan → detect → cost → risk → buy → manage → sell → record
+
+`tradebot fast` (Windows: `windows\run_fast.bat`) turns the scanner into an autonomous paper trading loop that runs
+unattended every 5 seconds and never asks for approval. It is a separate process from the 4h engine with its own
+ledger (`data/fast.db`) and it shares the kill switch file (`data/KILL`), so one switch stops both engines.
+
+1. **Scan**: Jupiter Price v3 (with `blockId`), Binance reference price, slot, Tokens v2 facts.
+2. **Detect**: 1-minute bars → `basis_reversion`, `breakout_5m`, `dip_reversion_1m` (deterministic, no tuning).
+3. **Cost**: two fresh size-specific read-only quotes → worst-case round trip (min-out both legs + network fees) →
+   net edge = expected move − worst-case cost − adverse-selection buffer. Below `min_net_edge_bps`: rejected.
+4. **Risk**: the same independent `RiskEngine` as the 4h engine (position and exposure limits, daily-loss halt,
+   drawdown kill, loss streaks, data age, slippage, trade cap). Rejected reasons are logged per candidate.
+5. **Buy**: the broker re-quotes immediately before the order; if the edge is gone at the executable price the
+   trade is rejected (`edge_vanished`). Fills come from the `PaperBroker`: a fresh Jupiter quote when a key is
+   present, otherwise the parametric model. Intents are persisted before and after the fill.
+6. **Manage**: every poll: stop-loss (`fast.stop_pct` below the worst-case entry), take-profit (expected move,
+   never below cost plus `min_take_profit_bps`), optional trailing stop, max hold (signal horizon × 2).
+7. **Sell**: reduce-only exits through the same risk engine and broker; the kill switch and daily halt flatten.
+8. **Record**: fills, trades net of fees, equity curve, per-stage latency (detect → quote → risk → order → fill),
+   every rejection with its reason. `tradebot fast-report` prints trades with timestamps and net results, win rate,
+   fees, drawdown, trading frequency, latency percentiles and rejection counts.
+
+Event-driven data: `--ws` (or `fast.ws_reference=true`, needs `pip install "tradebot[fast]"`) streams Binance trades
+over WebSocket for the reference leg and measures exchange-to-local latency; the Jupiter leg has no public price
+stream and stays polled. Claude is not in this loop; research stays on the weekly cadence described above.
+
+Offline replay over real historical 1-minute bars (parametric fills, no second venue, clearly a simulation):
+
+```bash
+tradebot fast --replay "data/1m/SOLUSDT_1m_2026-*.csv" --symbols SOL --start 2026-07-01
+```
+
+Live money is not reachable from this engine: it refuses to construct with `mode = "live"` and only ever builds a
+`PaperBroker`. Its trades do not count toward the 4h engine's live gate.
+
 ## Risk controls (defaults in `config.toml`)
 
 | Control | Default | Effect |

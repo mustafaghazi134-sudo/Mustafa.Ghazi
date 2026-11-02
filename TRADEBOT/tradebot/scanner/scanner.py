@@ -242,6 +242,7 @@ class OpportunityScanner:
             ref = refs.get(pairs.get(sym, "")) if pairs.get(sym) else None
             self.store.log_tick(now, sym, price, block, slot, ref, pres.latency_ms)
             self.bars.add(sym, now, price)
+            self.on_tick(sym, price, now)
             for cand in evaluate_all(sym, self.bars.bars(sym), price, ref):
                 key = (sym, cand.signal)
                 if self.cooldown.get(key, 0) > now:
@@ -254,6 +255,9 @@ class OpportunityScanner:
             self.probe_costs()
         self.store.set("last_poll", {"ts": now, "polls": self.polls, "universe": len(self.symbols), "req_last_min": self._requests_last_minute()})
         return {"ok": True, "opened": opened, "rejected": rejected, "universe": len(self.symbols), "req_last_min": self._requests_last_minute()}
+
+    def on_tick(self, sym: str, price: float, now: float) -> None:
+        """Hook for subclasses (the fast engine updates its broker's price view here)."""
 
     def _handle_candidate(self, cand: Candidate, price: float, block: int | None, slot: int | None, now: float) -> str:
         sym = cand.symbol

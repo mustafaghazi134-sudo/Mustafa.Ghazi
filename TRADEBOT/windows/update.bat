@@ -11,7 +11,7 @@ if exist config.toml copy /y config.toml "backups\config.toml.%STAMP%" >nul && e
 if exist .env copy /y .env "backups\.env.%STAMP%" >nul && echo backed up .env -> backups\.env.%STAMP%
 git fetch origin claude/inspiring-edison-6xsm35 && git checkout claude/inspiring-edison-6xsm35 && git pull --ff-only origin claude/inspiring-edison-6xsm35 || (echo git update failed & pause & exit /b 1)
 call .venv\Scripts\activate.bat
-pip install -q -e ".[dev]" || (echo dependency update failed & pause & exit /b 1)
+pip install -q -e ".[dev,fast]" || pip install -q -e ".[dev]" || (echo dependency update failed & pause & exit /b 1)
 if not exist config.toml tradebot init
 tradebot apply-profile || (echo profile update failed & pause & exit /b 1)
 if exist .env (for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do if not "%%a"=="" set "%%a=%%b")
