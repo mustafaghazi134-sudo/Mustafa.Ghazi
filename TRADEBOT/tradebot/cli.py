@@ -350,6 +350,7 @@ def cmd_fast(args) -> int:
         settings.scanner.poll_sec = 60.0; settings.scanner.probe_interval_sec = 1e12; settings.scanner.check_slot = False
         settings.universe.symbols = syms
         eng = FastEngine(settings, store, feed, ledger, kill, clock=feed.now)
+        eng.ledger.log_event("start", f"replay of real 1m bars, parametric fills: {','.join(syms)}", ts=feed.now())
         n = 0
         while not feed.finished() and (args.max_bars is None or n < args.max_bars):
             eng.poll(); feed.advance(); n += 1

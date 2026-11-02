@@ -315,10 +315,11 @@ def fast_report(ledger: Ledger, store: ScannerStore, since_hours: float = 24.0, 
     L = ["=== fast engine (PAPER) ==="]
     L.append(f"equity ${rep.equity:.2f}  cash ${rep.cash:.2f}  net profit ${rep.net_profit:+.2f} ({rep.net_return_pct:+.2f}%)  fees ${rep.fees:.2f}  "
              f"max DD {rep.max_drawdown_pct:.2f}%  trades {rep.trades}  win rate {rep.win_rate:.1f}%  PF {rep.profit_factor:.2f}")
-    first = ledger.first_event_ts()
-    if first and trades:
-        days = max((time.time() - first) / 86400, 1 / 24)
-        L.append(f"trading frequency: {len(trades) / days:.2f} closed trades/day over {days:.2f} days")
+    span = ledger._exec("SELECT MIN(ts) a, MAX(ts) b FROM (SELECT ts FROM events WHERE mode=? UNION ALL SELECT ts FROM decisions)", (ledger.mode,)).fetchone()
+    first, end = span["a"], span["b"]                               # ledger clock (replay or live), never the wall clock
+    if first and end:
+        days = max((end - first) / 86400, 1 / 24)
+        L.append(f"trading frequency: {len(trades) / days:.3f} closed trades/day over {days:.1f} days ({len(trades)} trades)")
     lat = [json.loads(d["payload"]) for d in ledger.decisions(kind="latency", limit=10000)]
     s2o = sorted(x["signal_to_order_ms"] for x in lat if "signal_to_order_ms" in x)
     o2f = sorted(x["order_to_fill_ms"] for x in lat if "order_to_fill_ms" in x)
