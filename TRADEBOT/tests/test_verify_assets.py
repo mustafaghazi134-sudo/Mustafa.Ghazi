@@ -37,6 +37,9 @@ def test_verify_assets_round_trip_and_limits(tmp_path, monkeypatch):
         if url.endswith("/tokens/v2/search"):
             return [{"id": CBBTC, "symbol": "cbBTC", "decimals": 8, "liquidity": 30_000_000, "isVerified": True, "organicScore": 95,
                      "stats24h": {"buyVolume": 20_000_000, "sellVolume": 18_000_000, "priceChange": 1.0}}]
+        if "/api/v3/ticker/price" in url:
+            assert params["symbols"] == '["BTCUSDT"]'
+            return [{"symbol": "BTCUSDT", "price": str(price)}]
         if "/api/v3/klines" in url:
             assert params["symbol"] == "BTCUSDT"
             import time
@@ -49,7 +52,7 @@ def test_verify_assets_round_trip_and_limits(tmp_path, monkeypatch):
     def fake_httpx_get(url, timeout=None, headers=None, params=None):
         assert url.endswith("/swap/v2/order") and "taker" not in params and headers == {"x-api-key": "k"}
         if params["inputMint"] == USDC:
-            out = int(100 / (price * 1.001) * 1e8 * 0.998)
+            out = int(int(params["amount"]) / 1e6 / (price * 1.001) * 1e8 * 0.998)
             return _resp({"inAmount": params["amount"], "outAmount": str(out), "priceImpactPct": "0.0005", "feeBps": 10, "router": "metis",
                           "transaction": None, "routePlan": [{"swapInfo": {"label": "Whirlpool"}, "bps": 10000}]})
         qty = int(params["amount"]) / 1e8
@@ -62,7 +65,11 @@ def test_verify_assets_round_trip_and_limits(tmp_path, monkeypatch):
     assert r["status"] == "OK", r["problems"]
     assert r["mint"] == CBBTC and r["candles"] == 1000 and r["order_usd"] == 100.0
     assert abs(r["basis_pct"] - 0.1) < 0.01
+    assert abs(r["basis_bps"] - 10.0) < 0.1                      # Jupiter price vs Binance spot at the same instant
     assert 0 < r["round_trip_cost_bps"] < 50 and r["buy_impact_bps"] == 5.0 and r["jupiter_fee_bps"] == 10
+    assert r["worst_case_cost_bps"] >= r["round_trip_cost_bps"]   # min-out legs can only cost more
+    assert [x["size_usd"] for x in r["round_trips"]] == [5.0, 100.0, 500.0]   # min, intended, max order sizes
+    assert (tmp_path / "verify_assets.jsonl").exists()
     assert "all assets executable" in format_assets(rows)
 
 

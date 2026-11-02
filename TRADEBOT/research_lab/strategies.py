@@ -221,6 +221,19 @@ def tsmom_trail(df, p):
     return (mom > 0) & daily, (mom < 0) & daily, ExitSpec(trailing_stop_pct=p["trail_pct"])
 
 
+@register("tsmom_ema_band", {"lookback_days": [30], "ema_days": [100], "vol_stop_pct": [25.0], "band_pct": [2.0, 5.0]},
+          {"lookback_days": 30, "ema_days": 100, "vol_stop_pct": 25.0, "band_pct": 2.0}, "Deployed TSMOM+EMA with a momentum dead-band",
+          "Same as tsmom_ema_filter but enters only when 30d momentum > +band and exits only when < -band (or close < EMA). "
+          "Hypothesis from research_lab/HOLDOUT_DIAGNOSIS.md: whipsaw trades held <= 7 days destroyed the holdout. "
+          "Because the hypothesis came from inspecting the holdout, this variant is evaluated on DEVELOPMENT data only "
+          "(--dev-only); its independent test is the live paper record, never the 2025+ holdout.")
+def tsmom_ema_band(df, p):
+    c = df["close"]; bpd = _bars_per_day(df); lb = p["lookback_days"] * bpd
+    mom = c / c.shift(lb) - 1; e = I.ema(c, p["ema_days"] * bpd); b = p["band_pct"] / 100.0
+    daily = pd.Series(df.index.hour == 0, index=df.index) if bpd > 1 else pd.Series(True, index=df.index)
+    return (mom > b) & (c > e) & daily, ((mom < -b) | (c < e)) & daily, ExitSpec(stop_loss_pct=p["vol_stop_pct"])
+
+
 @register("tsmom_ema_filter", {"lookback_days": [30, 60], "ema_days": [50, 100], "vol_stop_pct": [25.0]},
           {"lookback_days": 30, "ema_days": 100, "vol_stop_pct": 25.0}, "TSMOM with long-term EMA regime filter",
           "Daily TSMOM, but only long while close is above a long EMA (regime filter); exit when momentum turns negative or close drops below the EMA.")

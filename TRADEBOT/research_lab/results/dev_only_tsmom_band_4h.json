@@ -1,0 +1,2370 @@
+{
+ "costs": {
+  "fee_bps_per_side": 10.0,
+  "slippage_bps_per_side": 15.0
+ },
+ "timeframe": "4h",
+ "size_frac": 0.1,
+ "holdout_start": "2025-01-01",
+ "data": {
+  "BTCUSDT": {
+   "symbol": "BTCUSDT",
+   "sources": {
+    "nawr1_RL_trading": 20,
+    "changhaowuwu_LSTM-live-cripto-forecast": 56,
+    "7huahua_RedditDataset": 12,
+    "el-frontend_frontbot": 5
+   },
+   "months": 93,
+   "bars": 67861,
+   "start": "2019-01-01 00:00",
+   "end": "2026-09-30 23:00",
+   "gaps": [
+    [
+     "2019-03-12 01:00",
+     "2019-03-12 08:00",
+     6
+    ],
+    [
+     "2019-05-15 02:00",
+     "2019-05-15 13:00",
+     10
+    ],
+    [
+     "2019-08-15 01:00",
+     "2019-08-15 10:00",
+     8
+    ],
+    [
+     "2019-11-13 01:00",
+     "2019-11-13 04:00",
+     2
+    ],
+    [
+     "2019-11-25 01:00",
+     "2019-11-25 04:00",
+     2
+    ],
+    [
+     "2020-02-09 01:00",
+     "2020-02-09 03:00",
+     1
+    ],
+    [
+     "2020-02-19 11:00",
+     "2020-02-19 17:00",
+     5
+    ],
+    [
+     "2020-03-04 09:00",
+     "2020-03-04 11:00",
+     1
+    ],
+    [
+     "2020-04-25 01:00",
+     "2020-04-25 04:00",
+     2
+    ],
+    [
+     "2020-06-28 01:00",
+     "2020-06-28 05:00",
+     3
+    ],
+    [
+     "2020-11-30 05:00",
+     "2020-11-30 07:00",
+     1
+    ],
+    [
+     "2020-12-21 14:00",
+     "2020-12-21 18:00",
+     3
+    ],
+    [
+     "2020-12-25 01:00",
+     "2020-12-25 03:00",
+     1
+    ],
+    [
+     "2021-02-11 03:00",
+     "2021-02-11 05:00",
+     1
+    ],
+    [
+     "2021-03-06 01:00",
+     "2021-03-06 03:00",
+     1
+    ],
+    [
+     "2021-04-20 01:00",
+     "2021-04-20 04:00",
+     2
+    ],
+    [
+     "2021-04-25 04:00",
+     "2021-04-25 08:00",
+     3
+    ],
+    [
+     "2021-08-13 01:00",
+     "2021-08-13 06:00",
+     4
+    ],
+    [
+     "2021-09-29 06:00",
+     "2021-09-29 09:00",
+     2
+    ],
+    [
+     "2023-03-24 12:00",
+     "2023-03-24 14:00",
+     1
+    ]
+   ],
+   "max_overlap_close_dev_pct": 1.8575,
+   "overlap_months_checked": 178,
+   "sanity_errors": 0
+  },
+  "ETHUSDT": {
+   "symbol": "ETHUSDT",
+   "sources": {
+    "changhaowuwu_LSTM-live-cripto-forecast": 56,
+    "7huahua_RedditDataset": 12
+   },
+   "months": 68,
+   "bars": 49621,
+   "start": "2019-09-01 00:00",
+   "end": "2025-04-30 23:00",
+   "gaps": [
+    [
+     "2019-11-13 01:00",
+     "2019-11-13 04:00",
+     2
+    ],
+    [
+     "2019-11-25 01:00",
+     "2019-11-25 04:00",
+     2
+    ],
+    [
+     "2020-02-09 01:00",
+     "2020-02-09 03:00",
+     1
+    ],
+    [
+     "2020-02-19 11:00",
+     "2020-02-19 17:00",
+     5
+    ],
+    [
+     "2020-03-04 09:00",
+     "2020-03-04 11:00",
+     1
+    ],
+    [
+     "2020-04-25 01:00",
+     "2020-04-25 04:00",
+     2
+    ],
+    [
+     "2020-06-28 01:00",
+     "2020-06-28 05:00",
+     3
+    ],
+    [
+     "2020-11-30 05:00",
+     "2020-11-30 07:00",
+     1
+    ],
+    [
+     "2020-12-21 14:00",
+     "2020-12-21 18:00",
+     3
+    ],
+    [
+     "2020-12-25 01:00",
+     "2020-12-25 03:00",
+     1
+    ],
+    [
+     "2021-02-11 03:00",
+     "2021-02-11 05:00",
+     1
+    ],
+    [
+     "2021-03-06 01:00",
+     "2021-03-06 03:00",
+     1
+    ],
+    [
+     "2021-04-20 01:00",
+     "2021-04-20 04:00",
+     2
+    ],
+    [
+     "2021-04-25 04:00",
+     "2021-04-25 08:00",
+     3
+    ],
+    [
+     "2021-08-13 01:00",
+     "2021-08-13 06:00",
+     4
+    ],
+    [
+     "2021-09-29 06:00",
+     "2021-09-29 09:00",
+     2
+    ],
+    [
+     "2023-03-24 12:00",
+     "2023-03-24 14:00",
+     1
+    ]
+   ],
+   "max_overlap_close_dev_pct": 2.5225,
+   "overlap_months_checked": 70,
+   "sanity_errors": 0
+  }
+ },
+ "strategies": {
+  "tsmom_ema_filter": {
+   "source": "TSMOM with long-term EMA regime filter",
+   "note": "Daily TSMOM, but only long while close is above a long EMA (regime filter); exit when momentum turns negative or close drops below the EMA.",
+   "flags": [],
+   "author_claim": "",
+   "per_symbol": {
+    "BTCUSDT": {
+     "in_sample_default_params": {
+      "trades": 60,
+      "win_rate_pct": 33.3,
+      "net_profit": 6055.82,
+      "net_return_pct": 60.56,
+      "cagr_pct": 8.21,
+      "profit_factor": 3.87,
+      "max_drawdown_pct": -10.72,
+      "avg_win": 408.25,
+      "avg_loss": -52.73,
+      "avg_win_pct": 33.8,
+      "avg_loss_pct": -4.09,
+      "worst_trade_pct": -14.15,
+      "expectancy_pct": 8.54,
+      "sharpe": 1.18,
+      "calmar": 0.77,
+      "avg_bars_held": 101.5,
+      "longest_losing_streak": 11,
+      "avg_win_over_avg_loss": 7.74,
+      "years": 6.0
+     },
+     "lookahead": {
+      "lookahead_signal_mismatches": 0,
+      "passed": true
+     },
+     "walk_forward_oos": {
+      "trades": 62,
+      "win_rate_pct": 37.1,
+      "net_profit": 4586.8,
+      "net_return_pct": 45.87,
+      "cagr_pct": 7.84,
+      "profit_factor": 3.55,
+      "max_drawdown_pct": -4.36,
+      "avg_win": 239.97,
+      "avg_loss": -39.82,
+      "avg_win_pct": 23.97,
+      "avg_loss_pct": -3.96,
+      "worst_trade_pct": -14.15,
+      "expectancy_pct": 6.399,
+      "sharpe": 1.5,
+      "calmar": 1.8,
+      "avg_bars_held": 88.0,
+      "longest_losing_streak": 7,
+      "avg_win_over_avg_loss": 6.03,
+      "years": 5.0
+     },
+     "wf_segments": [
+      {
+       "test_start": "2020-01-01",
+       "test_end": "2020-04-01",
+       "params": {
+        "lookback_days": 60,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": 10.56,
+        "sharpe": 1.08,
+        "max_drawdown_pct": -12.46,
+        "win_rate_pct": 20.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 0.03,
+        "sharpe": 0.04,
+        "max_drawdown_pct": -1.8,
+        "win_rate_pct": 50.0,
+        "profit_factor": 1.07
+       }
+      },
+      {
+       "test_start": "2020-04-01",
+       "test_end": "2020-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 0.62,
+        "sharpe": 0.14,
+        "max_drawdown_pct": -8.5,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 6,
+        "net_return_pct": 1.7,
+        "sharpe": 0.93,
+        "max_drawdown_pct": -1.91,
+        "win_rate_pct": 16.7,
+        "profit_factor": 2.55
+       }
+      },
+      {
+       "test_start": "2020-07-01",
+       "test_end": "2020-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 2.21,
+        "sharpe": 0.58,
+        "max_drawdown_pct": -2.22,
+        "win_rate_pct": 22.2
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 0.74,
+        "sharpe": 0.64,
+        "max_drawdown_pct": -2.21,
+        "win_rate_pct": 50.0,
+        "profit_factor": 1.53
+       }
+      },
+      {
+       "test_start": "2020-10-01",
+       "test_end": "2021-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": 4.19,
+        "sharpe": 0.99,
+        "max_drawdown_pct": -2.23,
+        "win_rate_pct": 30.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 16.43,
+        "sharpe": 5.26,
+        "max_drawdown_pct": -2.43,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2021-01-01",
+       "test_end": "2021-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 12,
+        "net_return_pct": 17.72,
+        "sharpe": 2.77,
+        "max_drawdown_pct": -2.43,
+        "win_rate_pct": 25.0
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": 5.93,
+        "sharpe": 1.67,
+        "max_drawdown_pct": -3.59,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2021-04-01",
+       "test_end": "2021-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 12,
+        "net_return_pct": 27.98,
+        "sharpe": 2.09,
+        "max_drawdown_pct": -7.86,
+        "win_rate_pct": 41.7
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": -1.79,
+        "sharpe": -2.09,
+        "max_drawdown_pct": -2.06,
+        "win_rate_pct": 33.3,
+        "profit_factor": 0.09
+       }
+      },
+      {
+       "test_start": "2021-07-01",
+       "test_end": "2021-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 24.24,
+        "sharpe": 1.86,
+        "max_drawdown_pct": -7.86,
+        "win_rate_pct": 37.5
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": 1.05,
+        "sharpe": 0.6,
+        "max_drawdown_pct": -2.58,
+        "win_rate_pct": 33.3,
+        "profit_factor": 2.5
+       }
+      },
+      {
+       "test_start": "2021-10-01",
+       "test_end": "2022-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 13.63,
+        "sharpe": 1.48,
+        "max_drawdown_pct": -5.39,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 1.06,
+        "sharpe": 0.82,
+        "max_drawdown_pct": -1.51,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2022-01-01",
+       "test_end": "2022-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 1.42,
+        "sharpe": 0.32,
+        "max_drawdown_pct": -2.78,
+        "win_rate_pct": 37.5
+       },
+       "oos": {
+        "trades": 4,
+        "net_return_pct": -0.53,
+        "sharpe": -0.66,
+        "max_drawdown_pct": -2.06,
+        "win_rate_pct": 25.0,
+        "profit_factor": 0.6
+       }
+      },
+      {
+       "test_start": "2022-04-01",
+       "test_end": "2022-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 1.57,
+        "sharpe": 0.43,
+        "max_drawdown_pct": -3.12,
+        "win_rate_pct": 37.5
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": -0.55,
+        "sharpe": -1.38,
+        "max_drawdown_pct": -0.99,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-07-01",
+       "test_end": "2022-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": -1.34,
+        "sharpe": -0.42,
+        "max_drawdown_pct": -2.95,
+        "win_rate_pct": 25.0
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": -1.37,
+        "sharpe": -1.61,
+        "max_drawdown_pct": -1.65,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-10-01",
+       "test_end": "2023-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": -2.52,
+        "sharpe": -1.38,
+        "max_drawdown_pct": -3.02,
+        "win_rate_pct": 11.1
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.35,
+        "sharpe": -0.81,
+        "max_drawdown_pct": -0.92,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-01-01",
+       "test_end": "2023-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": -2.77,
+        "sharpe": -1.55,
+        "max_drawdown_pct": -3.17,
+        "win_rate_pct": 10.0
+       },
+       "oos": {
+        "trades": 5,
+        "net_return_pct": 5.59,
+        "sharpe": 2.93,
+        "max_drawdown_pct": -1.71,
+        "win_rate_pct": 60.0,
+        "profit_factor": 10.01
+       }
+      },
+      {
+       "test_start": "2023-04-01",
+       "test_end": "2023-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": 3.83,
+        "sharpe": 1.16,
+        "max_drawdown_pct": -2.04,
+        "win_rate_pct": 27.3
+       },
+       "oos": {
+        "trades": 5,
+        "net_return_pct": -0.63,
+        "sharpe": -0.64,
+        "max_drawdown_pct": -2.01,
+        "win_rate_pct": 20.0,
+        "profit_factor": 0.47
+       }
+      },
+      {
+       "test_start": "2023-07-01",
+       "test_end": "2023-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 4.09,
+        "sharpe": 1.18,
+        "max_drawdown_pct": -2.31,
+        "win_rate_pct": 44.4
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-10-01",
+       "test_end": "2024-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": 4.41,
+        "sharpe": 1.23,
+        "max_drawdown_pct": -2.31,
+        "win_rate_pct": 40.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 5.38,
+        "sharpe": 3.3,
+        "max_drawdown_pct": -1.17,
+        "win_rate_pct": 50.0,
+        "profit_factor": 90.07
+       }
+      },
+      {
+       "test_start": "2024-01-01",
+       "test_end": "2024-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": 6.09,
+        "sharpe": 1.56,
+        "max_drawdown_pct": -2.31,
+        "win_rate_pct": 36.4
+       },
+       "oos": {
+        "trades": 7,
+        "net_return_pct": 3.77,
+        "sharpe": 1.97,
+        "max_drawdown_pct": -2.29,
+        "win_rate_pct": 28.6,
+        "profit_factor": 3.78
+       }
+      },
+      {
+       "test_start": "2024-04-01",
+       "test_end": "2024-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": 9.88,
+        "sharpe": 2.26,
+        "max_drawdown_pct": -2.29,
+        "win_rate_pct": 30.0
+       },
+       "oos": {
+        "trades": 4,
+        "net_return_pct": -0.21,
+        "sharpe": -0.22,
+        "max_drawdown_pct": -0.98,
+        "win_rate_pct": 75.0,
+        "profit_factor": 0.72
+       }
+      },
+      {
+       "test_start": "2024-07-01",
+       "test_end": "2024-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": 8.91,
+        "sharpe": 1.98,
+        "max_drawdown_pct": -2.29,
+        "win_rate_pct": 45.5
+       },
+       "oos": {
+        "trades": 5,
+        "net_return_pct": -1.1,
+        "sharpe": -1.81,
+        "max_drawdown_pct": -1.86,
+        "win_rate_pct": 20.0,
+        "profit_factor": 0.25
+       }
+      },
+      {
+       "test_start": "2024-10-01",
+       "test_end": "2025-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 15,
+        "net_return_pct": 3.48,
+        "sharpe": 0.9,
+        "max_drawdown_pct": -2.48,
+        "win_rate_pct": 40.0
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": 4.48,
+        "sharpe": 2.27,
+        "max_drawdown_pct": -2.11,
+        "win_rate_pct": 33.3,
+        "profit_factor": 5.9
+       }
+      }
+     ],
+     "wf_param_stability": 0.9,
+     "final_params": {
+      "ema_days": 50,
+      "lookback_days": 30,
+      "vol_stop_pct": 25.0
+     },
+     "holdout": {
+      "note": "not evaluated (--dev-only): hypothesis post-dates the holdout inspection"
+     }
+    },
+    "ETHUSDT": {
+     "in_sample_default_params": {
+      "trades": 53,
+      "win_rate_pct": 45.3,
+      "net_profit": 5119.08,
+      "net_return_pct": 51.19,
+      "cagr_pct": 8.06,
+      "profit_factor": 3.99,
+      "max_drawdown_pct": -11.15,
+      "avg_win": 284.7,
+      "avg_loss": -59.09,
+      "avg_win_pct": 23.12,
+      "avg_loss_pct": -4.31,
+      "worst_trade_pct": -13.87,
+      "expectancy_pct": 8.113,
+      "sharpe": 0.99,
+      "calmar": 0.72,
+      "avg_bars_held": 103.8,
+      "longest_losing_streak": 4,
+      "avg_win_over_avg_loss": 4.82,
+      "years": 5.34
+     },
+     "lookahead": {
+      "lookahead_signal_mismatches": 0,
+      "passed": true
+     },
+     "walk_forward_oos": {
+      "trades": 56,
+      "win_rate_pct": 33.9,
+      "net_profit": 1478.04,
+      "net_return_pct": 14.78,
+      "cagr_pct": 3.23,
+      "profit_factor": 1.84,
+      "max_drawdown_pct": -10.74,
+      "avg_win": 163.36,
+      "avg_loss": -45.53,
+      "avg_win_pct": 16.43,
+      "avg_loss_pct": -4.55,
+      "worst_trade_pct": -14.04,
+      "expectancy_pct": 2.572,
+      "sharpe": 0.56,
+      "calmar": 0.3,
+      "avg_bars_held": 62.4,
+      "longest_losing_streak": 6,
+      "avg_win_over_avg_loss": 3.59,
+      "years": 4.33
+     },
+     "wf_segments": [
+      {
+       "test_start": "2020-09-01",
+       "test_end": "2020-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 12,
+        "net_return_pct": 12.21,
+        "sharpe": 1.68,
+        "max_drawdown_pct": -5.42,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 5,
+        "net_return_pct": 3.97,
+        "sharpe": 1.89,
+        "max_drawdown_pct": -2.85,
+        "win_rate_pct": 40.0,
+        "profit_factor": 3.05
+       }
+      },
+      {
+       "test_start": "2020-12-01",
+       "test_end": "2021-03-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": 14.56,
+        "sharpe": 2.12,
+        "max_drawdown_pct": -4.34,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 0.51,
+        "sharpe": 0.21,
+        "max_drawdown_pct": -4.95,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2021-03-01",
+       "test_end": "2021-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": 25.59,
+        "sharpe": 1.81,
+        "max_drawdown_pct": -8.72,
+        "win_rate_pct": 54.5
+       },
+       "oos": {
+        "trades": 4,
+        "net_return_pct": 4.8,
+        "sharpe": 1.02,
+        "max_drawdown_pct": -10.08,
+        "win_rate_pct": 75.0,
+        "profit_factor": 8.4
+       }
+      },
+      {
+       "test_start": "2021-06-01",
+       "test_end": "2021-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": 29.87,
+        "sharpe": 1.82,
+        "max_drawdown_pct": -10.08,
+        "win_rate_pct": 63.6
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 4.21,
+        "sharpe": 2.09,
+        "max_drawdown_pct": -1.48,
+        "win_rate_pct": 50.0,
+        "profit_factor": 7.29
+       }
+      },
+      {
+       "test_start": "2021-09-01",
+       "test_end": "2021-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": 27.74,
+        "sharpe": 1.75,
+        "max_drawdown_pct": -10.74,
+        "win_rate_pct": 63.6
+       },
+       "oos": {
+        "trades": 5,
+        "net_return_pct": 0.16,
+        "sharpe": 0.1,
+        "max_drawdown_pct": -2.98,
+        "win_rate_pct": 40.0,
+        "profit_factor": 1.11
+       }
+      },
+      {
+       "test_start": "2021-12-01",
+       "test_end": "2022-03-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 12,
+        "net_return_pct": 8.82,
+        "sharpe": 0.86,
+        "max_drawdown_pct": -10.74,
+        "win_rate_pct": 58.3
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.96,
+        "sharpe": -2.74,
+        "max_drawdown_pct": -0.97,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-03-01",
+       "test_end": "2022-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 4.69,
+        "sharpe": 0.62,
+        "max_drawdown_pct": -9.27,
+        "win_rate_pct": 44.4
+       },
+       "oos": {
+        "trades": 4,
+        "net_return_pct": -1.22,
+        "sharpe": -1.1,
+        "max_drawdown_pct": -2.49,
+        "win_rate_pct": 25.0,
+        "profit_factor": 0.09
+       }
+      },
+      {
+       "test_start": "2022-06-01",
+       "test_end": "2022-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": 3.05,
+        "sharpe": 0.59,
+        "max_drawdown_pct": -3.94,
+        "win_rate_pct": 40.0
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": -1.09,
+        "sharpe": -0.59,
+        "max_drawdown_pct": -3.35,
+        "win_rate_pct": 33.3,
+        "profit_factor": 0.11
+       }
+      },
+      {
+       "test_start": "2022-09-01",
+       "test_end": "2022-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 12,
+        "net_return_pct": -3.61,
+        "sharpe": -0.88,
+        "max_drawdown_pct": -5.08,
+        "win_rate_pct": 25.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.91,
+        "sharpe": -0.91,
+        "max_drawdown_pct": -2.27,
+        "win_rate_pct": 50.0,
+        "profit_factor": 0.25
+       }
+      },
+      {
+       "test_start": "2022-12-01",
+       "test_end": "2023-03-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": -2.95,
+        "sharpe": -0.8,
+        "max_drawdown_pct": -4.42,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 5,
+        "net_return_pct": 0.38,
+        "sharpe": 0.3,
+        "max_drawdown_pct": -1.87,
+        "win_rate_pct": 20.0,
+        "profit_factor": 1.34
+       }
+      },
+      {
+       "test_start": "2023-03-01",
+       "test_end": "2023-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": -1.82,
+        "sharpe": -0.44,
+        "max_drawdown_pct": -4.57,
+        "win_rate_pct": 27.3
+       },
+       "oos": {
+        "trades": 7,
+        "net_return_pct": -0.2,
+        "sharpe": -0.11,
+        "max_drawdown_pct": -2.98,
+        "win_rate_pct": 28.6,
+        "profit_factor": 0.89
+       }
+      },
+      {
+       "test_start": "2023-06-01",
+       "test_end": "2023-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 0.5,
+        "sharpe": 0.15,
+        "max_drawdown_pct": -2.49,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": -0.26,
+        "sharpe": -2.8,
+        "max_drawdown_pct": -0.28,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-09-01",
+       "test_end": "2023-12-01",
+       "params": {
+        "lookback_days": 60,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 1.61,
+        "sharpe": 0.43,
+        "max_drawdown_pct": -2.45,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 2.05,
+        "sharpe": 1.76,
+        "max_drawdown_pct": -1.17,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2023-12-01",
+       "test_end": "2024-03-01",
+       "params": {
+        "lookback_days": 60,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 2.84,
+        "sharpe": 0.81,
+        "max_drawdown_pct": -2.58,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 3.32,
+        "sharpe": 3.05,
+        "max_drawdown_pct": -1.21,
+        "win_rate_pct": 50.0,
+        "profit_factor": 5.68
+       }
+      },
+      {
+       "test_start": "2024-03-01",
+       "test_end": "2024-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 13,
+        "net_return_pct": 5.05,
+        "sharpe": 1.44,
+        "max_drawdown_pct": -2.18,
+        "win_rate_pct": 46.2
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.01,
+        "sharpe": -0.0,
+        "max_drawdown_pct": -0.65,
+        "win_rate_pct": 50.0,
+        "profit_factor": 0.94
+       }
+      },
+      {
+       "test_start": "2024-06-01",
+       "test_end": "2024-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 7.5,
+        "sharpe": 1.53,
+        "max_drawdown_pct": -3.25,
+        "win_rate_pct": 55.6
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -1.01,
+        "sharpe": -2.57,
+        "max_drawdown_pct": -1.05,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2024-09-01",
+       "test_end": "2024-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 10,
+        "net_return_pct": 2.38,
+        "sharpe": 0.56,
+        "max_drawdown_pct": -3.25,
+        "win_rate_pct": 40.0
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": 1.89,
+        "sharpe": 1.52,
+        "max_drawdown_pct": -1.23,
+        "win_rate_pct": 33.3,
+        "profit_factor": 2.9
+       }
+      },
+      {
+       "test_start": "2024-12-01",
+       "test_end": "2025-01-01",
+       "params": {
+        "lookback_days": 60,
+        "ema_days": 50,
+        "vol_stop_pct": 25.0
+       },
+       "is": {
+        "trades": 17,
+        "net_return_pct": 3.18,
+        "sharpe": 0.71,
+        "max_drawdown_pct": -7.16,
+        "win_rate_pct": 17.6
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": -1.43,
+        "sharpe": -2.64,
+        "max_drawdown_pct": -2.54,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      }
+     ],
+     "wf_param_stability": 0.56,
+     "final_params": {
+      "ema_days": 50,
+      "lookback_days": 60,
+      "vol_stop_pct": 25.0
+     },
+     "holdout": {
+      "note": "not evaluated (--dev-only): hypothesis post-dates the holdout inspection"
+     }
+    }
+   }
+  },
+  "tsmom_ema_band": {
+   "source": "Deployed TSMOM+EMA with a momentum dead-band",
+   "note": "Same as tsmom_ema_filter but enters only when 30d momentum > +band and exits only when < -band (or close < EMA). Hypothesis from research_lab/HOLDOUT_DIAGNOSIS.md: whipsaw trades held <= 7 days destroyed the holdout. Because the hypothesis came from inspecting the holdout, this variant is evaluated on DEVELOPMENT data only (--dev-only); its independent test is the live paper record, never the 2025+ holdout.",
+   "flags": [],
+   "author_claim": "",
+   "per_symbol": {
+    "BTCUSDT": {
+     "in_sample_default_params": {
+      "trades": 44,
+      "win_rate_pct": 36.4,
+      "net_profit": 6054.85,
+      "net_return_pct": 60.55,
+      "cagr_pct": 8.21,
+      "profit_factor": 4.81,
+      "max_drawdown_pct": -9.8,
+      "avg_win": 477.88,
+      "avg_loss": -56.83,
+      "avg_win_pct": 39.72,
+      "avg_loss_pct": -4.43,
+      "worst_trade_pct": -13.7,
+      "expectancy_pct": 11.621,
+      "sharpe": 1.18,
+      "calmar": 0.84,
+      "avg_bars_held": 140.1,
+      "longest_losing_streak": 8,
+      "avg_win_over_avg_loss": 8.41,
+      "years": 6.0
+     },
+     "lookahead": {
+      "lookahead_signal_mismatches": 0,
+      "passed": true
+     },
+     "walk_forward_oos": {
+      "trades": 21,
+      "win_rate_pct": 47.6,
+      "net_profit": 964.43,
+      "net_return_pct": 9.64,
+      "cagr_pct": 1.86,
+      "profit_factor": 2.36,
+      "max_drawdown_pct": -4.34,
+      "avg_win": 165.26,
+      "avg_loss": -63.79,
+      "avg_win_pct": 16.55,
+      "avg_loss_pct": -6.38,
+      "worst_trade_pct": -13.7,
+      "expectancy_pct": 4.54,
+      "sharpe": 0.67,
+      "calmar": 0.43,
+      "avg_bars_held": 103.5,
+      "longest_losing_streak": 4,
+      "avg_win_over_avg_loss": 2.59,
+      "years": 5.0
+     },
+     "wf_segments": [
+      {
+       "test_start": "2020-01-01",
+       "test_end": "2020-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 9,
+        "net_return_pct": 6.48,
+        "sharpe": 0.84,
+        "max_drawdown_pct": -9.09,
+        "win_rate_pct": 22.2
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": -0.91,
+        "sharpe": -2.66,
+        "max_drawdown_pct": -1.27,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2020-04-01",
+       "test_end": "2020-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 11,
+        "net_return_pct": -4.28,
+        "sharpe": -1.46,
+        "max_drawdown_pct": -5.11,
+        "win_rate_pct": 18.2
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": -0.89,
+        "sharpe": -0.95,
+        "max_drawdown_pct": -1.62,
+        "win_rate_pct": 33.3,
+        "profit_factor": 0.15
+       }
+      },
+      {
+       "test_start": "2020-07-01",
+       "test_end": "2020-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 0.8,
+        "sharpe": 0.24,
+        "max_drawdown_pct": -2.03,
+        "win_rate_pct": 25.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -1.43,
+        "sharpe": -2.6,
+        "max_drawdown_pct": -1.62,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2020-10-01",
+       "test_end": "2021-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 7,
+        "net_return_pct": 3.26,
+        "sharpe": 0.81,
+        "max_drawdown_pct": -2.21,
+        "win_rate_pct": 42.9
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 6.03,
+        "sharpe": 3.52,
+        "max_drawdown_pct": -1.58,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2021-01-01",
+       "test_end": "2021-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": 20.21,
+        "sharpe": 3.09,
+        "max_drawdown_pct": -2.5,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 0.92,
+        "sharpe": 0.57,
+        "max_drawdown_pct": -2.62,
+        "win_rate_pct": 50.0,
+        "profit_factor": 4.92
+       }
+      },
+      {
+       "test_start": "2021-04-01",
+       "test_end": "2021-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 5,
+        "net_return_pct": 30.47,
+        "sharpe": 2.22,
+        "max_drawdown_pct": -8.04,
+        "win_rate_pct": 80.0
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2021-07-01",
+       "test_end": "2021-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 4,
+        "net_return_pct": 26.74,
+        "sharpe": 2.03,
+        "max_drawdown_pct": -7.86,
+        "win_rate_pct": 75.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -1.05,
+        "sharpe": -0.98,
+        "max_drawdown_pct": -2.18,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2021-10-01",
+       "test_end": "2022-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 1.63,
+        "sharpe": 0.31,
+        "max_drawdown_pct": -3.07,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-01-01",
+       "test_end": "2022-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": -0.34,
+        "sharpe": -0.08,
+        "max_drawdown_pct": -2.84,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 0.3,
+        "sharpe": 0.76,
+        "max_drawdown_pct": -0.58,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2022-04-01",
+       "test_end": "2022-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": 1.19,
+        "sharpe": 0.37,
+        "max_drawdown_pct": -2.64,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-07-01",
+       "test_end": "2022-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 4,
+        "net_return_pct": -0.05,
+        "sharpe": -0.01,
+        "max_drawdown_pct": -2.51,
+        "win_rate_pct": 25.0
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-10-01",
+       "test_end": "2023-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 3,
+        "net_return_pct": -0.81,
+        "sharpe": -0.86,
+        "max_drawdown_pct": -1.4,
+        "win_rate_pct": 0.0
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-01-01",
+       "test_end": "2023-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 1,
+        "net_return_pct": -0.3,
+        "sharpe": -1.81,
+        "max_drawdown_pct": -0.3,
+        "win_rate_pct": 0.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 1.81,
+        "sharpe": 1.36,
+        "max_drawdown_pct": -1.2,
+        "win_rate_pct": 50.0,
+        "profit_factor": 3.0
+       }
+      },
+      {
+       "test_start": "2023-04-01",
+       "test_end": "2023-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 3,
+        "net_return_pct": 4.67,
+        "sharpe": 1.55,
+        "max_drawdown_pct": -1.56,
+        "win_rate_pct": 66.7
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 0.56,
+        "sharpe": 1.2,
+        "max_drawdown_pct": -0.4,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2023-07-01",
+       "test_end": "2023-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 5,
+        "net_return_pct": 4.56,
+        "sharpe": 1.33,
+        "max_drawdown_pct": -1.98,
+        "win_rate_pct": 60.0
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-10-01",
+       "test_end": "2024-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 4,
+        "net_return_pct": 4.4,
+        "sharpe": 1.27,
+        "max_drawdown_pct": -1.98,
+        "win_rate_pct": 75.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 1.34,
+        "sharpe": 1.46,
+        "max_drawdown_pct": -0.9,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2024-01-01",
+       "test_end": "2024-04-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 5,
+        "net_return_pct": 3.31,
+        "sharpe": 1.16,
+        "max_drawdown_pct": -1.73,
+        "win_rate_pct": 40.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 3.75,
+        "sharpe": 2.3,
+        "max_drawdown_pct": -2.13,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2024-04-01",
+       "test_end": "2024-07-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": 8.01,
+        "sharpe": 1.86,
+        "max_drawdown_pct": -2.56,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": -0.86,
+        "sharpe": -1.3,
+        "max_drawdown_pct": -0.89,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2024-07-01",
+       "test_end": "2024-10-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 7,
+        "net_return_pct": 6.89,
+        "sharpe": 1.51,
+        "max_drawdown_pct": -2.56,
+        "win_rate_pct": 28.6
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 0.14,
+        "sharpe": 0.44,
+        "max_drawdown_pct": -0.46,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2024-10-01",
+       "test_end": "2025-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 0.55,
+        "sharpe": 0.17,
+        "max_drawdown_pct": -2.85,
+        "win_rate_pct": 25.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.2,
+        "sharpe": -0.18,
+        "max_drawdown_pct": -1.76,
+        "win_rate_pct": 50.0,
+        "profit_factor": 0.65
+       }
+      }
+     ],
+     "wf_param_stability": 1.0,
+     "final_params": {
+      "band_pct": 2.0,
+      "ema_days": 100,
+      "lookback_days": 30,
+      "vol_stop_pct": 25.0
+     },
+     "holdout": {
+      "note": "not evaluated (--dev-only): hypothesis post-dates the holdout inspection"
+     }
+    },
+    "ETHUSDT": {
+     "in_sample_default_params": {
+      "trades": 34,
+      "win_rate_pct": 52.9,
+      "net_profit": 5226.08,
+      "net_return_pct": 52.26,
+      "cagr_pct": 8.2,
+      "profit_factor": 5.25,
+      "max_drawdown_pct": -11.15,
+      "avg_win": 358.62,
+      "avg_loss": -76.82,
+      "avg_win_pct": 29.08,
+      "avg_loss_pct": -5.45,
+      "worst_trade_pct": -13.87,
+      "expectancy_pct": 12.834,
+      "sharpe": 1.01,
+      "calmar": 0.74,
+      "avg_bars_held": 162.9,
+      "longest_losing_streak": 5,
+      "avg_win_over_avg_loss": 4.67,
+      "years": 5.34
+     },
+     "lookahead": {
+      "lookahead_signal_mismatches": 0,
+      "passed": true
+     },
+     "walk_forward_oos": {
+      "trades": 26,
+      "win_rate_pct": 34.6,
+      "net_profit": 1050.14,
+      "net_return_pct": 10.5,
+      "cagr_pct": 2.33,
+      "profit_factor": 2.1,
+      "max_drawdown_pct": -11.76,
+      "avg_win": 218.47,
+      "avg_loss": -55.0,
+      "avg_win_pct": 21.93,
+      "avg_loss_pct": -5.51,
+      "worst_trade_pct": -13.87,
+      "expectancy_pct": 3.986,
+      "sharpe": 0.48,
+      "calmar": 0.2,
+      "avg_bars_held": 87.9,
+      "longest_losing_streak": 11,
+      "avg_win_over_avg_loss": 3.97,
+      "years": 4.33
+     },
+     "wf_segments": [
+      {
+       "test_start": "2020-09-01",
+       "test_end": "2020-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 3,
+        "net_return_pct": 13.94,
+        "sharpe": 1.95,
+        "max_drawdown_pct": -5.05,
+        "win_rate_pct": 100.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 5.64,
+        "sharpe": 2.93,
+        "max_drawdown_pct": -2.81,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2020-12-01",
+       "test_end": "2021-03-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 5,
+        "net_return_pct": 15.47,
+        "sharpe": 2.21,
+        "max_drawdown_pct": -4.12,
+        "win_rate_pct": 80.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 0.51,
+        "sharpe": 0.21,
+        "max_drawdown_pct": -4.95,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2021-03-01",
+       "test_end": "2021-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": 24.66,
+        "sharpe": 1.79,
+        "max_drawdown_pct": -9.36,
+        "win_rate_pct": 66.7
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 0.78,
+        "sharpe": 0.24,
+        "max_drawdown_pct": -9.33,
+        "win_rate_pct": 50.0,
+        "profit_factor": 3.85
+       }
+      },
+      {
+       "test_start": "2021-06-01",
+       "test_end": "2021-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 24.11,
+        "sharpe": 1.52,
+        "max_drawdown_pct": -10.93,
+        "win_rate_pct": 75.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 3.39,
+        "sharpe": 1.79,
+        "max_drawdown_pct": -1.41,
+        "win_rate_pct": 50.0,
+        "profit_factor": 6.07
+       }
+      },
+      {
+       "test_start": "2021-09-01",
+       "test_end": "2021-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 23.82,
+        "sharpe": 1.52,
+        "max_drawdown_pct": -11.15,
+        "win_rate_pct": 75.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": -0.43,
+        "sharpe": -0.28,
+        "max_drawdown_pct": -2.02,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2021-12-01",
+       "test_end": "2022-03-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 7,
+        "net_return_pct": 7.94,
+        "sharpe": 0.82,
+        "max_drawdown_pct": -11.15,
+        "win_rate_pct": 57.1
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-03-01",
+       "test_end": "2022-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 4,
+        "net_return_pct": 3.78,
+        "sharpe": 0.74,
+        "max_drawdown_pct": -3.67,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": -0.36,
+        "sharpe": -1.14,
+        "max_drawdown_pct": -0.54,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-06-01",
+       "test_end": "2022-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 4,
+        "net_return_pct": -0.81,
+        "sharpe": -0.22,
+        "max_drawdown_pct": -3.35,
+        "win_rate_pct": 25.0
+       },
+       "oos": {
+        "trades": 3,
+        "net_return_pct": -2.37,
+        "sharpe": -3.1,
+        "max_drawdown_pct": -2.45,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-09-01",
+       "test_end": "2022-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 3,
+        "net_return_pct": -2.56,
+        "sharpe": -1.47,
+        "max_drawdown_pct": -3.81,
+        "win_rate_pct": 0.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": -1.22,
+        "sharpe": -1.24,
+        "max_drawdown_pct": -2.27,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2022-12-01",
+       "test_end": "2023-03-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 5,
+        "net_return_pct": -2.63,
+        "sharpe": -1.33,
+        "max_drawdown_pct": -3.84,
+        "win_rate_pct": 20.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.85,
+        "sharpe": -0.85,
+        "max_drawdown_pct": -1.72,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-03-01",
+       "test_end": "2023-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": -1.91,
+        "sharpe": -0.7,
+        "max_drawdown_pct": -2.78,
+        "win_rate_pct": 16.7
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.85,
+        "sharpe": -1.11,
+        "max_drawdown_pct": -1.1,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-06-01",
+       "test_end": "2023-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 5,
+        "net_return_pct": 0.78,
+        "sharpe": 0.23,
+        "max_drawdown_pct": -2.28,
+        "win_rate_pct": 40.0
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": -0.29,
+        "sharpe": -1.99,
+        "max_drawdown_pct": -0.31,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2023-09-01",
+       "test_end": "2023-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": 1.11,
+        "sharpe": 0.33,
+        "max_drawdown_pct": -2.86,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 1,
+        "net_return_pct": 2.05,
+        "sharpe": 1.76,
+        "max_drawdown_pct": -1.17,
+        "win_rate_pct": 100.0,
+        "profit_factor": Infinity
+       }
+      },
+      {
+       "test_start": "2023-12-01",
+       "test_end": "2024-03-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": 1.99,
+        "sharpe": 0.6,
+        "max_drawdown_pct": -3.38,
+        "win_rate_pct": 33.3
+       },
+       "oos": {
+        "trades": 4,
+        "net_return_pct": 1.79,
+        "sharpe": 1.92,
+        "max_drawdown_pct": -1.73,
+        "win_rate_pct": 50.0,
+        "profit_factor": 2.17
+       }
+      },
+      {
+       "test_start": "2024-03-01",
+       "test_end": "2024-06-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 8,
+        "net_return_pct": 4.13,
+        "sharpe": 1.2,
+        "max_drawdown_pct": -2.48,
+        "win_rate_pct": 37.5
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": -0.01,
+        "sharpe": -0.0,
+        "max_drawdown_pct": -0.65,
+        "win_rate_pct": 50.0,
+        "profit_factor": 0.94
+       }
+      },
+      {
+       "test_start": "2024-06-01",
+       "test_end": "2024-09-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 7,
+        "net_return_pct": 7.08,
+        "sharpe": 1.44,
+        "max_drawdown_pct": -3.25,
+        "win_rate_pct": 57.1
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      },
+      {
+       "test_start": "2024-09-01",
+       "test_end": "2024-12-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 6,
+        "net_return_pct": 3.01,
+        "sharpe": 0.71,
+        "max_drawdown_pct": -3.25,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 2,
+        "net_return_pct": 2.53,
+        "sharpe": 2.06,
+        "max_drawdown_pct": -1.2,
+        "win_rate_pct": 50.0,
+        "profit_factor": 7.76
+       }
+      },
+      {
+       "test_start": "2024-12-01",
+       "test_end": "2025-01-01",
+       "params": {
+        "lookback_days": 30,
+        "ema_days": 100,
+        "vol_stop_pct": 25.0,
+        "band_pct": 2.0
+       },
+       "is": {
+        "trades": 4,
+        "net_return_pct": 2.24,
+        "sharpe": 0.69,
+        "max_drawdown_pct": -2.29,
+        "win_rate_pct": 50.0
+       },
+       "oos": {
+        "trades": 0,
+        "net_return_pct": 0.0,
+        "sharpe": 0.0,
+        "max_drawdown_pct": 0.0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0
+       }
+      }
+     ],
+     "wf_param_stability": 1.0,
+     "final_params": {
+      "band_pct": 2.0,
+      "ema_days": 100,
+      "lookback_days": 30,
+      "vol_stop_pct": 25.0
+     },
+     "holdout": {
+      "note": "not evaluated (--dev-only): hypothesis post-dates the holdout inspection"
+     }
+    }
+   }
+  }
+ },
+ "dca_martingale_demo": {
+  "BTCUSDT": {
+   "closed_trades": 1254,
+   "win_rate_pct": 100.0,
+   "net_return_pct": 65.3,
+   "max_drawdown_pct": -45.81,
+   "open_position_unrealised_pct": -27.94,
+   "max_exposure_x_equity": 0.92,
+   "liquidated": false,
+   "verdict": "REJECTED: martingale / unlimited averaging down hides catastrophic tail risk"
+  },
+  "ETHUSDT": {
+   "closed_trades": 1024,
+   "win_rate_pct": 100.0,
+   "net_return_pct": 76.28,
+   "max_drawdown_pct": -45.79,
+   "open_position_unrealised_pct": -8.7,
+   "max_exposure_x_equity": 0.95,
+   "liquidated": false,
+   "verdict": "REJECTED: martingale / unlimited averaging down hides catastrophic tail risk"
+  }
+ }
+}

@@ -220,21 +220,36 @@ def format_wallet(bal: dict, sol_price_usd: float | None = None) -> str:
 
 
 # ----------------------------------------------------------------------------- asset verification
-def verify_assets(settings: Settings, symbols: list[str] | None = None, equity_usd: float | None = None) -> list[dict]:
-    """Read-only check that each traded symbol can actually be executed through Jupiter at the bot's order size,
-    within the risk limits, and that its signal data (Binance candles) is available. Nothing is signed or sent."""
+def verify_assets(settings: Settings, symbols: list[str] | None = None, equity_usd: float | None = None,
+                  record: bool = True) -> list[dict]:
+    """Read-only check that each traded symbol can actually be executed through Jupiter at the bot's order sizes,
+    within the risk limits, and that its signal data (Binance candles) tracks the Jupiter-traded asset.
+    Nothing is signed or sent. Each run is appended to <data_dir>/verify_assets.jsonl so costs are on record.
+
+    Round-trip cost per size = 1 - USDC back / USDC in, for USDC -> asset -> USDC using two size-specific
+    `/swap/v2/order` quotes without a taker. `expected` uses outAmount, `worst_case` uses otherAmountThreshold
+    (the minimum the swap would accept at the configured slippage) on both legs, plus two Solana network fees."""
     from .data.live import LiveProvider
+    from .execution.paper import SOLANA_TX_FEE_USD
     jup = jupiter_endpoints(settings.data, settings.execution)
     prov = LiveProvider(settings.data, settings.universe, settings.execution)
     if not jup.has_key:
         return [{"symbol": sym, "status": "FAIL", "problems": ["JUPITER_API_KEY missing: Jupiter REST requires an x-api-key (free at developers.jup.ag)"],
                  "order_usd": 0.0} for sym in (symbols or settings.universe.symbols)]
     eq = equity_usd or settings.initial_capital_usd
-    notional = min(eq * settings.risk.max_position_pct / 100, settings.risk.max_order_notional_usd)
+    intended = min(eq * settings.risk.max_position_pct / 100, settings.risk.max_order_notional_usd)
+    sizes = sorted({round(settings.risk.min_order_notional_usd, 2), round(intended, 2), round(settings.risk.max_order_notional_usd, 2)})
+    assumed_rt = 2 * (settings.execution.paper_fee_bps + settings.execution.paper_slippage_bps)
     usdc = settings.universe.mints["USDC"]
+    try:
+        refs = prov.get_reference_prices(list(symbols or settings.universe.symbols))
+    except Exception as e:  # noqa: BLE001
+        refs = {}; ref_err = f"{type(e).__name__}: {e}"
+    else:
+        ref_err = ""
     rows = []
     for sym in symbols or settings.universe.symbols:
-        r: dict = {"symbol": sym, "order_usd": round(notional, 2), "status": "OK", "problems": []}
+        r: dict = {"symbol": sym, "order_usd": round(intended, 2), "sizes_usd": sizes, "status": "OK", "problems": []}
         mint = settings.universe.mints.get(sym); dec = settings.universe.decimals.get(sym)
         r["mint"] = mint; r["decimals"] = dec
         if not mint or dec is None:
@@ -251,6 +266,15 @@ def verify_assets(settings: Settings, symbols: list[str] | None = None, equity_u
                 r["problems"].append(f"24h volume ${t.volume_24h_usd:,.0f} < min ${settings.risk.min_volume_24h_usd:,.0f}")
         except Exception as e:  # noqa: BLE001
             r["problems"].append(f"ticker: {type(e).__name__}: {e}")
+        # signal instrument vs traded asset, measured at the same instant (Binance spot vs Jupiter price)
+        ref = refs.get(sym)
+        if ref and r.get("price"):
+            r["reference_price"] = ref
+            r["basis_bps"] = round((r["price"] / ref - 1) * 1e4, 1)
+            if abs(r["basis_bps"]) > settings.data.max_basis_bps:
+                r["problems"].append(f"Jupiter vs Binance spot basis {r['basis_bps']:+.0f} bps exceeds max_basis_bps {settings.data.max_basis_bps:.0f}")
+        elif ref_err:
+            r["problems"].append(f"reference price: {ref_err}")
         # candles for signals
         try:
             c = prov.get_candles(sym, settings.data.candle_interval, settings.data.candle_history)
@@ -259,43 +283,68 @@ def verify_assets(settings: Settings, symbols: list[str] | None = None, equity_u
             if len(c) < need:
                 r["problems"].append(f"only {len(c)} candles, strategies need {need}")
             if c and r.get("price"):
-                r["basis_pct"] = round((r["price"] / c[-1].close - 1) * 100, 3)
-                if abs(r["basis_pct"]) > 2.0:
-                    r["problems"].append(f"Jupiter price vs Binance close basis {r['basis_pct']}% (> 2%)")
+                r["basis_pct"] = round((r["price"] / c[-1].close - 1) * 100, 3)   # vs last COMPLETED candle (can be hours old)
+                if abs(r["basis_pct"]) > 2.0 and "basis_bps" not in r:
+                    r["problems"].append(f"Jupiter price vs last Binance close {r['basis_pct']}% (> 2%)")
         except Exception as e:  # noqa: BLE001
             r["problems"].append(f"candles: {type(e).__name__}: {e}")
-        # round-trip quotes at the real order size
-        try:
-            # read-only quotes: Swap v2 /order without taker (transaction null)
-            q_buy = httpx.get(f"{jup.swap}/order", timeout=settings.data.jupiter_quote_timeout_sec, headers=jup.headers,
-                              params={"inputMint": usdc, "outputMint": mint, "amount": str(int(notional * 1e6)),
-                                      "slippageBps": settings.execution.live_slippage_bps})
-            q_buy.raise_for_status(); qb = q_buy.json()
-            if qb.get("error"):
-                raise RuntimeError(qb["error"])
-            out_qty = int(qb["outAmount"]) / 10 ** dec
-            q_sell = httpx.get(f"{jup.swap}/order", timeout=settings.data.jupiter_quote_timeout_sec, headers=jup.headers,
-                               params={"inputMint": mint, "outputMint": usdc, "amount": str(int(out_qty * 10 ** dec)),
-                                       "slippageBps": settings.execution.live_slippage_bps})
-            q_sell.raise_for_status(); qs = q_sell.json()
-            if qs.get("error"):
-                raise RuntimeError(qs["error"])
-            r["jupiter_fee_bps"] = qb.get("feeBps"); r["router"] = qb.get("router")
-            back_usd = int(qs["outAmount"]) / 1e6
-            r["buy_impact_bps"] = round(float(qb.get("priceImpactPct") or 0) * 1e4, 1)
-            r["sell_impact_bps"] = round(float(qs.get("priceImpactPct") or 0) * 1e4, 1)
-            r["round_trip_cost_bps"] = round((1 - back_usd / notional) * 1e4, 1)
-            r["route"] = "+".join(h["swapInfo"]["label"] for h in qb.get("routePlan", []))[:60]
-            if max(r["buy_impact_bps"], r["sell_impact_bps"]) > settings.risk.max_slippage_bps:
+        # round-trip quotes at every order size the bot could send
+        r["round_trips"] = []
+        for size in sizes:
+            try:
+                r["round_trips"].append(_round_trip(jup, settings, usdc, mint, dec, size, SOLANA_TX_FEE_USD))
+            except Exception as e:  # noqa: BLE001
+                r["problems"].append(f"quote ${size}: {type(e).__name__}: {e}")
+        main = next((x for x in r["round_trips"] if x["size_usd"] == round(intended, 2)), None)
+        if main:
+            r.update({k: main[k] for k in ("jupiter_fee_bps", "router", "route", "buy_impact_bps", "sell_impact_bps", "round_trip_cost_bps", "worst_case_cost_bps")})
+            if max(main["buy_impact_bps"], main["sell_impact_bps"]) > settings.risk.max_slippage_bps:
                 r["problems"].append(f"price impact > max_slippage_bps {settings.risk.max_slippage_bps}")
-            if r["round_trip_cost_bps"] > 2 * (settings.execution.paper_fee_bps + settings.execution.paper_slippage_bps):
-                r["problems"].append(f"round-trip cost {r['round_trip_cost_bps']} bps exceeds the cost assumed in research ({2*(settings.execution.paper_fee_bps+settings.execution.paper_slippage_bps):.0f} bps)")
-        except Exception as e:  # noqa: BLE001
-            r["problems"].append(f"quote: {type(e).__name__}: {e}")
+            if main["round_trip_cost_bps"] > assumed_rt:
+                r["problems"].append(f"round-trip cost {main['round_trip_cost_bps']} bps exceeds the cost assumed in research ({assumed_rt:.0f} bps)")
+            if main["worst_case_cost_bps"] > 2 * assumed_rt:
+                r["problems"].append(f"worst-case (min-out) round trip {main['worst_case_cost_bps']} bps is more than twice the research assumption")
+        for x in r["round_trips"]:
+            if x["size_usd"] != round(intended, 2) and x["round_trip_cost_bps"] > assumed_rt:
+                r["problems"].append(f"at ${x['size_usd']}: round trip {x['round_trip_cost_bps']} bps > assumed {assumed_rt:.0f} bps")
         if r["problems"]:
             r["status"] = "FAIL" if any(p.startswith(("quote", "ticker", "candles", "no mint")) for p in r["problems"]) else "WARN"
         rows.append(r)
+    if record:
+        try:
+            import json, os, time
+            os.makedirs(settings.data_dir, exist_ok=True)
+            with open(os.path.join(settings.data_dir, "verify_assets.jsonl"), "a") as f:
+                f.write(json.dumps({"ts": time.time(), "equity_usd": eq, "assumed_round_trip_bps": assumed_rt, "rows": rows}, default=str) + "\n")
+        except OSError:
+            pass
     return rows
+
+
+def _round_trip(jup, settings: Settings, usdc: str, mint: str, dec: int, size_usd: float, tx_fee_usd: float) -> dict:
+    """Two read-only Swap v2 quotes (no taker => transaction null): USDC -> asset at size_usd, then the received amount back."""
+    params = {"inputMint": usdc, "outputMint": mint, "amount": str(int(round(size_usd * 1e6))), "slippageBps": settings.execution.live_slippage_bps}
+    q_buy = httpx.get(f"{jup.swap}/order", timeout=settings.data.jupiter_quote_timeout_sec, headers=jup.headers, params=params)
+    q_buy.raise_for_status(); qb = q_buy.json()
+    if qb.get("error"):
+        raise RuntimeError(qb["error"])
+    out_raw = int(qb["outAmount"])
+    q_sell = httpx.get(f"{jup.swap}/order", timeout=settings.data.jupiter_quote_timeout_sec, headers=jup.headers,
+                       params={"inputMint": mint, "outputMint": usdc, "amount": str(out_raw), "slippageBps": settings.execution.live_slippage_bps})
+    q_sell.raise_for_status(); qs = q_sell.json()
+    if qs.get("error"):
+        raise RuntimeError(qs["error"])
+    back_usd = int(qs["outAmount"]) / 1e6
+    worst_back = int(qs.get("otherAmountThreshold") or qs["outAmount"]) / 1e6
+    # worst case also assumes the BUY leg only delivered its minimum: scale the sell proceeds by min-out / expected-out
+    buy_min_ratio = int(qb.get("otherAmountThreshold") or qb["outAmount"]) / out_raw if out_raw else 1.0
+    fees = 2 * tx_fee_usd
+    return {"size_usd": round(size_usd, 2), "jupiter_fee_bps": qb.get("feeBps"), "router": qb.get("router"), "mode": qb.get("mode"),
+            "route": "+".join(h["swapInfo"]["label"] for h in qb.get("routePlan", []))[:60],
+            "buy_impact_bps": round(float(qb.get("priceImpactPct") or 0) * 1e4, 1), "sell_impact_bps": round(float(qs.get("priceImpactPct") or 0) * 1e4, 1),
+            "usdc_back": round(back_usd, 4), "network_fees_usd": fees,
+            "round_trip_cost_bps": round((1 - (back_usd - fees) / size_usd) * 1e4, 1),
+            "worst_case_cost_bps": round((1 - (worst_back * buy_min_ratio - fees) / size_usd) * 1e4, 1)}
 
 
 def _strategies(settings: Settings):
@@ -308,8 +357,10 @@ def format_assets(rows: list[dict]) -> str:
     for r in rows:
         L.append(f"{r['status']:<5}{r['symbol']:<6} mint {str(r.get('mint'))[:10]}… dec {r.get('decimals')}  price {r.get('price', 'n/a')}  "
                  f"liq ${r.get('liquidity_usd', 0):,}  vol24h ${r.get('volume_24h_usd', 0):,}  candles {r.get('candles', 'n/a')}  "
-                 f"basis {r.get('basis_pct', 'n/a')}%  order ${r['order_usd']}: impact {r.get('buy_impact_bps', 'n/a')}/{r.get('sell_impact_bps', 'n/a')} bps, "
-                 f"round trip {r.get('round_trip_cost_bps', 'n/a')} bps via {r.get('route', 'n/a')}")
+                 f"basis vs Binance spot {r.get('basis_bps', 'n/a')} bps (vs last close {r.get('basis_pct', 'n/a')}%)")
+        for x in r.get("round_trips", []):
+            L.append(f"        ${x['size_usd']:<8} round trip {x['round_trip_cost_bps']} bps expected / {x['worst_case_cost_bps']} bps worst-case  "
+                     f"(jup fee {x.get('jupiter_fee_bps')} bps, impact {x['buy_impact_bps']}/{x['sell_impact_bps']} bps, router {x.get('router')}, {x.get('route')})")
         for p in r["problems"]:
             L.append(f"        - {p}")
     worst = max((["OK", "WARN", "FAIL"].index(r["status"]) for r in rows), default=0)

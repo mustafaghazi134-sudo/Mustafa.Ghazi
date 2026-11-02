@@ -13,6 +13,11 @@ Holdout spans: BTC 2025-01-01 → 2026-09-30 (21 months); ETH and SOL only 2025-
 **insufficient**). SOL development evidence is **insufficient** (< 25 trades for every strategy). Buy-and-hold over the
 BTC holdout at the same 10% sizing: −1.1% (a sideways period).
 
+> **Correction (2026-11-02, `HOLDOUT_DIAGNOSIS.md`):** the holdout rows use each strategy's walk-forward *final* parameters.
+> For `tsmom_ema_filter` that is a 50-day EMA, whereas the bot deployed by `apply-profile` runs the 100-day EMA fixed in
+> `config.toml`. The deployed 30/100 configuration on the same BTC holdout: 11 trades, 36.4% win rate, PF 2.18, **+2.4%**,
+> max DD −2.2%. Both evaluations are recorded in `results/holdout_looks.jsonl`.
+
 ## Candidates and their origin
 
 | Candidate | Origin | Adaptation | Already among the earlier 19? |

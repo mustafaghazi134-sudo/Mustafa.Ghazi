@@ -13,6 +13,10 @@ from pathlib import Path
 
 VALIDATED = {
     ("claude", "enabled"): "false",
+    ("claude", "research_enabled"): "false",      # forward test = frozen parameters; no periodic re-optimisation
+    ("claude", "vet_signals"): "false",
+    ("claude", "daily_report"): "false",
+    ("claude", "auto_apply_overrides"): "false",
     ("universe", "symbols"): '["BTC", "ETH", "SOL"]',
     ("universe", "auto_scan"): "false",
     ("data", "candle_interval"): '"4h"',

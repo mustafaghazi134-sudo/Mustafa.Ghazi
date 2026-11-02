@@ -36,6 +36,11 @@ class MarketDataProvider(ABC):
         """Optional: discover tradable tokens. Default: none (use configured list)."""
         return []
 
+    def get_reference_prices(self, symbols: list[str]) -> dict[str, float]:
+        """Optional: spot price of the SIGNAL instrument (e.g. Binance BTCUSDT) for a tracking check against the
+        execution venue's price. Default: none (replay/synthetic providers have a single price source)."""
+        return {}
+
     def advance(self) -> None:
         """Replay providers step forward one bar; live providers do nothing."""
         return None

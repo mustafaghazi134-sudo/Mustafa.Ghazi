@@ -133,6 +133,7 @@ class TradingBot:
 
         if self.ledger.pending_intents():
             self.reconcile_pending()
+        self._check_reference_basis(tickers)
         self._manage_positions(tickers)
         self._scan_entries(tickers)
         if not self._signals_this_cycle and not self.provider.is_replay:
@@ -296,10 +297,44 @@ class TradingBot:
         self.ledger.log_event("flatten", reason, ts=self.clock())
 
     # ------------------------------------------------------------------ entries
+    def _check_reference_basis(self, tickers: dict[str, Ticker]) -> None:
+        """Deterministic tracking check: Jupiter price (what we trade) vs Binance spot (what the signals are computed
+        on). Symbols whose gap exceeds max_basis_bps are blocked from NEW entries this cycle; exits are never blocked.
+        Replay/synthetic providers return no reference prices, so this is a no-op there."""
+        self._basis_blocked = set()
+        if not self.s.data.reference_price_check:
+            return
+        try:
+            ref = self.provider.get_reference_prices(list(tickers))
+        except Exception as e:  # noqa: BLE001
+            log.warning("reference prices unavailable (%s); basis check skipped this cycle", e)
+            self.ledger.log_event("basis_unavailable", str(e)[:200], ts=self.clock())
+            return
+        if not ref:
+            return
+        basis: dict[str, float] = {}
+        for sym, t in tickers.items():
+            r = ref.get(sym)
+            if not r:
+                continue
+            bps = (t.price / r - 1) * 1e4
+            basis[sym] = round(bps, 1)
+            if abs(bps) > self.s.data.max_basis_bps:
+                self._basis_blocked.add(sym)
+                log.warning("%s: Jupiter %.6g vs Binance %.6g = %+.0f bps (> %.0f): entries blocked this cycle",
+                            sym, t.price, r, bps, self.s.data.max_basis_bps)
+                self.ledger.log_event("basis_block", f"{sym} {bps:+.0f} bps (jup {t.price:.6g} vs ref {r:.6g})", ts=self.clock())
+        if basis:
+            self.ledger.set("last_basis_bps", {"ts": self.clock(), **basis})
+            log.info("basis vs Binance (bps): %s", ", ".join(f"{k}={v:+.0f}" for k, v in basis.items()))
+
     def _scan_entries(self, tickers: dict[str, Ticker]) -> None:
         prices = {s: t.price for s, t in tickers.items()}
         for sym in self.symbols:
             if sym in self.removed_symbols or sym in self.book.positions:
+                continue
+            if sym in getattr(self, "_basis_blocked", set()):
+                self.ledger.log_decision("entry_blocked", {"reason": "basis vs reference price exceeds max_basis_bps"}, sym, "", ts=self.clock())
                 continue
             t = tickers.get(sym)
             if t is None:
@@ -430,16 +465,24 @@ class TradingBot:
             self.ledger.log_decision("research", {"source": "claude", "market_view": proposal.market_view, "applied": applied,
                                                   "removed": proposal.remove_symbols}, ts=now)
         else:
-            # Deterministic fallback: adopt the top candidate only if it clearly beats current params out-of-sample.
+            # Deterministic pass: PROPOSE the top candidate when it clearly beats current params out-of-sample.
+            # Proposals are only applied when claude.auto_apply_overrides is true; otherwise the running strategy keeps
+            # its frozen parameters so the paper record stays an independent forward test (see research_lab/SPLITS.md).
+            proposals: list[str] = []
             for name, cands in candidates.items():
                 if not cands:
                     continue
                 best = cands[0]
                 cur_oos = next((c.out_sample.get("total_return_pct", 0) for c in cands if c.params == current.get(name)), None)
                 if cur_oos is None or best.out_sample.get("total_return_pct", 0) > cur_oos + 2.0:
-                    overrides.setdefault(name, {})["params"] = best.params
-                    applied.append(f"{name}: params={best.params} (deterministic, oos={best.out_sample.get('total_return_pct')}%)")
-            self.ledger.log_decision("research", {"source": "deterministic", "applied": applied}, ts=now)
+                    proposals.append(f"{name}: params={best.params} (oos={best.out_sample.get('total_return_pct')}%)")
+                    if self.s.claude.auto_apply_overrides:
+                        overrides.setdefault(name, {})["params"] = best.params
+                        applied.append(f"{name}: params={best.params} (deterministic, oos={best.out_sample.get('total_return_pct')}%)")
+            self.ledger.log_decision("research", {"source": "deterministic", "proposals": proposals, "applied": applied,
+                                                  "auto_apply": self.s.claude.auto_apply_overrides}, ts=now)
+            if proposals and not applied:
+                log.info("research proposals (NOT applied; parameters frozen): %s", proposals)
         self.ledger.set("strategy_overrides", overrides)
         self._rebuild_strategies(overrides, configured)
         summary = {"candidates": {k: [c.row() for c in v[:3]] for k, v in candidates.items()}, "applied": applied,

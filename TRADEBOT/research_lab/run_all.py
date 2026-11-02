@@ -20,6 +20,16 @@ from .walkforward import holdout_run, run_strategy, walk_forward
 FEE_BPS, SLIP_BPS, WARMUP = 10.0, 15.0, 800   # per side; ~0.5% round trip, realistic for liquid Jupiter routes
 
 
+def _log_holdout_look(out_dir: str, strategy: str, symbol: str, holdout_start: str, params: dict, metrics: dict) -> None:
+    """Every evaluation on the untouched period is appended to results/holdout_looks.jsonl so the number of looks is
+    auditable (research_lab/SPLITS.md). A holdout that has been looked at many times is no longer independent."""
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "holdout_looks.jsonl"), "a") as f:
+        f.write(json.dumps({"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "symbol": symbol, "holdout_start": holdout_start,
+                            "strategy": strategy, "params": params, "purpose": "run_all frozen-parameter holdout",
+                            "net_return_pct": metrics.get("net_return_pct")}) + "\n")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dirs", nargs="+", required=True)
@@ -32,6 +42,7 @@ def main() -> None:
     ap.add_argument("--holdout-start", default=None, help="YYYY-MM-DD: walk-forward develops before this date; frozen params are then run on the untouched period after it")
     ap.add_argument("--size-frac", type=float, default=1.0, help="fraction of equity per position (deployment: max_position_pct/100)")
     ap.add_argument("--fee-bps", type=float, default=None); ap.add_argument("--slip-bps", type=float, default=None)
+    ap.add_argument("--dev-only", action="store_true", help="with --holdout-start: develop before the date but do NOT evaluate on the holdout (for hypotheses formed after the holdout was inspected)")
     args = ap.parse_args()
     global FEE_BPS, SLIP_BPS
     if args.fee_bps is not None: FEE_BPS = args.fee_bps
@@ -80,10 +91,13 @@ def main() -> None:
                 entry["wf_segments"] = wf.segments
                 entry["wf_param_stability"] = wf.param_stability
                 entry["final_params"] = wf.final_params
-                if holdout is not None and len(df[df.index >= holdout]) > 10:
+                if holdout is not None and args.dev_only:
+                    entry["holdout"] = {"note": "not evaluated (--dev-only): hypothesis post-dates the holdout inspection"}
+                elif holdout is not None and len(df[df.index >= holdout]) > 10:
                     hr = holdout_run(name, df, wf.final_params, holdout, FEE_BPS, SLIP_BPS, warmup, bar_minutes, args.size_frac, partners)
                     entry["holdout"] = hr.metrics if hr else {"note": "insufficient holdout data"}
                     entry["holdout_span"] = [str(holdout)[:10], str(df.index[-1])[:10]]
+                    _log_holdout_look(args.out, name, s, args.holdout_start, wf.final_params, entry["holdout"])
             elif holdout is not None:
                 hr = holdout_run(name, df, {}, holdout, FEE_BPS, SLIP_BPS, warmup, bar_minutes, args.size_frac)
                 entry["holdout"] = hr.metrics if hr else {}

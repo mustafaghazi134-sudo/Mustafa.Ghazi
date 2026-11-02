@@ -163,6 +163,16 @@ class LiveProvider(MarketDataProvider):
             out[s] = Ticker(symbol=s, price=float(px), ts=ts, volume_24h_usd=vol, liquidity_usd=liq, change_24h_pct=float(chg))
         return out
 
+    # ---- reference (signal-venue) prices ------------------------------------------------------
+    def get_reference_prices(self, symbols: list[str]) -> dict[str, float]:
+        """Binance spot price of each symbol's candle pair (the instrument the strategies are computed on)."""
+        pairs = {s: self.universe_cfg.candle_symbols.get(s, f"{s}USDT") for s in symbols}
+        import json as _json
+        data = self.http.get_json(f"{self.cfg.binance_base_url}/api/v3/ticker/price",
+                                  params={"symbols": _json.dumps(sorted(set(pairs.values())), separators=(",", ":"))})
+        by_pair = {d["symbol"]: float(d["price"]) for d in data if "symbol" in d and "price" in d}
+        return {s: by_pair[p] for s, p in pairs.items() if p in by_pair}
+
     # ---- candles -----------------------------------------------------------------------------
     def _binance_klines(self, symbol: str, interval: str, limit: int) -> list[Candle]:
         if interval not in _BINANCE_INTERVALS:

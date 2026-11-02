@@ -139,9 +139,34 @@ server-side refusal fallbacks enabled. Three jobs, all advisory:
 3. **Daily narrative**: a plain-language summary appended to `data/reports/YYYY-MM-DD.txt`.
 
 Claude never sees or touches the risk limits, kill switch, live gate, or wallet. If the API is
-down or refuses, the bot continues on deterministic strategies (`fail_open=true`) and the research
-loop falls back to a conservative rule (adopt a candidate only if it beats current parameters
-out-of-sample by more than 2 points). Estimated API spend is tracked and subtracted in net profit.
+down or refuses, the bot continues on deterministic strategies (`fail_open=true`). Estimated API
+spend is tracked and subtracted in net profit.
+
+**Default during the forward test: no Claude calls at all.** `tradebot apply-profile` (and the
+generated `config.toml`) set `[claude] enabled=false`, `research_enabled=false`, `vet_signals=false`,
+`daily_report=false`, `auto_apply_overrides=false`. Monitoring, signals, risk and execution are
+deterministic software. When research is switched on later, the default cadence is weekly
+(`research_interval_hours=168`), and without Claude the research pass only **logs proposals**: it
+never changes the running parameters unless `auto_apply_overrides=true`. A forward test whose
+parameters are silently re-fitted every six hours is not a forward test (see
+`research_lab/SPLITS.md`).
+
+## Forward-test integrity and the tracking check
+
+- **Frozen parameters.** The paper record is evidence only if the strategy that produced it is the
+  one that was validated. Parameter changes require an explicit config edit or Claude's bounded
+  choice from tested candidates; nothing re-optimises on its own.
+- **Signal venue vs execution venue.** Strategies are computed on Binance candles (`BTCUSDT`,
+  `ETHUSDT`, `SOLUSDT`); orders are quoted on Jupiter (cbBTC, Wormhole WETH, SOL). Every cycle the
+  bot fetches Binance spot for the signal symbols and compares it with the Jupiter price. The gap
+  is logged (`last_basis_bps`), and a symbol whose gap exceeds `[data] max_basis_bps` (100) is
+  blocked from **new entries** that cycle (`basis_block` event, `entry_blocked` decision). Exits are
+  never blocked. `tradebot verify-assets` reports the same basis at the same instant.
+- **Costs on record.** `tradebot verify-assets` quotes a full USDC → asset → USDC round trip at the
+  minimum, intended and maximum order sizes, reports the expected cost (quoted `outAmount`) and the
+  worst case (`otherAmountThreshold`, the minimum the swap would accept, on both legs) plus two
+  network fees, and appends each run to `data/verify_assets.jsonl`. Research assumed 25 bps per
+  side (50 bps round trip); the first real run on your machine replaces that assumption.
 
 ## Risk controls (defaults in `config.toml`)
 

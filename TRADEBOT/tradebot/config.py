@@ -45,10 +45,14 @@ class ClaudeConfig(BaseModel):
     model: str = "claude-opus-5-5"
     effort: Literal["low", "medium", "high", "xhigh", "max"] = "medium"
     research_enabled: bool = True
-    research_interval_hours: float = 6.0
+    research_interval_hours: float = 168.0      # weekly: research is periodic, monitoring/execution are deterministic
     vet_signals: bool = True
     daily_report: bool = True
     fail_open: bool = Field(True, description="If Claude is unreachable, proceed on deterministic strategies")
+    # When Claude is unavailable the deterministic research pass may only LOG candidate parameters. Setting this true
+    # lets it apply them automatically, which re-optimises the running strategy on recent data and makes the paper
+    # record a tuned-in-sample result instead of an independent forward test. Keep false during forward testing.
+    auto_apply_overrides: bool = False
     max_tokens: int = 8000
     # rough pricing for net-profitability accounting (USD per 1M tokens)
     input_price_per_mtok: float = 4.0
@@ -70,6 +74,11 @@ class DataConfig(BaseModel):
     jupiter_quote_timeout_sec: float = 5.0      # skill: 5s for quotes
     jupiter_execute_timeout_sec: float = 30.0   # skill: 30s for executions
     binance_base_url: str = "https://api.binance.com"
+    # Signals come from Binance candles (BTCUSDT...) while execution is on Jupiter (cbBTC, WETH, SOL). Every cycle the
+    # bot compares the Jupiter price with the Binance spot price of the same symbol; if the gap exceeds max_basis_bps
+    # the signal no longer describes the asset we would buy, so new entries for that symbol are blocked that cycle.
+    reference_price_check: bool = True
+    max_basis_bps: float = 100.0
     dexscreener_base_url: str = "https://api.dexscreener.com"
     coingecko_base_url: str = "https://api.coingecko.com/api/v3"
     request_timeout_sec: float = 15.0
@@ -288,17 +297,20 @@ trailing = false
 enabled = false              # Anthropic API calls OFF: deterministic strategies only. Set true (and ANTHROPIC_API_KEY) to enable.
 model = "claude-opus-5-5"
 effort = "medium"
-research_enabled = true
-research_interval_hours = 6
-vet_signals = true
-daily_report = true
+research_enabled = false     # forward test runs FROZEN parameters; no re-optimisation of the live strategy
+research_interval_hours = 168
+vet_signals = false
+daily_report = false
 fail_open = true
+auto_apply_overrides = false # deterministic research may only log proposals, never apply them
 
 [data]
 provider = "live"            # "synthetic" or "csv" for offline testing
 candle_interval = "4h"       # the validated timeframe; 1h churns away the edge at realistic costs
 candle_history = 1000        # >= 30d lookback (180 bars) + 100d EMA (600 bars) at 4h
 jupiter_api_key = ""         # REQUIRED for live market data and quotes: free key from https://developers.jup.ag (or env JUPITER_API_KEY)
+reference_price_check = true # each cycle: Jupiter price vs Binance spot of the signal symbol; entries blocked if the gap exceeds
+max_basis_bps = 100
 
 [universe]                   # validated exposure: BTC (as cbBTC), ETH (as Wormhole WETH), SOL. See `tradebot verify-assets`.
 symbols = ["BTC", "ETH", "SOL"]
