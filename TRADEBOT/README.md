@@ -168,6 +168,29 @@ parameters are silently re-fitted every six hours is not a forward test (see
   network fees, and appends each run to `data/verify_assets.jsonl`. Research assumed 25 bps per
   side (50 bps round trip); the first real run on your machine replaces that assumption.
 
+## Real-time opportunity scanner (read-only, paper, separate process)
+
+`tradebot scan` is a second, independent process for evaluating short-horizon opportunities without touching the
+4h engine: its own database (`data/scanner.db`), its own poll loop (default every 5 s), no wallet, no signing
+module, and no `taker` on any Jupiter request (a test asserts this from the module's code tokens). It:
+
+- measures every data source each poll: latency, p95, error and 429 rate, achieved refresh (how often the Jupiter
+  price actually changed and how often its `blockId` advanced), plus Solana slot drift via `getSlot`;
+- builds 1-minute bars from polled Jupiter prices and evaluates deterministic signals (`basis_reversion` against the
+  Binance reference, `breakout_5m`, `dip_reversion_1m`);
+- prices every candidate with two size-specific read-only `/swap/v2/order` quotes and computes the round-trip cost
+  both as quoted and worst-case (minimum-out on both legs, two network fees);
+- rejects unverified or `audit.isSus` tokens, active mint/freeze authorities, thin liquidity, stablecoins, stale
+  prices (blockId far behind the slot), excessive impact, and anything below `min_net_edge_bps` after worst-case
+  cost and an adverse-selection buffer;
+- opens hypothetical positions at the worst-case buy price and settles them at the horizon with a real sell quote,
+  so every candidate ends as a win, a false positive, or a rejected candidate that is marked at the horizon to
+  count **missed** opportunities;
+- probes round-trip cost at $5 / $50 / $100 / $1,000 every ten minutes, which feeds `research_lab/economics.py`.
+
+`tradebot scan-report` summarises all of it. Claude is nowhere in this loop. Design notes, benchmark of the
+existing engine, external-system review and the trades-per-day economics are in `research_lab/REALTIME_SCANNER_EVAL.md`.
+
 ## Risk controls (defaults in `config.toml`)
 
 | Control | Default | Effect |

@@ -166,8 +166,36 @@ class EngineConfig(BaseModel):
     live_confirm_phrase: str = "I UNDERSTAND THIS TRADES REAL MONEY WITHOUT APPROVAL"
 
 
+class ScannerConfig(BaseModel):
+    """Read-only real-time opportunity scanner (`tradebot scan`). Separate process and database from the 4h engine.
+    It never trades: no wallet, no signing, no `taker` on any Jupiter request."""
+    poll_sec: float = 5.0
+    size_usd: float = 50.0                      # hypothetical position size used to price every candidate
+    min_net_edge_bps: float = 20.0              # expected move minus WORST-CASE round trip minus adverse buffer
+    adverse_buffer_bps: float = 10.0            # the quote you can act on is the one nobody else took
+    max_round_trip_bps: float = 150.0
+    min_organic_score: float = 50.0
+    require_verified: bool = True
+    max_price_age_sec: float = 10.0
+    max_price_slots_behind: int = 25            # Price v3 blockId vs current slot (~0.4 s per slot)
+    check_slot: bool = True
+    slot_interval_sec: float = 30.0
+    facts_interval_sec: float = 600.0
+    probe_interval_sec: float = 600.0
+    probe_sizes_usd: list[float] = Field(default_factory=lambda: [5.0, 50.0, 100.0, 1000.0])
+    probe_symbols: list[str] = Field(default_factory=lambda: ["SOL", "BTC", "ETH"])
+    default_round_trip_bps: float = 60.0        # used to mark rejected candidates when no quote/probe exists
+    extra_mints: list[str] = Field(default_factory=list)
+    discover_category: str = ""                 # "" = off; "toptraded" widens the universe from Jupiter Tokens v2
+    discover_interval: str = "1h"
+    discover_interval_sec: float = 1800.0
+    max_universe: int = 25
+    max_requests_per_min: int = 50              # stay inside the free-tier budget; probes/quotes are skipped first
+
+
 class Settings(BaseModel):
     mode: Literal["paper", "live"] = "paper"
+    scanner: ScannerConfig = Field(default_factory=ScannerConfig)
     initial_capital_usd: float = 1000.0
     data_dir: str = "data"
     log_level: str = "INFO"

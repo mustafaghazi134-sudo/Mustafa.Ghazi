@@ -274,6 +274,43 @@ def cmd_verify_assets(args) -> int:
     return 0 if all(r["status"] == "OK" for r in rows) else (1 if any(r["status"] == "FAIL" for r in rows) else 0)
 
 
+def cmd_scan(args) -> int:
+    """Read-only real-time opportunity scanner. Own process, own database (data/scanner.db); never trades."""
+    from .scanner.scanner import LiveFeed, OpportunityScanner
+    from .scanner.store import ScannerStore
+    settings = load_settings(args.config)
+    _setup_logging(settings.log_level, Path(settings.data_dir))
+    if args.poll:
+        settings.scanner.poll_sec = args.poll
+    if args.size:
+        settings.scanner.size_usd = args.size
+    if args.discover:
+        settings.scanner.discover_category = args.discover
+    try:
+        feed = LiveFeed(settings)
+    except RuntimeError as e:
+        print(e); return 2
+    store = ScannerStore(Path(settings.data_dir) / "scanner.db")
+    OpportunityScanner(settings, store, feed).run(minutes=args.minutes)
+    print(scan_report_text(settings, store, args.minutes / 60 if args.minutes else 24.0))
+    return 0
+
+
+def scan_report_text(settings: Settings, store, hours: float) -> str:
+    from .scanner.scanner import scan_report
+    return scan_report(store, since_hours=hours, min_edge_bps=settings.scanner.min_net_edge_bps)
+
+
+def cmd_scan_report(args) -> int:
+    from .scanner.store import ScannerStore
+    settings = load_settings(args.config)
+    path = Path(settings.data_dir) / "scanner.db"
+    if not path.exists():
+        print(f"no scanner database at {path}; run `tradebot scan` first"); return 1
+    print(scan_report_text(settings, ScannerStore(path), args.hours))
+    return 0
+
+
 def cmd_apply_profile(args) -> int:
     """Edit the EXISTING config.toml in place (backup first): Claude off, BTC/ETH/SOL, no auto-scan, 4h, tsmom+momentum."""
     from .profile import apply_validated_profile
@@ -372,6 +409,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--cycles", type=int, default=700); p.set_defaults(fn=cmd_selftest)
     p = sub.add_parser("verify-assets", help="read-only: can each universe symbol be executed via Jupiter at the bot's order size within limits?")
     p.add_argument("--symbols", default=None); p.add_argument("--equity", type=float, default=None); p.set_defaults(fn=cmd_verify_assets)
+    p = sub.add_parser("scan", help="READ-ONLY real-time opportunity scanner (paper): latency, 1m signals, quoted round-trip costs, hypothetical outcomes")
+    p.add_argument("--minutes", type=float, default=None, help="stop after N minutes (default: run until Ctrl+C)")
+    p.add_argument("--poll", type=float, default=None); p.add_argument("--size", type=float, default=None, help="hypothetical size in USD")
+    p.add_argument("--discover", default=None, help="widen universe from Jupiter Tokens v2, e.g. toptraded")
+    p.set_defaults(fn=cmd_scan)
+    p = sub.add_parser("scan-report", help="summarise the scanner database: sources, refresh, costs, candidates, false positives, missed")
+    p.add_argument("--hours", type=float, default=24.0); p.set_defaults(fn=cmd_scan_report)
     p = sub.add_parser("apply-profile", help="update an existing config.toml to the validated settings, preserving everything else (backup first)")
     p.add_argument("--no-backup", action="store_true"); p.set_defaults(fn=cmd_apply_profile)
     p = sub.add_parser("resolve-intent", help="manually settle an UNKNOWN order intent after verifying it yourself")

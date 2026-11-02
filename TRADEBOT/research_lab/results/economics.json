@@ -1,0 +1,155 @@
+{
+ "symbol_for_moves": "SOLUSDT",
+ "moves": {
+  "sd_1h_bps": 98.1,
+  "sd_1m_bps_approx": 12.7,
+  "sd_5m_bps_approx": 28.3,
+  "mean_abs_1h_bps": 66.1
+ },
+ "probes": {},
+ "assumptions": {
+  "network_fee_usd_per_tx": 0.01,
+  "assumed_variable_rt_bps": {
+   "5.0": 20.0,
+   "50.0": 20.0,
+   "100.0": 20.0,
+   "1000.0": 30.0
+  },
+  "adverse_selection_bps": 10.0,
+  "position_fraction": 1.0
+ },
+ "cells": [
+  {
+   "capital_usd": 5.0,
+   "trades_per_day": 20,
+   "size_usd": 5.0,
+   "fixed_fee_bps": 40.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 70.0,
+   "daily_cost_pct_of_capital": 14.0,
+   "gross_edge_needed_for_1pct_day_bps": 75.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 5.0,
+   "trades_per_day": 50,
+   "size_usd": 5.0,
+   "fixed_fee_bps": 40.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 70.0,
+   "daily_cost_pct_of_capital": 35.0,
+   "gross_edge_needed_for_1pct_day_bps": 72.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 5.0,
+   "trades_per_day": 100,
+   "size_usd": 5.0,
+   "fixed_fee_bps": 40.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 70.0,
+   "daily_cost_pct_of_capital": 70.0,
+   "gross_edge_needed_for_1pct_day_bps": 71.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 50.0,
+   "trades_per_day": 20,
+   "size_usd": 50.0,
+   "fixed_fee_bps": 4.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 34.0,
+   "daily_cost_pct_of_capital": 6.8,
+   "gross_edge_needed_for_1pct_day_bps": 39.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 50.0,
+   "trades_per_day": 50,
+   "size_usd": 50.0,
+   "fixed_fee_bps": 4.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 34.0,
+   "daily_cost_pct_of_capital": 17.0,
+   "gross_edge_needed_for_1pct_day_bps": 36.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 50.0,
+   "trades_per_day": 100,
+   "size_usd": 50.0,
+   "fixed_fee_bps": 4.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 34.0,
+   "daily_cost_pct_of_capital": 34.0,
+   "gross_edge_needed_for_1pct_day_bps": 35.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 100.0,
+   "trades_per_day": 20,
+   "size_usd": 100.0,
+   "fixed_fee_bps": 2.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 32.0,
+   "daily_cost_pct_of_capital": 6.4,
+   "gross_edge_needed_for_1pct_day_bps": 37.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 100.0,
+   "trades_per_day": 50,
+   "size_usd": 100.0,
+   "fixed_fee_bps": 2.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 32.0,
+   "daily_cost_pct_of_capital": 16.0,
+   "gross_edge_needed_for_1pct_day_bps": 34.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 100.0,
+   "trades_per_day": 100,
+   "size_usd": 100.0,
+   "fixed_fee_bps": 2.0,
+   "variable_rt_bps": 20.0,
+   "cost_floor_bps_per_trade": 32.0,
+   "daily_cost_pct_of_capital": 32.0,
+   "gross_edge_needed_for_1pct_day_bps": 33.0,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 1000.0,
+   "trades_per_day": 20,
+   "size_usd": 1000.0,
+   "fixed_fee_bps": 0.2,
+   "variable_rt_bps": 30.0,
+   "cost_floor_bps_per_trade": 40.2,
+   "daily_cost_pct_of_capital": 8.0,
+   "gross_edge_needed_for_1pct_day_bps": 45.2,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 1000.0,
+   "trades_per_day": 50,
+   "size_usd": 1000.0,
+   "fixed_fee_bps": 0.2,
+   "variable_rt_bps": 30.0,
+   "cost_floor_bps_per_trade": 40.2,
+   "daily_cost_pct_of_capital": 20.1,
+   "gross_edge_needed_for_1pct_day_bps": 42.2,
+   "cost_source": "ASSUMED"
+  },
+  {
+   "capital_usd": 1000.0,
+   "trades_per_day": 100,
+   "size_usd": 1000.0,
+   "fixed_fee_bps": 0.2,
+   "variable_rt_bps": 30.0,
+   "cost_floor_bps_per_trade": 40.2,
+   "daily_cost_pct_of_capital": 40.2,
+   "gross_edge_needed_for_1pct_day_bps": 41.2,
+   "cost_source": "ASSUMED"
+  }
+ ]
+}
