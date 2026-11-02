@@ -1,0 +1,247 @@
+{
+ "audits": [
+  {
+   "dataset": "SOLUSDT parshant (primary)",
+   "rows": 2005839,
+   "duplicates": 0,
+   "non_monotonic": 0,
+   "first": "2023-01-01 00:00",
+   "last": "2026-10-24 23:59",
+   "misaligned_to_minute": 0,
+   "gaps": 2,
+   "missing_minutes": 81,
+   "largest_gaps": [
+    "2023-03-24 12:39 -> 14:00 (80 min)",
+    "2023-02-14 16:38 -> 16:40 (1 min)"
+   ],
+   "nonpositive_prices": 0,
+   "ohlc_violations": 0,
+   "zero_volume_pct": 0.012,
+   "abs_1m_return_p99_bps": 42.2,
+   "moves_gt_5pct": 14,
+   "largest_moves": [
+    "2023-01-02 07:14 +19.52%",
+    "2023-11-09 16:12 -7.63%",
+    "2024-01-03 12:09 -7.13%"
+   ],
+   "spike_and_revert": 6,
+   "spike_and_revert_examples": [
+    "2023-12-11 02:13 -2.06% then +2.71%",
+    "2024-01-09 21:14 +3.07% then -4.83%",
+    "2024-03-05 19:56 -6.75% then +5.65%"
+   ],
+   "wicks_gt_5pct": 38
+  },
+  {
+   "dataset": "SOLUSDT official zips (JienWeng)",
+   "rows": 349920,
+   "duplicates": 0,
+   "non_monotonic": 0,
+   "first": "2026-01-01 00:00",
+   "last": "2026-08-31 23:59",
+   "misaligned_to_minute": 0,
+   "gaps": 0,
+   "missing_minutes": 0,
+   "nonpositive_prices": 0,
+   "ohlc_violations": 0,
+   "zero_volume_pct": 0.0,
+   "abs_1m_return_p99_bps": 33.6,
+   "moves_gt_5pct": 1,
+   "largest_moves": [
+    "2026-08-22 05:10 -5.51%",
+    "2026-01-31 18:43 -4.45%",
+    "2026-02-06 00:19 -3.84%"
+   ],
+   "spike_and_revert": 0,
+   "spike_and_revert_examples": [],
+   "wicks_gt_5pct": 3
+  },
+  {
+   "dataset": "BTCUSDT parshant (primary)",
+   "rows": 2005840,
+   "duplicates": 0,
+   "non_monotonic": 0,
+   "first": "2023-01-01 00:00",
+   "last": "2026-10-24 23:59",
+   "misaligned_to_minute": 0,
+   "gaps": 1,
+   "missing_minutes": 80,
+   "largest_gaps": [
+    "2023-03-24 12:39 -> 14:00 (80 min)"
+   ],
+   "nonpositive_prices": 0,
+   "ohlc_violations": 0,
+   "zero_volume_pct": 0.004,
+   "abs_1m_return_p99_bps": 23.0,
+   "moves_gt_5pct": 0,
+   "largest_moves": [
+    "2025-10-10 21:19 -4.29%",
+    "2024-12-05 22:28 -3.68%",
+    "2023-08-17 21:43 -3.50%"
+   ],
+   "spike_and_revert": 1,
+   "spike_and_revert_examples": [
+    "2026-01-31 18:43 -2.06% then +2.33%"
+   ],
+   "wicks_gt_5pct": 4
+  },
+  {
+   "dataset": "BTCUSDT official zips (JienWeng)",
+   "rows": 349920,
+   "duplicates": 0,
+   "non_monotonic": 0,
+   "first": "2026-01-01 00:00",
+   "last": "2026-08-31 23:59",
+   "misaligned_to_minute": 0,
+   "gaps": 0,
+   "missing_minutes": 0,
+   "nonpositive_prices": 0,
+   "ohlc_violations": 0,
+   "zero_volume_pct": 0.0,
+   "abs_1m_return_p99_bps": 23.4,
+   "moves_gt_5pct": 0,
+   "largest_moves": [
+    "2026-01-31 18:44 +2.33%",
+    "2026-08-19 15:27 +2.18%",
+    "2026-01-31 18:43 -2.06%"
+   ],
+   "spike_and_revert": 1,
+   "spike_and_revert_examples": [
+    "2026-01-31 18:43 -2.06% then +2.33%"
+   ],
+   "wicks_gt_5pct": 0
+  },
+  {
+   "dataset": "ETHUSDT parshant (primary)",
+   "rows": 1480320,
+   "duplicates": 0,
+   "non_monotonic": 0,
+   "first": "2024-01-01 00:00",
+   "last": "2026-10-24 23:59",
+   "misaligned_to_minute": 0,
+   "gaps": 0,
+   "missing_minutes": 0,
+   "nonpositive_prices": 0,
+   "ohlc_violations": 0,
+   "zero_volume_pct": 0.0,
+   "abs_1m_return_p99_bps": 32.1,
+   "moves_gt_5pct": 4,
+   "largest_moves": [
+    "2025-02-03 02:07 -9.59%",
+    "2024-08-05 01:10 -8.40%",
+    "2025-02-03 01:55 -6.18%"
+   ],
+   "spike_and_revert": 3,
+   "spike_and_revert_examples": [
+    "2024-03-05 19:56 -2.18% then +1.77%",
+    "2024-08-05 01:16 -2.01% then +2.03%",
+    "2026-01-31 18:43 -3.75% then +4.55%"
+   ],
+   "wicks_gt_5pct": 15
+  },
+  {
+   "dataset": "ETHUSDT official zips (JienWeng)",
+   "rows": 349920,
+   "duplicates": 0,
+   "non_monotonic": 0,
+   "first": "2026-01-01 00:00",
+   "last": "2026-08-31 23:59",
+   "misaligned_to_minute": 0,
+   "gaps": 0,
+   "missing_minutes": 0,
+   "nonpositive_prices": 0,
+   "ohlc_violations": 0,
+   "zero_volume_pct": 0.0,
+   "abs_1m_return_p99_bps": 31.3,
+   "moves_gt_5pct": 0,
+   "largest_moves": [
+    "2026-01-31 18:44 +4.55%",
+    "2026-03-23 11:05 +3.79%",
+    "2026-01-31 18:43 -3.75%"
+   ],
+   "spike_and_revert": 1,
+   "spike_and_revert_examples": [
+    "2026-01-31 18:43 -3.75% then +4.55%"
+   ],
+   "wicks_gt_5pct": 1
+  },
+  {
+   "dataset": "SOLUSDT official zips (metatim)",
+   "rows": 1313280,
+   "duplicates": 0,
+   "non_monotonic": 0,
+   "first": "2024-01-01 00:00",
+   "last": "2026-06-30 23:59",
+   "misaligned_to_minute": 0,
+   "gaps": 0,
+   "missing_minutes": 0,
+   "nonpositive_prices": 0,
+   "ohlc_violations": 0,
+   "zero_volume_pct": 0.0,
+   "abs_1m_return_p99_bps": 41.8,
+   "moves_gt_5pct": 6,
+   "largest_moves": [
+    "2024-01-03 12:09 -7.13%",
+    "2024-03-05 19:56 -6.75%",
+    "2024-03-05 19:57 +5.65%"
+   ],
+   "spike_and_revert": 5,
+   "spike_and_revert_examples": [
+    "2024-01-09 21:14 +3.07% then -4.83%",
+    "2024-03-05 19:56 -6.75% then +5.65%",
+    "2024-04-12 18:35 -5.63% then +5.00%"
+   ],
+   "wicks_gt_5pct": 15
+  }
+ ],
+ "comparisons": [
+  {
+   "pair": "SOLUSDT: parshant vs official zips (JienWeng)",
+   "overlap_minutes": 349920,
+   "open_mismatches": 0,
+   "high_mismatches": 0,
+   "low_mismatches": 0,
+   "close_mismatches": 0,
+   "volume_mismatches": 0,
+   "max_close_rel_diff": 0.0,
+   "minutes_only_in_first": 1655919,
+   "minutes_only_in_second": 0
+  },
+  {
+   "pair": "SOLUSDT: parshant vs official zips (metatim)",
+   "overlap_minutes": 1313280,
+   "open_mismatches": 0,
+   "high_mismatches": 0,
+   "low_mismatches": 0,
+   "close_mismatches": 0,
+   "volume_mismatches": 0,
+   "max_close_rel_diff": 0.0,
+   "minutes_only_in_first": 692559,
+   "minutes_only_in_second": 0
+  },
+  {
+   "pair": "BTCUSDT: parshant vs official zips (JienWeng)",
+   "overlap_minutes": 349920,
+   "open_mismatches": 0,
+   "high_mismatches": 0,
+   "low_mismatches": 0,
+   "close_mismatches": 0,
+   "volume_mismatches": 0,
+   "max_close_rel_diff": 0.0,
+   "minutes_only_in_first": 1655920,
+   "minutes_only_in_second": 0
+  },
+  {
+   "pair": "ETHUSDT: parshant vs official zips (JienWeng)",
+   "overlap_minutes": 349920,
+   "open_mismatches": 0,
+   "high_mismatches": 0,
+   "low_mismatches": 0,
+   "close_mismatches": 0,
+   "volume_mismatches": 0,
+   "max_close_rel_diff": 0.0,
+   "minutes_only_in_first": 1130400,
+   "minutes_only_in_second": 0
+  }
+ ]
+}

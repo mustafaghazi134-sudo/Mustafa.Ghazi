@@ -1,0 +1,3478 @@
+{
+ "A_reconstruction": {
+  "bars": {
+   "05:09": {
+    "open": 97.54,
+    "high": 97.82,
+    "low": 95.44,
+    "close": 95.53,
+    "volume": 111598.345
+   },
+   "05:10": {
+    "open": 95.52,
+    "high": 95.89,
+    "low": 89.83,
+    "close": 90.27,
+    "volume": 227133.473
+   },
+   "05:11": {
+    "open": 90.16,
+    "high": 90.69,
+    "low": 87.72,
+    "close": 90.49,
+    "volume": 143186.158
+   },
+   "05:12": {
+    "open": 90.5,
+    "high": 93.31,
+    "low": 89.97,
+    "close": 93.18,
+    "volume": 74826.145
+   },
+   "05:13": {
+    "open": 93.18,
+    "high": 93.77,
+    "low": 93.06,
+    "close": 93.73,
+    "volume": 55988.3
+   },
+   "05:14": {
+    "open": 93.73,
+    "high": 94.49,
+    "low": 93.29,
+    "close": 93.33,
+    "volume": 45412.655
+   },
+   "05:15": {
+    "open": 93.34,
+    "high": 94.54,
+    "low": 93.34,
+    "close": 94.14,
+    "volume": 41647.982
+   }
+  },
+  "grid": [
+   {
+    "entry": "replayed fill: 05:11 close (known 05:12:00)",
+    "entry_px": 90.49,
+    "exit": "replayed: 05:13 close",
+    "exit_px": 93.73,
+    "net_usd_cost15": 1.615,
+    "net_usd_cost25": 1.512,
+    "net_usd_cost50": 1.254,
+    "net_usd_cost100": 0.74,
+    "net_usd_cost200": -0.281
+   },
+   {
+    "entry": "replayed fill: 05:11 close (known 05:12:00)",
+    "entry_px": 90.49,
+    "exit": "take-profit level touched in 05:13 bar",
+    "exit_px": 93.5888,
+    "net_usd_cost15": 1.537,
+    "net_usd_cost25": 1.434,
+    "net_usd_cost50": 1.176,
+    "net_usd_cost100": 0.663,
+    "net_usd_cost200": -0.356
+   },
+   {
+    "entry": "replayed fill: 05:11 close (known 05:12:00)",
+    "entry_px": 90.49,
+    "exit": "next open 05:14",
+    "exit_px": 93.73,
+    "net_usd_cost15": 1.615,
+    "net_usd_cost25": 1.512,
+    "net_usd_cost50": 1.254,
+    "net_usd_cost100": 0.74,
+    "net_usd_cost200": -0.281
+   },
+   {
+    "entry": "replayed fill: 05:11 close (known 05:12:00)",
+    "entry_px": 90.49,
+    "exit": "worst inside 05:13 bar",
+    "exit_px": 93.06,
+    "net_usd_cost15": 1.246,
+    "net_usd_cost25": 1.143,
+    "net_usd_cost50": 0.887,
+    "net_usd_cost100": 0.377,
+    "net_usd_cost200": -0.636
+   },
+   {
+    "entry": "next open 05:12",
+    "entry_px": 90.5,
+    "exit": "replayed: 05:13 close",
+    "exit_px": 93.73,
+    "net_usd_cost15": 1.609,
+    "net_usd_cost25": 1.506,
+    "net_usd_cost50": 1.248,
+    "net_usd_cost100": 0.734,
+    "net_usd_cost200": -0.286
+   },
+   {
+    "entry": "next open 05:12",
+    "entry_px": 90.5,
+    "exit": "take-profit level touched in 05:13 bar",
+    "exit_px": 93.5888,
+    "net_usd_cost15": 1.532,
+    "net_usd_cost25": 1.428,
+    "net_usd_cost50": 1.171,
+    "net_usd_cost100": 0.658,
+    "net_usd_cost200": -0.361
+   },
+   {
+    "entry": "next open 05:12",
+    "entry_px": 90.5,
+    "exit": "next open 05:14",
+    "exit_px": 93.73,
+    "net_usd_cost15": 1.609,
+    "net_usd_cost25": 1.506,
+    "net_usd_cost50": 1.248,
+    "net_usd_cost100": 0.734,
+    "net_usd_cost200": -0.286
+   },
+   {
+    "entry": "next open 05:12",
+    "entry_px": 90.5,
+    "exit": "worst inside 05:13 bar",
+    "exit_px": 93.06,
+    "net_usd_cost15": 1.24,
+    "net_usd_cost25": 1.138,
+    "net_usd_cost50": 0.882,
+    "net_usd_cost100": 0.371,
+    "net_usd_cost200": -0.642
+   },
+   {
+    "entry": "worst inside 05:11 bar (signal at 05:11:00)",
+    "entry_px": 90.69,
+    "exit": "replayed: 05:13 close",
+    "exit_px": 93.73,
+    "net_usd_cost15": 1.501,
+    "net_usd_cost25": 1.398,
+    "net_usd_cost50": 1.141,
+    "net_usd_cost100": 0.628,
+    "net_usd_cost200": -0.39
+   },
+   {
+    "entry": "worst inside 05:11 bar (signal at 05:11:00)",
+    "entry_px": 90.69,
+    "exit": "take-profit level touched in 05:13 bar",
+    "exit_px": 93.5888,
+    "net_usd_cost15": 1.424,
+    "net_usd_cost25": 1.321,
+    "net_usd_cost50": 1.063,
+    "net_usd_cost100": 0.551,
+    "net_usd_cost200": -0.465
+   },
+   {
+    "entry": "worst inside 05:11 bar (signal at 05:11:00)",
+    "entry_px": 90.69,
+    "exit": "next open 05:14",
+    "exit_px": 93.73,
+    "net_usd_cost15": 1.501,
+    "net_usd_cost25": 1.398,
+    "net_usd_cost50": 1.141,
+    "net_usd_cost100": 0.628,
+    "net_usd_cost200": -0.39
+   },
+   {
+    "entry": "worst inside 05:11 bar (signal at 05:11:00)",
+    "entry_px": 90.69,
+    "exit": "worst inside 05:13 bar",
+    "exit_px": 93.06,
+    "net_usd_cost15": 1.133,
+    "net_usd_cost25": 1.03,
+    "net_usd_cost50": 0.775,
+    "net_usd_cost100": 0.266,
+    "net_usd_cost200": -0.745
+   },
+   {
+    "entry": "best inside 05:11 bar",
+    "entry_px": 87.72,
+    "exit": "replayed: 05:13 close",
+    "exit_px": 93.73,
+    "net_usd_cost15": 3.246,
+    "net_usd_cost25": 3.139,
+    "net_usd_cost50": 2.873,
+    "net_usd_cost100": 2.343,
+    "net_usd_cost200": 1.29
+   },
+   {
+    "entry": "best inside 05:11 bar",
+    "entry_px": 87.72,
+    "exit": "take-profit level touched in 05:13 bar",
+    "exit_px": 93.5888,
+    "net_usd_cost15": 3.165,
+    "net_usd_cost25": 3.059,
+    "net_usd_cost50": 2.793,
+    "net_usd_cost100": 2.264,
+    "net_usd_cost200": 1.213
+   },
+   {
+    "entry": "best inside 05:11 bar",
+    "entry_px": 87.72,
+    "exit": "next open 05:14",
+    "exit_px": 93.73,
+    "net_usd_cost15": 3.246,
+    "net_usd_cost25": 3.139,
+    "net_usd_cost50": 2.873,
+    "net_usd_cost100": 2.343,
+    "net_usd_cost200": 1.29
+   },
+   {
+    "entry": "best inside 05:11 bar",
+    "entry_px": 87.72,
+    "exit": "worst inside 05:13 bar",
+    "exit_px": 93.06,
+    "net_usd_cost15": 2.865,
+    "net_usd_cost25": 2.759,
+    "net_usd_cost50": 2.495,
+    "net_usd_cost100": 1.968,
+    "net_usd_cost200": 0.923
+   }
+  ],
+  "engine_runs": {
+   "old engine (parametric fill, 30 bps fee + 6-11 bps slippage)": 1.39,
+   "new engine (min-out at 50 bps slippage tolerance + 15 bps/leg, $0.01/tx)": 1.1
+  }
+ },
+ "B_analogs": {
+  "cost15|delay0": {
+   "pooled": {
+    "n": 357,
+    "win_rate_pct": 0.0,
+    "mean_bps": -133.7,
+    "median_bps": -133.7,
+    "ci95_mean_bps": [
+     -133.7,
+     -133.7
+    ],
+    "profit_factor": 0.0,
+    "worst_bps": -133.7,
+    "best_bps": -133.7,
+    "exits": {
+     "take_profit": 0,
+     "stop": 357,
+     "max_hold": 0
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 208,
+     "win_rate_pct": 0.0,
+     "mean_bps": -133.7,
+     "median_bps": -133.7,
+     "ci95_mean_bps": [
+      -133.7,
+      -133.7
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -133.7,
+     "best_bps": -133.7,
+     "exits": {
+      "take_profit": 0,
+      "stop": 208,
+      "max_hold": 0
+     }
+    },
+    "BTCUSDT": {
+     "n": 51,
+     "win_rate_pct": 0.0,
+     "mean_bps": -133.7,
+     "median_bps": -133.7,
+     "ci95_mean_bps": [
+      -133.7,
+      -133.7
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -133.7,
+     "best_bps": -133.7,
+     "exits": {
+      "take_profit": 0,
+      "stop": 51,
+      "max_hold": 0
+     }
+    },
+    "ETHUSDT": {
+     "n": 98,
+     "win_rate_pct": 0.0,
+     "mean_bps": -133.7,
+     "median_bps": -133.7,
+     "ci95_mean_bps": [
+      -133.7,
+      -133.7
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -133.7,
+     "best_bps": -133.7,
+     "exits": {
+      "take_profit": 0,
+      "stop": 98,
+      "max_hold": 0
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 99,
+     "win_rate_pct": 0.0,
+     "mean_bps": -133.7,
+     "median_bps": -133.7,
+     "ci95_mean_bps": [
+      -133.7,
+      -133.7
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -133.7,
+     "best_bps": -133.7,
+     "exits": {
+      "take_profit": 0,
+      "stop": 99,
+      "max_hold": 0
+     }
+    },
+    "2024": {
+     "n": 109,
+     "win_rate_pct": 0.0,
+     "mean_bps": -133.7,
+     "median_bps": -133.7,
+     "ci95_mean_bps": [
+      -133.7,
+      -133.7
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -133.7,
+     "best_bps": -133.7,
+     "exits": {
+      "take_profit": 0,
+      "stop": 109,
+      "max_hold": 0
+     }
+    },
+    "2025": {
+     "n": 110,
+     "win_rate_pct": 0.0,
+     "mean_bps": -133.7,
+     "median_bps": -133.7,
+     "ci95_mean_bps": [
+      -133.7,
+      -133.7
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -133.7,
+     "best_bps": -133.7,
+     "exits": {
+      "take_profit": 0,
+      "stop": 110,
+      "max_hold": 0
+     }
+    },
+    "2026": {
+     "n": 39,
+     "win_rate_pct": 0.0,
+     "mean_bps": -133.7,
+     "median_bps": -133.7,
+     "ci95_mean_bps": [
+      -133.7,
+      -133.7
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -133.7,
+     "best_bps": -133.7,
+     "exits": {
+      "take_profit": 0,
+      "stop": 39,
+      "max_hold": 0
+     }
+    }
+   },
+   "trades": null
+  },
+  "cost15|delay1": {
+   "pooled": {
+    "n": 357,
+    "win_rate_pct": 56.3,
+    "mean_bps": -16.1,
+    "median_bps": 31.8,
+    "ci95_mean_bps": [
+     -26.8,
+     -5.6
+    ],
+    "profit_factor": 0.7,
+    "worst_bps": -133.7,
+    "best_bps": 385.0,
+    "exits": {
+     "take_profit": 189,
+     "stop": 132,
+     "max_hold": 36
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 208,
+     "win_rate_pct": 53.4,
+     "mean_bps": -23.1,
+     "median_bps": 31.0,
+     "ci95_mean_bps": [
+      -37.1,
+      -9.0
+     ],
+     "profit_factor": 0.6,
+     "worst_bps": -133.7,
+     "best_bps": 346.6,
+     "exits": {
+      "take_profit": 106,
+      "stop": 87,
+      "max_hold": 15
+     }
+    },
+    "BTCUSDT": {
+     "n": 51,
+     "win_rate_pct": 66.7,
+     "mean_bps": -1.7,
+     "median_bps": 33.3,
+     "ci95_mean_bps": [
+      -25.7,
+      21.7
+     ],
+     "profit_factor": 0.95,
+     "worst_bps": -133.7,
+     "best_bps": 149.2,
+     "exits": {
+      "take_profit": 32,
+      "stop": 12,
+      "max_hold": 7
+     }
+    },
+    "ETHUSDT": {
+     "n": 98,
+     "win_rate_pct": 57.1,
+     "mean_bps": -8.5,
+     "median_bps": 32.5,
+     "ci95_mean_bps": [
+      -29.0,
+      12.7
+     ],
+     "profit_factor": 0.83,
+     "worst_bps": -133.7,
+     "best_bps": 385.0,
+     "exits": {
+      "take_profit": 51,
+      "stop": 33,
+      "max_hold": 14
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 99,
+     "win_rate_pct": 56.6,
+     "mean_bps": -22.1,
+     "median_bps": 30.8,
+     "ci95_mean_bps": [
+      -41.7,
+      -1.9
+     ],
+     "profit_factor": 0.6,
+     "worst_bps": -133.7,
+     "best_bps": 346.6,
+     "exits": {
+      "take_profit": 51,
+      "stop": 39,
+      "max_hold": 9
+     }
+    },
+    "2024": {
+     "n": 109,
+     "win_rate_pct": 60.6,
+     "mean_bps": -1.1,
+     "median_bps": 37.9,
+     "ci95_mean_bps": [
+      -22.2,
+      20.0
+     ],
+     "profit_factor": 0.98,
+     "worst_bps": -133.7,
+     "best_bps": 385.0,
+     "exits": {
+      "take_profit": 63,
+      "stop": 38,
+      "max_hold": 8
+     }
+    },
+    "2025": {
+     "n": 110,
+     "win_rate_pct": 53.6,
+     "mean_bps": -25.4,
+     "median_bps": 30.1,
+     "ci95_mean_bps": [
+      -42.8,
+      -8.2
+     ],
+     "profit_factor": 0.54,
+     "worst_bps": -133.7,
+     "best_bps": 273.9,
+     "exits": {
+      "take_profit": 56,
+      "stop": 41,
+      "max_hold": 13
+     }
+    },
+    "2026": {
+     "n": 39,
+     "win_rate_pct": 51.3,
+     "mean_bps": -16.2,
+     "median_bps": 4.6,
+     "ci95_mean_bps": [
+      -47.9,
+      16.0
+     ],
+     "profit_factor": 0.69,
+     "worst_bps": -133.7,
+     "best_bps": 188.0,
+     "exits": {
+      "take_profit": 19,
+      "stop": 14,
+      "max_hold": 6
+     }
+    }
+   },
+   "trades": null
+  },
+  "cost15|delay2": {
+   "pooled": {
+    "n": 356,
+    "win_rate_pct": 44.1,
+    "mean_bps": -28.5,
+    "median_bps": -26.6,
+    "ci95_mean_bps": [
+     -38.6,
+     -18.1
+    ],
+    "profit_factor": 0.5,
+    "worst_bps": -133.7,
+    "best_bps": 444.0,
+    "exits": {
+     "take_profit": 130,
+     "stop": 127,
+     "max_hold": 99
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 208,
+     "win_rate_pct": 44.7,
+     "mean_bps": -25.0,
+     "median_bps": -15.4,
+     "ci95_mean_bps": [
+      -38.2,
+      -11.2
+     ],
+     "profit_factor": 0.56,
+     "worst_bps": -133.7,
+     "best_bps": 346.6,
+     "exits": {
+      "take_profit": 81,
+      "stop": 75,
+      "max_hold": 52
+     }
+    },
+    "BTCUSDT": {
+     "n": 51,
+     "win_rate_pct": 43.1,
+     "mean_bps": -28.4,
+     "median_bps": -27.0,
+     "ci95_mean_bps": [
+      -51.7,
+      -4.7
+     ],
+     "profit_factor": 0.46,
+     "worst_bps": -133.7,
+     "best_bps": 149.2,
+     "exits": {
+      "take_profit": 17,
+      "stop": 15,
+      "max_hold": 19
+     }
+    },
+    "ETHUSDT": {
+     "n": 97,
+     "win_rate_pct": 43.3,
+     "mean_bps": -36.0,
+     "median_bps": -34.3,
+     "ci95_mean_bps": [
+      -54.8,
+      -16.7
+     ],
+     "profit_factor": 0.4,
+     "worst_bps": -133.7,
+     "best_bps": 444.0,
+     "exits": {
+      "take_profit": 32,
+      "stop": 37,
+      "max_hold": 28
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 99,
+     "win_rate_pct": 46.5,
+     "mean_bps": -16.8,
+     "median_bps": -8.5,
+     "ci95_mean_bps": [
+      -34.7,
+      1.5
+     ],
+     "profit_factor": 0.64,
+     "worst_bps": -133.7,
+     "best_bps": 346.6,
+     "exits": {
+      "take_profit": 40,
+      "stop": 28,
+      "max_hold": 31
+     }
+    },
+    "2024": {
+     "n": 108,
+     "win_rate_pct": 49.1,
+     "mean_bps": -25.6,
+     "median_bps": -5.3,
+     "ci95_mean_bps": [
+      -46.0,
+      -4.9
+     ],
+     "profit_factor": 0.58,
+     "worst_bps": -133.7,
+     "best_bps": 321.6,
+     "exits": {
+      "take_profit": 44,
+      "stop": 46,
+      "max_hold": 18
+     }
+    },
+    "2025": {
+     "n": 110,
+     "win_rate_pct": 39.1,
+     "mean_bps": -41.5,
+     "median_bps": -47.7,
+     "ci95_mean_bps": [
+      -58.4,
+      -23.1
+     ],
+     "profit_factor": 0.34,
+     "worst_bps": -133.7,
+     "best_bps": 444.0,
+     "exits": {
+      "take_profit": 37,
+      "stop": 40,
+      "max_hold": 33
+     }
+    },
+    "2026": {
+     "n": 39,
+     "win_rate_pct": 38.5,
+     "mean_bps": -29.2,
+     "median_bps": -16.5,
+     "ci95_mean_bps": [
+      -58.1,
+      1.2
+     ],
+     "profit_factor": 0.47,
+     "worst_bps": -133.7,
+     "best_bps": 240.5,
+     "exits": {
+      "take_profit": 9,
+      "stop": 13,
+      "max_hold": 17
+     }
+    }
+   },
+   "trades": null
+  },
+  "cost25|delay0": {
+   "pooled": {
+    "n": 186,
+    "win_rate_pct": 0.0,
+    "mean_bps": -153.4,
+    "median_bps": -153.4,
+    "ci95_mean_bps": [
+     -153.4,
+     -153.4
+    ],
+    "profit_factor": 0.0,
+    "worst_bps": -153.4,
+    "best_bps": -153.4,
+    "exits": {
+     "take_profit": 0,
+     "stop": 186,
+     "max_hold": 0
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 116,
+     "win_rate_pct": 0.0,
+     "mean_bps": -153.4,
+     "median_bps": -153.4,
+     "ci95_mean_bps": [
+      -153.4,
+      -153.4
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -153.4,
+     "best_bps": -153.4,
+     "exits": {
+      "take_profit": 0,
+      "stop": 116,
+      "max_hold": 0
+     }
+    },
+    "BTCUSDT": {
+     "n": 20,
+     "win_rate_pct": 0.0,
+     "mean_bps": -153.4,
+     "median_bps": -153.4,
+     "ci95_mean_bps": [
+      -153.4,
+      -153.4
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -153.4,
+     "best_bps": -153.4,
+     "exits": {
+      "take_profit": 0,
+      "stop": 20,
+      "max_hold": 0
+     }
+    },
+    "ETHUSDT": {
+     "n": 50,
+     "win_rate_pct": 0.0,
+     "mean_bps": -153.4,
+     "median_bps": -153.4,
+     "ci95_mean_bps": [
+      -153.4,
+      -153.4
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -153.4,
+     "best_bps": -153.4,
+     "exits": {
+      "take_profit": 0,
+      "stop": 50,
+      "max_hold": 0
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 49,
+     "win_rate_pct": 0.0,
+     "mean_bps": -153.4,
+     "median_bps": -153.4,
+     "ci95_mean_bps": [
+      -153.4,
+      -153.4
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -153.4,
+     "best_bps": -153.4,
+     "exits": {
+      "take_profit": 0,
+      "stop": 49,
+      "max_hold": 0
+     }
+    },
+    "2024": {
+     "n": 66,
+     "win_rate_pct": 0.0,
+     "mean_bps": -153.4,
+     "median_bps": -153.4,
+     "ci95_mean_bps": [
+      -153.4,
+      -153.4
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -153.4,
+     "best_bps": -153.4,
+     "exits": {
+      "take_profit": 0,
+      "stop": 66,
+      "max_hold": 0
+     }
+    },
+    "2025": {
+     "n": 49,
+     "win_rate_pct": 0.0,
+     "mean_bps": -153.4,
+     "median_bps": -153.4,
+     "ci95_mean_bps": [
+      -153.4,
+      -153.4
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -153.4,
+     "best_bps": -153.4,
+     "exits": {
+      "take_profit": 0,
+      "stop": 49,
+      "max_hold": 0
+     }
+    },
+    "2026": {
+     "n": 22,
+     "win_rate_pct": 0.0,
+     "mean_bps": -153.4,
+     "median_bps": -153.4,
+     "ci95_mean_bps": [
+      -153.4,
+      -153.4
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -153.4,
+     "best_bps": -153.4,
+     "exits": {
+      "take_profit": 0,
+      "stop": 22,
+      "max_hold": 0
+     }
+    }
+   },
+   "trades": null
+  },
+  "cost25|delay1": {
+   "pooled": {
+    "n": 186,
+    "win_rate_pct": 52.7,
+    "mean_bps": -27.3,
+    "median_bps": 29.8,
+    "ci95_mean_bps": [
+     -44.4,
+     -10.1
+    ],
+    "profit_factor": 0.59,
+    "worst_bps": -153.4,
+    "best_bps": 364.2,
+    "exits": {
+     "take_profit": 93,
+     "stop": 77,
+     "max_hold": 16
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 116,
+     "win_rate_pct": 48.3,
+     "mean_bps": -36.5,
+     "median_bps": -30.8,
+     "ci95_mean_bps": [
+      -57.7,
+      -14.4
+     ],
+     "profit_factor": 0.49,
+     "worst_bps": -153.4,
+     "best_bps": 325.9,
+     "exits": {
+      "take_profit": 54,
+      "stop": 52,
+      "max_hold": 10
+     }
+    },
+    "BTCUSDT": {
+     "n": 20,
+     "win_rate_pct": 60.0,
+     "mean_bps": -12.2,
+     "median_bps": 38.7,
+     "ci95_mean_bps": [
+      -59.5,
+      33.1
+     ],
+     "profit_factor": 0.77,
+     "worst_bps": -153.4,
+     "best_bps": 128.9,
+     "exits": {
+      "take_profit": 12,
+      "stop": 7,
+      "max_hold": 1
+     }
+    },
+    "ETHUSDT": {
+     "n": 50,
+     "win_rate_pct": 60.0,
+     "mean_bps": -11.9,
+     "median_bps": 30.9,
+     "ci95_mean_bps": [
+      -44.9,
+      24.7
+     ],
+     "profit_factor": 0.8,
+     "worst_bps": -153.4,
+     "best_bps": 364.2,
+     "exits": {
+      "take_profit": 27,
+      "stop": 18,
+      "max_hold": 5
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 49,
+     "win_rate_pct": 51.0,
+     "mean_bps": -32.4,
+     "median_bps": 8.0,
+     "ci95_mean_bps": [
+      -62.8,
+      1.0
+     ],
+     "profit_factor": 0.51,
+     "worst_bps": -153.4,
+     "best_bps": 325.9,
+     "exits": {
+      "take_profit": 23,
+      "stop": 20,
+      "max_hold": 6
+     }
+    },
+    "2024": {
+     "n": 66,
+     "win_rate_pct": 57.6,
+     "mean_bps": -11.4,
+     "median_bps": 33.0,
+     "ci95_mean_bps": [
+      -42.0,
+      19.9
+     ],
+     "profit_factor": 0.81,
+     "worst_bps": -153.4,
+     "best_bps": 364.2,
+     "exits": {
+      "take_profit": 37,
+      "stop": 26,
+      "max_hold": 3
+     }
+    },
+    "2025": {
+     "n": 49,
+     "win_rate_pct": 49.0,
+     "mean_bps": -44.5,
+     "median_bps": -41.6,
+     "ci95_mean_bps": [
+      -74.3,
+      -14.0
+     ],
+     "profit_factor": 0.4,
+     "worst_bps": -153.4,
+     "best_bps": 253.3,
+     "exits": {
+      "take_profit": 22,
+      "stop": 22,
+      "max_hold": 5
+     }
+    },
+    "2026": {
+     "n": 22,
+     "win_rate_pct": 50.0,
+     "mean_bps": -25.1,
+     "median_bps": -0.5,
+     "ci95_mean_bps": [
+      -72.8,
+      22.3
+     ],
+     "profit_factor": 0.62,
+     "worst_bps": -153.4,
+     "best_bps": 167.6,
+     "exits": {
+      "take_profit": 11,
+      "stop": 9,
+      "max_hold": 2
+     }
+    }
+   },
+   "trades": [
+    {
+     "time": "2023-01-14 00:41",
+     "drop_pct": -3.56,
+     "entry": 20.08,
+     "exit": 20.437020663142714,
+     "how": "take_profit",
+     "net_usd": 0.6148687530033601,
+     "ret_bps": 122.97375060067202,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-14 09:09",
+     "drop_pct": -2.98,
+     "entry": 22.79,
+     "exit": 22.562099999999997,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-14 10:23",
+     "drop_pct": -2.36,
+     "entry": 21.47,
+     "exit": 21.723851750795816,
+     "how": "take_profit",
+     "net_usd": 0.3185381139154191,
+     "ret_bps": 63.70762278308382,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-15 01:09",
+     "drop_pct": -2.67,
+     "entry": 22.6,
+     "exit": 22.901592767972453,
+     "how": "take_profit",
+     "net_usd": 0.3942211041756454,
+     "ret_bps": 78.84422083512906,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-16 08:09",
+     "drop_pct": -2.22,
+     "entry": 23.35,
+     "exit": 23.41,
+     "how": "max_hold",
+     "net_usd": -0.1418494379015027,
+     "ret_bps": -28.36988758030054,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-18 15:54",
+     "drop_pct": -5.28,
+     "entry": 21.0,
+     "exit": 20.79,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-18 16:21",
+     "drop_pct": -2.47,
+     "entry": 20.54,
+     "exit": 20.79333965844402,
+     "how": "take_profit",
+     "net_usd": 0.34393115512333905,
+     "ret_bps": 68.78623102466781,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-21 00:11",
+     "drop_pct": -2.29,
+     "entry": 24.77,
+     "exit": 24.522299999999998,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-21 10:26",
+     "drop_pct": -2.27,
+     "entry": 25.01,
+     "exit": 25.29342711996874,
+     "how": "take_profit",
+     "net_usd": 0.29411049237983944,
+     "ret_bps": 58.82209847596789,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-24 22:26",
+     "drop_pct": -1.89,
+     "entry": 23.29,
+     "exit": 23.0571,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-24 22:28",
+     "drop_pct": -2.57,
+     "entry": 22.42,
+     "exit": 22.70756086956522,
+     "how": "take_profit",
+     "net_usd": 0.3684143342391297,
+     "ret_bps": 73.68286684782595,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-01-30 19:10",
+     "drop_pct": -1.69,
+     "entry": 23.2,
+     "exit": 23.396526895383314,
+     "how": "take_profit",
+     "net_usd": 0.1517467439644267,
+     "ret_bps": 30.34934879288534,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-02-14 13:30",
+     "drop_pct": -2.52,
+     "entry": 21.28,
+     "exit": 21.0672,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-03-22 18:35",
+     "drop_pct": -1.87,
+     "entry": 22.1,
+     "exit": 21.879,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-04-19 08:11",
+     "drop_pct": -1.97,
+     "entry": 23.39,
+     "exit": 23.620467505241095,
+     "how": "take_profit",
+     "net_usd": 0.2205147405660415,
+     "ret_bps": 44.102948113208306,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-04-19 08:22",
+     "drop_pct": -4.17,
+     "entry": 22.05,
+     "exit": 21.8295,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-04-26 19:47",
+     "drop_pct": -2.2,
+     "entry": 20.86,
+     "exit": 21.08982184716362,
+     "how": "take_profit",
+     "net_usd": 0.27842892932489205,
+     "ret_bps": 55.68578586497841,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-05-08 01:44",
+     "drop_pct": -2.25,
+     "entry": 20.88,
+     "exit": 21.01,
+     "how": "max_hold",
+     "net_usd": 0.040060614224148874,
+     "ret_bps": 8.012122844829774,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-05-08 17:59",
+     "drop_pct": -1.82,
+     "entry": 20.47,
+     "exit": 20.656716274603937,
+     "how": "take_profit",
+     "net_usd": 0.18410795727317322,
+     "ret_bps": 36.82159145463464,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-05-10 17:16",
+     "drop_pct": -1.7,
+     "entry": 20.23,
+     "exit": 20.401940262263235,
+     "how": "take_profit",
+     "net_usd": 0.15315391270034298,
+     "ret_bps": 30.630782540068598,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-06-10 04:21",
+     "drop_pct": -6.58,
+     "entry": 15.08,
+     "exit": 14.9292,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-06-10 04:24",
+     "drop_pct": -4.59,
+     "entry": 13.72,
+     "exit": 13.5828,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-06-10 06:35",
+     "drop_pct": -1.84,
+     "entry": 13.85,
+     "exit": 13.7115,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-06-30 13:36",
+     "drop_pct": -1.69,
+     "entry": 18.68,
+     "exit": 18.493199999999998,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-06-30 13:38",
+     "drop_pct": -2.83,
+     "entry": 18.19,
+     "exit": 18.44763495456975,
+     "how": "take_profit",
+     "net_usd": 0.4349534840994127,
+     "ret_bps": 86.99069681988254,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-06-30 13:41",
+     "drop_pct": -2.77,
+     "entry": 17.92,
+     "exit": 18.16794357026587,
+     "how": "take_profit",
+     "net_usd": 0.41866462628864864,
+     "ret_bps": 83.73292525772973,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-07-14 18:30",
+     "drop_pct": -1.92,
+     "entry": 26.07,
+     "exit": 25.8093,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-07-22 23:17",
+     "drop_pct": -2.13,
+     "entry": 24.39,
+     "exit": 24.1461,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-07-24 09:50",
+     "drop_pct": -4.44,
+     "entry": 23.26,
+     "exit": 23.44,
+     "how": "max_hold",
+     "net_usd": 0.115310619088564,
+     "ret_bps": 23.062123817712802,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-08-17 21:41",
+     "drop_pct": -3.45,
+     "entry": 21.31,
+     "exit": 21.096899999999998,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-08-17 21:42",
+     "drop_pct": -2.82,
+     "entry": 20.7,
+     "exit": 20.493,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-09-10 04:07",
+     "drop_pct": -1.78,
+     "entry": 18.77,
+     "exit": 18.86,
+     "how": "max_hold",
+     "net_usd": -0.031140450186466922,
+     "ret_bps": -6.228090037293384,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-09-13 07:43",
+     "drop_pct": -1.7,
+     "entry": 17.94,
+     "exit": 18.092367123287673,
+     "how": "take_profit",
+     "net_usd": 0.15284940068493172,
+     "ret_bps": 30.56988013698634,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-10-02 18:39",
+     "drop_pct": -2.07,
+     "entry": 23.16,
+     "exit": 23.3998224852071,
+     "how": "take_profit",
+     "net_usd": 0.2454784578402385,
+     "ret_bps": 49.0956915680477,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-10-24 15:30",
+     "drop_pct": -1.73,
+     "entry": 30.75,
+     "exit": 31.015255591054313,
+     "how": "take_profit",
+     "net_usd": 0.15946855031949128,
+     "ret_bps": 31.893710063898258,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-11-01 19:32",
+     "drop_pct": -2.22,
+     "entry": 42.74,
+     "exit": 42.5,
+     "how": "max_hold",
+     "net_usd": -0.5490528486195569,
+     "ret_bps": -109.8105697239114,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-11-09 16:11",
+     "drop_pct": -1.76,
+     "entry": 45.22,
+     "exit": 44.7678,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-11-09 16:12",
+     "drop_pct": -7.63,
+     "entry": 41.77,
+     "exit": 43.364451206019034,
+     "how": "take_profit",
+     "net_usd": 1.6293894874419155,
+     "ret_bps": 325.8778974883831,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-11-09 16:36",
+     "drop_pct": -1.96,
+     "entry": 43.43,
+     "exit": 43.855784313725486,
+     "how": "take_profit",
+     "net_usd": 0.2180606617647132,
+     "ret_bps": 43.612132352942645,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-11-11 14:37",
+     "drop_pct": -1.74,
+     "entry": 61.53,
+     "exit": 62.06551341424465,
+     "how": "take_profit",
+     "net_usd": 0.16330388154743106,
+     "ret_bps": 32.66077630948621,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-11-16 19:21",
+     "drop_pct": -1.79,
+     "entry": 59.75,
+     "exit": 59.152499999999996,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-12-04 11:12",
+     "drop_pct": -2.51,
+     "entry": 60.56,
+     "exit": 61.320289715113475,
+     "how": "take_profit",
+     "net_usd": 0.3548939220183587,
+     "ret_bps": 70.97878440367174,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-12-11 02:12",
+     "drop_pct": -4.41,
+     "entry": 67.39,
+     "exit": 66.7161,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-12-14 13:30",
+     "drop_pct": -1.9,
+     "entry": 69.77,
+     "exit": 70.43237341772152,
+     "how": "take_profit",
+     "net_usd": 0.20262559335443656,
+     "ret_bps": 40.525118670887316,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-01-03 12:01",
+     "drop_pct": -4.18,
+     "entry": 98.0,
+     "exit": 97.02,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-01-03 12:08",
+     "drop_pct": -5.25,
+     "entry": 92.17,
+     "exit": 91.2483,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-01-03 12:09",
+     "drop_pct": -7.13,
+     "entry": 85.53,
+     "exit": 88.58066286644952,
+     "how": "take_profit",
+     "net_usd": 1.5047943302117335,
+     "ret_bps": 300.9588660423467,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-01-05 01:48",
+     "drop_pct": -2.76,
+     "entry": 99.45,
+     "exit": 100.8245042977144,
+     "how": "take_profit",
+     "net_usd": 0.4179144944080906,
+     "ret_bps": 83.5828988816181,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-01-09 12:56",
+     "drop_pct": -3.46,
+     "entry": 96.91,
+     "exit": 98.58502341103805,
+     "how": "take_profit",
+     "net_usd": 0.5902128007322136,
+     "ret_bps": 118.04256014644272,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-01-09 21:15",
+     "drop_pct": -4.83,
+     "entry": 99.82,
+     "exit": 98.8218,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-01-12 22:21",
+     "drop_pct": -2.52,
+     "entry": 87.91,
+     "exit": 87.0309,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-02-28 17:31",
+     "drop_pct": -3.6,
+     "entry": 108.04,
+     "exit": 109.98666666666668,
+     "how": "take_profit",
+     "net_usd": 0.6267145270270364,
+     "ret_bps": 125.34290540540728,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-03-03 07:27",
+     "drop_pct": -1.87,
+     "entry": 124.69,
+     "exit": 125.85289666299386,
+     "how": "take_profit",
+     "net_usd": 0.1942989655477763,
+     "ret_bps": 38.859793109555255,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-03-05 15:05",
+     "drop_pct": -1.75,
+     "entry": 135.77,
+     "exit": 136.95924062545242,
+     "how": "take_profit",
+     "net_usd": 0.16608691816272228,
+     "ret_bps": 33.217383632544454,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-03-05 19:53",
+     "drop_pct": -2.59,
+     "entry": 121.44,
+     "exit": 120.2256,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-03-05 19:54",
+     "drop_pct": -3.36,
+     "entry": 117.35,
+     "exit": 116.17649999999999,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-03-05 19:56",
+     "drop_pct": -6.75,
+     "entry": 109.0,
+     "exit": 107.91,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-04-12 18:32",
+     "drop_pct": -4.5,
+     "entry": 151.0,
+     "exit": 149.49,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-04-12 18:35",
+     "drop_pct": -5.63,
+     "entry": 142.22,
+     "exit": 146.2220046511628,
+     "how": "take_profit",
+     "net_usd": 1.1302631540697692,
+     "ret_bps": 226.05263081395384,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-04-13 19:53",
+     "drop_pct": -3.08,
+     "entry": 134.46,
+     "exit": 133.1154,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-04-13 19:56",
+     "drop_pct": -2.35,
+     "entry": 131.6,
+     "exit": 130.284,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-04-13 20:06",
+     "drop_pct": -3.8,
+     "entry": 126.7,
+     "exit": 125.433,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-05-23 20:00",
+     "drop_pct": -1.74,
+     "entry": 168.0,
+     "exit": 169.4596302363679,
+     "how": "take_profit",
+     "net_usd": 0.16255690710567053,
+     "ret_bps": 32.511381421134104,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-06-07 18:04",
+     "drop_pct": -2.81,
+     "entry": 158.26,
+     "exit": 156.67739999999998,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-06-07 18:14",
+     "drop_pct": -2.8,
+     "entry": 154.06,
+     "exit": 156.2178119873817,
+     "how": "take_profit",
+     "net_usd": 0.4271307570977956,
+     "ret_bps": 85.42615141955912,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-06-18 01:41",
+     "drop_pct": -2.2,
+     "entry": 134.51,
+     "exit": 133.1649,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-06-18 01:43",
+     "drop_pct": -2.94,
+     "entry": 130.1,
+     "exit": 128.799,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-07-04 01:34",
+     "drop_pct": -1.69,
+     "entry": 135.84,
+     "exit": 136.02,
+     "how": "max_hold",
+     "net_usd": -0.20376394103356119,
+     "ret_bps": -40.75278820671224,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-08-05 01:08",
+     "drop_pct": -1.74,
+     "entry": 125.13,
+     "exit": 126.22090716305372,
+     "how": "take_profit",
+     "net_usd": 0.16404519615928906,
+     "ret_bps": 32.80903923185781,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-08-05 01:10",
+     "drop_pct": -2.93,
+     "entry": 122.72,
+     "exit": 124.51914328617718,
+     "how": "take_profit",
+     "net_usd": 0.4596796831778991,
+     "ret_bps": 91.93593663557981,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-08-05 05:10",
+     "drop_pct": -1.92,
+     "entry": 117.82,
+     "exit": 116.64179999999999,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-08-05 05:12",
+     "drop_pct": -3.08,
+     "entry": 113.06,
+     "exit": 114.79960826332935,
+     "how": "take_profit",
+     "net_usd": 0.4958003359120613,
+     "ret_bps": 99.16006718241226,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-08-05 06:24",
+     "drop_pct": -3.17,
+     "entry": 111.42,
+     "exit": 113.18665073848825,
+     "how": "take_profit",
+     "net_usd": 0.5191423897697578,
+     "ret_bps": 103.82847795395156,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-12-05 22:28",
+     "drop_pct": -1.92,
+     "entry": 225.34,
+     "exit": 227.50267551686616,
+     "how": "take_profit",
+     "net_usd": 0.20778557535364287,
+     "ret_bps": 41.55711507072857,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-12-09 21:04",
+     "drop_pct": -2.83,
+     "entry": 206.69,
+     "exit": 204.6231,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2024-12-20 10:14",
+     "drop_pct": -1.92,
+     "entry": 176.69,
+     "exit": 178.38592598757214,
+     "how": "take_profit",
+     "net_usd": 0.20783158913116354,
+     "ret_bps": 41.56631782623271,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-01-19 21:51",
+     "drop_pct": -1.98,
+     "entry": 260.11,
+     "exit": 257.5089,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-02-02 22:40",
+     "drop_pct": -1.81,
+     "entry": 195.01,
+     "exit": 193.0599,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-02-03 01:54",
+     "drop_pct": -2.11,
+     "entry": 181.3,
+     "exit": 179.48700000000002,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-02-12 13:30",
+     "drop_pct": -1.89,
+     "entry": 194.31,
+     "exit": 192.3669,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-02-24 22:02",
+     "drop_pct": -2.17,
+     "entry": 145.4,
+     "exit": 146.97969054826777,
+     "how": "take_profit",
+     "net_usd": 0.2708221178103005,
+     "ret_bps": 54.16442356206011,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-03-02 16:40",
+     "drop_pct": -2.1,
+     "entry": 175.4,
+     "exit": 173.64600000000002,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-03-04 02:05",
+     "drop_pct": -1.91,
+     "entry": 133.27,
+     "exit": 134.5403124539968,
+     "how": "take_profit",
+     "net_usd": 0.20452606313486002,
+     "ret_bps": 40.905212626972,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-03-07 20:56",
+     "drop_pct": -1.89,
+     "entry": 143.64,
+     "exit": 144.99407609809413,
+     "how": "take_profit",
+     "net_usd": 0.19930239855865353,
+     "ret_bps": 39.860479711730704,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-04-07 06:46",
+     "drop_pct": -1.69,
+     "entry": 96.27,
+     "exit": 97.08118118680419,
+     "how": "take_profit",
+     "net_usd": 0.1495138871157127,
+     "ret_bps": 29.90277742314254,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-06-20 17:20",
+     "drop_pct": -2.62,
+     "entry": 136.73,
+     "exit": 136.9,
+     "how": "max_hold",
+     "net_usd": -0.20783162985445755,
+     "ret_bps": -41.56632597089151,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-06-21 21:24",
+     "drop_pct": -1.77,
+     "entry": 135.06,
+     "exit": 134.98,
+     "how": "max_hold",
+     "net_usd": -0.29915606952466023,
+     "ret_bps": -59.83121390493205,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-06-21 21:31",
+     "drop_pct": -2.9,
+     "entry": 131.05,
+     "exit": 132.9480793450882,
+     "how": "take_profit",
+     "net_usd": 0.4508774795340176,
+     "ret_bps": 90.17549590680352,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-08-14 12:30",
+     "drop_pct": -2.14,
+     "entry": 200.67,
+     "exit": 198.6633,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-08-14 12:34",
+     "drop_pct": -2.01,
+     "entry": 193.72,
+     "exit": 191.7828,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-08-14 13:04",
+     "drop_pct": -1.68,
+     "entry": 188.26,
+     "exit": 189.84292563191977,
+     "how": "take_profit",
+     "net_usd": 0.14862252258720646,
+     "ret_bps": 29.724504517441293,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-08-27 20:21",
+     "drop_pct": -1.95,
+     "entry": 203.2,
+     "exit": 205.18542822677924,
+     "how": "take_profit",
+     "net_usd": 0.21641326145958886,
+     "ret_bps": 43.28265229191777,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-09-11 12:30",
+     "drop_pct": -1.97,
+     "entry": 223.85,
+     "exit": 226.05566017079045,
+     "how": "take_profit",
+     "net_usd": 0.2205170243048005,
+     "ret_bps": 44.103404860960104,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-09-22 05:59",
+     "drop_pct": -2.25,
+     "entry": 224.98,
+     "exit": 222.7302,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-09-22 06:02",
+     "drop_pct": -2.36,
+     "entry": 217.05,
+     "exit": 219.61427494486702,
+     "how": "take_profit",
+     "net_usd": 0.31807329172105225,
+     "ret_bps": 63.614658344210454,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-10-03 17:00",
+     "drop_pct": -2.04,
+     "entry": 229.14,
+     "exit": 231.4763639861485,
+     "how": "take_profit",
+     "net_usd": 0.23757809494035656,
+     "ret_bps": 47.51561898807131,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-10-10 21:12",
+     "drop_pct": -2.64,
+     "entry": 189.53,
+     "exit": 187.6347,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-10-10 21:15",
+     "drop_pct": -2.91,
+     "entry": 182.08,
+     "exit": 180.25920000000002,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-10-16 09:34",
+     "drop_pct": -2.53,
+     "entry": 186.84,
+     "exit": 189.19889398998333,
+     "how": "take_profit",
+     "net_usd": 0.35842057726420107,
+     "ret_bps": 71.68411545284022,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-10-29 18:35",
+     "drop_pct": -2.25,
+     "entry": 193.67,
+     "exit": 191.73329999999999,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-11-03 15:27",
+     "drop_pct": -2.32,
+     "entry": 168.5,
+     "exit": 170.4582801993972,
+     "how": "take_profit",
+     "net_usd": 0.30850271888766967,
+     "ret_bps": 61.70054377753393,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2025-11-21 07:33",
+     "drop_pct": -2.06,
+     "entry": 125.88,
+     "exit": 124.62119999999999,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-01-19 00:01",
+     "drop_pct": -2.65,
+     "entry": 132.08,
+     "exit": 130.75920000000002,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-01-25 19:53",
+     "drop_pct": -1.73,
+     "entry": 117.75,
+     "exit": 117.96,
+     "how": "max_hold",
+     "net_usd": -0.18096082802547328,
+     "ret_bps": -36.19216560509465,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-01-30 01:42",
+     "drop_pct": -2.53,
+     "entry": 112.68,
+     "exit": 114.10799480968858,
+     "how": "take_profit",
+     "net_usd": 0.36079872675172764,
+     "ret_bps": 72.15974535034553,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-01-31 17:11",
+     "drop_pct": -2.79,
+     "entry": 101.26,
+     "exit": 102.67313351237291,
+     "how": "take_profit",
+     "net_usd": 0.42460278090831194,
+     "ret_bps": 84.92055618166239,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-01-31 18:43",
+     "drop_pct": -4.45,
+     "entry": 97.19,
+     "exit": 99.35391772338542,
+     "how": "take_profit",
+     "net_usd": 0.8379941849749346,
+     "ret_bps": 167.59883699498693,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-02-05 20:25",
+     "drop_pct": -1.91,
+     "entry": 78.18,
+     "exit": 78.92550564617315,
+     "how": "take_profit",
+     "net_usd": 0.20471949498117994,
+     "ret_bps": 40.943898996235994,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-02-06 00:14",
+     "drop_pct": -2.99,
+     "entry": 72.36,
+     "exit": 71.6364,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-02-06 00:19",
+     "drop_pct": -3.84,
+     "entry": 67.81,
+     "exit": 69.11089975930908,
+     "how": "take_profit",
+     "net_usd": 0.6847465002477651,
+     "ret_bps": 136.94930004955302,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-08-22 04:45",
+     "drop_pct": -2.02,
+     "entry": 100.15,
+     "exit": 99.1485,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-08-22 05:09",
+     "drop_pct": -2.06,
+     "entry": 95.52,
+     "exit": 94.56479999999999,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-08-22 05:10",
+     "drop_pct": -5.51,
+     "entry": 90.16,
+     "exit": 89.2584,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-08-23 14:42",
+     "drop_pct": -1.73,
+     "entry": 93.64,
+     "exit": 94.45071466051003,
+     "how": "take_profit",
+     "net_usd": 0.16103983563333515,
+     "ret_bps": 32.20796712666703,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-09-04 12:30",
+     "drop_pct": -2.25,
+     "entry": 101.98,
+     "exit": 100.9602,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2026-10-14 12:30",
+     "drop_pct": -1.71,
+     "entry": 105.91,
+     "exit": 106.13,
+     "how": "max_hold",
+     "net_usd": -0.16634439028419876,
+     "ret_bps": -33.26887805683975,
+     "symbol": "SOLUSDT"
+    },
+    {
+     "time": "2023-07-24 09:50",
+     "drop_pct": -1.83,
+     "entry": 29074.47,
+     "exit": 29202.29,
+     "how": "max_hold",
+     "net_usd": -0.050970359369398185,
+     "ret_bps": -10.194071873879636,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2023-08-17 21:43",
+     "drop_pct": -3.5,
+     "entry": 26054.32,
+     "exit": 25793.7768,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2023-08-17 21:44",
+     "drop_pct": -3.33,
+     "entry": 25188.0,
+     "exit": 25606.752365826476,
+     "how": "take_profit",
+     "net_usd": 0.5574151306170267,
+     "ret_bps": 111.48302612340535,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2023-10-16 13:35",
+     "drop_pct": -1.73,
+     "entry": 28709.86,
+     "exit": 28958.487858500244,
+     "how": "take_profit",
+     "net_usd": 0.16115102225657155,
+     "ret_bps": 32.23020445131431,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2023-12-11 02:12",
+     "drop_pct": -2.39,
+     "entry": 41272.87,
+     "exit": 40860.1413,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-01-03 12:01",
+     "drop_pct": -2.25,
+     "entry": 42573.63,
+     "exit": 43053.25901243371,
+     "how": "take_profit",
+     "net_usd": 0.29079308980744,
+     "ret_bps": 58.158617961488,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-01-03 12:09",
+     "drop_pct": -2.55,
+     "entry": 40888.0,
+     "exit": 41410.15913848723,
+     "how": "take_profit",
+     "net_usd": 0.3656475693227992,
+     "ret_bps": 73.12951386455984,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-01-05 01:48",
+     "drop_pct": -2.7,
+     "entry": 42550.0,
+     "exit": 43124.15610161213,
+     "how": "take_profit",
+     "net_usd": 0.4016273173674523,
+     "ret_bps": 80.32546347349046,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-01-09 12:56",
+     "drop_pct": -1.9,
+     "entry": 45815.79,
+     "exit": 46251.09300512082,
+     "how": "take_profit",
+     "net_usd": 0.20299802036208406,
+     "ret_bps": 40.59960407241681,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-01-09 21:15",
+     "drop_pct": -2.48,
+     "entry": 46705.61,
+     "exit": 46238.5539,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-02-28 17:25",
+     "drop_pct": -2.14,
+     "entry": 61333.67,
+     "exit": 61991.27463841286,
+     "how": "take_profit",
+     "net_usd": 0.26372320675355665,
+     "ret_bps": 52.744641350711326,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-02-28 17:31",
+     "drop_pct": -2.77,
+     "entry": 59580.59,
+     "exit": 60404.70325565056,
+     "how": "take_profit",
+     "net_usd": 0.41845425898572897,
+     "ret_bps": 83.6908517971458,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-04-13 20:07",
+     "drop_pct": -1.82,
+     "entry": 62287.98,
+     "exit": 61665.1002,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-08-05 01:10",
+     "drop_pct": -2.96,
+     "entry": 53162.4,
+     "exit": 53948.80961309833,
+     "how": "take_profit",
+     "net_usd": 0.46624849996701156,
+     "ret_bps": 93.24969999340232,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-08-05 06:24",
+     "drop_pct": -1.83,
+     "entry": 49351.26,
+     "exit": 49801.75620505612,
+     "how": "take_profit",
+     "net_usd": 0.18445140104540372,
+     "ret_bps": 36.89028020908074,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-12-05 22:28",
+     "drop_pct": -3.68,
+     "entry": 92656.41,
+     "exit": 94359.23335921664,
+     "how": "take_profit",
+     "net_usd": 0.644615075000782,
+     "ret_bps": 128.9230150001564,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2025-10-10 21:16",
+     "drop_pct": -1.89,
+     "entry": 109022.17,
+     "exit": 107931.9483,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2025-10-10 21:19",
+     "drop_pct": -4.29,
+     "entry": 104113.85,
+     "exit": 103072.7115,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2025-11-21 07:33",
+     "drop_pct": -1.71,
+     "entry": 83400.0,
+     "exit": 82566.0,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2026-01-31 18:43",
+     "drop_pct": -2.06,
+     "entry": 75788.23,
+     "exit": 76569.7095390943,
+     "how": "take_profit",
+     "net_usd": 0.24330576138501273,
+     "ret_bps": 48.66115227700254,
+     "symbol": "BTCUSDT"
+    },
+    {
+     "time": "2024-01-03 12:01",
+     "drop_pct": -2.78,
+     "entry": 2235.93,
+     "exit": 2240.6,
+     "how": "max_hold",
+     "net_usd": -0.1657781829037472,
+     "ret_bps": -33.15563658074944,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-01-03 12:09",
+     "drop_pct": -2.93,
+     "entry": 2137.25,
+     "exit": 2115.8775,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-01-09 12:56",
+     "drop_pct": -1.89,
+     "entry": 2242.2,
+     "exit": 2263.3978360133265,
+     "how": "take_profit",
+     "net_usd": 0.20065366759733963,
+     "ret_bps": 40.130733519467924,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-02-28 17:31",
+     "drop_pct": -5.26,
+     "entry": 3196.72,
+     "exit": 3280.7384967754174,
+     "how": "take_profit",
+     "net_usd": 1.0378860348598837,
+     "ret_bps": 207.57720697197675,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-03-05 19:56",
+     "drop_pct": -2.18,
+     "entry": 3280.99,
+     "exit": 3248.1800999999996,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-04-12 18:32",
+     "drop_pct": -2.09,
+     "entry": 3222.23,
+     "exit": 3190.0077,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-04-12 18:35",
+     "drop_pct": -3.17,
+     "entry": 3123.0,
+     "exit": 3172.5370009797484,
+     "how": "take_profit",
+     "net_usd": 0.5194515582950063,
+     "ret_bps": 103.89031165900127,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-04-13 19:56",
+     "drop_pct": -1.93,
+     "entry": 3024.11,
+     "exit": 3053.367419182764,
+     "how": "take_profit",
+     "net_usd": 0.21163287104669196,
+     "ret_bps": 42.32657420933839,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-04-13 20:07",
+     "drop_pct": -2.59,
+     "entry": 2946.86,
+     "exit": 2917.3914,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-05-23 12:56",
+     "drop_pct": -2.03,
+     "entry": 3830.15,
+     "exit": 3868.9525382031843,
+     "how": "take_profit",
+     "net_usd": 0.23432367486302355,
+     "ret_bps": 46.86473497260471,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-05-23 20:00",
+     "drop_pct": -3.76,
+     "entry": 3652.04,
+     "exit": 3720.763668623758,
+     "how": "take_profit",
+     "net_usd": 0.6665081578182099,
+     "ret_bps": 133.301631563642,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-05-23 21:04",
+     "drop_pct": -1.81,
+     "entry": 3809.55,
+     "exit": 3844.0357317798675,
+     "how": "take_profit",
+     "net_usd": 0.18067433613277076,
+     "ret_bps": 36.13486722655415,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-06-07 18:04",
+     "drop_pct": -1.7,
+     "entry": 3612.21,
+     "exit": 3642.993367671787,
+     "how": "take_profit",
+     "net_usd": 0.15428623393955435,
+     "ret_bps": 30.85724678791087,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-08-04 17:10",
+     "drop_pct": -2.27,
+     "entry": 2733.27,
+     "exit": 2759.45,
+     "how": "max_hold",
+     "net_usd": 0.20683446133203234,
+     "ret_bps": 41.366892266406474,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-08-05 00:57",
+     "drop_pct": -1.7,
+     "entry": 2513.6,
+     "exit": 2534.9365172603943,
+     "how": "take_profit",
+     "net_usd": 0.15261453746271372,
+     "ret_bps": 30.522907492542746,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-08-05 01:06",
+     "drop_pct": -1.85,
+     "entry": 2467.09,
+     "exit": 2442.4191,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-08-05 01:08",
+     "drop_pct": -4.45,
+     "entry": 2318.23,
+     "exit": 2295.0477,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-08-05 01:10",
+     "drop_pct": -8.4,
+     "entry": 2140.6,
+     "exit": 2230.55152909059,
+     "how": "take_profit",
+     "net_usd": 1.8209023729840754,
+     "ret_bps": 364.1804745968151,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-08-05 06:24",
+     "drop_pct": -2.25,
+     "entry": 2176.16,
+     "exit": 2200.6330386814784,
+     "how": "take_profit",
+     "net_usd": 0.28980321861818537,
+     "ret_bps": 57.96064372363708,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-08-27 21:47",
+     "drop_pct": -1.9,
+     "entry": 2484.42,
+     "exit": 2459.5758,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-12-05 22:28",
+     "drop_pct": -1.7,
+     "entry": 3716.01,
+     "exit": 3747.6179859773774,
+     "how": "take_profit",
+     "net_usd": 0.15348336871944526,
+     "ret_bps": 30.69667374388905,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-12-09 21:04",
+     "drop_pct": -2.28,
+     "entry": 3568.01,
+     "exit": 3532.3299,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2024-12-20 10:14",
+     "drop_pct": -1.89,
+     "entry": 3149.82,
+     "exit": 3179.6223974627783,
+     "how": "take_profit",
+     "net_usd": 0.20103101312850982,
+     "ret_bps": 40.20620262570196,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-02-02 22:31",
+     "drop_pct": -1.71,
+     "entry": 2853.5,
+     "exit": 2877.8568808192704,
+     "how": "take_profit",
+     "net_usd": 0.1549707906199305,
+     "ret_bps": 30.994158123986097,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-02-03 01:45",
+     "drop_pct": -1.81,
+     "entry": 2699.31,
+     "exit": 2672.3169,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-02-03 01:54",
+     "drop_pct": -2.8,
+     "entry": 2566.26,
+     "exit": 2540.5974,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-02-03 01:55",
+     "drop_pct": -6.18,
+     "entry": 2407.8,
+     "exit": 2482.14215144938,
+     "how": "take_profit",
+     "net_usd": 1.2663808057268002,
+     "ret_bps": 253.27616114536002,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-02-03 02:07",
+     "drop_pct": -9.59,
+     "entry": 2179.52,
+     "exit": 2157.7248,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-02-12 13:30",
+     "drop_pct": -1.86,
+     "entry": 2610.4,
+     "exit": 2584.2960000000003,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-03-11 00:51",
+     "drop_pct": -1.91,
+     "entry": 1760.59,
+     "exit": 1777.3929298663963,
+     "how": "take_profit",
+     "net_usd": 0.20512549551218798,
+     "ret_bps": 41.02509910243759,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-03-12 08:16",
+     "drop_pct": -1.93,
+     "entry": 1885.12,
+     "exit": 1896.02,
+     "how": "max_hold",
+     "net_usd": 0.017975039387418974,
+     "ret_bps": 3.5950078774837944,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-03-28 04:40",
+     "drop_pct": -1.78,
+     "entry": 1942.67,
+     "exit": 1923.2433,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-04-06 20:36",
+     "drop_pct": -2.06,
+     "entry": 1560.55,
+     "exit": 1576.6229063823114,
+     "how": "take_profit",
+     "net_usd": 0.24271653402853446,
+     "ret_bps": 48.5433068057069,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-04-07 06:46",
+     "drop_pct": -2.28,
+     "entry": 1436.36,
+     "exit": 1452.7394667047688,
+     "how": "take_profit",
+     "net_usd": 0.2976379526341648,
+     "ret_bps": 59.52759052683296,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-05-18 20:00",
+     "drop_pct": -2.81,
+     "entry": 2340.46,
+     "exit": 2373.3869931068843,
+     "how": "take_profit",
+     "net_usd": 0.43022969437754055,
+     "ret_bps": 86.04593887550811,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-06-21 21:24",
+     "drop_pct": -3.33,
+     "entry": 2307.72,
+     "exit": 2346.1597720991003,
+     "how": "take_profit",
+     "net_usd": 0.5590051812434029,
+     "ret_bps": 111.80103624868059,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-06-21 21:31",
+     "drop_pct": -3.3,
+     "entry": 2255.89,
+     "exit": 2293.1190989755237,
+     "how": "take_profit",
+     "net_usd": 0.551345133739122,
+     "ret_bps": 110.2690267478244,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-09-11 12:30",
+     "drop_pct": -1.87,
+     "entry": 4389.13,
+     "exit": 4414.12,
+     "how": "max_hold",
+     "net_usd": 0.013571439556361326,
+     "ret_bps": 2.7142879112722653,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-09-17 17:59",
+     "drop_pct": -1.84,
+     "entry": 4433.77,
+     "exit": 4474.48330761039,
+     "how": "take_profit",
+     "net_usd": 0.1871471523445041,
+     "ret_bps": 37.42943046890082,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-09-22 06:02",
+     "drop_pct": -1.73,
+     "entry": 4091.56,
+     "exit": 4126.927713705852,
+     "how": "take_profit",
+     "net_usd": 0.1603574728897246,
+     "ret_bps": 32.07149457794492,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-10-10 21:16",
+     "drop_pct": -3.69,
+     "entry": 3592.52,
+     "exit": 3556.5948,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-10-10 21:57",
+     "drop_pct": -2.94,
+     "entry": 3948.28,
+     "exit": 3915.71,
+     "how": "max_hold",
+     "net_usd": -0.6800858704613089,
+     "ret_bps": -136.01717409226177,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2025-10-29 18:35",
+     "drop_pct": -2.45,
+     "entry": 3906.21,
+     "exit": 3867.1479,
+     "how": "stop",
+     "net_usd": -0.7671906250000018,
+     "ret_bps": -153.43812500000035,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2026-01-31 17:11",
+     "drop_pct": -1.96,
+     "entry": 2399.45,
+     "exit": 2375.4554999999996,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2026-01-31 18:43",
+     "drop_pct": -3.75,
+     "entry": 2250.5,
+     "exit": 2292.6914007535806,
+     "how": "take_profit",
+     "net_usd": 0.6630098438362029,
+     "ret_bps": 132.60196876724058,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2026-05-17 23:41",
+     "drop_pct": -2.33,
+     "entry": 2095.47,
+     "exit": 2119.892146722412,
+     "how": "take_profit",
+     "net_usd": 0.31013918869554,
+     "ret_bps": 62.02783773910801,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2026-08-22 05:09",
+     "drop_pct": -1.69,
+     "entry": 2452.94,
+     "exit": 2428.4106,
+     "how": "stop",
+     "net_usd": -0.7671906249999947,
+     "ret_bps": -153.43812499999893,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2026-08-22 05:10",
+     "drop_pct": -2.46,
+     "entry": 2394.09,
+     "exit": 2423.550813003987,
+     "how": "take_profit",
+     "net_usd": 0.3425220048441804,
+     "ret_bps": 68.50440096883608,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2026-08-23 14:42",
+     "drop_pct": -2.11,
+     "entry": 2400.18,
+     "exit": 2425.5424240619905,
+     "how": "take_profit",
+     "net_usd": 0.25601828991640785,
+     "ret_bps": 51.20365798328157,
+     "symbol": "ETHUSDT"
+    },
+    {
+     "time": "2026-09-04 12:30",
+     "drop_pct": -2.24,
+     "entry": 2473.64,
+     "exit": 2448.9035999999996,
+     "how": "stop",
+     "net_usd": -0.7671906250000089,
+     "ret_bps": -153.43812500000178,
+     "symbol": "ETHUSDT"
+    }
+   ]
+  },
+  "cost25|delay2": {
+   "pooled": {
+    "n": 186,
+    "win_rate_pct": 40.9,
+    "mean_bps": -40.2,
+    "median_bps": -51.6,
+    "ci95_mean_bps": [
+     -56.6,
+     -22.9
+    ],
+    "profit_factor": 0.44,
+    "worst_bps": -153.4,
+    "best_bps": 423.1,
+    "exits": {
+     "take_profit": 69,
+     "stop": 76,
+     "max_hold": 41
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 116,
+     "win_rate_pct": 42.2,
+     "mean_bps": -36.2,
+     "median_bps": -51.7,
+     "ci95_mean_bps": [
+      -57.1,
+      -15.0
+     ],
+     "profit_factor": 0.49,
+     "worst_bps": -153.4,
+     "best_bps": 325.9,
+     "exits": {
+      "take_profit": 45,
+      "stop": 46,
+      "max_hold": 25
+     }
+    },
+    "BTCUSDT": {
+     "n": 20,
+     "win_rate_pct": 50.0,
+     "mean_bps": -27.8,
+     "median_bps": -1.2,
+     "ci95_mean_bps": [
+      -76.4,
+      19.7
+     ],
+     "profit_factor": 0.55,
+     "worst_bps": -153.4,
+     "best_bps": 128.9,
+     "exits": {
+      "take_profit": 9,
+      "stop": 8,
+      "max_hold": 3
+     }
+    },
+    "ETHUSDT": {
+     "n": 50,
+     "win_rate_pct": 34.0,
+     "mean_bps": -54.3,
+     "median_bps": -65.5,
+     "ci95_mean_bps": [
+      -84.0,
+      -21.5
+     ],
+     "profit_factor": 0.3,
+     "worst_bps": -153.4,
+     "best_bps": 423.1,
+     "exits": {
+      "take_profit": 15,
+      "stop": 22,
+      "max_hold": 13
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 49,
+     "win_rate_pct": 44.9,
+     "mean_bps": -32.1,
+     "median_bps": -36.9,
+     "ci95_mean_bps": [
+      -63.2,
+      0.9
+     ],
+     "profit_factor": 0.53,
+     "worst_bps": -153.4,
+     "best_bps": 325.9,
+     "exits": {
+      "take_profit": 21,
+      "stop": 19,
+      "max_hold": 9
+     }
+    },
+    "2024": {
+     "n": 66,
+     "win_rate_pct": 48.5,
+     "mean_bps": -32.4,
+     "median_bps": -6.2,
+     "ci95_mean_bps": [
+      -61.1,
+      -3.7
+     ],
+     "profit_factor": 0.53,
+     "worst_bps": -153.4,
+     "best_bps": 301.0,
+     "exits": {
+      "take_profit": 30,
+      "stop": 29,
+      "max_hold": 7
+     }
+    },
+    "2025": {
+     "n": 49,
+     "win_rate_pct": 30.6,
+     "mean_bps": -62.1,
+     "median_bps": -78.7,
+     "ci95_mean_bps": [
+      -91.0,
+      -29.4
+     ],
+     "profit_factor": 0.26,
+     "worst_bps": -153.4,
+     "best_bps": 423.1,
+     "exits": {
+      "take_profit": 13,
+      "stop": 21,
+      "max_hold": 15
+     }
+    },
+    "2026": {
+     "n": 22,
+     "win_rate_pct": 31.8,
+     "mean_bps": -32.5,
+     "median_bps": -30.0,
+     "ci95_mean_bps": [
+      -75.6,
+      13.1
+     ],
+     "profit_factor": 0.47,
+     "worst_bps": -153.4,
+     "best_bps": 220.0,
+     "exits": {
+      "take_profit": 5,
+      "stop": 7,
+      "max_hold": 10
+     }
+    }
+   },
+   "trades": null
+  },
+  "cost50|delay0": {
+   "pooled": {
+    "n": 63,
+    "win_rate_pct": 0.0,
+    "mean_bps": -202.8,
+    "median_bps": -202.8,
+    "ci95_mean_bps": [
+     -202.8,
+     -202.8
+    ],
+    "profit_factor": 0.0,
+    "worst_bps": -202.8,
+    "best_bps": -202.8,
+    "exits": {
+     "take_profit": 0,
+     "stop": 63,
+     "max_hold": 0
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 40,
+     "win_rate_pct": 0.0,
+     "mean_bps": -202.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -202.8,
+      -202.8
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -202.8,
+     "best_bps": -202.8,
+     "exits": {
+      "take_profit": 0,
+      "stop": 40,
+      "max_hold": 0
+     }
+    },
+    "BTCUSDT": {
+     "n": 7,
+     "win_rate_pct": 0.0,
+     "mean_bps": -202.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -202.8,
+      -202.8
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -202.8,
+     "best_bps": -202.8,
+     "exits": {
+      "take_profit": 0,
+      "stop": 7,
+      "max_hold": 0
+     }
+    },
+    "ETHUSDT": {
+     "n": 16,
+     "win_rate_pct": 0.0,
+     "mean_bps": -202.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -202.8,
+      -202.8
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -202.8,
+     "best_bps": -202.8,
+     "exits": {
+      "take_profit": 0,
+      "stop": 16,
+      "max_hold": 0
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 15,
+     "win_rate_pct": 0.0,
+     "mean_bps": -202.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -202.8,
+      -202.8
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -202.8,
+     "best_bps": -202.8,
+     "exits": {
+      "take_profit": 0,
+      "stop": 15,
+      "max_hold": 0
+     }
+    },
+    "2024": {
+     "n": 31,
+     "win_rate_pct": 0.0,
+     "mean_bps": -202.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -202.8,
+      -202.8
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -202.8,
+     "best_bps": -202.8,
+     "exits": {
+      "take_profit": 0,
+      "stop": 31,
+      "max_hold": 0
+     }
+    },
+    "2025": {
+     "n": 11,
+     "win_rate_pct": 0.0,
+     "mean_bps": -202.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -202.8,
+      -202.8
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -202.8,
+     "best_bps": -202.8,
+     "exits": {
+      "take_profit": 0,
+      "stop": 11,
+      "max_hold": 0
+     }
+    },
+    "2026": {
+     "n": 6,
+     "win_rate_pct": 0.0,
+     "mean_bps": -202.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -202.8,
+      -202.8
+     ],
+     "profit_factor": 0.0,
+     "worst_bps": -202.8,
+     "best_bps": -202.8,
+     "exits": {
+      "take_profit": 0,
+      "stop": 6,
+      "max_hold": 0
+     }
+    }
+   },
+   "trades": null
+  },
+  "cost50|delay1": {
+   "pooled": {
+    "n": 63,
+    "win_rate_pct": 49.2,
+    "mean_bps": -54.2,
+    "median_bps": -27.1,
+    "ci95_mean_bps": [
+     -91.9,
+     -16.9
+    ],
+    "profit_factor": 0.45,
+    "worst_bps": -202.8,
+    "best_bps": 312.3,
+    "exits": {
+     "take_profit": 31,
+     "stop": 29,
+     "max_hold": 3
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 40,
+     "win_rate_pct": 42.5,
+     "mean_bps": -75.4,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -121.3,
+      -29.3
+     ],
+     "profit_factor": 0.33,
+     "worst_bps": -202.8,
+     "best_bps": 274.2,
+     "exits": {
+      "take_profit": 17,
+      "stop": 22,
+      "max_hold": 1
+     }
+    },
+    "BTCUSDT": {
+     "n": 7,
+     "win_rate_pct": 71.4,
+     "mean_bps": -23.0,
+     "median_bps": 33.2,
+     "ci95_mean_bps": [
+      -102.6,
+      52.9
+     ],
+     "profit_factor": 0.6,
+     "worst_bps": -202.8,
+     "best_bps": 78.2,
+     "exits": {
+      "take_profit": 5,
+      "stop": 2,
+      "max_hold": 0
+     }
+    },
+    "ETHUSDT": {
+     "n": 16,
+     "win_rate_pct": 56.2,
+     "mean_bps": -14.8,
+     "median_bps": 44.4,
+     "ci95_mean_bps": [
+      -94.5,
+      66.5
+     ],
+     "profit_factor": 0.81,
+     "worst_bps": -202.8,
+     "best_bps": 312.3,
+     "exits": {
+      "take_profit": 9,
+      "stop": 5,
+      "max_hold": 2
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 15,
+     "win_rate_pct": 33.3,
+     "mean_bps": -91.7,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -161.8,
+      -12.8
+     ],
+     "profit_factor": 0.26,
+     "worst_bps": -202.8,
+     "best_bps": 274.2,
+     "exits": {
+      "take_profit": 5,
+      "stop": 9,
+      "max_hold": 1
+     }
+    },
+    "2024": {
+     "n": 31,
+     "win_rate_pct": 54.8,
+     "mean_bps": -37.2,
+     "median_bps": 33.1,
+     "ci95_mean_bps": [
+      -93.3,
+      18.0
+     ],
+     "profit_factor": 0.58,
+     "worst_bps": -202.8,
+     "best_bps": 312.3,
+     "exits": {
+      "take_profit": 17,
+      "stop": 13,
+      "max_hold": 1
+     }
+    },
+    "2025": {
+     "n": 11,
+     "win_rate_pct": 45.5,
+     "mean_bps": -72.8,
+     "median_bps": -185.4,
+     "ci95_mean_bps": [
+      -155.9,
+      14.4
+     ],
+     "profit_factor": 0.33,
+     "worst_bps": -202.8,
+     "best_bps": 201.9,
+     "exits": {
+      "take_profit": 5,
+      "stop": 5,
+      "max_hold": 1
+     }
+    },
+    "2026": {
+     "n": 6,
+     "win_rate_pct": 66.7,
+     "mean_bps": -14.4,
+     "median_bps": 58.1,
+     "ci95_mean_bps": [
+      -115.8,
+      87.0
+     ],
+     "profit_factor": 0.79,
+     "worst_bps": -202.8,
+     "best_bps": 116.7,
+     "exits": {
+      "take_profit": 4,
+      "stop": 2,
+      "max_hold": 0
+     }
+    }
+   },
+   "trades": null
+  },
+  "cost50|delay2": {
+   "pooled": {
+    "n": 63,
+    "win_rate_pct": 39.7,
+    "mean_bps": -68.0,
+    "median_bps": -114.2,
+    "ci95_mean_bps": [
+     -104.7,
+     -30.0
+    ],
+    "profit_factor": 0.36,
+    "worst_bps": -202.8,
+    "best_bps": 370.9,
+    "exits": {
+     "take_profit": 24,
+     "stop": 31,
+     "max_hold": 8
+    }
+   },
+   "per_asset": {
+    "SOLUSDT": {
+     "n": 40,
+     "win_rate_pct": 42.5,
+     "mean_bps": -53.3,
+     "median_bps": -63.2,
+     "ci95_mean_bps": [
+      -99.1,
+      -7.7
+     ],
+     "profit_factor": 0.44,
+     "worst_bps": -202.8,
+     "best_bps": 274.2,
+     "exits": {
+      "take_profit": 16,
+      "stop": 17,
+      "max_hold": 7
+     }
+    },
+    "BTCUSDT": {
+     "n": 7,
+     "win_rate_pct": 57.1,
+     "mean_bps": -31.1,
+     "median_bps": 33.2,
+     "ci95_mean_bps": [
+      -123.7,
+      50.5
+     ],
+     "profit_factor": 0.53,
+     "worst_bps": -202.8,
+     "best_bps": 78.2,
+     "exits": {
+      "take_profit": 4,
+      "stop": 2,
+      "max_hold": 1
+     }
+    },
+    "ETHUSDT": {
+     "n": 16,
+     "win_rate_pct": 25.0,
+     "mean_bps": -120.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -187.5,
+      -33.5
+     ],
+     "profit_factor": 0.21,
+     "worst_bps": -202.8,
+     "best_bps": 370.9,
+     "exits": {
+      "take_profit": 4,
+      "stop": 12,
+      "max_hold": 0
+     }
+    }
+   },
+   "by_year": {
+    "2023": {
+     "n": 15,
+     "win_rate_pct": 40.0,
+     "mean_bps": -59.1,
+     "median_bps": -99.5,
+     "ci95_mean_bps": [
+      -135.4,
+      20.6
+     ],
+     "profit_factor": 0.43,
+     "worst_bps": -202.8,
+     "best_bps": 274.2,
+     "exits": {
+      "take_profit": 6,
+      "stop": 7,
+      "max_hold": 2
+     }
+    },
+    "2024": {
+     "n": 31,
+     "win_rate_pct": 38.7,
+     "mean_bps": -72.2,
+     "median_bps": -67.7,
+     "ci95_mean_bps": [
+      -120.0,
+      -23.9
+     ],
+     "profit_factor": 0.31,
+     "worst_bps": -202.8,
+     "best_bps": 249.4,
+     "exits": {
+      "take_profit": 12,
+      "stop": 15,
+      "max_hold": 4
+     }
+    },
+    "2025": {
+     "n": 11,
+     "win_rate_pct": 27.3,
+     "mean_bps": -98.8,
+     "median_bps": -202.8,
+     "ci95_mean_bps": [
+      -186.6,
+      18.6
+     ],
+     "profit_factor": 0.29,
+     "worst_bps": -202.8,
+     "best_bps": 370.9,
+     "exits": {
+      "take_profit": 3,
+      "stop": 7,
+      "max_hold": 1
+     }
+    },
+    "2026": {
+     "n": 6,
+     "win_rate_pct": 66.7,
+     "mean_bps": -12.0,
+     "median_bps": 39.4,
+     "ci95_mean_bps": [
+      -123.7,
+      96.5
+     ],
+     "profit_factor": 0.82,
+     "worst_bps": -202.8,
+     "best_bps": 168.8,
+     "exits": {
+      "take_profit": 3,
+      "stop": 2,
+      "max_hold": 1
+     }
+    }
+   },
+   "trades": null
+  }
+ },
+ "C_bootstrap": {
+  "pool_sizes": [
+   43,
+   43,
+   43,
+   43,
+   43,
+   43
+  ],
+  "probabilities_pct": {
+   "target": 36.9,
+   "stop": 60.2,
+   "neither": 2.9
+  },
+  "entry": 90.5,
+  "take_profit": 93.5888,
+  "stop": 89.595,
+  "breakeven_target_share_pct": 22.7
+ }
+}
