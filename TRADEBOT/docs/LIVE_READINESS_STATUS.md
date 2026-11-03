@@ -69,6 +69,53 @@ roughly 6–10 months.
 | AI | Off. Not in the execution path |
 | Signal vs executable asset | Signals on Binance BTCUSDT, ETHUSDT, SOLUSDT; executes cbBTC `cbbtcf3a…ij`, WETH `7vfCXTUX…voxs`, SOL `So111…112`. Measured basis 2026-11-03 07:07–07:09 UTC: −16 to −23 bps, tracked in every cycle |
 
+## 4a. Exit protection: what happens on failure while holding a position
+
+Exits (stops, strategy exits, kill-switch and daily-halt flatten) run **inside the engine process**, once per 60 s
+cycle (`engine/bot._manage_positions`). Jupiter spot has no resting stop order in this design. So a stop exists only
+while the engine runs and can reach its data, Jupiter and, live, its RPC and signer.
+
+| Failure while holding | What happens | When the exit happens |
+|---|---|---|
+| **Engine process crashes** | Positions, stops and high-water marks are in the ledger (updated every cycle). The supervisor restarts the engine: `windows/run_paper.bat` loop after 30 s, systemd `Restart=always` after 15 s, Docker `restart: unless-stopped`. On start: pending intents are reconciled from chain evidence; live balances are compared with the ledger, and a mismatch trips the kill switch. | First cycle after restart, **at the post-restart price**, so a gap through the stop fills below it. **Verified:** `test_restart_while_holding_restores_stop_and_exits_when_breached` plus the crash tests |
+| **Host down** (power, sleep, OS update) | Nothing runs, so no exit | Only when the host is back. **Unbounded.** Windows sleep is the most likely cause on a PC |
+| **Internet down** | Prices go stale. After 300 s the kill switch trips and tries to flatten, which fails without network. It retries every cycle | When connectivity returns |
+| **Binance candles down; Jupiter up** | Stale data trips the kill switch, then flattens through Jupiter | Within about 5 min (conservative: exits rather than holds) |
+| **Jupiter down** | No quotes and no swaps; Jupiter is the only venue | When Jupiter returns |
+| **RPC down (live)** | The live adapter needs RPC for block height, simulation and confirmation. Its fail-closed checks **also block exits** | When the RPC returns |
+| **Signer down (live)** | No signature, so no exit | When the signer returns |
+| **Exit transaction outcome unknown** | Symbol blocked; settled from chain evidence; never re-sent as a new transaction | After reconciliation, usually within the blockhash life of about 1–2 min |
+
+**Loss while unprotected is bounded only by position size and the gap:**
+
+- Paper: up to 10% of equity per position and 50% total.
+- Planned micro-live: $10 per order and $25 exposure.
+- The tsmom 25% disaster stop and the momentum ATR stop are enforced only while the engine runs.
+
+**Minimum practical protection.** Steps 1–3 use existing tools; nothing new is subscribed to.
+
+1. **An always-on host with supervision:** a small VPS, or the PC with sleep and automatic restarts disabled, running
+   the existing `run_paper.bat` loop, systemd unit or Docker. This removes most process and host gaps.
+2. **An out-of-band heartbeat alert.** The engine already writes an equity point every 300 s. A check on a second
+   machine pages you if the newest point is older than 10 minutes while positions are open; you then sell in Phantom
+   or jup.ag by hand. This covers host, process and internet loss on the engine side, provided Jupiter is up and you
+   are reachable.
+3. **A fallback RPC list for live exits:** two or three independent providers, so one RPC outage does not block
+   reduce-only exits. All verification stays as it is.
+4. **Deliberately not proposed yet:**
+   - **Jupiter Trigger orders.** They move funds into Jupiter's order program until filled or cancelled. That is a
+     custody change and needs your decision first. Stop-style semantics on Trigger are unverified here.
+   - **A second process able to sign sells.** That would be a second execution path holding signing access.
+
+**What still fails even with 1–3:**
+
+- simultaneous Jupiter and engine outages;
+- you being unreachable when paged;
+- the alert path failing at the same time;
+- gap risk between the last good price and the eventual exit.
+
+The only control over the size of those losses is the position and exposure limit.
+
 ## 5. Live blockers, in order
 
 1. **Forward evidence (section 3).**
