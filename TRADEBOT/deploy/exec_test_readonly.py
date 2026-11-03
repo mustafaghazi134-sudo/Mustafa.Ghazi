@@ -67,7 +67,26 @@ def main() -> None:
     if own:
         targets.append(("OWNER TEST WALLET", own))
     fw = None
-    for cand in RPCS:
+    print("\n--- quote-only round trip (no wallet; nothing built or simulated)")
+    try:
+        s.live.wallet_pubkey = "11111111111111111111111111111111"
+        a0 = JupiterExecutionAdapter(RiskEngine(s.risk, KillSwitch(s.kill_file)), s, LiveProvider(s.data, s.universe, s.execution),
+                                     controls=None, signer=None, dry_run=True)
+        for i in range(3):
+            qb = a0.quote("SOL", Side.BUY, usd)
+            time.sleep(2.5)
+            qs = a0.quote("SOL", Side.SELL, qb.out_amount)
+            print(f"sample {i + 1}: buy ${usd:.2f} -> {qb.out_amount:.6f} SOL (cost {qb.expected_slippage_bps:.1f} bps vs reference, router "
+                  f"{(qb.raw or {}).get('router')}); sell back -> ${qs.out_amount:.4f} (cost {qs.expected_slippage_bps:.1f} bps); "
+                  f"round trip {(1 - qs.out_amount / usd) * 1e4:.1f} bps = ${usd - qs.out_amount:.4f}")
+            time.sleep(2.5)
+    except Exception as e:  # noqa: BLE001
+        print(f"quote-only FAIL {type(e).__name__}: {e}")
+    if not targets:
+        print("\nno owner test wallet configured (deploy/exec_test_wallet.txt); skipping the funded-wallet search")
+        print("\nread-only: no signature was requested and nothing was submitted.")
+        return
+    for cand in RPCS[1:]:
         for attempt in range(3):
             try:
                 fw = find_funded_wallet(cand)
