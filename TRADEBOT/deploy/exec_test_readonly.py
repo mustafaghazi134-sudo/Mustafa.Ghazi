@@ -82,7 +82,10 @@ def dump_route(a: JupiterExecutionAdapter, symbol: str, side: Side, amount: floa
     print(f"  route router={o.get('router')} mode={o.get('mode')} prioritizationFeeLamports={o.get('prioritizationFeeLamports')} "
           f"rentFeeLamports={o.get('rentFeeLamports')} signatureFeeLamports={o.get('signatureFeeLamports')}")
     tx = V.decode_transaction(o["transaction"])
-    keys, static = V.resolve_account_keys(tx.message, a.alts)
+    keys, alt_problems = V.resolve_account_keys(tx.message, a.alts)
+    static = [str(k) for k in tx.message.account_keys]
+    if alt_problems:
+        print(f"  lookup-table problems: {alt_problems}")
     wsol_ata = V.ata_address(a.wallet, V.WSOL_MINT)
     names = {a.wallet: "WALLET", wsol_ata: "WALLET_wSOL_ATA", V.ata_address(a.wallet, USDC): "WALLET_USDC_ATA"}
     for n, ix in enumerate(tx.message.instructions):
