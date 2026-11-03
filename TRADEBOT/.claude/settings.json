@@ -23,7 +23,10 @@
       "Read(**/ACTIVATION.json)",
       "Edit(**/ACTIVATION.json)",
       "Edit(./tradebot/execution/submission.py)",
-      "Bash(*MAINNET_SUBMISSION_ENABLED*)"
+      "Bash(*MAINNET_SUBMISSION_ENABLED*)",
+      "Bash(*approve-exec-test*)",
+      "Edit(**/EXEC_TEST_APPROVAL.json)",
+      "Bash(*EXEC_TEST_APPROVAL*)"
     ]
   }
 }

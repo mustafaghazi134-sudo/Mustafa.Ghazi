@@ -581,6 +581,61 @@ def cmd_live_resume(args) -> int:
     print("live halt removed (the build switch, live gate, signer activation and limits still apply)")
     return 0
 
+def cmd_approve_exec_test(args) -> int:
+    """OWNER ONLY. Single-use approval for one supervised execution test (one buy, one sell back) with exact limits."""
+    from .execution.exec_test import approval_phrase, write_approval
+    settings = load_settings(args.config)
+    try:
+        a = write_approval(settings, args.symbol, args.usd, args.max_loss, args.max_cost_bps, args.hours, args.confirm)
+    except PermissionError as e:
+        print(f"REFUSED: {e}")
+        print("expected confirmation: " + approval_phrase(args.symbol, args.usd, args.max_loss))
+        return 2
+    print(f"approved ONE {a['symbol']} round trip of ${a['usd']:.2f}, max loss ${a['max_loss_usd']:.2f}, max cost {a['max_cost_bps']} bps, "
+          f"wallet {a['wallet']}, valid until {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime(a['expires_ts']))}.")
+    print("This does not arm the trading engine. Run: tradebot exec-test")
+    return 0
+
+
+def cmd_exec_test(args) -> int:
+    """One supervised execution test with real funds: buy, sell straight back, reconcile with the chain, report."""
+    from .data.live import LiveProvider
+    from .engine.bot import TradingBot
+    from .execution.exec_test import ExecTestGate, exec_test_risk_limits, load_approval, run_exec_test
+    from .execution.jupiter_adapter import JupiterExecutionAdapter
+    from .execution.live_controls import LiveControls
+    from .execution.signer_protocol import SignerClient, load_client_secret
+    from .portfolio.accounting import PortfolioBook
+    from .research.claude_analyst import ClaudeAnalyst
+    from .risk.engine import RiskEngine
+    settings = load_settings(args.config)
+    settings.claude.enabled = False
+    settings.claude.vet_signals = False
+    appr = load_approval(settings)
+    gate = ExecTestGate(settings)
+    if gate.problems():
+        print("REFUSED: " + "; ".join(gate.problems()))
+        return 2
+    settings.live.max_total_cost_bps = min(settings.live.max_total_cost_bps, float(appr["max_cost_bps"]))
+    provider = LiveProvider(settings.data, settings.universe, settings.execution)
+    ledger = Ledger(settings.data_path / "exec_test.sqlite", mode="live")
+    kill = KillSwitch(settings.kill_file)
+    controls = LiveControls(settings.live, ledger, kill, settings.live_halt_file)
+    signer = SignerClient(settings.live.signer_url, load_client_secret(settings.live.signer_secret_file))
+    probe = JupiterExecutionAdapter(RiskEngine(settings.risk, kill), settings, provider, controls=None, signer=None, dry_run=True)
+    usdc = probe.get_balances().get(settings.universe.quote_symbol, 0.0)
+    risk = RiskEngine(exec_test_risk_limits(settings, float(appr["usd"]), usdc), kill)
+    adapter = JupiterExecutionAdapter(risk, settings, provider, gate=gate, controls=controls, signer=signer, dry_run=False)
+    book = PortfolioBook(ledger, max(usdc, 0.01), time.time)
+    bot = TradingBot(settings, provider, ledger, risk, kill, adapter, book, [], ClaudeAnalyst(settings.claude), time.time)
+    rep = run_exec_test(settings, adapter, bot, controls, exit_only=args.exit_only)
+    print(json.dumps(rep, indent=1, default=str))
+    print(f"\nEXECUTION TEST: {rep['result']}. Report: {rep.get('report_file')}")
+    print("This was an execution test, not evidence of a profitable strategy. The engine was not armed.")
+    print("Now: deactivate the signer (python -m tradebot_signer deactivate --home <signer home>) and restore the build switch.")
+    return 0 if rep["result"] in ("COMPLETED",) else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="tradebot", description="Autonomous Solana trading bot (paper by default)")
     ap.add_argument("--config", default=os.environ.get("TRADEBOT_CONFIG", "config.toml"))
@@ -652,6 +707,12 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--symbol", default="SOL"); p.add_argument("--side", choices=["buy", "sell"], default="buy")
     p.add_argument("--amount", type=float, required=True, help="USD for buys, token quantity for sells")
     p.add_argument("--wallet", default=None, help="public key to build for (default [live] wallet_pubkey)"); p.set_defaults(fn=cmd_live_dry_run)
+    p = sub.add_parser("approve-exec-test", help="OWNER ONLY: single-use approval for one supervised execution test (exact limits)")
+    p.add_argument("--symbol", default="SOL"); p.add_argument("--usd", type=float, required=True)
+    p.add_argument("--max-loss", type=float, required=True, help="USD"); p.add_argument("--max-cost-bps", type=float, default=60.0)
+    p.add_argument("--hours", type=float, default=1.0); p.add_argument("--confirm", required=True); p.set_defaults(fn=cmd_approve_exec_test)
+    p = sub.add_parser("exec-test", help="one supervised real-funds execution test: buy, sell straight back, reconcile, report")
+    p.add_argument("--exit-only", action="store_true", help="only sell back a position a previous run left held"); p.set_defaults(fn=cmd_exec_test)
     p = sub.add_parser("live-status", help="live build switch, gate, halt, unresolved intents"); p.set_defaults(fn=cmd_live_status)
     p = sub.add_parser("live-halt", help="EMERGENCY: refuse every live order (data/LIVE_HALT)"); p.add_argument("--reason", default="manual")
     p.set_defaults(fn=cmd_live_halt)

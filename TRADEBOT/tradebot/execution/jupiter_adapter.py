@@ -101,7 +101,9 @@ class JupiterExecutionAdapter(Broker):
             raise ExecutionError("[live] wallet_pubkey must be the bot wallet's public key") from e
         self.wallet = self.cfg.wallet_pubkey
         self.jup = jupiter_endpoints(settings.data, settings.execution)
-        if not self.jup.has_key and http is None:
+        if not self.jup.has_key and http is None and not (dry_run and settings.execution.paper_keyless_quotes):
+            # keyless access is accepted only for a dry run (which can never sign or submit), and only when the config
+            # explicitly opts in (execution.paper_keyless_quotes)
             raise ExecutionError("JUPITER_API_KEY is required for the Swap API (developers.jup.ag)")
         self.http = http or httpx.Client(timeout=settings.data.jupiter_quote_timeout_sec, headers=self.jup.headers)
         self.exec_http = http or httpx.Client(timeout=settings.data.jupiter_execute_timeout_sec, headers=self.jup.headers)
