@@ -39,7 +39,7 @@ jobs:
       - name: Rehearsal (read-only)
         run: |
           mkdir -p paper_evidence/exec_test
-          python deploy/exec_test_readonly.py 10 > "paper_evidence/exec_test/rehearsal_$(date -u +%Y%m%dT%H%M%SZ).txt" 2>&1 || true
+          python deploy/exec_test_readonly.py 6 > "paper_evidence/exec_test/rehearsal_$(date -u +%Y%m%dT%H%M%SZ).txt" 2>&1 || true
           cat paper_evidence/exec_test/rehearsal_*.txt | tail -40
       - name: Commit the rehearsal output
         working-directory: .
