@@ -1,0 +1,54 @@
+# READ-ONLY diagnostic of the Opportunity Lab's security rejections, in its own data folder. Does not touch the running
+# opportunity-lab experiment (different concurrency group, different data, no cache). No keys, no secrets.
+# Trigger: push a change to TRADEBOT/deploy/lab_diag.trigger.
+name: lab-security-diag
+
+on:
+  push:
+    branches: [claude/inspiring-edison-6xsm35]
+    paths: [TRADEBOT/deploy/lab_diag.trigger]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lab-security-diag
+  cancel-in-progress: false
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: TRADEBOT
+    env:
+      LAB_CONFIG: /tmp/labdiag.toml
+      LAB_DATA_DIR: /tmp/labdiag
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -q -e .
+      - name: Diagnostic (read-only)
+        run: |
+          cp lab.toml.example /tmp/labdiag.toml
+          mkdir -p lab_diagnostics
+          python deploy/lab_security_diag.py 6 > "lab_diagnostics/security_diag_$(date -u +%Y%m%dT%H%M%SZ).txt" 2>&1 || true
+          tail -30 lab_diagnostics/security_diag_*.txt
+      - name: Commit the diagnostic output
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add TRADEBOT/lab_diagnostics
+          git commit -q -m "Lab security diagnostic output (read-only)" || exit 0
+          for i in 1 2 3 4; do
+            git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin HEAD:"$GITHUB_REF_NAME" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
