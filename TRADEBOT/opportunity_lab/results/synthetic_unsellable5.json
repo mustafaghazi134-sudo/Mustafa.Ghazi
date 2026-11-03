@@ -1,0 +1,31 @@
+{
+ "cost_x1": {
+  "null_edge": false,
+  "seeds": 12,
+  "cost_multiplier": 1.0,
+  "unsellable_rate": 0.05,
+  "pooled": {
+   "n": 98,
+   "net_usd": 534.74,
+   "win_rate": 0.959,
+   "loss_rate": 0.041,
+   "profit_factor": 6.35,
+   "expectancy_usd": 5.457,
+   "expectancy_bps": 2182.6,
+   "expectancy_ci_bps": [
+    1610.2,
+    2646.0
+   ],
+   "per_trade_sharpe": 0.849,
+   "avg_win_usd": 6.753,
+   "avg_loss_usd": -25.0
+  },
+  "seed_net_usd_ci": [
+   31.8125,
+   57.15416666666667
+  ],
+  "trades_on_trap_tokens": 0,
+  "mean_bps": 2182.6,
+  "note": "synthetic: tests mechanics and bias controls only; not evidence about real markets"
+ }
+}

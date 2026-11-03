@@ -95,7 +95,47 @@ responses; real 429 behaviour; Windows Task Scheduler; Linux systemd.
 
 ## 4. Synthetic simulations (mechanics and bias controls only)
 
-Pending: the synthetic Monte Carlo runs (normal, zero-edge null, 5% unsellable; 1x/2x/3x costs) are in progress and will be added here.
+These runs use synthetic markets of 80 tokens over 24 h, polled every 30 s, with the full four-agent pipeline.
+
+**About 1 in 3 synthetic tokens is a trap:** honeypot, rug, live mint authority, live freeze authority or fee trap. The
+"pump_dump" archetype is given a built-in upward drift during its pump, so the normal market contains an engineered,
+exploitable pattern. **A profit on it shows the machinery works, nothing about real markets.**
+
+Commands (results in `opportunity_lab/results/synthetic_*.json`):
+
+```bash
+python -m opportunity_lab backtest --seeds 12 --seed 200 --hours 24 --tokens 80 --stress 1 2 3
+```
+
+```bash
+python -m opportunity_lab backtest --null --seeds 20 --seed 100 --hours 24 --tokens 80 --stress 1 2 3
+```
+
+```bash
+python -m opportunity_lab backtest --seeds 12 --seed 200 --hours 24 --tokens 80 --stress 1 --unsellable 0.05
+```
+
+| Run | Seeds | Trades | Expectancy, bps per trade (95% CI) | Win rate | Trades on trap tokens |
+|---|---|---|---|---|---|
+| Normal market, x1 costs | 12 | 98 | +2,706 [+2,591, +2,804] (engineered pumps) | 100% | **0** |
+| Normal market, x2 and x3 costs | 12 | **0** | n/a: every proposal exceeds the 300 bps cost cap | n/a | 0 |
+| **Zero-edge (null) market, x1** | 20 | 130 | **−167 [−340, +21]** | 28% | **0** |
+| Null market, x2 and x3 | 20 | 0 | n/a (cost cap) | n/a | 0 |
+| Normal market with 5% of held tokens losing their sell route | 12 | 98 | +2,183 [+1,610, +2,646] | 96% | 0 |
+
+**What these show:**
+
+1. **No look-ahead or fill bias found.** On markets where nothing is predictable, the lab loses about its modelled
+   costs, and the point estimate is negative. An earlier 16-seed, 12-hour null run gave −396 bps [−586, −176].
+   `tests/test_opportunity_lab.py::test_null_market_does_not_produce_profit` keeps this check in the suite.
+2. **The security agent stops every trap that reaches it.** Across 44 market simulations, no paper trade was opened
+   on a honeypot, live-authority or fee-trap token. Most traps never matched a strategy; those that did were rejected,
+   honeypots mainly through the missing sell route.
+3. **Write-offs bite as designed.** Making 5% of held tokens unsellable cut the expectancy by about 520 bps, from
+   +2,706 to +2,183 bps.
+4. **Cost stress acts as a gate, not just a haircut.** At 2x costs, fixed costs on a $25 position alone reach about
+   336 bps, which exceeds the 300 bps cap, so the lab does not trade at all. The real-data study (section 3) is
+   where the same trades are re-priced at 2x and 3x.
 
 ## 5. Grok: is it worth it?
 
