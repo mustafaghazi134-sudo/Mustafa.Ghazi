@@ -1,5 +1,21 @@
 # Micro-live execution test ($6 SOL round trip): preparation status
 
+> **PAUSED on 2026-11-03.** The owner's available balance is 0.00663 SOL (about $0.61), which is below what this test
+> needs. No funds are to be moved or spent.
+>
+> **At that balance, checked with the real code:**
+>
+> - the RiskEngine rejects every order, because the 10% position size is $0.06 against the $5 minimum;
+> - LiveControls rejects every live order, because the SOL reserve is 0.02 SOL and the wallet holds 0.00663.
+>
+> **Smallest test the existing code allows without loosening any control:** a $1 round trip. The wallet would need:
+>
+> - 1.10 USDC;
+> - 0.025 SOL: the 0.020 reserve, which is not spent, plus refundable rent and fees;
+> - about 0.00204 SOL of rent for the USDC account.
+>
+> In total about $3.60 at $92/SOL. The expected amount actually spent is about $0.002–0.005.
+
 Revised 2026-11-03 at about 09:40 UTC. Status: **read-only preparation.**
 
 - Nothing has been funded, activated, signed or submitted.
