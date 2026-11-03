@@ -58,8 +58,9 @@ def preflight(settings: Settings) -> list[tuple[str, str, str]]:
     rows.append(("ANTHROPIC_API_KEY", "OK" if key else "WARN",
                  "set" if key else "missing: Claude research/vetting disabled, deterministic strategies still run"))
     jup = jupiter_endpoints(settings.data, settings.execution)
-    rows.append(("jupiter_api_key", "OK" if jup.has_key else "FAIL",
-                 f"{jup.base} (x-api-key set)" if jup.has_key else "missing: Jupiter REST requires an x-api-key (free at developers.jup.ag); set JUPITER_API_KEY"))
+    rows.append(("jupiter_api_key", "OK" if jup.has_key else "WARN",
+                 f"{jup.base} (x-api-key set)" if jup.has_key else
+                 "not set: keyless access (rate-limited, about 0.5 req/s); a free key from developers.jup.ag raises limits"))
     for name, url in hosts(settings).items():
         code, detail = _get(url, headers=jup.headers if name.startswith("jupiter") else None)
         if code is None:

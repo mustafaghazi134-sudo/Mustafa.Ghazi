@@ -37,6 +37,18 @@ jobs:
           find /tmp/arts -name '*.txt' -exec cp {} "TRADEBOT/paper_evidence/run-$RUN/" \;
           gh run view "$RUN" --json status,conclusion,createdAt,updatedAt > "TRADEBOT/paper_evidence/run-$RUN/run_status.json" || true
           ls -la "TRADEBOT/paper_evidence/run-$RUN"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Read-only signal state on live candles (same code and config as the paper engine)
+        working-directory: TRADEBOT
+        env:
+          TRADEBOT_CONFIG: deploy/paper_ci.toml
+          TRADEBOT_DATA_DIR: /tmp/relay_data
+          TRADEBOT_FORCE_PAPER: "1"
+        run: |
+          pip install -q -e .
+          python deploy/signal_state.py > "paper_evidence/run-$RUN/signal_state_$(date -u +%Y%m%dT%H%M%SZ).txt" 2>&1 || true
       - name: Commit evidence to this branch
         run: |
           git config user.name "github-actions[bot]"
