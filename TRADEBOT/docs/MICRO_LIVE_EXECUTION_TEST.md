@@ -1,6 +1,9 @@
-# Micro-live execution test: proposal for owner approval
+# Micro-live execution test ($6 SOL round trip): preparation status
 
-Date 2026-11-03. Status: **prepared, not run. No real order has been placed.**
+Revised 2026-11-03 at about 09:40 UTC. Status: **read-only preparation.**
+
+- Nothing has been funded, activated, signed or submitted.
+- The design keeps the **separate Windows signer account** (`LIVE_EXECUTION_ADAPTER.md` §6).
 
 ## What this test is, and what it is not
 
@@ -8,93 +11,113 @@ Date 2026-11-03. Status: **prepared, not run. No real order has been placed.**
 |---|---|---|
 | Question | Can the system buy, sell and reconcile **real funds** correctly, end to end? | Does a strategy make money after costs? |
 | Shown by | One round trip whose chain balances match the booked fills | ≥ 30 forward trades, plus the review in `STRATEGY_AUDIT_GO_NOGO.md` §9 |
-| What success enables | Nothing automatically. **The trading engine is never armed.** The approval is single use, so a second order needs a new owner approval. Unattended trading still needs the engine's own live gate (≥ 30 paper trades over 14 days) and a separate decision | — |
+| What success enables | Nothing automatically. **The trading engine is never armed**, and the approval is single use. Unattended trading still needs the engine's own live gate and a separate decision | — |
 
-## The proposal (exact limits for approval)
+## 1. Re-quoted costs for $6 (live, keyless, 2026-11-03)
 
-| Item | Proposed value |
+Source: `paper_evidence/exec_test/rehearsal_20261103T092029Z.txt` and `..._092236Z.txt`.
+
+### Swap round trip
+
+| Item | Measured |
 |---|---|
-| Account | A **new dedicated Solana wallet**, created on your PC, funded from funds you already hold. Your main wallet's key is never used or imported |
-| Funding moved into it | **8 USDC + 0.04 SOL**. 0.02 SOL stays as the reserve; the rest covers fees |
-| Venue | Jupiter Swap API v2 on Solana mainnet. Router Metis or JupiterZ; the transaction is verified and simulated before signing |
-| Instrument | **SOL**, native: no wrapper or bridge risk. The pair is USDC → SOL → USDC |
-| Order amount | **$6.00 buy**, then sell exactly the SOL received (about 0.065 SOL at $92) |
-| Minimum order | Engine and controls: $3 minimum for this test ($5 normally); signer per-transaction cap 10 USDC and 0.08 SOL (defaults, unchanged) |
-| Estimated round-trip cost | **Quoted live 2026-11-03 09:04 UTC:** 2–4 bps of swap cost on $10, about $0.002 on $6. **Network:** 2 × (5,000 lamports + priority fee), usually about $0.002–0.02. **Worst case** at the caps (50 bps slippage per leg and 500,000 lamports priority per transaction): about $0.15 |
-| Pre-trade cost gate | The test refuses **before signing** if the estimated round trip exceeds **60 bps** (about $0.036) or the maximum loss |
-| Exit method | Sell immediately in the same command, seconds after the buy confirms: the exact received quantity at market through Jupiter, up to 3 attempts. **If the position is still held:** `tradebot exec-test --exit-only` within the approval window, or sell it yourself in a wallet app |
-| **Maximum intended loss** | **$0.50.** Above that, LiveControls' $5 daily cap applies; the most the wallet can lose in total is its contents, about $9.70 |
-| Time limits | Approval valid 1 hour, single use. Signer activation 1 hour |
-| What gets reported | Signatures with explorer links, fills read from the chain, the wallet before and after, chain-vs-ledger reconciliation and net result. Written to `data/exec_test_report_*.json` |
+| Reference SOL price | $92.02–92.09 |
+| $6.00 buys | 0.065098–0.065181 SOL |
+| Swap cost, six samples | **1.4–5.3 bps**, that is **$0.0008–0.0032** |
+| Jupiter platform fee | 2 bps per leg, included in those figures |
+| Sell floor at the 50 bps slippage limit | $5.967–5.969 |
 
-## Remaining risks (not removed by the controls)
+### Network, priority fee and rent, per transaction
 
-- **Market move during the seconds between legs.** SOL moves about 0.1% a minute, about $0.006 on $6.
-- **Sell leg fails or its outcome is unknown.** For example: Jupiter or the RPC is down, or the price moves past the signer's 0.08 SOL cap. The SOL then stays in the wallet; it is recoverable with `--exit-only` or by hand. Unknown outcomes are settled from chain evidence and are never re-sent blindly.
-- **Same-Windows-account signer (recommended simplification for this test only).** Anything that can run commands as you could activate the signer. The exposure is bounded by the wallet's contents, about $9.70. The separate Windows account in `LIVE_EXECUTION_ADAPTER.md` §6 remains required before any larger or unattended use.
-- **Software risk on the first real route.** The verifier's program allow-list has never seen a real Metis or JupiterZ transaction. If it rejects the real route, the test stops before signing. The rehearsal below checks this first.
-- **Jurisdiction.** A spot swap on a decentralised exchange, from a self-custody wallet. This document does not assess its legal treatment in Jordan.
-- **Key handling.** The new wallet's key file sits on your PC. Losing it loses at most the test funds. It must never be pasted into a chat, terminal transcript or repository.
+| Item | Metis route | JupiterZ (RFQ) route |
+|---|---|---|
+| Signature fee | 5,000 lamports | 0 when gasless (seen on buys); 10,000 when not |
+| Priority fee | 17–2,054 lamports observed. Policy cap 500,000 | 0–23 lamports |
+| Rent | Native SOL legs use a temporary wrapped-SOL account, created and closed **in the same transaction**. Its ~2,039,280 lamports are refunded, but the wallet must hold them during the transaction | Up to 1,488,440 lamports reported by Jupiter on JupiterZ routes. Whether it is refunded is **not yet verified** |
 
-## Steps on your PC (Windows, in `...\Mustafa.Ghazi\TRADEBOT`)
+### Expected total for the test
 
-1. Update and test:
-   ```bash
-   git pull
-   ```
-   ```bash
-   pip install -e .[dev]
-   ```
-   ```bash
-   python -m pytest -q
-   ```
-2. **Create the dedicated wallet.** The command prints its **public** address only:
-   ```bash
-   python -c "from solders.keypair import Keypair; import json,os; os.makedirs(os.path.expanduser('~/tradebot-signer'),exist_ok=True); k=Keypair(); open(os.path.expanduser('~/tradebot-signer/test-wallet.json'),'w').write(json.dumps(list(bytes(k)))); print(k.pubkey())"
-   ```
-3. Send **8 USDC and 0.04 SOL** to that address from your existing wallet.
-4. **Read-only rehearsal on GitHub's servers.** Put the **public** address in `deploy/exec_test_wallet.txt` and push it, or give it to Claude. The rehearsal then builds, verifies and simulates the exact buy and sell for your wallet and reports its balances. Nothing is signed.
-5. Initialise and start the signer (it keeps the default caps):
-   ```bash
-   python -m tradebot_signer init --home %USERPROFILE%\tradebot-signer --keypair %USERPROFILE%\tradebot-signer\test-wallet.json
-   ```
-   ```bash
-   python -m tradebot_signer serve --home %USERPROFILE%\tradebot-signer --port 8787
-   ```
-   In `config.toml`:
-   - set `[live] wallet_pubkey` to the public address;
-   - set `signer_secret_file` to `%USERPROFILE%\tradebot-signer\client_secret`.
-6. Read-only checks:
-   ```bash
-   tradebot live-preflight
-   ```
-   ```bash
-   tradebot live-dry-run --symbol SOL --side buy --amount 6
-   ```
-7. **Only after you approve the limits above:**
-   1. Edit `tradebot/execution/submission.py` **locally**: `MAINNET_SUBMISSION_ENABLED = True`. Do not commit this.
-   2. Run, in the same `cmd` window:
-      ```bash
-      set TRADEBOT_LIVE_TRADING=I_ACCEPT_THE_RISK
-      ```
-      ```bash
-      python -m tradebot_signer activate --home %USERPROFILE%\tradebot-signer --hours 1
-      ```
-      ```bash
-      tradebot approve-exec-test --symbol SOL --usd 6 --max-loss 0.50 --max-cost-bps 60 --hours 1 --confirm "I APPROVE ONE SOL ROUND TRIP OF 6.00 USD WITH MAX LOSS 0.50 USD"
-      ```
-      ```bash
-      tradebot exec-test
-      ```
-8. **Immediately afterwards:**
-   ```bash
-   python -m tradebot_signer deactivate --home %USERPROFILE%\tradebot-signer
-   ```
-   ```bash
-   git checkout -- tradebot/execution/submission.py
-   ```
-   Close the `cmd` window to drop the environment variable. Share the report file: it contains public data only.
-   Claude then checks the signatures and balances independently on the chain.
+**About $0.003–0.006**:
 
-**Emergency stop at any time:** `tradebot live-halt --reason test`, then
-`python -m tradebot_signer halt --home %USERPROFILE%\tradebot-signer`.
+- swap cost of about $0.002;
+- network fees of about 10,000–14,000 lamports, about $0.001.
+
+### Worst case that the pre-trade gate still allows
+
+**About $0.16**:
+
+- slippage of 50 bps per leg, $0.06;
+- priority fees at the cap, 2 × 500,000 lamports = 0.001 SOL, about $0.09;
+- base fees.
+
+The test refuses **before signing** if the estimated round trip exceeds 60 bps (about $0.036) or the approved maximum
+loss.
+
+## 2. Funding arithmetic (corrected)
+
+The earlier figures (8 USDC + 0.04 SOL, "wallet value $9.70") were wrong.
+
+- $9.70 was the wallet's *exposure* figure, not its value.
+- 8 + 0.04 × $92 = **$11.68**.
+- 8 USDC was more than needed.
+
+| Need | Amount | Why |
+|---|---|---|
+| USDC | **6.50 USDC** | The buy spends exactly 6.00 (ExactIn). The 0.50 buffer only lets a second attempt be re-quoted. |
+| SOL | **0.030 SOL** | 0.020 is the minimum reserve LiveControls enforces. About 0.0021 is held temporarily as wrapped-SOL rent and refunded in the same transaction. At most about 0.0011 goes on fees at the caps. That leaves about 0.006 SOL of margin. The 0.01 SOL sell-route probe (see 4) is only a simulation and spends nothing. |
+| **Total moved** | **6.50 USDC + 0.030 SOL ≈ $9.26** | At SOL $92.05 |
+| Paid by your **existing** wallet when sending | USDC token-account rent ≈ 0.00204 SOL (≈ $0.19) + 2 transfer fees ≈ 0.00001 SOL | Phantom or similar creates the new wallet's USDC account. That rent is locked, not lost; it is recoverable only by closing the account later. |
+
+**Exposure during the test:** 0.030 SOL plus $6 of SOL bought, about $8.80. That is under the $25 LiveControls cap.
+
+## 3. Loss: the intended limit is not the maximum possible loss
+
+| Case | What can be lost | Bounded by |
+|---|---|---|
+| **A. Normal completion** (expected) | About $0.003–0.006, ± about $0.006 market move during the seconds between legs | Measured costs |
+| **B. Completion at worst-case fills** | Up to about $0.16 | Slippage and priority caps. The pre-trade gate refuses above $0.036 estimated |
+| **The $0.50 "maximum intended loss"** | A **pre-trade approval threshold** on the estimated cost. **It is not a stop-loss**: nothing sells automatically at −$0.50 | — |
+| **C. Buy fills, sell fails or stays unknown**: Jupiter, RPC or signer down; route refused; price moves past the signer's 0.08 SOL per-transaction cap | The 0.065 SOL ($6) stays held and moves with the market: −5% ≈ −$0.30, −10% ≈ −$0.60, a −50% crash ≈ −$3. **Theoretical maximum ≈ $6 + fees** | How quickly you exit: `exec-test --exit-only`, or sell by hand |
+| **D. Wallet compromise or loss** (key file stolen or deleted) | Everything in the wallet: **≈ $9.26** (+ $0.19 rent in the USDC account) | Wallet contents. The verifier and signer refuse transfers to third parties above 500,000 lamports, but a stolen key bypasses both |
+| E. Duplicate submission | Prevented: intents are persisted before submission, and only identical bytes are re-sent | Tested |
+
+## 4. Route verification so far, and what still needs a funded wallet
+
+Read-only results from GitHub's servers, with real Jupiter routes and the real chain:
+
+1. **The buy route (USDC → SOL) passed** verification and simulation for a funded third-party wallet, used only as the
+   taker, on a JupiterZ route.
+2. **That same simulation exposed a gap in our own check:** the wallet's watched USDC account was not debited, yet
+   the check passed. That third-party wallet keeps its USDC outside its standard token account.
+   **Fixed:** the simulation must now see the full input leave the wallet's own token account. A regression test was
+   added.
+3. **The sell route (SOL → USDC) was refused by our verifier** in three samples, on Metis routes:
+   - the SOL went through a pre-existing wrapped-SOL account that is not the wallet's standard one;
+   - the verifier correctly refuses that today;
+   - a **fresh** wallet has no such account, so its route may differ. This cannot be confirmed without funds.
+4. **Jupiter builds no transaction at all for an empty wallet**, checked with a fresh random address. So the actual
+   route for *your* wallet can be verified and simulated **only after it is funded**.
+5. **New safeguard:** before buying, `exec-test` now verifies and simulates a 0.01 SOL sell from the wallet's own
+   reserve. If our verifier would refuse the sell route, the test stops **before buying**, so no position can be
+   stranded. Tested.
+
+The steps below follow from these findings.
+
+## 5. Steps and approvals
+
+| Step | Who | Money moves? | Needs your approval |
+|---|---|---|---|
+| **1. Run `windows\setup_signer_account.bat` as Administrator.** It creates the `tradebot-signer` account, the locked `C:\tradebot-signer` folder and a new wallet inside it, then prints only the PUBLIC address | You | No | No (read-only for money) |
+| 2. I check the address on chain: it must be empty and new | Claude | No | No |
+| 3. Fund the address: 6.50 USDC + 0.030 SOL | You | **Yes** | **Yes**: funding approval |
+| 4. Read-only rehearsal on **your** wallet: verify and simulate the real buy, the real sell and the 0.01 SOL sell probe; record exact fees and rent | Claude (GitHub servers) | No | No |
+| 5. If step 4 passes: final limits presented for approval | — | — | — |
+| 6. Signer set up as `tradebot-signer`, then activation, local build switch, `approve-exec-test`, `exec-test` | You | **Yes** | **Yes**: activation and submission approval |
+| 7. Independent check of the signatures and balances on the chain; results and reconciliation reported | Claude | No | — |
+
+**If step 4 shows the sell route is still refused for a fresh wallet:**
+
+- the test does not run;
+- the fix is a reviewed verifier change that accepts a wrapped-SOL account created and closed by the wallet within
+  the same transaction;
+- that change will be shown to you before any activation is requested.

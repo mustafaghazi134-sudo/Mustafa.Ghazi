@@ -33,6 +33,7 @@ APPROVAL_FILE = "EXEC_TEST_APPROVAL.json"
 MAX_TEST_USD = 25.0
 MAX_TTL_HOURS = 2.0
 EXPLORER = "https://solscan.io/tx/"
+SELL_PROBE_QTY = {"SOL": 0.01}           # verify + simulate a sell of this size before buying (no probe for other symbols yet)
 
 
 def approval_path(settings: Settings) -> Path:
@@ -187,6 +188,19 @@ def run_exec_test(settings: Settings, adapter, bot, controls, clock=time.time, s
                                                               "feeBps", "priceImpact_bps", "reference_price", "live_controls_would_block")}
         if not dry.get("ok") or dry.get("live_controls_would_block"):
             rep["problems"].append("pre-trade dry run refused: " + "; ".join((dry.get("problems") or []) + (dry.get("live_controls_would_block") or [])))
+            return finish("REFUSED")
+        # the SELL route must also pass verification and simulation BEFORE buying, or the test could strand a
+        # position: probe it with a small quantity the wallet already holds (its SOL reserve, for SOL)
+        probe_qty = SELL_PROBE_QTY.get(sym)
+        if probe_qty is None or bal0.get(sym, 0.0) < probe_qty * 1.5:
+            rep["problems"].append(f"cannot pre-verify the {sym} sell route: the wallet needs at least {(probe_qty or 0) * 1.5:g} {sym} "
+                                   "to build a probe sell")
+            return finish("REFUSED")
+        sp = adapter.dry_run_order(sym, Side.SELL, probe_qty)
+        rep["pre_trade_sell_route_probe"] = {k: sp.get(k) for k in ("ok", "problems", "router", "programs", "live_controls_would_block")}
+        rep["pre_trade_sell_route_probe"]["qty"] = probe_qty
+        if not sp.get("ok"):
+            rep["problems"].append("the sell route would be refused, so nothing is bought: " + "; ".join(sp.get("problems") or []))
             return finish("REFUSED")
         out_ui = int(dry["outAmount"]) / 10 ** adapter.decimals[sym]
         buy_cost_bps = (usd / out_ui / dry["reference_price"] - 1) * 1e4

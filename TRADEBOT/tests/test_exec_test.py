@@ -250,3 +250,20 @@ def test_failed_sell_leaves_a_recoverable_state_and_exit_only_completes(env, swi
     r2 = env["run"](exit_only=True)
     assert r2["result"] in ("COMPLETED", "COMPLETED_WITH_MISMATCH") and r2["legs"][-1]["intent_state"] == "confirmed"
     assert not X.approval_path(env["s"]).exists()
+
+
+def test_unverifiable_sell_route_refuses_before_buying(env, switch_on, monkeypatch):
+    from tradebot.execution import tx_verify as V2
+    env["approve"]()
+    real = V2.verify_all
+
+    def refuse_sol_input(order, exp, *a, **k):
+        rep = real(order, exp, *a, **k)
+        if exp.input_mint == V.WSOL_MINT:
+            raise V2.VerificationError(["ix3: SyncNative on an account other than the wallet's wSOL account"])
+        return rep
+    monkeypatch.setattr("tradebot.execution.jupiter_adapter.V.verify_all", refuse_sol_input)
+    r = env["run"]()
+    assert r["result"] == "REFUSED" and any("sell route would be refused" in p for p in r["problems"])
+    assert env["signer"].sign_calls == 0 and env["jup"].exec_calls == 0
+    assert X.load_approval(env["s"])["state"] == "approved"          # nothing was bought; the approval is still unused
