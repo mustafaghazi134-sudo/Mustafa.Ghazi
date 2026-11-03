@@ -131,6 +131,23 @@ def main() -> None:
     p = os.path.join(os.path.dirname(__file__), "exec_test_wallet.txt")
     if os.path.exists(p) and open(p).read().strip():
         targets.append(("OWNER TEST WALLET", open(p).read().split()[0].strip()))
+    # fresh, empty wallet (random public key, no key kept): how does Jupiter route for a brand-new test wallet?
+    from solders.keypair import Keypair
+    fresh = str(Keypair().pubkey())
+    print(f"\n--- FRESH EMPTY WALLET {fresh} (random public key; decode + verifier only, simulation will fail for lack of funds)")
+    fa = adapter(fresh)
+    qty = fa.quote("SOL", Side.BUY, usd).out_amount
+    for label, sym, side, amt in (("SOL BUY", "SOL", Side.BUY, usd), ("SOL SELL", "SOL", Side.SELL, qty)):
+        for rep in range(2):
+            print(f"{label} #{rep + 1}:")
+            try:
+                dump_route(fa, sym, side, amt)
+                r = fa.dry_run_order(sym, side, amt)
+                print(f"  verifier+simulation: ok={r.get('ok')} problems={r.get('problems')}")
+            except Exception as e:  # noqa: BLE001
+                print(f"  FAIL {type(e).__name__}: {str(e)[:300]}")
+            time.sleep(3)
+
     # decode-only: the wallet seen in the 09:20 run (2.46 SOL), used only as the taker to see the real SELL route
     ref_taker = "BXEHNbKPGeUHaqpaiHR6hc9mQkTZ2WFCXh6kkHkhFnCY"
     try:
