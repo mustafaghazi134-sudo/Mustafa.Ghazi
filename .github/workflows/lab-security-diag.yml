@@ -5,7 +5,7 @@ name: lab-security-diag
 
 on:
   push:
-    branches: [claude/inspiring-edison-6xsm35]
+    branches: [claude/lab-data-access-fixes]
     paths: [TRADEBOT/deploy/lab_diag.trigger]
   workflow_dispatch:
 

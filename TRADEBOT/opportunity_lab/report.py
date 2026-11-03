@@ -115,6 +115,11 @@ def build_report(cfg: LabConfig, led: LabLedger, ground_truth: dict | None = Non
             if f["severity"] in ("critical", "high"):
                 flags[f["code"]] += 1
     rep["security_rejections_by_flag"] = dict(flags.most_common())
+    basis = Counter()
+    for r in led.x("SELECT flags FROM assessments").fetchall():
+        b = next((f["detail"] for f in json.loads(r["flags"]) if f.get("code") == "decision_basis"), "not_recorded")
+        basis[b] += 1
+    rep["security_decision_basis"] = dict(basis)   # evidence | missing_data_only | approved | not_recorded (older rows)
     reasons = Counter()
     for r in led.x("SELECT payload FROM proposals WHERE accept=0").fetchall():
         for x in json.loads(r["payload"]).get("reasons", []):
@@ -147,6 +152,7 @@ def format_report(rep: dict) -> str:
              f"maxDD ${rep['max_drawdown_usd']}  equity ${rep['final_equity']}",
              f"funnel: {f}",
              f"security rejections: {rep['security_rejections_by_flag']}",
+             f"security decision basis: {rep.get('security_decision_basis')}",
              f"analyst rejections: {rep['analyst_rejections']}",
              f"exits: {rep['exit_reasons']}  liquidity-related: {rep['liquidity_related']}",
              f"naive basket benchmark: n={rep['benchmark_naive_basket'].get('n')} expectancy "

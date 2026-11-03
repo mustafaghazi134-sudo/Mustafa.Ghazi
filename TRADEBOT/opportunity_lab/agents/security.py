@@ -15,6 +15,9 @@ from ..config import LabConfig
 from ..models import Opportunity, RiskAssessment
 
 SEV_WEIGHT = {"critical": 40, "high": 15, "medium": 5, "info": 0}
+# Flags that mean "the data needed to decide was not obtained". A rejection resting only on these says the token's
+# safety is UNKNOWN: it is neither evidence of danger nor of safety. They still block approval (fail closed).
+DATA_GAP_FLAGS = frozenset({"liquidity_unknown", "age_unknown", "facts_missing", "holders_unknown", "route_unknown"})
 
 
 class SecurityAnalyst:
@@ -58,7 +61,9 @@ class SecurityAnalyst:
         except Exception as e:  # noqa: BLE001
             gaps.append(f"facts error: {type(e).__name__}")
         if facts is None or not facts.known:
-            flag("facts_missing", "critical", "mint authority / freeze authority / extensions unknown"); gaps.append("mint facts")
+            st = (getattr(facts, "data_status", None) or {}).get("authorities") or {}
+            why = f" ({st.get('source')}: {st.get('outcome')} {st.get('http') or ''})".rstrip() if st else ""
+            flag("facts_missing", "critical", f"mint authority / freeze authority / extensions unknown{why}"); gaps.append("mint facts")
         else:
             if facts.mint_authority and c.require_mint_authority_revoked:
                 flag("mint_authority", "critical", "mint authority not revoked (supply can be inflated)")
@@ -72,7 +77,10 @@ class SecurityAnalyst:
             if facts.jupiter_sus and c.reject_jupiter_sus:
                 flag("jupiter_sus", "critical", "Jupiter audit marks the token suspicious")
             if facts.top10_pct is None:
-                flag("holders_unknown", "high", "holder concentration unknown"); gaps.append("holders")
+                st = (facts.data_status or {}).get("holders") or {}
+                why = (f" (lookup {st.get('state')}: {st.get('outcome')} {st.get('http') or ''}"
+                       f"{'; retry pending' if st.get('state') == 'failed' else ''})") if st else ""
+                flag("holders_unknown", "high", f"holder concentration unknown{why}"); gaps.append("holders")
             else:
                 if facts.top10_pct > c.max_top10_holder_pct:
                     flag("holder_concentration", "high", f"top-10 holders {facts.top10_pct:.0f}% (> {c.max_top10_holder_pct:.0f}%)")
@@ -88,8 +96,10 @@ class SecurityAnalyst:
         except Exception as e:  # noqa: BLE001
             gaps.append(f"route error: {type(e).__name__}")
         if route is None or route.unknown:
-            flag("route_unknown", "critical", "no buy/sell quote available"); gaps.append("route")
+            # no answer from the quote API (429, local throttle, timeout, 5xx): unknown, retry pending. Never a honeypot.
+            flag("route_unknown", "critical", (route.error if route else "") or "no buy/sell quote available"); gaps.append("route")
         elif not route.ok:
+            # Jupiter answered and confirmed there is no route: buy but no sell is the honeypot pattern
             sev_code = "honeypot_suspect" if route.buy_out_raw else "no_route"
             flag(sev_code, "critical", route.error or "no executable route")
         else:
@@ -100,4 +110,12 @@ class SecurityAnalyst:
 
         bad = [f for f in flags if f["severity"] in ("critical", "high")]
         score = max(0.0, 100.0 - sum(SEV_WEIGHT[f["severity"]] for f in flags))
-        return RiskAssessment(opp.mint, now, approved=not bad, score=score, flags=flags, route=route, facts=facts, data_gaps=gaps)
+        if not bad:
+            basis = "approved"
+        elif all(f["code"] in DATA_GAP_FLAGS for f in bad):
+            basis = "missing_data_only"
+        else:
+            basis = "evidence"
+        flags.append({"code": "decision_basis", "severity": "info", "detail": basis})
+        return RiskAssessment(opp.mint, now, approved=not bad, score=score, flags=flags, route=route, facts=facts, data_gaps=gaps,
+                              decision_basis=basis)

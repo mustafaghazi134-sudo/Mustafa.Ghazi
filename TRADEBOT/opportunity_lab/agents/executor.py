@@ -101,6 +101,13 @@ class PaperExecutor:
             if snap is None or snap.price_usd is None or now - snap.observed_ts > ex.max_quote_age_sec:
                 self._fail(iid, "no fresh quote at fill time"); continue
             route = self.routes.route_check(p.mint, p.size_usd)
+            if getattr(route, "retry_pending", False):
+                # the quote API gave no answer: do not enter on an unverified route; retry, at most 3 times
+                o["deferrals"] = o.get("deferrals", 0) + 1
+                self.ledger.event("entry_deferred", f"{p.mint}: {route.error}", {"proposal": p.id, "n": o["deferrals"]}, ts=self.clock())
+                if o["deferrals"] >= 3:
+                    self._fail(iid, "route not verified: quote API gave no answer 3 times (data gap, not a confirmed missing route)")
+                continue
             if ex.fail_entry_without_route and not route.ok and not route.unknown:
                 self._fail(iid, f"route unavailable at fill time: {route.error}"); continue
             if snap.price_usd > p.decision_price * (1 + ex.slippage_tolerance_bps / 1e4):
@@ -174,6 +181,11 @@ class PaperExecutor:
                 self.ledger.save_position(pos)
                 continue
             route = self.routes.route_check(pos.mint, pos.qty * snap.price_usd)
+            if getattr(route, "retry_pending", False):
+                # no answer from the quote API: keep the position and retry next cycle; not "unsellable"
+                self.ledger.event("exit_deferred", f"{pos.symbol}: {reason} wanted; {route.error}", {"position": pos.id}, ts=now)
+                self.ledger.save_position(pos)
+                continue
             if not route.ok and not route.unknown:
                 self._unsellable(pos, f"{reason} wanted, but {route.error or 'no sell route'}")
                 continue

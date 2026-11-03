@@ -71,6 +71,14 @@ class MintFacts:
     jupiter_sus: bool | None = None
     organic_score: float | None = None
     provenance: dict = field(default_factory=dict)
+    # per data item ("authorities", "holders", "indexer"): {"source", "ts", "http", "outcome", "state"} where state is
+    # confirmed | missing (provider answered, no data) | failed (no answer: 429, throttled, network) | stale
+    data_status: dict = field(default_factory=dict)
+    indexer_audit: dict | None = None        # Jupiter tokens/v2 `audit` object, RECORDED ONLY (not used in decisions)
+
+    @property
+    def holders_confirmed(self) -> bool:
+        return (self.data_status.get("holders") or {}).get("state") == "confirmed"
 
     @property
     def known(self) -> bool:
@@ -90,6 +98,8 @@ class RouteCheck:
     source: str = ""
     error: str = ""
     unknown: bool = False                    # no data either way (e.g. replay without a recorded check)
+    retry_pending: bool = False              # unknown because a request got no answer (429, throttle, network): retry
+    status: dict = field(default_factory=dict)   # {"buy": CallResult.record(...), "sell": ...}
 
 
 @dataclass
@@ -114,6 +124,9 @@ class RiskAssessment:
     route: RouteCheck | None
     facts: MintFacts | None
     data_gaps: list[str]
+    # evidence: at least one blocking flag rests on observed data | missing_data_only: every blocking flag is a data
+    # gap (safety UNKNOWN, neither safe nor dangerous) | approved: no blocking flag
+    decision_basis: str = ""
 
     @property
     def reasons(self) -> list[str]:

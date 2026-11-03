@@ -56,7 +56,10 @@ def main() -> None:
             seen.add(o.mint)
             a = sec.assess(o, cfg.risk.position_usd)
             codes = [f["code"] for f in a.flags if f["severity"] in ("critical", "high")]
-            row = {"symbol": o.snapshot.symbol, "mint": o.mint, "liq": o.snapshot.liquidity_usd, "age_min": o.snapshot.age_min(time.time()),
+            ds = getattr(a.facts, "data_status", None) or {}
+            row = {"symbol": o.snapshot.symbol, "decision_basis": getattr(a, "decision_basis", ""),
+                   "data_status": {k: {x: v.get(x) for x in ("state", "outcome", "http", "attempts")} for k, v in ds.items()},
+                   "route_status": {k: {x: v.get(x) for x in ("outcome", "http", "confirmed_no_route")} for k, v in (getattr(a.route, "status", None) or {}).items()}, "mint": o.mint, "liq": o.snapshot.liquidity_usd, "age_min": o.snapshot.age_min(time.time()),
                    "signals": o.signals, "approved": a.approved, "blocking": codes, "flags": a.flags, "gaps": a.data_gaps,
                    "provenance": getattr(a.facts, "provenance", None), "http_last_error": dict(http.last_error)}
             if "facts_missing" in codes or "holders_unknown" in codes:
@@ -83,7 +86,11 @@ def main() -> None:
         r["class"] = "APPROVED" if r["approved"] else ("real_risk_only" if real and not data else "data_only" if data and not real else "real_and_data")
         cls[r["class"]] += 1
     n = max(1, len(rows))
+    basis = collections.Counter(r.get("decision_basis") or "n/a" for r in rows)
+    hold = collections.Counter((r.get("data_status", {}).get("holders") or {}).get("state", "n/a") for r in rows)
+    auth = collections.Counter((r.get("data_status", {}).get("authorities") or {}).get("state", "n/a") for r in rows)
     print(f"\n=== {len(rows)} tokens assessed")
+    print("decision basis (code):", dict(basis), " holders lookup:", dict(hold), " authorities lookup:", dict(auth))
     print("classification:", {k: f"{v} ({v / n * 100:.0f}%)" for k, v in cls.items()})
     print("blocking flags (tokens, %):", {k: f"{v} ({v / n * 100:.0f}%)" for k, v in flag_counts.most_common()})
     for r in rows:

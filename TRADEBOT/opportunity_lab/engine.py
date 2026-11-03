@@ -59,7 +59,8 @@ class _CachedFacts:
         if hit and self.clock() - hit[0] <= self.max_age:
             return hit[1]
         f = self.inner.mint_facts(mint)
-        if f is not None and f.known:
+        # cache only fully confirmed facts: a lookup that failed (429, throttle) must be retried, not reused
+        if f is not None and f.known and getattr(f, "holders_confirmed", True):
             self.cache[mint] = (self.clock(), f)
         return f
 
