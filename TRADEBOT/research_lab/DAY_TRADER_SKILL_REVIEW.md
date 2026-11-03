@@ -6,6 +6,24 @@ nothing from it ran before the static review below was complete.
 
 ## Outcome
 
+**Update 2026-11-03: all 11 skills are now installed, at the owner's request.** The install follows the README's
+project-local route, pinned to the same reviewed commit `3d0f4ef`; upstream had no newer commit.
+
+- **Files:** byte-identical copies in `.claude/skills/<skill>/`, with each file's hash in `.claude/skills.lock.json`.
+- **Upstream tests:** 315 tests, all passing on Python 3.13.
+- **Loading:** a fresh Claude Code session in `TRADEBOT/` lists all 11 skills.
+- **Safeguards kept:**
+  - Paper is the default: `ticket.py` uses `cfg.get("paper", True)`, and a test pins this.
+  - `TRADEBOT/.claude/settings.json` still denies the `alpaca` and `ibkr` MCP servers and their order tools, and still
+    denies running `trader-broker`/`ticket.py` from the shell. So no brokerage can be connected or reached from this
+    project.
+  - No brokerage account, key or `trader/config.json` was created.
+  - The SEC tools need the owner's own `SEC_USER_AGENT` (name and email). It was left unset.
+- **Fit:** the reasons in section 2 that most skills fit US stocks rather than SOL, BTC or ETH still apply. They are
+  installed as tools, not wired into the trading engine; a test asserts that `tradebot` never imports or runs them.
+
+The table below is the original 2026-11-02 decision, kept for the record.
+
 | Decision | Skills |
 |---|---|
 | **Installed** (project-local, pinned, hash-checked) | `trader-timemachine` |

@@ -1,34 +1,229 @@
 {
-  "comment": "Third-party Claude Code skills vendored into this project after a security review (research_lab/DAY_TRADER_SKILL_REVIEW.md). tests/test_vendored_skills.py fails if any file drifts from these hashes. To upgrade: re-review the new upstream commit, copy byte-identical files, update commit and hashes here.",
-  "skills": {
-    "trader-timemachine": {
-      "source": "https://github.com/Jakeschincariol/day-trader-skill",
-      "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
-      "commit_date": "2026-10-20T09:17:50-05:00",
-      "plugin_version": "2.0.0",
-      "license": "MIT (copied as LICENSE)",
-      "reviewed": "2026-11-02",
-      "files": {
-        "SKILL.md": "394e025b2584fee9e485c1c3ff5255ff8efefc816cad72c2a1b97e30107701dc",
-        "timemachine.py": "5e73d566c78e5e42142371319491eef6257b6fc31fab5a87aa62506d03e9b5a1",
-        "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c"
-      },
-      "network": ["https://query2.finance.yahoo.com", "https://query1.finance.yahoo.com"],
-      "writes": ["trader/timemachine.json (only with --write)"],
-      "credentials": "none",
-      "can_place_orders": false
-    }
+ "comment": "Third-party Claude Code skills vendored into this project after a security review (research_lab/DAY_TRADER_SKILL_REVIEW.md). tests/test_vendored_skills.py fails if any file drifts from these hashes. To upgrade: re-review the new upstream commit, copy byte-identical files, update commit and hashes here.",
+ "skills": {
+  "trader-timemachine": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-02",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "394e025b2584fee9e485c1c3ff5255ff8efefc816cad72c2a1b97e30107701dc",
+    "timemachine.py": "5e73d566c78e5e42142371319491eef6257b6fc31fab5a87aa62506d03e9b5a1"
+   },
+   "network": [
+    "https://query1.finance.yahoo.com",
+    "https://query2.finance.yahoo.com",
+    "https://www.nyse.com"
+   ],
+   "writes": [
+    "trader/timemachine.json (only with --write)"
+   ],
+   "credentials": "none",
+   "can_place_orders": false
   },
-  "rejected": {
-    "trader-broker": "order path to an external brokerage MCP server (Alpaca via unpinned `uvx alpaca-mcp-server`) with API keys; violates the no-credentials, no-order-permission rule",
-    "trader-risk": "blocks every non-US-stock ticker (crypto explicitly); duplicates tradebot/risk/engine.py",
-    "trader-budget": "whole-share stock sizing to Alpaca order JSON, 75% default position cap, no fees; duplicates RiskEngine sizing",
-    "trader-scanner": "Nasdaq Trader stock universe, ticker regex rejects crypto, NYSE session; duplicates tradebot/scanner",
-    "trader-entry": "NYSE 9:30 opening-range timer on Yahoo stock bars; duplicates tradebot strategies/scanner signals",
-    "trader-exit": "NYSE flat-by and cent-rounded stock stops; duplicates TRADEBOT stops/targets",
-    "trader-alerts": "NYSE hours and stock quotes; TRADEBOT manages exits and the kill switch itself",
-    "trader-news": "Yahoo stock headlines plus SEC 8-K filings; stock-specific, not needed in the trading loop",
-    "trader-analyst": "SEC XBRL company financials; not applicable to SOL/BTC/ETH",
-    "trader-pelosi": "US House stock-trade disclosures; not applicable; also shells out to a local pdftotext binary"
+  "trader-alerts": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "48ba7c580fc64b48ee03b83a6206288641a97495c71dd78205c7f1c6e8b87d11",
+    "alerts.example.json": "54d4be97231f618cb8766962ace66120c5388d2d69cff16580d43fe38c30f94e",
+    "alerts.py": "2db22d8e9b27ff1776600dd53664e21b55fc8787ed1abdd9e6f1e79bcc80c74f"
+   },
+   "network": [
+    "https://query2.finance.yahoo.com",
+    "https://stooq.com",
+    "https://www.nyse.com"
+   ],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false
+  },
+  "trader-analyst": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "884edfcfcfe0c8c3392093e5eb25da5f37a3fed89ec15f8a968e3c782c8eb8d3",
+    "facts.py": "6cd7e24588e7389268cd6af6315768bd9c292032773fe1a7364e07696d7ac6b9",
+    "metrics.example.json": "e7929dd849a072cf444a085f26a7c32aaa99dcf23beac6ef8c81d39335767c7d"
+   },
+   "network": [
+    "https://data.sec.gov",
+    "https://www.sec.gov"
+   ],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none (reads SEC_USER_AGENT: a name and email the SEC requires, set by the user)",
+   "can_place_orders": false
+  },
+  "trader-broker": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "d1a34683814cce09c8074a978ac817c1e9f4e4790ad6804ad395c227d50b91b8",
+    "claude_desktop_config.example.json": "012ccc622a02dc818448a285651a875bef241a162341d12ba63dcc63d1d77b65",
+    "ticket.py": "9500300b3ceba93c1423c0e022654bc6283cbed9084c81b324778f062a5f6559"
+   },
+   "network": [],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false,
+   "note": "ticket.py writes a reviewed order ticket and the JSON for Alpaca place_stock_order; it sends nothing. Sending needs the alpaca or ibkr MCP server, which TRADEBOT/.claude/settings.json denies. Paper is the default (cfg paper=True)."
+  },
+  "trader-budget": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "ce404e7877013eccbcc757c9db6926a4974d40ed3471696b929e253a27b81112",
+    "config.example.json": "a889c0283ab24d30f16707b71e1a2e242ad97312a83731061255087f96697008",
+    "size.py": "2dcb2ef604a92fb022ca210eb67a9b28ef82fefe5f7a2382ce2592461a6d3cba",
+    "targets.example.json": "901df8a605f79a064a770a3a21a915e4852bb7a64eaca90a5df5c8e0fec3a6b8"
+   },
+   "network": [],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false
+  },
+  "trader-entry": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "e61e10c703915a7dad118b38d0a61fd6457d34e320e36f48abcac5f6ede1a5af",
+    "entry.py": "11518ca87e329520741044329e37066207d8a096d37809cd29ebed9f6d2776ec"
+   },
+   "network": [
+    "https://query2.finance.yahoo.com"
+   ],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false
+  },
+  "trader-exit": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "4bccdfff09c8414eee3a486e239bff9602b219d8439e9b0f8bce4743a5999841",
+    "exit.py": "8183a2cc5c71cecef33d7ae6a401416a5d042aeb7d130a1f8d5e8a51642447fc"
+   },
+   "network": [
+    "https://query1.finance.yahoo.com",
+    "https://query2.finance.yahoo.com"
+   ],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false
+  },
+  "trader-news": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "6a26283452c15ac9001c8f41633cab829abd2e6d6c7ccc95d7d26af39ec6319b",
+    "news.py": "bf9e12a9c5962de3f661bf334e76f4df417a39879ff067426b338b7a063c71f3"
+   },
+   "network": [
+    "https://feeds.finance.yahoo.com",
+    "https://query2.finance.yahoo.com",
+    "https://www.sec.gov"
+   ],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none (reads SEC_USER_AGENT: a name and email the SEC requires, set by the user)",
+   "can_place_orders": false
+  },
+  "trader-pelosi": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "960f2fb1c2a1921c3cbb70f837fd942a05b74a345e3ef05d0c90c7b2341f67bb",
+    "ptr.py": "b325c8b56a9580f8ce6a447b5b5d3d9c34508bbed3d67d50d3f71603807e9fcc"
+   },
+   "network": [
+    "https://disclosures-clerk.house.gov"
+   ],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false,
+   "process": "runs the local pdftotext binary (shutil.which) if installed, to read House disclosure PDFs"
+  },
+  "trader-risk": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "e3671889e6b658ed769f3ccc2f117436ff54080c1378d5bfbbe29463da6c16d5",
+    "check.py": "6faf9372c20d30b33dbc6175d0d81935f8dc88bc8e94aacd2ed0ae6919aafa18"
+   },
+   "network": [],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false
+  },
+  "trader-scanner": {
+   "source": "https://github.com/Jakeschincariol/day-trader-skill",
+   "commit": "3d0f4ef6986f4984b7c6bd46f7ff4f87744c3abd",
+   "commit_date": "2026-10-20T09:17:50-05:00",
+   "plugin_version": "2.0.0",
+   "license": "MIT (copied as LICENSE)",
+   "reviewed": "2026-11-03",
+   "files": {
+    "LICENSE": "857c8d5276809c8196b3cd7cb3300324768bfc562b2b6281b06d6865058e186c",
+    "SKILL.md": "8db022339f3ddd3a5f0574152040d154c484ef4c56f5dbc4a4d6c5768b8c92f7",
+    "scan.py": "2cc0d99a4f21d2b8a28b6917d527ca17e3a71dea0951365d5f82c6b5afcac913"
+   },
+   "network": [
+    "https://query1.finance.yahoo.com",
+    "https://query2.finance.yahoo.com",
+    "https://www.nasdaqtrader.com"
+   ],
+   "writes": "trader/ (relative to the working directory) only",
+   "credentials": "none",
+   "can_place_orders": false
   }
+ },
+ "rejected": {},
+ "installed_by_owner_request": "2026-11-03: owner asked to install the full day-trader-skill per its README; installed project-local, pinned to the reviewed commit"
 }

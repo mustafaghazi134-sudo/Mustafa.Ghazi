@@ -33,7 +33,7 @@ def test_vendored_files_match_reviewed_hashes():
         assert on_disk == sorted(entry["files"]), f"{name}: unexpected or missing files {on_disk}"
         for fname, digest in entry["files"].items():
             assert hashlib.sha256((folder / fname).read_bytes()).hexdigest() == digest, f"{name}/{fname} drifted from the reviewed version"
-        assert entry["can_place_orders"] is False and entry["credentials"] == "none"
+        assert entry["can_place_orders"] is False and entry["credentials"].startswith("none")
 
 
 def test_only_reviewed_skills_are_installed():
@@ -55,17 +55,50 @@ def _code_tokens(src: str) -> str:
     return " ".join(out)
 
 
+# Per-skill exceptions, each checked by hand in research_lab/DAY_TRADER_SKILL_REVIEW.md (reviewed commit 3d0f4ef):
+#  - trader-budget/size.py and trader-risk/check.py shape and check a proposed order in Alpaca's field format; no network.
+#  - trader-broker/ticket.py builds the JSON for Alpaca's place_stock_order and records the owner's yes; it sends
+#    nothing (no network code). Sending needs the alpaca/ibkr MCP server, which the project settings deny.
+#  - trader-analyst/facts.py and trader-news/news.py read SEC_USER_AGENT (name + email the SEC requires).
+#  - trader-pelosi/ptr.py runs the local `pdftotext` binary (found with shutil.which) to read disclosure PDFs.
+ALLOWED = {
+    "ticket.py": {"place_stock_order", "place_crypto_order", "alpaca", "ALPACA"},
+    "size.py": {"place_stock_order", "alpaca", "ALPACA"},      # shapes the proposed order like Alpaca's fields; no network
+    "check.py": {"place_stock_order", "alpaca", "ALPACA"},     # validates that proposed order; no network
+    "facts.py": {"os.environ"},
+    "news.py": {"os.environ"},
+    "ptr.py": {"subprocess"},
+}
+
+
 def test_vendored_code_has_no_order_credential_or_exec_path():
+    lock = _lock()["skills"]
     for py in SKILLS.rglob("*.py"):
         code = _code_tokens(py.read_text())
+        allowed = ALLOWED.get(py.name, set())
         for bad in ("subprocess", "os.system", "os.popen", "eval (", "exec (", "pickle", "ctypes", "socket",
                     "os.environ", "getenv", "place_stock_order", "place_crypto_order", "alpaca", "ALPACA",
-                    "solders", "Keypair", "SOLANA_PRIVATE_KEY", "JUPITER_API_KEY", "swap/v2"):
+                    "solders", "Keypair", "SOLANA_PRIVATE_KEY", "JUPITER_API_KEY", "swap/v2", "urlopen (data"):
+            if bad in allowed:
+                continue
             assert bad not in code, f"{py.name}: '{bad}' found in code"
-        assert "data =" not in code.replace("data = json", ""), f"{py.name}: request bodies are not expected"
-        # hosts named in code (comments excluded); github.com appears only inside the User-Agent string
-        hosts = set(re.findall(r"https?://([a-zA-Z0-9.-]+)", code))
-        assert hosts <= {"query1.finance.yahoo.com", "query2.finance.yahoo.com", "github.com"}, hosts
+        if not lock[py.parent.name]["network"]:
+            assert "urllib" not in code and "http.client" not in code, f"{py.name} declares no network but imports a client"
+        if py.name == "ptr.py":
+            assert 'shutil . which ( "pdftotext" )' in code and code.count("subprocess . run") == 1
+        if "os.environ" in allowed:
+            assert set(re_env.findall(code)) <= {"SEC_USER_AGENT"}, py.name
+        # hosts named in code (comments excluded) must be declared in the lock file for that skill
+        hosts = {f"https://{h}" for h in re.findall(r"https?://([a-zA-Z0-9.-]+)", code)} - {"https://github.com"}
+        assert hosts <= set(lock[py.parent.name]["network"]), (py.name, hosts)
+
+
+re_env = re.compile(r"os \. environ \. get \( \"([A-Z_]+)\"")
+
+
+def test_broker_skill_defaults_to_paper():
+    code = (SKILLS / "trader-broker" / "ticket.py").read_text()
+    assert 'cfg.get("paper", True)' in code and 'cfg.get("paper", False)' not in code
 
 
 def test_tradebot_never_imports_or_runs_vendored_skills():
