@@ -1,0 +1,97 @@
+# PAPER-TRADING CONFIG FOR THE GITHUB ACTIONS RUNNER (.github/workflows/paper-trading.yml).
+# Same strategies and risk limits as the local config; Claude off; no keys; paper only.
+# tradebot configuration. Paper trading is the default and the safe choice.
+mode = "paper"               # CI: PAPER ONLY (TRADEBOT_FORCE_PAPER=1 is also set by the workflow)
+initial_capital_usd = 1000.0
+data_dir = "data"
+log_level = "INFO"
+
+[risk]                       # Hard limits. Enforced by the independent risk engine.
+max_position_pct = 10.0
+max_total_exposure_pct = 50.0
+max_open_positions = 5
+max_order_notional_usd = 500.0
+min_order_notional_usd = 5.0
+max_daily_loss_pct = 3.0      # flatten + no new entries until next UTC day ("halt_day") or "kill"
+daily_loss_action = "halt_day"
+max_drawdown_pct = 10.0       # trips the kill switch
+max_trades_per_day = 30
+max_slippage_bps = 100
+min_liquidity_usd = 250000.0
+min_volume_24h_usd = 500000.0
+max_consecutive_losses = 5
+loss_cooldown_sec = 1800
+loss_streak_pause_sec = 14400  # 4h pause after a losing streak, then entries resume
+stale_data_sec = 300
+max_consecutive_errors = 5
+allowlist = []
+denylist = []
+
+# Strategy selection follows research_lab/RESULTS.md (walk-forward validated on BTC/ETH/SOL, 2019-2026).
+[[strategies]]                 # PRIMARY: daily-evaluated time-series momentum with a 100-day EMA regime filter
+name = "tsmom"
+enabled = true
+[strategies.params]
+lookback_days = 30
+ema_filter_days = 100
+stop_pct = 25.0               # disaster stop between daily checks
+trail_pct = 0.0               # 20.0 enables the "tsmom_trail" variant
+
+[[strategies]]                 # SECONDARY: EMA 12/26 cross above EMA 100, 2.5-ATR stop, no take-profit (validated form)
+name = "momentum"
+enabled = true
+[strategies.params]
+fast = 12
+slow = 26
+trend = 100
+atr_mult = 2.5
+tp_mult = 0.0
+trailing = false
+
+[[strategies]]                 # REJECTED in research (loses after costs); kept for experimentation only
+name = "mean_reversion"
+enabled = false
+
+[[strategies]]                 # REJECTED on 1h/4h; the daily Donchian variant looked good but on too few trades
+name = "breakout"
+enabled = false
+[strategies.params]
+channel = 55
+exit_channel = 20
+volume_mult = 0
+atr_mult = 2.0
+tp_mult = 0.0
+trailing = false
+
+[claude]                     # forward-test profile: no Claude in the loop, parameters frozen
+enabled = false
+research_enabled = false
+vet_signals = false
+daily_report = false
+auto_apply_overrides = false
+fail_open = true
+
+[data]
+provider = "live"            # "synthetic" or "csv" for offline testing
+candle_interval = "4h"       # the validated timeframe; 1h churns away the edge at realistic costs
+candle_history = 1000        # >= 30d lookback (180 bars) + 100d EMA (600 bars) at 4h
+jupiter_api_key = ""         # empty in CI: keyless api.jup.ag (rate-limited); never put a key in this file
+binance_base_url = "https://data-api.binance.vision"   # Binance public market-data domain (api.binance.com refuses US runners)
+
+[universe]                   # validated exposure: BTC (as cbBTC), ETH (as Wormhole WETH), SOL. See `tradebot verify-assets`.
+symbols = ["BTC", "ETH", "SOL"]
+auto_scan = false            # true lets the bot add other verified Jupiter tokens (untested exposure)
+max_symbols = 12
+
+[execution]
+paper_fee_bps = 30
+paper_slippage_bps = 15
+live_slippage_bps = 50
+rpc_url = "https://api.mainnet-beta.solana.com"   # balances only; swaps execute via Jupiter Swap API v2
+
+[engine]
+scan_interval_sec = 60
+flatten_on_kill = true
+flatten_on_daily_halt = true
+min_paper_trades_before_live = 30
+min_paper_days_before_live = 14

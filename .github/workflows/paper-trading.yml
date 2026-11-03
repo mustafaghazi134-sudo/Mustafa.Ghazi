@@ -1,0 +1,95 @@
+# TRADEBOT 4h engine: PAPER TRADING on live market data, on a GitHub-hosted runner.
+# Simulated funds only. TRADEBOT_FORCE_PAPER=1 makes live mode impossible; no keys or secrets are used.
+#
+# Start: push a change to TRADEBOT/deploy/paper_run.trigger on this branch, or "Run workflow" in the Actions tab.
+# Stop:  push a file TRADEBOT/deploy/PAPER_STOP (the watcher trips the kill switch, which flattens paper positions,
+#        then stops the engine), or cancel the run in the Actions tab.
+# State: the paper ledger is restored from the previous run's cache and saved after each run; every run also uploads
+#        the ledger, logs and reports as an artifact.
+name: paper-trading
+
+on:
+  push:
+    branches: [claude/inspiring-edison-6xsm35]
+    paths: [TRADEBOT/deploy/paper_run.trigger]
+  workflow_dispatch:
+
+concurrency:
+  group: tradebot-paper
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    defaults:
+      run:
+        working-directory: TRADEBOT
+    env:
+      TRADEBOT_FORCE_PAPER: "1"
+      TRADEBOT_CONFIG: deploy/paper_ci.toml
+      TRADEBOT_DATA_DIR: data_paper
+      PYTHONUNBUFFERED: "1"
+      RUN_MINUTES: "335"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: pip install -q -e .
+      - name: Restore paper ledger from the previous run
+        uses: actions/cache/restore@v4
+        with:
+          path: TRADEBOT/data_paper
+          key: tradebot-paper-${{ github.run_id }}
+          restore-keys: tradebot-paper-
+      - name: Self-test (offline execution checks)
+        run: python -m tradebot selftest
+      - name: Preflight (read-only connectivity and data freshness)
+        run: python -m tradebot preflight || true
+      - name: Paper trading (live data, simulated fills)
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          python -m tradebot run --paper &
+          BOT=$!
+          ( while kill -0 $BOT 2>/dev/null; do
+              sleep 120
+              git fetch -q origin "$BRANCH" 2>/dev/null || continue
+              if git cat-file -e "origin/$BRANCH:TRADEBOT/deploy/PAPER_STOP" 2>/dev/null; then
+                echo "PAPER_STOP found: tripping kill switch (flattens paper positions)"
+                echo '{"reason": "PAPER_STOP pushed", "source": "ci"}' > data_paper/KILL
+                sleep 150
+                kill -TERM $BOT 2>/dev/null
+                break
+              fi
+            done ) > /dev/null 2>&1 &
+          WATCH=$!
+          ( sleep $(( RUN_MINUTES * 60 )); kill -TERM $BOT 2>/dev/null ) > /dev/null 2>&1 &
+          TIMER=$!
+          wait $BOT || true
+          kill $WATCH $TIMER 2>/dev/null || true
+      - name: Status and performance report
+        if: always()
+        run: |
+          python -m tradebot status --mode paper || true
+          python -m tradebot report --mode paper --decisions 40 || true
+      - name: Save paper ledger for the next run
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: TRADEBOT/data_paper
+          key: tradebot-paper-${{ github.run_id }}
+      - name: Upload ledger, logs and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-run-${{ github.run_id }}
+          path: |
+            TRADEBOT/data_paper/ledger.sqlite
+            TRADEBOT/data_paper/tradebot.log
+            TRADEBOT/data_paper/reports/
+          retention-days: 90
