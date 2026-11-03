@@ -39,7 +39,7 @@ jobs:
           cp lab.toml.example /tmp/labdiag.toml
           mkdir -p lab_diagnostics
           python deploy/lab_security_diag.py 6 > "lab_diagnostics/security_diag_$(date -u +%Y%m%dT%H%M%SZ).txt" 2>&1 || true
-          tail -30 lab_diagnostics/security_diag_*.txt
+          tail -n 30 "$(ls -t lab_diagnostics/security_diag_*.txt | head -1)" || true
       - name: Commit the diagnostic output
         working-directory: .
         run: |
