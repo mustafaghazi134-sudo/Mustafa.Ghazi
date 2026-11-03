@@ -72,3 +72,43 @@ def test_replay_runs_do_not_count_toward_paper_record(tmp_path):
     replay.log_event("start", "replay")
     gate = LiveGate(s, Ledger(s.db_path, "paper"))
     assert gate.paper_record() == (0, 0.0)
+
+
+def _paper_history(s, days: float, snapshot_share: float, trades: int):
+    """Write a paper ledger that started `days` ago with snapshots covering `snapshot_share` of that time."""
+    import time
+    from tradebot.models import ClosedTrade, EquityPoint
+    led = Ledger(s.db_path, "paper")
+    now = time.time()
+    start = now - days * 86400
+    led.log_event("start", "paper", ts=start)
+    interval = s.engine.equity_snapshot_interval_sec
+    n = int(days * 86400 * snapshot_share / interval)
+    for i in range(n):
+        led.add_equity(EquityPoint(start + i * interval, 1000, 1000, 0, 0, 0))
+    for _ in range(trades):
+        led.record_trade(ClosedTrade("SOL", "tsmom", 1, 1, 2, start, now, 0, 1, "signal"))
+    return led
+
+
+def test_default_gate_is_time_and_coverage_based():
+    e = Settings().engine
+    assert (e.min_paper_trades_before_live, e.min_paper_days_before_live, e.min_paper_coverage_before_live) == (5, 60.0, 0.8)
+
+
+def test_arm_accepts_sixty_covered_days_with_a_few_trades(tmp_path):
+    s = _settings(tmp_path)
+    gate = LiveGate(s, _paper_history(s, days=61, snapshot_share=0.95, trades=5))
+    assert gate.paper_coverage() > 0.9
+    gate.arm(s.engine.live_confirm_phrase)
+    rec = json.loads(s.armed_file.read_text())
+    assert rec["paper_trades"] == 5 and rec["forced"] is False and rec["paper_coverage"] > 0.9
+
+
+@pytest.mark.parametrize("days,share,trades", [(30, 0.95, 10), (61, 0.5, 10), (61, 0.95, 2)])
+def test_arm_refuses_short_gappy_or_tradeless_records(tmp_path, days, share, trades):
+    s = _settings(tmp_path)
+    gate = LiveGate(s, _paper_history(s, days=days, snapshot_share=share, trades=trades))
+    with pytest.raises(LiveGateError):
+        gate.arm(s.engine.live_confirm_phrase)
+    assert not s.armed_file.exists()

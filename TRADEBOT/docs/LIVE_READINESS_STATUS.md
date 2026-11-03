@@ -50,13 +50,13 @@ The same tests, deliberately broken, were confirmed to catch:
 
 | Requirement (source) | Needed | Forward evidence |
 |---|---|---|
-| Paper record before arming (`execution/live_gate.py`, `[engine]`) | ≥ 30 closed paper trades and ≥ 14 days | **0 trades.** No persistent forward paper ledger exists: none on the PC is visible here, and the runner ledger started 2026-11-03 07:07 UTC |
+| Paper record before arming (`execution/live_gate.py`, `[engine]`) | ≥ 60 days, engine running ≥ 80% of them, ≥ 5 closed paper trades (changed 2026-11-03 from 30 trades / 14 days) | **0 trades.** The runner ledger started 2026-11-03 07:07 UTC; runs now chain continuously (`PAPER_RUNNER.md`) |
 | Pre-registered review (`STRATEGY_AUDIT_GO_NOGO.md` §9) | ≥ 30 forward trades or 6 months; forward expectancy CI excludes 0; realised costs within base | **Not met** |
 | Historical audit | The 4h/1d trend rules are positive but not significant after correcting for 20 tests; everything shorter-horizon is rejected | Historical only: does not count |
 
-**No strategy qualifies for real money.** The missing evidence is at least 30 closed forward paper trades over at least
-14 days, from a persistent engine with executable quotes. At about 0.1 trades/day across BTC, ETH and SOL, that is
-roughly 6–10 months.
+**No strategy qualifies for real money.** Arming the small `[live]` caps needs 60 days of mostly uninterrupted paper
+trading with at least 5 closed trades (earliest early January 2027 if the chain runs without breaks). Scaling beyond
+those caps still needs the pre-registered review (≥ 30 forward trades or 6 months, expectancy CI excluding 0).
 
 ## 4. Capabilities
 

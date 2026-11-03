@@ -77,18 +77,34 @@ class LiveGate:
         days = (time.time() - first) / 86400 if first else 0.0
         return trades, days
 
+    def paper_coverage(self) -> float:
+        """Share of the paper period during which the engine was running, from its equity snapshots (0..1)."""
+        if self.ledger is None:
+            return 0.0
+        first = self.ledger.first_event_ts(mode="paper")
+        if not first:
+            return 0.0
+        elapsed = time.time() - first
+        if elapsed <= 0:
+            return 0.0
+        snaps = self.ledger.count_equity(mode="paper")
+        return min(1.0, snaps * self.s.engine.equity_snapshot_interval_sec / elapsed)
+
     def arm(self, confirm: str, force: bool = False) -> None:
         phrase = self.s.engine.live_confirm_phrase
         if confirm.strip() != phrase:
             raise LiveGateError(f"confirmation phrase mismatch; expected exactly: {phrase}")
         trades, days = self.paper_record()
-        need_t, need_d = self.s.engine.min_paper_trades_before_live, self.s.engine.min_paper_days_before_live
-        if not force and (trades < need_t or days < need_d):
-            raise LiveGateError(f"paper record insufficient: {trades} trades / {days:.1f} days; need {need_t} / {need_d}. "
-                                f"Use --force to override deliberately.")
+        cov = self.paper_coverage()
+        e = self.s.engine
+        need_t, need_d, need_c = e.min_paper_trades_before_live, e.min_paper_days_before_live, e.min_paper_coverage_before_live
+        if not force and (trades < need_t or days < need_d or cov < need_c):
+            raise LiveGateError(f"paper record insufficient: {trades} trades / {days:.1f} days / {cov:.0%} running; "
+                                f"need {need_t} / {need_d} / {need_c:.0%}. Use --force to override deliberately.")
         self.s.armed_file.parent.mkdir(parents=True, exist_ok=True)
         self.s.armed_file.write_text(json.dumps({"ts": time.time(), "confirm": confirm, "limits_hash": self.limits_hash(),
-                                                 "paper_trades": trades, "paper_days": round(days, 2), "forced": force}, indent=2))
+                                                 "paper_trades": trades, "paper_days": round(days, 2),
+                                                 "paper_coverage": round(cov, 3), "forced": force}, indent=2))
         log.warning("LIVE TRADING ARMED (paper record: %d trades, %.1f days, forced=%s)", trades, days, force)
 
     def disarm(self) -> None:

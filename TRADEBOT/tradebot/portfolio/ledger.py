@@ -168,6 +168,9 @@ class Ledger:
         self._exec("INSERT INTO equity VALUES(?,?,?,?,?,?,?)",
                    (e.ts, self.mode, e.equity_usd, e.cash_usd, e.exposure_usd, e.realized_pnl_usd, e.unrealized_pnl_usd))
 
+    def count_equity(self, mode: str | None = None) -> int:
+        return self._exec("SELECT COUNT(*) c FROM equity WHERE mode=?", (mode or self.mode,)).fetchone()["c"]
+
     def equity_curve(self, since: float = 0.0) -> list[EquityPoint]:
         rows = self._exec("SELECT * FROM equity WHERE mode=? AND ts>=? ORDER BY ts", (self.mode, since)).fetchall()
         return [EquityPoint(r["ts"], r["equity_usd"], r["cash_usd"], r["exposure_usd"], r["realized_pnl_usd"], r["unrealized_pnl_usd"])

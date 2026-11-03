@@ -93,7 +93,7 @@ Why Claude stays out of the execution loop:
 | Loss streak | 5 consecutive losses pauses entries for 4 h; 30-minute cooldown after any loss |
 | Market quality | Slippage ≤ 100 bps, liquidity ≥ $250k, 24 h volume ≥ $500k, stale data > 300 s trips the kill switch |
 | Approvals | HMAC, single use, 30 s lifetime; the kill switch and daily halt are re-checked right before execution |
-| Live gate | Mode live + environment variable + armed file hashing `[risk]` and `[live]` + ≥ 30 paper trades over 14 days |
+| Live gate | Mode live + environment variable + armed file hashing `[risk]` and `[live]` + ≥ 60 paper days, ≥ 80% engine uptime, ≥ 5 paper trades |
 | Live controls | $10 per order, $25 wallet exposure, $5 daily loss, 10 orders and $50 per day, 0.02 SOL reserve, one order at a time |
 | Fast engine gateway | $300 capital, $100 per position, $200 exposure, $2 maximum loss per trade, $15 daily loss, $40 drawdown |
 | Process safety | Instance lock per ledger; separate halt files per engine |

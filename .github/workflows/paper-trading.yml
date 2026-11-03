@@ -7,6 +7,9 @@
 # Evidence while running: checkpoint artifacts paper-cp-* (status, decisions, orders, fills, events, log tail) at
 #        about +4, +15, +30, +60, +120, +180, +240 and +300 minutes; final artifact paper-final-* at the end.
 # State: the paper ledger is restored from the previous run's cache and saved at the end of each run.
+# Continuous: at the end of each run (~5.6 h) the workflow starts the next one itself, so paper trading runs around
+#        the clock. It does NOT chain when PAPER_STOP exists, when the engine was not alive at the end, or when the
+#        kill switch tripped; those stop the chain and leave the evidence in the run for review.
 name: paper-trading
 
 on:
@@ -21,6 +24,7 @@ concurrency:
 
 permissions:
   contents: read
+  actions: write   # only to dispatch the next run of this workflow
 
 jobs:
   paper:
@@ -93,6 +97,8 @@ jobs:
       - name: Stop engine and final report
         if: always()
         run: |
+          if kill -0 "$(cat data_paper/bot.pid 2>/dev/null)" 2>/dev/null; then echo "ENGINE_ALIVE_AT_END=1" >> "$GITHUB_ENV"; fi
+          if [ -f data_paper/KILL ]; then echo "KILL_AT_END=1" >> "$GITHUB_ENV"; cat data_paper/KILL; fi
           kill -TERM "$(cat data_paper/bot.pid 2>/dev/null)" 2>/dev/null || true
           sleep 3
           bash deploy/paper_checkpoint.sh final 0
@@ -114,3 +120,20 @@ jobs:
             TRADEBOT/data_paper/checkpoints/
             TRADEBOT/data_paper/reports/
           retention-days: 90
+      - name: Start the next run (continuous paper trading)
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch -q origin "$GITHUB_REF_NAME" || true
+          if git cat-file -e "origin/$GITHUB_REF_NAME:TRADEBOT/deploy/PAPER_STOP" 2>/dev/null; then
+            echo "PAPER_STOP is present: not starting another run."; exit 0
+          fi
+          if [ "${KILL_AT_END:-0}" = "1" ]; then
+            echo "::warning::kill switch tripped during this run; not restarting automatically. Review the final artifact, then push the trigger file."; exit 0
+          fi
+          if [ "${ENGINE_ALIVE_AT_END:-0}" != "1" ]; then
+            echo "::warning::engine was not running at the end of this run; not restarting automatically. Review run_stdout.log, then push the trigger file."; exit 0
+          fi
+          gh workflow run paper-trading.yml --ref "$GITHUB_REF_NAME"
+          echo "next paper run dispatched"

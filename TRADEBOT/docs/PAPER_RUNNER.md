@@ -77,13 +77,29 @@ stops it immediately. Paper state is saved per cycle, and crash protection recon
 
 ## Does it keep running after the Claude session closes?
 
-Yes, for the length of one run: about 5.6 hours. GitHub limits a job to 6 hours. A new run starts only when the
-trigger file is pushed again; scheduled runs would require the workflow on the default branch.
+Yes, continuously. GitHub limits one job to 6 hours, so each run lasts about 5.6 h and then **starts the next run
+itself** (`gh workflow run`, using only the workflow's own token). The ledger carries over through the Actions cache,
+so the paper record accumulates across runs. Expect a gap of a few minutes between runs; positions and intents are
+reconciled on each start.
 
-For continuous operation, run the same engine on your PC or a VPS:
+The chain stops on its own, leaving a warning in the run, when:
 
-```bash
-tradebot run --paper
-```
+- `TRADEBOT/deploy/PAPER_STOP` exists on the branch (your stop request);
+- the engine was not running at the end of the run (crash: read `run_stdout.log` in the final artifact);
+- the kill switch tripped during the run (for example the 10% drawdown limit). The next start would clear it, so the
+  chain refuses to restart until you have looked.
 
-Point that machine at the same strategies; the cache here does not sync to it.
+To resume after any of these: delete `PAPER_STOP` if present, then push the trigger file (command above).
+
+## Paper record and the live gate
+
+`tradebot arm-live` requires **60 days** since the first paper event, the engine running for **at least 80%** of that
+time (measured from its 5-minute equity snapshots), and **at least 5** closed paper trades. The old requirement of 30
+trades in 14 days could not be met by a strategy that trades about 0.1 times a day; it would have taken 6-10 months.
+The gate is operational: it shows the engine runs unattended and every order path works. It is **not** proof of an
+edge; with a handful of trades nothing can be proved. Raising size beyond the small `[live]` caps still requires the
+pre-registered review in `STRATEGY_AUDIT_GO_NOGO.md` section 9.
+
+The gate reads the ledger on the machine where `arm-live` runs. The paper record built here lives in the Actions
+cache and the `paper-final-*` artifacts, not on your PC. Before going live, either run the paper engine on the same
+machine that will trade, or bring the runner's `ledger.sqlite` across and confirm `tradebot status` shows the record.

@@ -171,8 +171,11 @@ def cmd_status(args) -> int:
     print(f"mode:          {settings.mode}" + (f"  (showing ledger: {ledger.mode})" if ledger.mode != settings.mode else ""))
     print(f"kill switch:   {'TRIPPED - ' + str(kill.reason()) if kill.is_tripped() else 'clear'}")
     print(f"live gate:     {'ARMED' if st['armed'] else 'not armed'}  (env_ok={st['env_ok']} armed_file={st['armed_file']} limits_match={st['limits_match']})")
-    print(f"paper record:  {trades} closed trades over {days:.1f} days "
-          f"(need {settings.engine.min_paper_trades_before_live} / {settings.engine.min_paper_days_before_live} to arm)")
+    cov = gate.paper_coverage()
+    e = settings.engine
+    print(f"paper record:  {trades} closed trades over {days:.1f} days, engine running {cov:.0%} of that time "
+          f"(need {e.min_paper_trades_before_live} / {e.min_paper_days_before_live:g} days / "
+          f"{e.min_paper_coverage_before_live:.0%} to arm)")
     print(f"cash:          ${ledger.get('cash', settings.initial_capital_usd):,.2f}")
     pos = ledger.load_positions()
     print(f"positions:     {len(pos)}" + (" -> " + ", ".join(f"{p.symbol} {p.qty:.6g}@{p.avg_cost:.6g}" for p in pos.values()) if pos else ""))

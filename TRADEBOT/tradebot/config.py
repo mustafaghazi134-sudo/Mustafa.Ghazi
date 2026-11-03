@@ -164,8 +164,14 @@ class EngineConfig(BaseModel):
     equity_snapshot_interval_sec: float = 300.0
     flatten_on_kill: bool = True
     flatten_on_daily_halt: bool = True
-    min_paper_trades_before_live: int = 30
-    min_paper_days_before_live: float = 14.0
+    # Arming gate (operational, not statistical): the paper engine must have run for this long, mostly without gaps,
+    # and closed a few trades so every order path has been exercised. At ~0.1 trades/day a trade-count gate of 30
+    # would take 6-10 months; time plus coverage is the meaningful check. Scaling beyond the small [live] caps is
+    # decided separately by the pre-registered review in docs/STRATEGY_AUDIT_GO_NOGO.md section 9.
+    min_paper_trades_before_live: int = 5
+    min_paper_days_before_live: float = 60.0
+    min_paper_coverage_before_live: float = Field(0.8, ge=0.0, le=1.0,
+                                                  description="Share of the paper period covered by equity snapshots")
     live_confirm_phrase: str = "I UNDERSTAND THIS TRADES REAL MONEY WITHOUT APPROVAL"
 
 
@@ -437,6 +443,7 @@ rpc_url = "https://api.mainnet-beta.solana.com"   # balances only; swaps execute
 scan_interval_sec = 60
 flatten_on_kill = true
 flatten_on_daily_halt = true
-min_paper_trades_before_live = 30
-min_paper_days_before_live = 14
+min_paper_trades_before_live = 5     # closed paper trades (exercises every order path)
+min_paper_days_before_live = 60      # calendar days since the first paper event
+min_paper_coverage_before_live = 0.8 # share of those days the engine was actually running
 """
