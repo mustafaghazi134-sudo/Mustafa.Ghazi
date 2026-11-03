@@ -1,0 +1,5 @@
+=== EXECUTION-TEST REHEARSAL (read-only) 2026-11-03T09:01:10Z  amount $10.00
+could not search for a funded public wallet: HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+read-only: no signature was requested and nothing was submitted.
