@@ -128,7 +128,7 @@ python -m opportunity_lab backtest --seeds 12 --seed 200 --hours 24 --tokens 80 
 1. **No look-ahead or fill bias found.** On markets where nothing is predictable, the lab loses about its modelled
    costs, and the point estimate is negative. An earlier 16-seed, 12-hour null run gave −396 bps [−586, −176].
    `tests/test_opportunity_lab.py::test_null_market_does_not_produce_profit` keeps this check in the suite.
-2. **The security agent stops every trap that reaches it.** Across 44 market simulations, no paper trade was opened
+2. **The security agent stops every trap that reaches it.** Across 108 simulation runs on 32 distinct markets, no paper trade was opened
    on a honeypot, live-authority or fee-trap token. Most traps never matched a strategy; those that did were rejected,
    honeypots mainly through the missing sell route.
 3. **Write-offs bite as designed.** Making 5% of held tokens unsellable cut the expectancy by about 520 bps, from
