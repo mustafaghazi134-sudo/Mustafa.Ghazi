@@ -1,0 +1,17 @@
+=== EXECUTION-TEST REHEARSAL (read-only) 2026-11-03T09:25:02Z  amount $6.00  rpc https://api.mainnet-beta.solana.com
+
+--- 1. quote-only round trip (no taker)
+reference SOL price 92.0137
+sample 1: buy {"router": "jupiterz", "inAmount": "6000000", "outAmount": "65146742", "otherAmountThreshold": "65146742", "slippageBps": 0, "feeBps": 2, "priceImpact": -0.03149192031808384, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": true}
+          sell {"router": "metis", "inAmount": "65146742", "outAmount": "5999033", "otherAmountThreshold": "5969037", "slippageBps": 50, "feeBps": 2, "priceImpact": 0.004233379663917259, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065147 SOL -> $5.9990: swap round trip 1.6 bps ($0.0010); sell floor at slippage limit $5.9690
+sample 2: buy {"router": "metis", "inAmount": "6000000", "outAmount": "65136977", "otherAmountThreshold": "64811292", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.03533537236593409, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          sell {"router": "metis", "inAmount": "65136977", "outAmount": "5999310", "otherAmountThreshold": "5969313", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.004947896753942449, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065137 SOL -> $5.9993: swap round trip 1.1 bps ($0.0007); sell floor at slippage limit $5.9693
+sample 3: buy {"router": "metis", "inAmount": "6000000", "outAmount": "65126579", "otherAmountThreshold": "64800946", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.022514664507469702, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          sell {"router": "jupiterz", "inAmount": "65126579", "outAmount": "5998004", "otherAmountThreshold": "5998004", "slippageBps": 0, "feeBps": 2, "priceImpact": -0.020935842293451506, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": true}
+          => $6.00 -> 0.065127 SOL -> $5.9980: swap round trip 3.3 bps ($0.0020); sell floor at slippage limit $5.9980
+
+no funded wallet found among recent Jupiter swaps
+
+read-only: no signature was requested and nothing was submitted.
