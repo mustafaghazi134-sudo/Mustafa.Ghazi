@@ -1,0 +1,37 @@
+[
+ {
+  "pool": "HxA6SKW5qA4o12fjVgTpXdq2YnZ5Zv1s7SB4FFomsyLM",
+  "name": "cbBTC / USDC",
+  "dex": "orca",
+  "reserve_usd": "4972161.5155",
+  "vol24h_usd": "10558861.7019258"
+ },
+ {
+  "pool": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+  "name": "cbBTC / SOL",
+  "dex": "orca",
+  "reserve_usd": "7362628.5263",
+  "vol24h_usd": "3377250.86435175"
+ },
+ {
+  "pool": "7ubS3GccjhQY99AYNKXjNJqnXjaokEdfdV915xnCb96r",
+  "name": "cbBTC / USDC",
+  "dex": "meteora",
+  "reserve_usd": "1362743.5514",
+  "vol24h_usd": "3551486.66801569"
+ },
+ {
+  "pool": "4v8ufj8Hj7UvFgtofQJAtzUud5xomwZfEqfCTHZ4wM72",
+  "name": "cbBTC / WBTC",
+  "dex": "orca",
+  "reserve_usd": "1221222.7848",
+  "vol24h_usd": "1757679.42491395"
+ },
+ {
+  "pool": "H2USRSaWuUchkbdmSJgKNfAm7ocyD4ZnCm69oRGyecKw",
+  "name": "cbBTC / SOL",
+  "dex": "meteora",
+  "reserve_usd": "1607930.7419",
+  "vol24h_usd": "888689.361640489"
+ }
+]
