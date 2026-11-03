@@ -128,8 +128,23 @@ def main() -> None:
     p = os.path.join(os.path.dirname(__file__), "exec_test_wallet.txt")
     if os.path.exists(p) and open(p).read().strip():
         targets.append(("OWNER TEST WALLET", open(p).read().split()[0].strip()))
+    # decode-only: the wallet seen in the 09:20 run (2.46 SOL), used only as the taker to see the real SELL route
+    ref_taker = "BXEHNbKPGeUHaqpaiHR6hc9mQkTZ2WFCXh6kkHkhFnCY"
     try:
-        fw = funded_wallet_from_recent_swaps(url, need_usdc=usd * 1.5, need_sol=0.05)
+        ad = adapter(ref_taker)
+        q = ad.quote("SOL", Side.BUY, usd).out_amount
+        for rep in range(3):
+            print(f"\n--- SOL SELL route decode #{rep + 1} (taker {ref_taker[:8]}, decode only)")
+            dump_route(ad, "SOL", Side.SELL, q)
+            r = ad.dry_run_order("SOL", Side.SELL, q)
+            print(f"  verifier: ok={r.get('ok')} problems={r.get('problems')}")
+            time.sleep(3)
+        print(f"\n--- cbBTC BUY route decode (taker {ref_taker[:8]}, decode only)")
+        dump_route(ad, "BTC", Side.BUY, usd)
+    except Exception as e:  # noqa: BLE001
+        print(f"decode FAIL {type(e).__name__}: {e}")
+    try:
+        fw = None if os.environ.get("SKIP_TAKER_SEARCH") else funded_wallet_from_recent_swaps(url, need_usdc=usd * 1.5, need_sol=0.05)
         if fw:
             targets.append(("funded wallet from a recent Jupiter swap (simulation only)", fw))
         else:
