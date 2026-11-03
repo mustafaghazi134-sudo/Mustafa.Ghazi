@@ -54,7 +54,7 @@ def find_funded_wallet(url) -> str | None:
 def main() -> None:
     usd = float(sys.argv[1]) if len(sys.argv) > 1 else 10.0
     s = load_settings()
-    url = s.data.rpc_url
+    url = s.execution.rpc_url
     print(f"=== EXECUTION-TEST REHEARSAL (read-only) {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}  amount ${usd:.2f}")
     own = None
     p = os.path.join(os.path.dirname(__file__), "exec_test_wallet.txt")
