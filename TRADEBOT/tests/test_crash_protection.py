@@ -285,3 +285,26 @@ def test_unknown_outcome_without_signature_never_erases_the_persisted_one(tmp_pa
     ok, order = _buy(bot, prov)
     row = ledger.get_intent(ledger.intents(1)[0]["id"])
     assert row["state"] == "submitted" and row["tx_signature"] == f"SIG-{order.id}" and row["request_id"] == f"req-{order.id}"
+
+
+def test_restart_while_holding_restores_stop_and_exits_when_breached(tmp_path):
+    """Process dies while a position is open: a fresh engine on the same ledger must restore the position with its
+    stop and exit it on the first cycle in which the stop is breached (exits are managed in-process)."""
+    from tradebot.models import Ticker
+    bot, ledger, broker, prov = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "ok"))
+    ok, _ = _buy(bot, prov)
+    assert ok and "SOL" in bot.book.positions
+    pos = bot.book.positions["SOL"]
+    pos.stop_loss = pos.avg_cost * 0.88
+    ledger.upsert_position(pos)
+    cash_before = bot.book.cash
+    del bot, ledger, broker                                           # crash: nothing else is flushed or closed
+    bot2, ledger2, broker2, prov2 = _bot(tmp_path, lambda r, p: CrashingBroker(r, p, "ok"))
+    restored = bot2.book.positions["SOL"]
+    assert restored.qty == pytest.approx(pos.qty) and restored.stop_loss == pytest.approx(pos.stop_loss)
+    assert bot2.book.cash == pytest.approx(cash_before) and not ledger2.pending_intents()
+    px = pos.stop_loss * 0.95
+    bot2._manage_positions({"SOL": Ticker("SOL", px, bot2.clock(), 1e9, 1e9)})
+    assert "SOL" not in bot2.book.positions
+    t = ledger2.trades()[-1]
+    assert t.exit_reason.startswith("stop") and t.pnl_usd < 0
