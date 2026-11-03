@@ -90,6 +90,11 @@ def check_deltas(sim: SimResult, input_mint: str, output_mint: str, max_in_raw: 
     else:
         if spent_in > max_in_raw:
             p.append(f"simulation: wallet spends {spent_in} raw {input_mint}, more than the order's {max_in_raw}")
+        elif spent_in < max_in_raw * 0.99:
+            # the input must leave the watched (associated) token account; anything else means the simulation is not
+            # observing the funds the transaction actually moves, so it proves nothing
+            p.append(f"simulation: the watched {input_mint} account is debited {spent_in}, not the order's {max_in_raw} "
+                     "(input held outside the wallet's associated token account?)")
         if output_mint != WSOL_MINT:
             sol_cost = -sim.native_delta_lamports
             if sol_cost > max_sol_cost_lamports:

@@ -176,6 +176,7 @@ def _sim(effect: dict, err=None):
     ({V.USDC_MINT: -9_000_000, V.WSOL_MINT: 31_000_000}, None, "more than the order"),
     ({V.USDC_MINT: -5_000_000, V.WSOL_MINT: 20_000_000}, None, "below the minimum"),
     ({V.USDC_MINT: -5_000_000, V.WSOL_MINT: 31_000_000, "cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij": -10_000}, None, "unrelated balance"),
+    ({V.USDC_MINT: 0, V.WSOL_MINT: 31_000_000}, None, "not the order's"),      # seen on a real JupiterZ route: input moved from an unwatched account
 ])
 def test_simulation_measures_real_wallet_changes(effect, err, needle):
     p = check_deltas(_sim(effect, err), V.USDC_MINT, V.WSOL_MINT, 5_000_000, 30_900_000, 5_000_000)

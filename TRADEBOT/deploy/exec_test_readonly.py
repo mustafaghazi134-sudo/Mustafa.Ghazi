@@ -22,6 +22,7 @@ from solders.pubkey import Pubkey
 
 from tradebot.config import load_settings
 from tradebot.data.live import LiveProvider
+from tradebot.execution import tx_verify as V
 from tradebot.execution.jupiter_adapter import JupiterExecutionAdapter
 from tradebot.models import Side
 from tradebot.risk.engine import RiskEngine
@@ -67,9 +68,27 @@ def funded_wallet_from_recent_swaps(url, need_usdc: float, need_sol: float) -> s
             usdc = sum(float(t["account"]["data"]["parsed"]["info"]["tokenAmount"]["uiAmount"] or 0) for t in toks)
         except Exception:  # noqa: BLE001
             continue
-        if lam / 1e9 >= need_sol and usdc >= need_usdc:
+        ata = V.ata_address(payer, USDC)
+        in_ata = sum(float(t["account"]["data"]["parsed"]["info"]["tokenAmount"]["uiAmount"] or 0) for t in toks if t["pubkey"] == ata)
+        if lam / 1e9 >= need_sol and in_ata >= need_usdc:
             return payer
     return None
+
+
+def dump_route(a: JupiterExecutionAdapter, symbol: str, side: Side, amount: float) -> None:
+    """Decode the transaction Jupiter builds for this wallet: every instruction, its program and accounts."""
+    in_mint, out_mint, raw_in, _, _ = a._pair(symbol, side, amount)
+    o = a._get_order(a.order_params(in_mint, out_mint, raw_in, a.wallet))
+    print(f"  route router={o.get('router')} mode={o.get('mode')} prioritizationFeeLamports={o.get('prioritizationFeeLamports')} "
+          f"rentFeeLamports={o.get('rentFeeLamports')} signatureFeeLamports={o.get('signatureFeeLamports')}")
+    tx = V.decode_transaction(o["transaction"])
+    keys, static = V.resolve_account_keys(tx.message, a.alts)
+    wsol_ata = V.ata_address(a.wallet, V.WSOL_MINT)
+    names = {a.wallet: "WALLET", wsol_ata: "WALLET_wSOL_ATA", V.ata_address(a.wallet, USDC): "WALLET_USDC_ATA"}
+    for n, ix in enumerate(tx.message.instructions):
+        prog = static[ix.program_id_index]
+        accs = [names.get(keys[i], keys[i][:8]) if i < len(keys) else "?" for i in bytes(ix.accounts)]
+        print(f"  ix{n} {prog[:12]} data={bytes(ix.data)[:12].hex()} accounts={accs[:8]}{' ...' if len(accs) > 8 else ''}")
 
 
 def main() -> None:
@@ -134,10 +153,26 @@ def main() -> None:
             time.sleep(2.5)
             sell = a.dry_run_order("SOL", Side.SELL, qty)
             print("SELL verify+simulate:", json.dumps({k: sell.get(k) for k in keys}, default=str))
+            for rep in range(3):
+                time.sleep(2.5)
+                try:
+                    print(f"SELL route decode #{rep + 1}:")
+                    dump_route(a, "SOL", Side.SELL, qty)
+                except Exception as e:  # noqa: BLE001
+                    print(f"  decode FAIL {type(e).__name__}: {e}")
             if sell.get("ok"):
                 lam = (buy.get("wallet_sol_cost_lamports") or 0) + (sell.get("wallet_sol_cost_lamports") or 0)
                 print(f"ROUND TRIP ${usd:.2f}: back ${int(sell['outAmount']) / 1e6:.4f}; wallet SOL cost of both transactions as built "
                       f"(fees + priority + rent not refunded in-tx) {lam} lamports = ${lam / 1e9 * sol_px:.4f}")
+        time.sleep(2.5)
+        # pure-SPL alternative (no native SOL wrapping): cbBTC
+        cb = a.dry_run_order("BTC", Side.BUY, usd)
+        print("cbBTC BUY  verify+simulate:", json.dumps({k: cb.get(k) for k in keys}, default=str))
+        if cb.get("ok"):
+            time.sleep(2.5)
+            cq = int(cb["outAmount"]) / 1e8
+            cs = a.dry_run_order("BTC", Side.SELL, cq)
+            print("cbBTC SELL verify+simulate:", json.dumps({k: cs.get(k) for k in keys}, default=str))
         time.sleep(2.5)
     print("\nread-only: no signature was requested and nothing was submitted.")
 
