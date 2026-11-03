@@ -48,12 +48,12 @@ def rpc(url, method, params):
 
 
 def funded_wallet_from_recent_swaps(url, need_usdc: float, need_sol: float) -> str | None:
-    sigs = rpc(url, "getSignaturesForAddress", [JUP6, {"limit": 25}])
+    sigs = rpc(url, "getSignaturesForAddress", [JUP6, {"limit": 120}])
     seen = set()
     for s in sigs:
         if s.get("err"):
             continue
-        time.sleep(0.6)
+        time.sleep(0.35)
         try:
             tx = rpc(url, "getTransaction", [s["signature"], {"encoding": "jsonParsed", "maxSupportedTransactionVersion": 0}])
             payer = tx["transaction"]["message"]["accountKeys"][0]["pubkey"]
@@ -129,7 +129,7 @@ def main() -> None:
     if os.path.exists(p) and open(p).read().strip():
         targets.append(("OWNER TEST WALLET", open(p).read().split()[0].strip()))
     try:
-        fw = funded_wallet_from_recent_swaps(url, need_usdc=usd * 2, need_sol=0.1)
+        fw = funded_wallet_from_recent_swaps(url, need_usdc=usd * 1.5, need_sol=0.05)
         if fw:
             targets.append(("funded wallet from a recent Jupiter swap (simulation only)", fw))
         else:
