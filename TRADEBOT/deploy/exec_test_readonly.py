@@ -35,6 +35,9 @@ def rpc(url, method, params):
     return j["result"]
 
 
+RPCS = ["https://solana-rpc.publicnode.com", "https://api.mainnet-beta.solana.com"]
+
+
 def find_funded_wallet(url) -> str | None:
     """A normal (on-curve) wallet holding >= $25 USDC and >= 0.5 SOL, used ONLY as the taker for simulation."""
     accts = rpc(url, "getTokenLargestAccounts", [USDC, {"commitment": "confirmed"}])["value"]
@@ -64,10 +67,19 @@ def main() -> None:
     if own:
         targets.append(("OWNER TEST WALLET", own))
     fw = None
-    try:
-        fw = find_funded_wallet(url)
-    except Exception as e:  # noqa: BLE001
-        print(f"could not search for a funded public wallet: {type(e).__name__}: {e}")
+    for cand in RPCS:
+        for attempt in range(3):
+            try:
+                fw = find_funded_wallet(cand)
+                url = cand
+                break
+            except Exception as e:  # noqa: BLE001
+                print(f"funded-wallet search via {cand} attempt {attempt + 1}: {type(e).__name__}: {str(e)[:120]}")
+                time.sleep(5 * (attempt + 1))
+        if fw:
+            break
+    s.execution.rpc_url = url
+    print(f"rpc used for balances and simulation: {url}")
     if fw:
         targets.append(("funded public wallet (simulation only)", fw))
     for label, w in targets:
