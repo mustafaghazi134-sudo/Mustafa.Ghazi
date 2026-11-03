@@ -29,7 +29,7 @@ SOLANA_TX_FEE_USD = 0.01   # base fee + typical priority fee, charged per paper 
 class PaperBroker(Broker):
     def __init__(self, risk: RiskEngine, provider: MarketDataProvider, fee_bps: float = 30.0,
                  slippage_bps: float = 15.0, seed: int = 7, clock=None, quote_timeout_sec: float = 5.0,
-                 live_slippage_bps: int = 50):
+                 live_slippage_bps: int = 50, allow_keyless_quotes: bool = False):
         super().__init__(risk)
         self.provider = provider
         self.fee_bps = fee_bps
@@ -41,7 +41,7 @@ class PaperBroker(Broker):
         self._confirmed: set[str] = set()
         self.quote_source = "parametric"
         jup = getattr(provider, "jup", None)
-        self._jup = jup if (jup is not None and getattr(jup, "has_key", False)) else None
+        self._jup = jup if (jup is not None and (getattr(jup, "has_key", False) or allow_keyless_quotes)) else None
 
     # ------------------------------------------------------------------ pricing
     def _mid(self, symbol: str) -> float:

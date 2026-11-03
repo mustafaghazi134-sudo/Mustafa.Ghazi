@@ -622,7 +622,8 @@ def build_bot(settings: Settings, provider: MarketDataProvider | None = None) ->
         broker = PaperBroker(risk, provider, fee_bps=settings.execution.paper_fee_bps,
                              slippage_bps=settings.execution.paper_slippage_bps, clock=clock,
                              quote_timeout_sec=settings.data.jupiter_quote_timeout_sec,
-                             live_slippage_bps=settings.execution.live_slippage_bps)
+                             live_slippage_bps=settings.execution.live_slippage_bps,
+                             allow_keyless_quotes=settings.execution.paper_keyless_quotes)
     bot = TradingBot(settings, provider, ledger, risk, kill, broker, book, strategies, analyst, clock)
     if settings.is_live and settings.execution.reconcile_on_start:
         problems = bot.reconcile_balances()

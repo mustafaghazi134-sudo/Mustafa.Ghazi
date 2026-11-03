@@ -70,3 +70,23 @@ def test_paper_falls_back_to_parametric_when_quote_fails_or_no_key(risk, clock, 
     o2 = OrderRequest(symbol="SOL", side=Side.BUY, notional_usd=100)
     d2 = risk.evaluate(o2, pf, MarketState(180.0, 1e9, 1e9, clock()))
     assert b2.execute(o2, d2.adjusted_qty, d2.approval).qty > 0 and b2.quote_source == "parametric"
+
+
+def test_keyless_quotes_only_when_explicitly_enabled(risk, clock, monkeypatch):
+    """paper_keyless_quotes: Jupiter quotes without a key (rate-limited public access); still no taker, still min-out."""
+    prov = LiveProvider(DataConfig(jupiter_api_key=""), UniverseConfig(), ExecutionConfig())
+    prov.http.get_json = _provider_with_price(180.0).http.get_json
+    monkeypatch.delenv("JUPITER_API_KEY", raising=False)
+    seen = []
+
+    def fake_get(url, params=None, headers=None, timeout=None):
+        seen.append((params, headers))
+        return SimpleNamespace(raise_for_status=lambda: None, json=lambda: {"outAmount": "554000000", "otherAmountThreshold": "552500000"})
+    monkeypatch.setattr(httpx, "get", fake_get)
+    b = PaperBroker(risk, prov, clock=clock, allow_keyless_quotes=True)
+    pf = PortfolioState(1000, 1000, {}, 0, 0, 0, None, 1000, 1000)
+    o = OrderRequest(symbol="SOL", side=Side.BUY, notional_usd=100)
+    d = risk.evaluate(o, pf, MarketState(180.0, 1e9, 1e9, clock()))
+    fill = b.execute(o, d.adjusted_qty, d.approval)
+    assert b.quote_source == "jupiter" and fill.qty == pytest.approx(0.5525)
+    assert seen and "taker" not in seen[0][0] and seen[0][1] == {}

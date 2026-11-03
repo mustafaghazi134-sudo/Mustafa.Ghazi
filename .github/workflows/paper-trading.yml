@@ -49,8 +49,12 @@ jobs:
           restore-keys: tradebot-paper-
       - name: Self-test (offline execution checks)
         run: python -m tradebot selftest
-      - name: Preflight (read-only connectivity and data freshness)
-        run: python -m tradebot preflight || true
+      - name: Preflight and read-only probe (connectivity, data freshness, executable quotes, signal-vs-asset basis)
+        run: |
+          mkdir -p data_paper/checkpoints
+          { python -m tradebot preflight; echo; python deploy/paper_probe.py; } > data_paper/checkpoints/cp0_preflight.txt 2>&1 || true
+          cat data_paper/checkpoints/cp0_preflight.txt
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp0-preflight, path: TRADEBOT/data_paper/checkpoints/}}
       - name: Start paper trading engine (background)
         run: |
           mkdir -p data_paper

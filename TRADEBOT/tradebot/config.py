@@ -116,6 +116,9 @@ class UniverseConfig(BaseModel):
 class ExecutionConfig(BaseModel):
     paper_fee_bps: float = 30.0            # Jupiter route + Solana fees approximated
     paper_slippage_bps: float = 15.0
+    # Paper fills from Jupiter /swap/v2/order quotes (no taker) even without an API key. Keyless access is
+    # rate-limited (about 0.5 req/s); if Jupiter refuses, the paper broker falls back to the parametric model and logs it.
+    paper_keyless_quotes: bool = False
     live_slippage_bps: int = 50
     rpc_url: str = "https://api.mainnet-beta.solana.com"
     # Execution uses Swap API v2 order -> sign -> execute (Jupiter submits and confirms; no RPC needed for swaps).

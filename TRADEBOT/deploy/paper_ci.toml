@@ -86,6 +86,7 @@ max_symbols = 12
 [execution]
 paper_fee_bps = 30
 paper_slippage_bps = 15
+paper_keyless_quotes = true   # paper fills at Jupiter's executable minimum output (no taker, no key); parametric fallback if refused
 live_slippage_bps = 50
 rpc_url = "https://api.mainnet-beta.solana.com"   # balances only; swaps execute via Jupiter Swap API v2
 
