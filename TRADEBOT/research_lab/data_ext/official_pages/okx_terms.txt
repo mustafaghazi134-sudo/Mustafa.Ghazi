@@ -1,0 +1,902 @@
+SOURCE https://www.okx.com/help/terms-of-service
+FETCHED 2026-11-03T07:36:39Z HTTP 200
+
+Terms of Service | OKX United States
+Skip to main content
+
+Buy crypto
+
+Buy and Sell
+Visa, Mastercard, and others
+
+Crypto calculator
+Check real-time conversion rates and crypto valuesMarkets
+Trade
+
+Trading instruments
+
+Convert
+Quick conversion, zero trading fees, no slippage
+
+Spot
+Buy and sell crypto with ease
+Powerful tools
+
+Agent Trade Kit
+Automate your trades with AI agents and community-built skills
+
+Agent Trade Kit
+Build AI agents to automate any trading strategy
+
+AI Builder Program
+Everything a Builder needs, all in one place
+
+Skills
+Discover and install trading skills
+
+RFQ
+Custom multi-leg strategies and block tradesUSDG rewards
+Grow
+
+Earn
+Don’t just HODL. Earn
+
+Onchain Earn
+Institutional
+
+Institutional home
+The world’s most powerful suite of crypto trading solutions
+
+OKX Rubix
+Digital assets-as-a-service for regulated institutions
+
+APIs
+Seamless and ultra-low latency API connectivity
+
+OKX Connect
+Access world-class market depth
+
+Historical market data
+Candlesticks, aggregate trades, order book data and more
+
+Institutional Insights
+Our latest institutional trading research, news, and more
+Learn
+
+Learn crypto
+Build strong crypto fundamentals with simple guides and tutorials
+
+How to buy crypto
+Follow step-by-step instructions to buy crypto
+
+Getting started
+Find answers to common questions on your crypto journey
+
+Crypto prices
+Track real-time crypto prices and market moves
+
+Crypto news
+Stay on top of the latest crypto news and trends
+
+Blog
+Read insights and stories from our team
+More
+
+ProductsSecurity of fundsStatusProof of ReservesOKX ShieldWeb3Pay & Card
+
+OthersRewardsDeposit matchReferralVIP programX Drops ClubOKX VenturesTrade on TradingViewListing applicationFees
+
+Log inSign up
+
+Support
+Support centerMy ticketsConnect with OKX
+
+Support center
+
+Terms of agreement
+Article
+
+Terms of Service
+
+Published on Aug 29, 2023
+
+Last Updated: 29 October 2026
+CLAUSE 20 OF THESE TERMS (AS DEFINED BELOW) REQUIRES ARBITRATION ON AN INDIVIDUAL BASIS. THIS PARAGRAPH CONTAINS AN IMPORTANT NOTICE. PLEASE READ IT CAREFULLY.
+Thank you for visiting OKX.com. These Terms of Service (“Terms”) constitute a legally binding agreement between the OKX Platform (as defined below) and you (hereinafter referred to as “User,” “user,” “You,” or “you”) and governs your use or access to the OKX Platform and/or the Services. By visiting, accessing, or using OKX.com or associated application program interface or mobile applications (“OKX Platform”), you are deemed to have read, understand and irrevocably consent to all of the Terms contained herein, as may be updated and amended from time to time, so please read them carefully.
+The Terms constitute the agreement and understanding regarding the use of any of the Services, and any manner of accessing them, between you and the following service providers (“we,” “us,” or “our”) depending on your residency or date of registration. Where any local terms governing the use of Services provided in any particular jurisdiction (“Local Terms”) apply as indicated hereunder, such Local Terms shall govern your use of the Services instead.
+OKX Europe Limited, a Malta limited liability company (“OKX EU”), which operates under the OKX brand, for Users who are residents of one of our approved operating locations within the European Economic Area. The Local Terms for such users can be found here;
+OKX Europe Markets Limited, a Malta limited liability company (“OEM”), which operates under the OKX brand, for Users who are residents within the European Economic Area. OEM is licensed as an investment firm and offers financial instruments that include crypto-assets based expiry futures. The Local Terms for such users can be found here;
+OKX INC., a Delaware corporation (“OKX US”), which operates under the OKX brand, for Users who are residents of one of OKX US’s approved operating locations within the United States and its territories. The Local Terms for such users can be found here;
+OKX Australia Pty Ltd and OKX Australia Financial Pty Ltd, Australian registered companies ("OKX Australia"), for Users who are residents of Australia. The Local Terms for such users can be found here;
+OKX Bahamas FinTech Company Limited, a Bahamas registered company (“OKX Bahamas”), for Users who are residents of Mexico and who registered between November 16, 2022, and August 28, 2023, and institutional Users who have been registered on or after August 29, 2023;
+OKX Middle East Fintech FZE, a UAE limited liability company (“OKX Dubai”), for Users who are residents of the UAE. The Local Terms for such users can be found here;
+OKX Serviços Digitais Ltda., a Brazil limited liability company (“OKX Brazil”), for Users who are residents of Brazil and who registered on or after June 15, 2023; and migrated Brazilian users who registered before June 15, 2023;
+OKX Fintech, S.A. de C.V. ("OKX El Salvador"), for Users residing in El Salvador who registered on or after February 19, 2026, as well as Users residing in Argentina, The Bahamas, Belize, Bolivia, Brazil, Chile, Colombia, Costa Rica, Dominican Republic, Ecuador, Guatemala, Guyana, Honduras, Mexico, Nicaragua, Panama, Paraguay, Peru, Suriname, and Uruguay, who may access specific products and services through OKX El Salvador in accordance with applicable laws and regulations. The Local Terms applicable to such users can be accessed here.
+OKX Fintech, S.A. de C.V. (Argentina Branch) ("OKX Argentina"), for Users residing in Argentina who registered on or after February 19, 2026. The Local Terms applicable to such users can be accessed here.
+OKX Financial Pte. Ltd., a Singapore limited liability company ("OKX Financial"), shall act as the contracting party for Users who have registered with OKX Financial on or after October 31, 2025, in respect of the provision of unlicensed and unregulated activities in Singapore. These activities include, but are not limited to, Payment Token Derivatives ("PTDs"), structured products, and related services. The Supplemental Terms governing such Users can be found here;
+OKX SG Pte. Ltd., a Singapore limited liability company ("OKX Singapore" or "OKX SG"), shall act as the contracting party for Users who have registered on or after October 13, 2023 with OKX SG in respect to the provision of any licensed and regulated activities in Singapore. These activities include, without limitation, Digital Payment Token ("DPT") services and other related payment services under the Payment Services Act 2019 of Singapore. The Supplemental Terms for such users can be found here; and
+Aux Cayes FinTech Co. Ltd., a Seychelles registered company (“Aux Cayes”), for all other Users eligible to access and use OKX’s Services.
+The term “OKX,” as used below, means either OKX Bahamas, OKX Brazil, OKX Singapore, or Aux Cayes, as the case may be for their respective Users.
+1. INTRODUCTION
+1.1 By clicking on the “Create Account” button on the OKX Platform, or by visiting the OKX Platform, we may provide you with access to our Services, including but not limited to our trading platform, API (application program interface), technologies, products and/or other functionalities.
+1.2 You agree to be legally bound by these Terms, including any additional terms incorporated by reference. If you have any questions regarding these Terms or the use of the OKX Platform, please visit the Support Center for more information. Terms specific to only certain users of OKX will be identified as such.
+1.3 If you do not agree to be bound by any of these Terms, you must not access and/or use any of the Services and must leave the OKX Platform immediately.
+1.4 We reserve the right to amend or modify the Terms, and any policy or guideline of the OKX Platform, at any time and at our sole and absolute discretion, subject to Applicable Laws and Regulations.
+1.5 If you do not agree to be bound by any of the updated Terms, or any other updates, your sole and exclusive remedy will be to close your Account, within 30 days of your actual, constructive or inquiry notice, and your access or use of the Services will be permitted only to the extent necessary to immediately close your Account. You acknowledge that you may close your Account without making any trades or transactions using the Services, and that any such actions are not necessary to close your Account. Your non-termination or continued use of the OKX Platform or Services after such a 30-day period will constitute your acceptance of the updated Terms as of your earliest notice date.
+1.6 The Terms take precedence over any other agreement you may have with us unless explicitly provided for otherwise.
+1.7 Any formal communication with you will be undertaken through electronic mail unless otherwise communicated. Documents will be sent to you by electronic mail, and you should seek to send any documents to us by the same means. Please visit our Support Center for assistance.
+1.8 Any formal communication with you will, unless otherwise agreed, be made in the English language. In the event of any discrepancy or conflict between the English version of these Terms or any such communications and any translation of these Terms or such communications (as applicable) in a foreign language, the English version shall prevail.
+2. ELIGIBILITY AND PROHIBITION OF USING OUR SERVICES & BUSINESS
+2.1 If you are a Natural Person, by accessing the OKX Platform and/or using our Services, you represent and warrant that you are at least 18 years old and legally allowed to use the Services. If you are accessing or using our Services on behalf of a legal entity (e.g., a corporate or institutional customer), you represent and warrant that: such legal entity is duly organized and validly existing under the applicable laws of the jurisdiction of its organization; you are duly authorized by such legal entity to act on its behalf; such legal entity agrees to be responsible to us if you violate these Terms; and you have not previously been suspended or removed from accessing the OKX Platform or using the Services. You also represent and warrant that you (or the legal entity you are representing, as the case may be) are not on and that you will not transact with anyone on any trade or economic sanctions lists of any Competent Authority, which includes without limitation: (i) Terrorism and terrorist financing - Islamic State in Iraq and the Levant (Da’esh), Al-Qaida, the Taliban, and associated individuals, groups, undertakings, and entities, any individual or entity designated by the United Nations Security Council (“UN Consolidated List”) or the United Arab Emirates ("Local Terrorist List"); and (ii) the financing of proliferation of weapons of mass destruction (WMDs) - Democratic People’s Republic of Korea: nuclear-related, other weapons of mass destruction-related, and ballistic missile-related programs; Islamic Republic of Iran: nuclear program; and other sanction lists that may be promulgated by a Competent Authority, including but not limited to the United Nations Security Council, European Union, the Monetary Authority of Singapore or Office of Foreign Asset Control. You agree to provide written certification of your compliance of this Clause 2.1 as soon as reasonably practicable when requested by us. We may amend our eligibility criteria at any time at our sole and absolute discretion.
+2.2 We may not make all of the Services available in all markets and jurisdictions. For a complete list of such markets and jurisdictions, please see Section 3: Regulatory Landscape in the Risk and Compliance Disclosure. We may change the scope of Services available in any jurisdiction from time to time and you acknowledge that this may impact your ability to access or use the OKX Platform and/or Services. If you do not meet these eligibility requirements, you may not use our Services.
+2.3 You further represent and warrant that your access or use of the OKX Platform is of your own accord and free from direction by another party.
+3. PROHIBITED BUSINESSES
+3.1 Any use of our Services in connection with any of the following categories of activities or businesses is prohibited (“Prohibited Businesses”), and we reserve the right at all times to monitor your transactions or Accounts for the purpose of enforcing this Section 3.1 and complying with Applicable Laws and Regulations:
+(a) Illegal, unlicensed, or unregistered money services or money transmission activity;
+(b) Money laundering, terrorist financing, sanctions evasion, fraud, or other Financial Crime;
+(c) Any Ponzi scheme, pyramid scheme, or multi-level marketing program;
+(d) Wash trading, front-running, insider trading, market manipulation, or other market-based fraud or deceit;
+(e) Sale, purchase, or facilitation of illegal goods or services, including through hidden (“Darknet”) marketplaces;
+(f) Shell Banks, or financial institutions maintaining correspondent relationships with Shell Banks;
+(g) Any other unlawful activity, or activity that violates or assists in violating any Applicable Laws and Regulations or sanctions program; and(h) Any other activity that we, in our sole and absolute discretion, deem unacceptable or prohibited.
+3.2 In the event that we learn or reasonably suspect, in our sole and absolute discretion, that your Account is or may be associated with any of the Prohibited Businesses as set forth in these Terms, we will consider it to be a violation of these Terms and may suspend or terminate your access to your Account, or to all or any of the Services, and/or block transactions or freeze your funds immediately without notice, and we reserve the right to report any such suspected or actual Prohibited Businesses to the appropriate law enforcement authorities.
+4. DESCRIPTION OF OUR SERVICES
+4.1 We provide an online trading platform for Users, if allowed in their respective jurisdictions, to hold and trade certain Digital Assets and/or its derivatives or indices thereof. Users may request the withdrawal of their Digital Assets at any time, subject to these Terms and any applicable terms governing specific Services and provided that Users have a sufficient balance in their Account. We may not process a withdrawal request if, in our reasonable opinion, we determine that Applicable Laws and Regulations prevent such withdrawal. We may also suspend withdrawals at such time we deem appropriate to resolve any incidents on the OKX Platform.
+4.2 Services we provide may include, but are not limited to:
+(a) An order matching platform that matches Users’ orders for Digital Assets or Digital Asset-linked products according to pre-established criteria;
+(b) To the extent permitted by Applicable Laws and Regulations, Users may be eligible for Margin products, at our discretion. The parameters and leverage permitted for each product may vary, depending on market conditions, the type of service, type of asset, and amount of collateral used in the transaction. Margin product users acknowledge, in all cases, that such products and other leveraged products are high-risk, may result in a loss larger than the value of the assets in their Accounts, and may require liquidation of their assets, as specified by the terms governing Margin for each product.
+4.3 Not every Service offered by OKX is addressed in these Terms. Any Service may be subject to terms specific to that particular Service. For Pay Wallet terms, please refer to the Pay Wallet Terms. For the API Services, please refer to the OKX API Agreement. For the terms governing any other specific Services, please refer to the “Product documentation” and "Terms of Agreement" sections on the OKX Platform. All terms referenced by this Clause 4.3 are incorporated into these Terms.
+4.5 By accepting these Terms, you expressly agree to the pooling of your Digital Assets with the Digital Assets of other users. Digital assets of users are not protected by deposit protection or a deposit insurance scheme. In the case of an irreconcilable shortfall, deposited assets or funds may not be fully recoverable.
+4.6 Unless separately agreed upon between you and OKX to the contrary, you represent and warrant that you are the ultimate and effective legal and beneficial owner of any Digital Assets transferred to your Account or wallet on the OKX Platform, that you will not act as nominee or trustee for any other person, and that you will not transfer, assign, pledge, charge or otherwise create any security interest or encumbrance whatsoever over such Digital Assets.
+4.7 Orders will not be accepted unless sufficient Digital Assets or Fiat Currency (as the case may be) are available on the Account for: (a) the settlement of the relevant order; (b) the provision of Margin as may be required with respect to a relevant transaction in derivatives; or (c) the payment of any related charges and expenses as applicable.
+4.8 While we have taken reasonable measures to ensure the accuracy of the information on the OKX Platform, the information and content on the OKX Platform is subject to change without notice and is provided for the sole purpose of assisting users to make independent decisions. We do not guarantee the accuracy, suitability, reliability, completeness, performance and/or fitness for purpose of the content of any Services or products available through the OKX Platform, and disclaim all liability to the greatest extent allowed by applicable law for any loss or damage that may arise directly or indirectly from the content provided on the OKX Platform, your inability to access the OKX Platform, or for any delay in or failure of the transmission or the receipt of any instructions or notifications sent through the OKX Platform.
+4.9 You are solely responsible for obtaining a suitable device to access the Services and for bearing costs for accessing the Platform and/or using the Services, including but not limited to: (a) internet-connected device, such as computer or other internet-connected terminals; and (b) internet-accessing costs, such as internet fees, rental charges for internet-connected equipment, cellular data fees, etc.
+4.10 You hereby authorize us to send you communications relating to your Account via email, SMS, mobile notification, or mailing address you provide to us. You may opt out of certain communications by changing relevant settings on the OKX Platform. You should ensure that your contact details are correct and up to date.
+4.11 You acknowledge and consent that the Services are provided by us according to our current technological capacity and other conditions. While we have made reasonable efforts to ensure continuity and security of the Services, we are unable to completely anticipate and mitigate legal, technological and other risks including but not limited to force majeure, virus, hacker attack, system instability, flaws in third-party services, acts of government, or government agency etc. that may result in service interruption, data loss, and other losses and risks.
+4.12 When the OKX Platform is unable to operate properly because of the following circumstances and the user is unable to access the Services or place or cancel an order, we assume no liability for damages. These circumstances include, but are not limited to:
+(a) system downtime during planned or unplanned maintenance;
+(b) telecom or networking equipment issues;
+(c) typhoon, earthquake, tsunami, flood, power failure, war, terrorist attack, pandemic, and other force majeure factors;
+(d) any other issues, including hacker attacks, computer virus intrusion or attacks, website or backend maintenance and upgrades, banking related issues, government regulations or mandates, freezing order imposed by any Competent Authority and any other third-party issues; and
+(e) damages caused by third parties.
+4.13 In relation to the Services provided on the OKX Platform:
+(a) We reserve the right to process, cancel, correct, claw back, and/or reverse any Digital Asset transaction or transfers or cancel abnormal transaction results at our sole and absolute discretion, even after funds have been debited from your Account, upon the occurrence of: (i) abnormal transactions, market interruption and other abnormal conditions caused by, arising from, or related to system failure, platform system bug(s), network failure, distributed denial of service attacks (DDos) and other hacker attacks and other unexpected factors; or (ii) in response to a subpoena, court order, or other government order; or (iii) if we suspect the transaction may: (a) involve money laundering, terrorist financing, fraud, or any other type of financial crime or prohibited activity; (b) be erroneous; or (c) relate to a prohibited use in accordance with these Terms. In instances where transactions are reversed, OKX will debit the corresponding Digital Assets and/or Fiat Currency (as the case may be) from your Account to recover the Losses arising from such transaction(s), and we are under no obligation to reinstate any purchase or sale order at the same price or on the same terms as the canceled transaction(s).
+(b) We strictly prohibit unfair trading behaviors. OKX reserves the right to enact, under its sole and absolute discretion, and take control over your Account, if you are suspected of, in our sole and absolute discretion: (i) being involved in insider trading, market manipulation, market distortion, or any other malicious wrongdoings; (ii) harming other users or OKX by exploiting the Services’ vulnerabilities or other means; (iii) are suspected of any other activities that OKX deems harmful to the overall well-being of the market or its users.
+(c) We also reserve the right to take actions, including but not limited to closing, suspending or restricting your Account, voiding, canceling or reversing transactions, or other actions without notice that we deem reasonable at our sole and absolute discretion so as to eliminate or mitigate any adverse effects to the overall well-being of the market. In no event shall we be liable to you for any loss incurred if such action against you is taken.
+4.14 We will not ask for any password or private keys from our users, nor will we ask users to transmit any funds or Digital Assets. Accordingly, we will not be responsible for any losses caused by your transmittal of funds or Digital Assets in such instances.
+4.15 You agree that we may delist any Digital Asset from the OKX Platform at any time and at our sole and absolute discretion.
+4.16 Applicable Laws and Regulations may require us to collect various information from all users who use our products or services. You agree to provide us with comprehensive and accurate information as required and allow us to keep a record of such information at least as long as may be prescribed by the Applicable Laws and Regulations. If we have reasonable grounds to suspect that you have provided false, outdated, or incomplete information, we are entitled to restrict you from the use of some or all of Services, temporarily or permanently. Further, in the event that users decline to provide the requested information, or otherwise do not comply in a timely manner, we may, without notice, suspend or terminate your access to your Account, or to all or part of the Services immediately.
+4.17 Digital Assets you purchase using a debit or credit card will be credited to your Account and our obligation in this regard will be deemed complete when the Digital Asset purchased by you is credited to your Account. We are not responsible for any losses that may occur after that point. You are solely responsible for the management of those Digital Assets once credited.
+CONFLICTS OF INTEREST
+4.18 General. OKX and its Related Parties may, from time to time, act in more than one capacity in connection with the Services, including as trading venue operator, principal, market maker, calculation agent and liquidity provider, and may receive fees, commissions, or other financial benefit from more than one User (including you) in connection with the same or related transactions. OKX and its Related Parties have no duty to act solely on your behalf and undertake no responsibility to do so. You consent to the trading activity of OKX and its Related Parties described in this Clause and in Clause 4.4, including your Trades potentially being matched and executed against a Related Party, and you agree not to bring a claim against OKX or its Related Parties insofar as your Trade is matched and executed in accordance with these Terms. Where required by Applicable Laws and Regulations, we take steps to identify and manage conflicts of interests through internal organisational and administrative arrangements. We reserve the right to decline to act for you when we are not able to manage any identified conflict of interest.
+4.19 Affiliated Market Makers. OKX may appoint one or more market makers or liquidity providers, including Related Parties acting in such capacity ("Affiliated Market Makers"), to provide liquidity on the OKX Platform. Affiliated Market Makers may enter into Transactions with you as your counterparty, may hold positions in Digital Assets that are contrary to your positions, and may conduct such activity by way of algorithmic or automated trading. Such activity may affect the price of, and available liquidity for, Digital Assets on the OKX Platform.
+4.20 Disclosures and information. Except to the extent required by Applicable Laws and Regulations:
+(a) Nothing in this clause requires OKX or Related Parties to disclose their proprietary positions or strategies.
+(b) Neither OKX nor any Related Party will be required to have regard to any information known to OKX or a Related Party that constitutes a material interest in relation to your Transaction; disclose any such information to you; or refrain from using such information in the ordinary course of business.
+5. TRADING ON THE OKX PLATFORM
+5.1 You may buy or sell a Digital Asset by placing an Order on the OKX Platform.
+5.2 You must verify all transaction information prior to submitting an Order. You acknowledge and agree that it is your sole responsibility to ensure the validity and accuracy of all actions conducted using your Account, including the wallet address details of any Assets being transferred. OKX is not liable for any consequences resulting from you providing invalid or inaccurate information to us.
+5.3 The OKX Platform may not be accessible during scheduled maintenance or in the unexpected event that the OKX Platform encounters an interruption or outage that is beyond its reasonable control. OKX will attempt to notify you of scheduled maintenance downtime when practicable.
+5.4 OKX may, at its sole discretion and without prior notice, close or suspend your Account and access to the Services, refuse any Order submitted, or impose trading limits on your Account if OKX deems that you may have violated any Applicable Laws and Regulations.
+5.5 You may only place an Order using the OKX Platform if your Account contains sufficient Assets to cover the Order and any associated fees. We have the right to refuse execution of any Order if user does not have sufficient Digital Assets or Fiat Currency in the Account to effect the Order.
+5.6 When you place an Order, the corresponding Asset amount (including any applicable fees) will be placed on hold in your Account until the Order fills, expires, or is canceled.
+5.7 You may withdraw or cancel an Order after it is submitted, provided such Order has not yet been executed. You also understand and agree that:
+(a) trades are irreversible once Orders are executed; and
+(b) while OKX may, at its sole and absolute discretion, reverse a Trade under certain extraordinary conditions (including but not limited to breaches of the Applicable Laws and Regulations), you do not have a right to a reversal of a Trade.
+5.8 You acknowledge and agree that:
+(a) by entering an Order on the OKX Platform, you are instructing OKX to carry out the Order and you agree to pay any associated fees. The price of a Trade is determined between the parties to that Trade. OKX does not guarantee the completion or fill of any Order;
+(b) OKX carries out all Orders based on price-time priority, irrespective of the entry method or user type;
+(c) all filled Orders are settled by debiting and crediting the relevant balances of Assets in both parties’ Accounts. Users will receive notification of their fill(s) via the OKX Platform, email, or other agreed means of communication. These notifications can be viewed in your trading history;
+(d) for Users of OKX Singapore specifically, the counterparty to every User’s Trade will be OKX Singapore; and
+(e) in order to maintain a fair and orderly OKX Platform, OKX may limit the number of Orders placed through a User’s Account, irrespective of the entry method, at its sole discretion.
+5.9 Use of API may be subject to Order rate limits. Repeated violations of the Order rate limits may result in Account suspension or termination.
+5.10 It is your responsibility to remain familiar and up to date on your own Account’s transaction history.
+5.11 You understand and agree that while we strive to execute all trades in a timely manner, situations may exist that result in delays when executing a Trade. You agree that OKX will not be liable for any damages or loss resulting therefrom.
+Suspension of Services
+5.12 You acknowledge and agree that OKX, at its sole and absolute discretion, may suspend all or part of the Services, or your access to all or part of the Services, whenever OKX determines that:
+(a) You may have breached any of these Terms; or
+(b) a situation arises that may affect the proper functioning of the OKX Platform.
+5.13 For the purposes of Clause 5.12(b), such situations include, but not limited to, the following circumstances:
+(a) when an IT or telecommunications network ceases to operate or function as intended;
+(b) a Force Majeure Event affects the provision of the Services;
+(c) when an attempted or actual malicious action causes a risk of damage or loss to OKX or its Users;
+(d) when an event affects the proper functioning of any internal system relied upon by the OKX Platform for the provision of the Services;
+(e) when OKX suspects there is unauthorized use of the OKX Platform, a breach of these Terms, or a breach of any Applicable Laws and Regulations;
+(f) when OKX determines that such action is necessary to ensure compliance with all Applicable Laws and Regulations;
+(g) when OKX decides to cease handling a Digital Asset due to changes to the nature of such Digital Asset; or
+(h) when for any other reason, OKX determines at its sole discretion that the suspension is necessary.
+6. RISK STATEMENT
+Introduction
+6.1 This Clause 6 provides Users with information about the risks associated with trading in Digital Assets and any other Services provided by OKX (“Risk Statement”). Applicants and Users should read this Risk Statement carefully before applying to open an Account and executing Trades. This Risk Statement should be read in conjunction with the Risk and Compliance Disclosure.
+6.2 This Clause 6 is not intended to disclose or discuss in detail all the risks associated with trading or holding Digital Assets or the use of the Services provided by OKX. This Risk Statement is not exhaustive and only outlines the general nature of the risks involved. Users should ensure that their decisions are made on a well-informed basis, and they should undertake their own assessment as to the suitability of trading in Digital Assets in the light of their experience, objectives, financial resources and their specific needs and requirements.
+6.3 By opening an Account and undertaking Trades, a User is deemed to have reviewed, understood and accepted the risks associated with the Services provided by OKX.
+6.4 The market for Digital Assets is young and rapidly developing, thus the risks of trading Digital Assets are not fully known and/or understood. As such, OKX may update this Risk Statement periodically, as notified to Users from time to time, to amend or supplement these risks. However, OKX is not liable for any missing, incomplete, or potentially inaccurate risk disclosures.
+6.5 Users acknowledge and agree that it is the User’s responsibility to stay up to date with the updated Risk Statement published by OKX from time to time.
+Overview of risks
+6.6 This Risk Statement addresses the following risks associated with transacting in Digital Assets with respect to the following matters:
+(a) nature of Digital Assets;
+(b) value of Digital Assets and the risk of loss;
+(c) past performance;
+(d) suitability;
+(e) availability of Digital Assets.
+(f) currency & conversion;
+(g) financial and cybercrime;
+(h) technology;
+(i) legal;
+(j) market;
+(k) regulatory;
+(l) stop-loss;
+(m) margin, gearing and leverage;
+(n) not a bank; and
+(o) other potential risks.
+Nature of Digital Assets
+6.7 Digital Assets are not legal tender, are not backed by any government and may not be backed by any physical assets.
+6.8 There is no assurance that a Person who accepts Digital Assets as a form of payment or a store of value will continue to do so in the future. Digital Assets may lose some or all long-term purchasing power and widespread acceptance of crypto assets may decline.
+6.9 Digital Assets are generally considered a high-risk asset class. You must therefore exercise prudent judgment when trading Digital Assets (as well as any other assets).
+6.10 The nature of Digital Assets may be very complex, and their terms, features, and/or risks may not be readily or fully understood due to the complex structure, novelty, and reliance on technological features.
+6.11 Digital Asset transactions are generally irreversible. Thus, accidental or fraudulent transactions with respect to Digital Assets may not be recoverable.
+Value of Digital Assets and the Risk of Loss
+6.12 Investing in Digital Assets carries a high level of risk and, as such, may not be suitable for all investors. Users may lose some or all of their money. A User should not transact in Digital Assets if they are seeking a regular or low risk return on their invested capital. Unlike traditional assets, Digital Assets may not have any underlying or intrinsic asset value or any assets supporting their price.
+6.13 Trading in Digital Assets is highly speculative and involves significant risk. There may be limited or no fundamental reasoning behind the pricing of Digital Assets, which may be subject to irrational and uncontrollable market forces. Whether the future price for a Digital Asset will increase or decrease is unpredictable and purely speculative. Likewise, there is a risk that a Digital Asset may not have any value whatsoever. Digital Assets are therefore traded at the User's own risk.
+6.14 Digital Asset values are highly volatile and can fluctuate substantially in comparison to Fiat Currencies or traditional investment products. Digital Asset values may be subject to influence by many factors, including liquidity levels, public speculation, dramatic shifts in investor confidence, operational interruptions, and/or market share competition. As a result, market conditions can change significantly in a very short period of time. Furthermore, the value of a Digital Asset may never recover if there is no interest in or development of the Digital Asset. A User is therefore at risk of losing all or a substantial portion of the value of the User’s Digital Assets. Such losses can occur in a very short period of time.
+6.15 The use of instructions in relation to Orders may not necessarily limit losses to the expressed amount and market conditions may make it impossible to Fill an Order or to obtain the limit price.
+6.16 Users may bear the risk of potential losses up to and even beyond the full amount of their invested capital. Users should only invest capital that they can afford to lose without impacting their standard of living and proportionate to their income. Users should cease trading in Digital Assets if their personal situation no longer permits.
+6.17 Digital Asset prices may greatly fluctuate based on global or local supply and demand, including, but not limited to, large sales from holders with significant positions on certain Digital Assets.
+6.18 Trading in Digital Assets is not appropriate for Persons with:
+(a) limited resources;
+(b) limited investment experience; and/or
+(c) a low-risk appetite to investment or trading losses.
+6.19 A User should ensure that they understand the economic and other types of risks involved in trading Digital Assets. A User should seek professional advice where appropriate.
+6.20 Before opening an Account, a User is deemed to have evaluated and confirmed that they understand the risks involved.
+Past performance
+6.21 The value of any Digital Asset may decrease as well as increase. Trading in Digital Assets may be susceptible to irrational market forces. Any data on the past performance of a Digital Asset does not guarantee, and may not be a reliable indicator of, future performance.
+6.22 Digital Asset trading has a relatively limited history.
+Suitability
+6.23 OKX provides an execution-only service and does not offer advice as to the merits of any particular Trade, trading risk or associated tax consequences.OKX does not provide any financial, investment, tax, or legal advice in connection with the Services.
+6.24 OKX acts as a platform for the trade execution of Orders and the custody of Digital Assets. As detailed in Clause 4.4 and 4.18, OKX and its Related Parties may engage in certain trading activities.
+6.25 OKX is therefore not responsible for assessing whether:
+(a) the Services are suitable for a User; or
+(b) any Trade is suitable for a User's needs.
+6.26 Any information provided on the OKX Platform is for information purposes only and is not, nor intended to be, financial advice, investment advice, financial advisory services, a trading recommendation, or any other advice. OKX does not warrant the accuracy, completeness or usefulness of such information and such information should not be considered as an offer to buy or sell a Digital Asset. A User is solely responsible for determining whether any Trade is appropriate.
+6.27 By opening an Account, a User accepts the risk of trading in Digital Assets. In entering into any Trade, a User represents that they have been, are, and will be solely responsible for making their own independent appraisal and investigation into the risks of each Trade and the underlying Digital Assets.
+6.28 By utilizing OKX’s services, each User represents that they have sufficient knowledge, market sophistication, professional advice, and experience to make their own evaluation of the merits and risks of any Trade or any underlying Digital Asset prior to opening an Account.
+6.29 Each User must ensure that they seek professional advice, if necessary, taking into account their investment objectives, level of experience and risk tolerance.
+6.30 Each User should be fully aware of the specific characteristics and risks relating to the particular Digital Asset that the User is planning to trade.
+Availability of Digital Assets
+6.31 The ability for a User to purchase Digital Assets using the OKX Platform may be dependent on the existence of a counterparty willing to sell the same Digital Asset (and vice versa). This is outside of OKX’s control. OKX makes no guarantee as to the timing of the ability to purchase or sell Digital Assets via the OKX Platform, or the availability thereof.
+6.32 The value of Digital Assets may be derived from the continued willingness of Users to trade Digital Assets for Digital Assets, which may result in the potential for permanent and total loss of value of a particular Digital Asset should the market for it decline sufficiently. Thinly traded or illiquid markets have an increased potential risk of loss given their enhanced volatility and a User may not be able to establish or liquidate positions in a Digital Asset when desired, at favorable prices, or at all.
+6.33 A Digital Asset may change or otherwise cease to operate as expected due to changes made to or using its underlying technology, including by way of cyber-attack. Such changes may dilute the value of a User's Digital Asset position and/or distribute the value of a User's Digital Asset position to another Digital Asset.
+6.34 A "Fork" refers to an upgrade in the code of a blockchain network which may, for example, occur as a result of disagreements between stakeholders regarding an update to a Digital Asset's protocol or from a deliberate effort to revert the blockchain history to a point prior to a cyber-attack. A “Hard Fork” may result in a permanent split from a previous version of the blockchain and will effectively create a new Digital Asset. The occurrence of a Fork is outside of OKX’s control. The supply of Digital Assets as a result of a Fork or similar changes to a Digital Asset's protocols and OKX’s ability to provide Services for the new Digital Asset which arises as a result may depend on third party providers which are outside of OKX’s control. OKX does not own or control any of the protocols that are used in connection with Digital Assets and their related networks. Accordingly, OKX is not liable with respect to such protocols or any change in the value of any Digital Asset (whether as a result of a Fork or any similar change to a Digital Asset's protocol or otherwise), and OKX makes no guarantees regarding the security, functionality, or availability of such protocols.
+6.35 A User is deemed to accept all risks associated with the use of the Services, including, but not limited to, the failure of hardware, software, and internet connections.
+6.36 There is a risk that you may experience losses due to the inability to sell or convert Digital Assets into a preferred alternative asset immediately or where conversion is possible but at a loss. Such liquidity risk for a Digital Asset may be caused by many reasons, including but not limited to the absence of buyers, limited buy/sell activity, or underdeveloped secondary markets.
+Currency & Conversion
+6.37 Trades may be executed in a currency different to the currency that the User deposited in their Account. The User should research and be aware of the risk of currency fluctuation and any risks related to it as it may apply to them. A movement in an exchange rate may have a positive or adverse effect on the gain or loss achieved from any Trade.
+6.38 If you convert Digital Assets following the execution of an order, or where an order is denominated in a particular Digital Asset other than your primary reference asset, there is a risk that, if the markets move against your position, then upon maturity or earlier, the net proceeds may be significantly less than the initial amount in your primary reference asset, and any income or gains may be entirely negated.
+Custody 
+6.39 OKX may hold Fiat Currencies and Digital Assets with third parties. However, the Digital Assets OKX holds are not “deposits” nor are they intended to be held as any other regulated product or service under Applicable Laws.
+6.40 In certain circumstances permitted by the Applicable Laws and Regulations or market practice of the relevant jurisdiction, OKX may register or record a User’s Account in the name of the custodian or under OKX’s name. If the Accounts are held in the name of the custodian or under OKX’s name, such assets may not be segregated from OKX’s assets and, in the event of a default by the custodian or OKX, may not be as well protected from claims of the custodian’s or OKX’s creditors as would be the case if the User’s client assets had been segregated from the custodian’s or OKX’s assets. For Users of OKX Singapore specifically, Users’ assets are held in one or more segregated custodial accounts on trust for the benefit of the Users.
+6.41 In the event of the insolvency or any other analogous proceedings of a third party holding a User’s Fiat Currencies and/or Digital Assets, OKX may only have an unsecured claim against the third party on behalf of a User and a User may be exposed to the risk that the Fiat Currencies, Digital Assets or any other property received by OKX from the third party is insufficient to satisfy the User’s claim and the claims of all other relevant Users.
+6.42 If OKX deposits a User’s Fiat Currencies and/or Digital Assets with a third party, such Fiat Currencies and/or Digital Assets may be pooled with those belonging to other Users. In such circumstances, a User’s individual client entitlements may not be separately identifiable by separate certificates, other physical documents of title or equivalent electronic records and, in the event of an irreconcilable shortfall after OKX’s insolvency, any Users whose assets have been pooled may share in that shortfall in proportion to their original assets in the pool. Any entitlements or other benefits arising with respect to pooled assets will be allocated pro rata to each User whose assets are so pooled.
+6.43 Fiat Currencies and/or Digital Assets may be held by a third party appointed in good faith by OKX, or by OKX’s nominees or sub-custodians. Such third parties are not under the control of OKX, and OKX accepts no liability for any default of any nature by such third parties and, in the event of any such default, a User may suffer total or partial loss with respect to the User’s Account. The extent to which a User may recover its Fiat Currencies and/or Digital Assets in jurisdictions may be governed by specific legislation or local rules.
+OKX Trading Platform
+6.44 Digital Asset transactions may not be subject to a right of claim under an investor compensation fund established by a government or regulatory authority.
+6.45 During the course of using our Services, you may be subject to various fees. Prior to making any transactions, you must obtain details and a full understanding of all commissions, fees, and costs for which you may be liable. If any of these fees are not clear to you, you must request clarification of what fees will be applicable in specific monetary terms before using the Services or entering into any transactions.
+6.46 Please note that Digital Assets received or held by OKX may be subject to Applicable Laws of international jurisdictions beyond your country of residence and/or citizenship.
+6.47 There are substantial risks when allowing another person to trade or operate an Account you have with us, and it is possible that any instructions you provide are not properly authorized or executed. You accept all risks of such operation and fully and irrevocably release OKX from any and all liability arising out of, or in connection with, all of the aforementioned.
+6.48 Digital Asset transactions are irreversible. Thus, accidental or fraudulent transactions with respect to Digital Assets may not be recoverable. You must therefore exercise caution when making any Digital Asset transfers and are solely liable for any losses that may arise.
+6.49 An order made on OKX’s platform is binding upon completion of the steps described in these Terms. An order will not be reserved unless otherwise provided in these Terms. There is a risk that the final binding order does not occur simultaneously along with your instructions. Thus, you may suffer losses due to the fact that an order is not carried out at the desired time. In particular, contingent orders such as options or perpetual swaps may not limit your losses to the intended amounts due to the volatility of market conditions.
+6.50 There is a genuine risk that unauthorized third parties may access your Account and make transactions without your knowledge or authorization, whether by obtaining control over a device or account you use or by other methods.
+6.51 OKX is not obliged to provide any adaptations, enhancements, and/or modifications to the materials and information provided on the OKX Platform. This means, for example, that you may have an out-of-date version of the OKX app, and new features may not be incorporated to the version of the app you use. It is your responsibility to ensure that you update and download applicable updates and versions.
+Financial and Cyber Crime
+6.52 The nature of Digital Assets means that they may be exposed to an increased risk of Financial Crime or cyber-attack, which includes but is not limited to malware, hacking, phishing, double spending, smurfing, spoofing, sybil attacks, social engineering, majority-mining, consensus-based, or other mining attacks, misinformation campaigns, distributed denial of services, and Forks. The transfer of Digital Assets into a digital wallet exposes the Digital Asset to the risk of loss from, amongst other things, security breaches from cyber-attacks that hack and steal Digital Assets.
+6.53 There is limited, or in some cases no, mechanism for the recovery of lost or stolen Digital Assets.
+6.54 You may store your Digital Assets in hot wallets, but these hot wallets may be at risk of hacking, cyber-attacks, or any of the risks mentioned in paragraph 6.50. Disruptions, theft, cyber-attacks and hacks of Digital Asset trading platforms and theft of Digital Assets unfortunately are very common. Victims may face extreme difficulty recovering losses from hackers, trading platforms, or other related industry organizations and/or individuals. This could result in significant losses and other adverse impacts that may materially affect your interests.
+Technology 
+6.55 Understanding Digital Assets may require advanced technical knowledge. Digital Assets are often described in exceedingly technical language that may require a comprehensive understanding of applied cryptography and computer science in order to appreciate inherent risks. The listing of a Digital Asset on the OKX Platform does not indicate approval or disapproval by OKX of the underlying technology regarding that Digital Asset and should not be used as a substitute for each User's understanding of the risks associated with that Digital Asset.
+6.56 The software protocols and governance structures that underlie Digital Assets are often open source and/or rely on various "open" or decentralized governance models, which may depend on autonomous agents or anonymous or pseudonymous actors.:
+(a) the development and control of such Digital Assets is outside of OKX’s control; and
+(b) Digital Assets are subject to sudden and dramatic changes that might have a significant impact on the availability, usability and/or price of a specific Digital Asset;
+(c) it may be difficult to anticipate or mitigate adverse governance decisions or changes to Digital Assets, creating additional and often unknown risks.
+6.57 Technological difficulties experienced by OKX may prevent a User's access to, or use of, their Digital Assets. OKX may experience sophisticated cyber-attacks, unexpected surges in activity, or other operational or technical difficulties that may cause interruptions to the Services or result in Digital Assets being lost and/or stolen. By using the Services, a User agrees to accept the risk of transaction failure resulting from unanticipated or heightened technical difficulties, including those resulting from sophisticated attacks.
+6.58 Digital Asset transactions cannot be reversed. Once a User sends a Digital Asset to a wallet address outside of the OKX Platform, there is a risk that the User may lose access to the Digital Asset indefinitely. For example, a wallet address may have been entered incorrectly and the true owner of the wallet address may never be discovered, or a wallet address may belong to an entity that will not return the User's Digital Assets.
+6.59 The person in possession of a private key for an external wallet address may be deemed to own the Digital Assets associated with that external wallet on that basis.
+6.60 A potential risk arises if a single entity acquires control of 51% of a blockchain network’s computing power (hash rate). This “51% attack” could allow the controlling party to spend the same Digital Assets more than once, thereby undermining confidence in blockchain networks as stores of value and mediums of exchange. A successful attack of this nature could result in a significant decline in Digital asset prices.
+6.61 The use of the OKX Platform on a jailbroken device may compromise security and lead to losses and/or termination of the Services.
+6.62 Digital Assets and the OKX Platform depend on the internet and other technology (including various communication methods and mediums). However, the public nature of the internet means that parts of, or even the entire, internet may be unreliable or unavailable at any given time. Furthermore, interruption, delay, corruption or loss of data, the loss of confidentiality or privacy through the course of data transmission, or malware transmission may occur when transmitting data via the internet and/or other technology. The above may result in your transactions not being executed according to your instruction at the requested time, or not being executed at all.
+6.63 There is no technology that is completely secure or safe. You should therefore exercise caution when using any technology.
+6.64 The internet as well as other electronic media (including but not limited to electronic devices, services by third-party telecom service providers such as mobile phones or other handheld trading devices or interactive voice response systems) are an inherently unreliable form of communication, and such unreliability may be beyond OKX’s control.
+6.65 Any information (including any document or data) transmitted, or communication or transactions made, over the internet or through other electronic media (including but not limited to electronic devices, services by third-party telecom service providers such as mobile phones or other handheld trading devices or interactive voice response systems) may be subject to interruption, transmission blackout, delayed transmission due to data volume, internet traffic, market volatility or incorrect data transmission (including incorrect price quotation), or pause and/or delay of price data feed due to the public nature of the internet or other electronic media.
+Legal 
+6.66 You are responsible for complying with Applicable Laws and Regulations for determining which laws apply to your transactions, including any Applicable tax laws. You are solely responsible for reporting and paying any taxes arising from your use of the Services.
+6.67 Due to the nature of Digital Assets, your bank may freeze your account or reject any incoming funds if your bank concludes that such funds are the result of buying or selling Digital Assets.
+Market
+6.68 You may suffer losses as a result of value depreciation of a Digital Asset you paid as a result of controls imposed by a Competent Authority. Repayment or payment of any amounts due to you may be delayed or even prevented by controls or other actions imposed by government or regulatory authorities over Digital Assets and/or their ecosystem that these Competent Authorities control or regulate.
+6.69 The supply of Digital Assets may be alterable, either because of their inherent design or through network events. If and when additional Digital Assets are created, the particular Digital Asset’s price may decline due to inflationary effects of adding additional Digital Assets to the total available amount of assets in the market.
+6.70 At any point in time, one or more persons may directly or indirectly control significant portions of the total supply of any particular Digital Asset. These persons are often referred to colloquially as “whales.” Whether acting individually or collectively, these whales may have significant impact and may be able to influence or cause significant market events that may have a detrimental effect on price, value, or functionality of Digital Assets. Furthermore, these whales or other network participants and users may make decisions that are not in your best interest as an investor of Digital Assets.
+6.71 Digital Asset prices may greatly fluctuate based on global or local supply and demand, including, but not limited to, large sales from holders with significant positions on certain Digital Assets.
+Regulatory 
+6.72 Any regulatory changes or actions by the Competent Authorities or any authorities that are not connected to OKX may adversely affect the use, transfer, exchange, and value of a Digital Asset or limit your ability to transact on the OKX Platform.
+6.73 Digital Asset regulation is evolving in many jurisdictions. New or amended regulations may restrict Digital Asset usage or otherwise affect demand, which could influence prices. Additionally, banks and other financial institutions may refuse to process funds for Digital Asset-related transactions or maintain accounts for parties dealing in Digital Assets. As a result, you may be impeded from converting Digital Assets into fiat currency.
+Stop Loss
+6.74 A Stop Order is an offer to deal if our quote becomes less favorable to you. A Stop Order is generally placed to provide some risk protection; for example, in the event of your Trade moving into loss, it can be used to either open or close a Trade. Each Stop Order has a specific stop level, set by you. Your Stop Order will be triggered if our bid price (in the case of an order to sell) or our offer price (in the case of an order to buy) moves against you to a point that is at or beyond the level specified by you. Notwithstanding the specific stop level set by you, we may be required by Applicable Laws and Regulations to close all or part of a Trade prior to your Stop Order being triggered.
+6.75 You agree and understand that Stop Orders will not necessarily limit your losses to the intended amounts, since market conditions may make it impossible to execute such Orders at a price close to your intended stop price or at all. In extremely volatile markets, the price of a Digital Asset may fall rapidly below your Stop Order price, and you may suffer losses well in excess of the amount realized had your Stop Order been executed at the Stop Order price.
+Margin, Gearing, and Leverage
+6.76 Before you are allowed to enter into a Contract with us, you will generally be required to deposit money with us – this is called the “Margin Requirement.” This Margin Requirement will usually be a proportion of the overall Contract value, meaning that you will be using ‘leverage’ or ‘gearing,’ which can work for or against you. A small price movement in your favor can result in a high return on the Margin Requirement placed for the Contract, but a small movement against you may result in substantial losses.
+6.77 At all times that you have open positions, you must ensure that your account balance, taking account of running profits and losses, is equal to at least the total Margin Requirement that we require you to have deposited with us. Therefore, if our price moves against you, you may need to provide us with significant additional funds immediately to meet your Margin Requirement and maintain your open positions. If you do not do this, we will be entitled, in our absolute discretion, to close one or some or all of your positions in any Digital Asset you hold. You will be responsible for any losses incurred as a result.
+6.78 The need to monitor your positions is of greater importance when you have entered into Contracts with us because of the effect of gearing. Gearing magnifies the rate at which profits or losses can be incurred and, as a result, it is important that you monitor your positions closely.
+6.79 We are not under any obligation to keep you informed of your account balance and Margin required (i.e., to make a “Margin Call”). However, if we do so, the Margin Call may be made by telephone call, post, email, text message or through your OKX Platform.
+6.80 We will be entitled, at any time, and at short notice, to increase or decrease the Margin required from you on open Trades. You agree that, regardless of the normal way in which you and we communicate, we will be entitled to notify you of a change to Margin levels or the credit arrangements for your account by any of the following means: telephone, email, text message, via our OKX Platform or by posting notice of the change on our OKX Platform. Any increase in Margin levels will be due and payable immediately on our demand. We will only increase Margin requirements or change the credit arrangements for your account where we, in our absolute discretion, reasonably consider it to be necessary, including but not limited to, in response to or in anticipation of:
+(a) a change in the volatility and/or liquidity in the Digital Asset market;
+(b) economic news;
+(c) a Digital Asset being rumored to have been suspended from trading on another Digital Asset trading platform;
+(d) you altering your dealing pattern with us; or
+(e) any change to the Applicable Laws and Regulations.
+6.81 Subject to Applicable Laws and Regulations, we reserve the right to specify the form of payment we accept for margin payments.
+6.82 Please note that in certain instances we may trigger a socialized claw-back mechanism to take a portion of your gain to cover any shortfall. The socialized claw-back mechanism is triggered when OKX’s security funds are not able to cover a User’s losses. In these instances, OKX will use its socialized claw-back mechanism to claw back net profits from other Users to cover shortfalls. More information on the socialized claw-back mechanism can be found here. For the avoidance of doubt, the OKX has full discretion to determine when to use security funds to cover losses. OKX does not guarantee that your losses will be satisfied by its security funds.
+6.83 In the event of a potential loophole in the trading rules or platform system failure or a loophole that unjustly enriches a User, we reserve the right to recover the unjust gains, and may take any and all actions necessary to do so, including but not limited to restrictions on account transactions, freezing account(s)Account or funds in the account(s)Account, debiting assets from account(s)Account, pursuing formal legal action, or any other recovery measures. If a User does not cooperate, the User will also bear any and all recovery costs.
+6.84 Under certain circumstances or situations, it may be difficult or even impossible to liquidate a position in Digital Assets. Certain events that occur on the network may occur rapidly and affect the ability to conduct transactions on OKX’s platform. Information relating to these network events may be difficult to predict or ascertain beforehand and may be subject to limited oversight by any third party who may be capable of intervening to stabilize the network.
+Not a Bank
+6.85 OKX is not a bank or other depository institution. Your Account is not a deposit or bank account. Our Services are not depository or traditional banking services. Neither your Account nor your Digital Assets are covered by insurance against losses or subject to any other protections, including, but not limited to, Federal Deposit Insurance Corporation or Securities Investor Protection Corporation protections.
+Other Potential Risks
+6.86 Website and internet pages, investor relations releases, oral or written outlooks, presentations, audio and video recordings of events, and other publications from websites may contain optimistic, forward-looking statements that reflect OKX and its management’s current views with respect to prospective projects and events. Certain words, including but not limited to, “anticipate,” “assume,” “believe,” “estimate,” “expect,” “intend,” “may,” “plan,” “project,” and “should,” as well as other expressions that often identify forward looking statements. These statements are subject to risks, uncertainties, and changes due to many factors, including but not limited to: changes in Digital Asset and Fiat Currency exchange rates, interest rates, and commodity prices; the introduction of new and/or competing technology and ideas; increased market incentives; and a decline in demand for current Services or other products.
+7. YOUR OKX ACCOUNT
+7.1 Account Registration and Identity Verification: in order to use any of the Services, you are required to provide accurate and complete information for all fields on the registration page to verify your identity and so that we may contact you regarding account-related matters. By registering an Account with OKX, you agree and represent that you will use the Account only for yourself and not on behalf of any third party, unless previously approved by OKX. You agree to provide us with authentic information at registration and on an ongoing basis for the purposes of identity verification and the detection of money laundering, terrorist financing, fraud, or any other financial crime, including without limitation a copy of your government issued photo ID and evidence of residency such as a utility bill or bank statement. If any such information changes, it is your obligation to update such information as soon as possible. Any notice sent to you will be deemed to have been received by you once sent to a contact address you have provided to us on file. You agree that OKX will not be liable for any notices sent to your contact address but not received by you due to circumstances outside our control, including but not limited to messages being flagged as spam, full email inboxes, and outdated/incorrect contact information provided by you.
+7.2 Protecting your Account: you agree to be the sole person accessing your Account unless otherwise authorized by OKX. You are solely responsible for keeping, protecting, and safeguarding any keys, certificates, passwords, access codes, user IDs, API Keys, OAuth tokens, or other credentials and login information (collectively "Passwords") that have been provided to you or that are generated in connection with your use of the Services. If you lose your Passwords, you may not be able to access your Account. You agree to notify us immediately of any unauthorized use of your Passwords or access to your Account and promptly revoke any OAuth tokens or authorizations you suspect have been compromised. We are not responsible for any liabilities, losses, or damages of any kind, whether direct or indirect, arising out of the unauthorized use of your Passwords. You agree to be solely responsible for all actions, including any loss or damage, resulting from your use of your Account or the sharing of your Passwords or other Account access information, whether intentional or unintentional, to the fullest extent allowed under Applicable Laws and Regulations. We will not be liable for any compensation or other legal liabilities for the loss or damage caused by the above-mentioned circumstances. We provide an online trading platform, and to avoid potential security risks, the login password, administration password and any other passwords shall not be set as the same. Users must keep all such information secure against any attacks and authorized access. Once the user is registered with the OKX Platform, they will get the username (user mailbox) and password and will be responsible for all activities and events with this username and password after entering the system, and bear all the legal liability directly or indirectly caused by the language and behaviors of the use of this username.
+7.3 Password Recovery: Please contact customer service to recover your password.
+7.4 Account Balance: We may at our discretion elect to withhold or offset your Account balance if:
+(a) your open derivatives transactions show notional losses;
+(b) we determine that additional Digital Assets may be required to meet any current or future margin requirement on open derivative positions due to underlying market conditions;
+(c) you have any actual or contingent liability towards us under the Terms; and/or
+(d) we reasonably determine that there is an unresolved dispute between us concerning your Account balance.
+7.5 Account Closure: you may request OKX to close your Account at any time. Closing an Account will not affect any rights and obligations incurred prior to the date of Account closure. Prior to OKX closing your Account, you will be required to cancel or close all open orders and withdraw all Assets in your Account. You are responsible for any fees, costs, expenses, charges, or obligations (including but not limited to attorney and court fees or transfer costs of Fiat Currency or Digital Assets) associated with the closing of your Account. In the event that the costs of closing your Account exceed the value in your Account, you will be responsible for reimbursing us for those costs. You may not close any of your Accounts to avoid paying any fees otherwise due or to avoid any examination related to our AML Program. OKX reserves its absolute right to accept or reject an Account closure request at its sole discretion.
+7.6 Account Suspension: OKX has the right to suspend your Account at any time, in our sole discretion. You agree that we may freeze/lock any Assets in your Account and suspend your access to the OKX Platform if we suspect, at our sole discretion, any of the following:
+(a) you are suspected to be in violation of any of these Terms or any other policies, rules, regulations, or user agreements;
+(b) you are suspected to be in violation of any programs of OKX, including but not limited to the OKX AML Program;
+(c) your Account has a balance that needs to be reconciled for any reason;
+(d) we suspect that an unauthorized person is attempting to gain access to your Account;
+(e) you are using your credentials or other Account information in an unauthorized or inappropriate manner; or
+(f) reasons relating to Clauses 7.7 or 12 of these Terms; or
+(g) an Event of Default (as defined below in Clause 22.5 of these Terms) has occurred.
+7.7 Investigation: OKX has the right to investigate and take action against you/your Account at our sole discretion, including but not limited to suspending, freezing and/or seizing your Account, in the event that we suspect or otherwise have cause to believe that you are, or your Account is, in any jurisdiction:
+(a) the subject of an investigation or official inquiry by any law enforcement or regulatory authority;
+(b) the subject of any warrant, subpoena, court order, or other similar document or request;
+(c) the subject of a pending and/or current litigation;
+(d) the subject of a government, regulatory authority, or court-ordered levy, judgment, or other asset turnover requirement (“Levy”);
+(e) in violation or have been involved in a violation of any laws or regulations; or
+(f) are involved in suspicious, illegal, or fraudulent activities.
+You agree to provide OKX with any additional information requested or required to comply with any Applicable Laws and Regulations.
+7.8 Account Termination: OKX has the right to terminate your Account at any time and for any reason, at our sole discretion. You agree and understand that we, at our sole discretion and subject to Applicable Laws and Regulations, have the right to take any action we deem necessary to enforce these Terms and to recover any costs associated with such action.
+7.9 If your Account is terminated, we will return your funds, less the value of any trading fee discounts, rebates, costs, expenses and/or damages that we are entitled to pursuant to these Terms and any Applicable Laws and Regulations. You agree to provide a valid wallet address for transfer of any remaining Digital Assets (less costs and fees) in your terminated Account within 30 days of receiving a request from us. If no valid wallet address is received after 30 days, you authorize us to liquidate the Digital Assets in your Account and return your funds (less costs and fees) to any bank account linked to your Account. Notwithstanding the above, OKX may continue to maintain custody of, or otherwise refuse to return, any Assets in a suspended or terminated Account if required under any Applicable Laws and Regulations. Any Assets in terminated accounts that are unable to be returned may be forfeited, as allowed under Applicable Laws and Regulations.
+7.10 In addition to the foregoing, and to the fullest extent permitted under Applicable Laws and Regulations, if an Event of Default occurs:
+(a) any delivery, payment or other obligation owed by you to any party, including but not limited to OKX, pursuant to activities involving your Account shall mature, accrue, or otherwise be accelerated so as to require performance thereof on the date of such Event of Default ("Accelerated Obligations"); and
+(b) without prejudice to such other rights that may accrue to OKX under these Terms or otherwise, OKX shall be entitled to take all actions deemed necessary at its sole discretion to protect its interests and discharge the Accelerated Obligations, including but not limited to closing any open trading positions, liquidating assets in your Account to repay any amounts or obligations owed to OKX, and transferring assets to third parties in accordance with court orders.
+Right of Offset and Recoveries
+7.11 In the event that there are insufficient assets in your Account due to a chargeback, payment dispute, wire recall, crediting reversal, credit error or other similar occurrence, there are insufficient assets in your Account to satisfy a fee or cost charged in such assets to your Account, or your Account are subject to a Levy that we reasonably determine is valid in our sole and absolute discretion, you expressly authorize us to freeze, debit, convert, withhold, and/or liquidate any current or future Assets from your Account to the extent necessary to offset or satisfy any insufficiencies or to satisfy the Levy, to the fullest extent permitted by applicable law. You acknowledge that you will be solely responsible for any and all tax consequences of any such action by us. In the event that the disposition or liquidation of digital assets is inadequate to satisfy the insufficiencies, you agree that you will immediately deliver, in U.S. Dollars (or the fiat currency relevant to your jurisdiction, as applicable), the full amount necessary to alleviate the insufficiency or you will be liable to us for the insufficiencies in addition to any attorney’s fees, interest or expense associated with its recovery.
+Electronic Communications 
+7.12 Acting on Electronic Communications. Where OKX reasonably believes that any instruction, request, or other communication (an “Electronic Communication”) transmitted to OKX through electronic means — including through the OKX Platform, email, application programming interface (API), in-platform messaging, or any other electronic channel — originates from you or is otherwise attributable to your Account, OKX is entitled and authorised to act upon and give effect to such Electronic Communication as if it were a valid and duly authorised instruction from you, without any obligation to verify the authenticity or source of such communication. You acknowledge that OKX shall bear no liability for acting in good faith on any Electronic Communication that OKX reasonably believed to have originated from you, regardless of whether such communication was in fact authorised by you.
+7.13 Right to Verify Identity. Notwithstanding clause 7.12, OKX is entitled, but not obligated, to make such further enquiries or undertake such additional identity or authorisation verification procedures as it considers appropriate before acting upon any Electronic Communication. OKX’s election not to conduct such further enquiries or verification in any instance shall not create any obligation on OKX to do so in any future instance, and shall not give rise to any liability on OKX’s part.
+7.14 Right to Reject Instructions. OKX reserves the right, in its absolute discretion and without any obligation to provide reasons therefor, to decline to act upon, reject, or refuse to give effect to any Electronic Communication or instruction that is, or appears to OKX to be, unclear, ambiguous, incomplete, or otherwise insufficient to enable OKX to properly give effect to such instruction. OKX shall bear no liability to you or any third party arising from or in connection with any such refusal, including any loss suffered by you as a consequence thereof.
+7.15 Limitation of Liability; Acknowledgement of Risks. Without prejudice to the generality of the indemnifications and liability disclaimers set out in these Terms:
+(a) OKX shall not be liable for any loss, damage, cost, expense, or liability of whatsoever nature arising from or in connection with:
+(i) any delay, failure, interruption, corruption, or non-delivery of any Electronic Communication, whether attributable to technological disruption, system failure, network congestion, cyberattack, or any other cause;
+(ii) OKX’s non-execution, partial execution, or delayed execution of any instruction that OKX considers to be unclear, ambiguous, or incomplete; or
+(iii) any action taken or omission by OKX in good faith reliance upon an Electronic Communication reasonably believed by OKX to originate from you.
+(b) You acknowledge and accept the risks inherent in the use of electronic means of communication, including without limitation:
+(i) the risk of loss of confidentiality of information transmitted electronically, including the risk of interception or disclosure to unauthorised third parties;
+(ii) technology and system risks, including the risk of system failures, errors, interruptions, delays, or disruptions; and
+(iii) third-party risks, including the risk of interception, manipulation, alteration, or unauthorised use of Electronic Communications by third parties not within OKX’s control.
+7.16 Validity and Irrevocability of Instructions. An Electronic Communication or instruction transmitted to OKX shall not constitute a valid or binding instruction unless and until it has been acknowledged by OKX, which acknowledgement may be evidenced by a confirmation message, system notification, order confirmation, or other form of acknowledgement issued through the OKX Platform or by such other means as OKX may determine from time to time. Upon OKX’s acknowledgement of an instruction, such instruction shall be irrevocable and binding on you, and you shall not be entitled to rescind, withdraw, or modify such instruction, except with OKX’s prior written consent or as otherwise expressly provided in these Terms.
+7.17 Record-Keeping. OKX is entitled, but not obligated, to maintain records of any or all Electronic Communications (whether or not resulting in a transaction) in such form and for such duration as OKX considers appropriate, subject to applicable laws. Where such records are maintained, they may be used by OKX for operational, evidentiary, compliance, or regulatory purposes, and you agree that any such records shall, in the absence of manifest error, constitute prima facie evidence of the content and authenticity of the relevant Electronic Communication and may be relied upon by OKX in any dispute, legal proceeding, arbitration, or regulatory inquiry.
+7.18 Indemnification. Without limiting any other indemnification obligation set out in these Terms, you agree to indemnify, defend, and hold harmless OKX and each of its affiliates, subsidiaries, officers, directors, employees, agents, and representatives from and against any and all claims, demands, proceedings, losses, damages, liabilities, judgments, costs, and expenses (including reasonable legal fees and disbursements) arising out of or in connection with:
+(a) any Electronic Communication transmitted from, or purportedly transmitted from, your Account, whether or not authorised by you;
+(b) any breach by you of your obligations under this section;
+(c) any claim brought by a third party arising from OKX’s good faith reliance on an Electronic Communication reasonably believed to originate from you; or
+(d) any loss or damage suffered by any person as a result of the unauthorised use of your Account credentials or the electronic communications channels associated with your Account.
+8. USERS’ RIGHTS AND LIMITATIONS TO LICENSE USE
+8.1 We grant you a limited, non-exclusive, non-transferable license, subject to the Terms, to access and use our OKX Platform and Services, solely for purposes permitted by us. You agree that you will not copy, transmit, distribute, sell, license, reverse engineer, modify, publish, or participate in the transfer or sale of, create derivative works from, or in any other way, exploit any of our products and Services.
+8.2 You agree that:
+(a) all rights, title and interest in the Services and associated software and technology, including all intellectual property rights therein, are and will remain with the Parties;
+(b) no right or interest in the Services is conveyed other than the limited licenses granted herein;
+(c) the Services are protected by the copyright and other intellectual property laws;
+(d) all rights not expressly granted in these Terms are reserved.
+(e) we have the right to inquire into, freeze, or transfer Assets from your Account in accordance with the requirements of any judicial, administrative, or military organization, including but not limited to public security organizations, procuratorial organizations, courts, customs, tax authorities, and court order or regulatory requirement without any obligation to verify the validity of such order or regulatory requirement provided the communicating source is legitimate.
+9. USER OBLIGATIONS
+9.1 You may not register multiple accounts with the OKX Platform without our express agreement.
+9.2 You may not use another user’s Account.
+9.3 You may not use the OKX Platform or the Services in any way that causes, or may cause, damage to this OKX Platform or impairment of the availability or accessibility of this OKX Platform.
+9.4 You may not use the OKX Platform or the Services for any commercial purpose unless otherwise explicitly authorized by OKX.
+9.5 You shall comply with all Applicable Laws and Regulations.
+9.6 You are solely responsible for any loss resulting from your actions, including but not limited to:
+(a) “fat finger” input or instructions errors, including price, quantity, timing, and other errors;
+(b) mistiming or mis-submission of trade instructions;
+(c) forgetting or disclosing your password;
+(d) computer or network issues, including any hacks or virus issues related to your computer or network (or the network you are utilizing);
+(e) transfer-in or withdrawal of Digital Assets or Fiat currencies to or from the wrong Account or wallet address;
+(f) executing instructions provided to you by a third-party;
+(g) Unauthorized transactions; or
+(h) third parties accessing and using your Account for any reason.
+9.7 It is your sole responsibility to ensure that all Account information is verified before making any transfers so that digital assets or fiat currencies are transferred into the correct Account. If you transfer digital assets or fiat currencies to the wrong Account and such Account is controlled by us, we will have the sole discretion to reject the transaction and return to you the relevant amount of digital assets or fiat currencies, less applicable fees.
+9.8 If you violate any obligation above, OKX has the right to take all necessary measures directly, including but not limited to deleting the content posted by you, canceling the customer star rating and honor, freezing your balance, pausing or seizing your Account (and any illegal gains), and criminal prosecution.
+10. FEES
+10.1 Fees, including a spread where applicable, may be incurred for some of the Services provided by us to you. By using our Services, you agree to incur these fees.
+10.2 OKX has the right to set and modify its fee structure at any time, in its sole discretion.
+10.3 If you do not agree with any fees charged, you must stop using the Services immediately. You are still responsible for any fees incurred up to the date of your termination of the Services.
+10.4 Unless otherwise stated or agreed, you agree that we have the right to automatically and without prior notice deduct the above-mentioned service fees directly from the Assets in your Account.
+10.5 If you do not pay any accrued fees in full and on time, we reserve the right to interrupt, suspend or terminate your Account.
+11. CHANGE, INTERRUPTION, TERMINATION, AND DISCONTINUANCE OF SERVICES
+11.1 Service Change and Interruption: we may change the Services and/or may also interrupt, suspend or terminate the Services at any time with or without prior notice.
+11.2 Service Discontinuance and Termination: we reserve the right, at our sole discretion, to discontinue or terminate the Services provided to you without notice, temporarily or permanently, including, but not limited to, in the following cases:
+(a) the personal information you have provided is determined to be untrue, incomplete, inaccurate, or is inconsistent with the information provided at the time of registration and you have failed to provide an acceptable reason for such discrepancy as solely determined by OKX;
+(b) you violate any Applicable Laws and Regulations;
+(c) you/your Account violate these Terms or any other policies, rules, regulations, user agreements;
+(d) if required by any Applicable Laws and Regulations or Competent Authorities;
+(e) for reasons relating to investigations under Clause 7.7 of these Terms; or
+(f) for security or other necessary reasons, including but not limited to protecting your Account from unauthorized access, as determined at our sole discretion.
+12. UNCLAIMED PROPERTY
+Obligations of OKX
+If you have any assets held by OKX in your Account and OKX is unable to contact you and has no record of your use of the Services for a period of time exceeding not less than twelve (12) months or, in certain jurisdictions, the period of time required by any local Applicable Laws and Regulations, OKX may be required to report these funds as unclaimed property in accordance with such Applicable Laws and Regulations.
+12.1 If OKX is unable to locate you, OKX reserves the right to:
+(a) close your Account and terminate your relationship with OKX;
+(b) liquidate, sell, trade, swap, or otherwise convert all assets into a Fiat Currency, to the extent such conversion is legally allowed and commercially feasible on the OKX Platform; and
+(c) deliver such Fiat Currency as unclaimed property, rounded to the nearest single unit of such Fiat Currency, or as may be directed by the Competent Authorities or any court of competent jurisdiction.
+12.2 If we receive any document(s) confirming your death or other information leading OKX to believe that you have died, OKX reserves the right to suspend your Account. Your Account will be suspended until sufficient and satisfactory proof disputing your death or your designated fiduciary opens their own Accounts so that your Assets may be transferred to them.
+12.3 If you have not designated a fiduciary, then OKX reserves the right to treat as your fiduciary any person entitled to inherit your Account, as determined by OKX upon receipt and review of the documentation that OKX, in its sole and absolute discretion, deems necessary or appropriate, including but not limited to a will, a living trust or other similar documentation, or an order designating a fiduciary from a court having competent jurisdiction over your estate.
+12.4 In the event OKX determines, in its sole and absolute discretion, that there is uncertainty regarding the validity of the fiduciary designation, OKX reserves the right to require an order resolving such issue from a court of competent jurisdiction before taking any action relating to your Account.
+Expenses
+12.5 OKX shall be entitled to deduct from any Fiat Currency all costs and expenses incurred in connection with this Clause 12.
+13. COMPLIANCE WITH YOUR LOCAL LAWS AND TAXES
+13.1 It is your sole responsibility to determine whether, and to what extent, any taxes apply to any transactions you conduct through the Services, and to withhold, collect, report and remit the correct amounts of taxes to the appropriate tax authorities. You agree that we do not provide legal or tax advice and are not responsible for determining whether taxes apply to your transactions, or for collecting, reporting, withholding or remitting any taxes arising from any transactions. It is highly advisable that you consult a professional to determine your obligations and your tax status in your home jurisdiction.
+13.2 You agree to comply with all relevant laws and regulations in any applicable jurisdiction. Regarding the prevention of terrorist financing and anti-money laundering (“AML”), and also compliance with laws and regulations in any applicable jurisdiction(s) more generally, we will work with the Competent Authorities and local, regional, national and multi-national authorities around the world as required and may provide any information associated with you to such authorities. We may also access and disclose information we stored associated with you to external third parties if, in our sole discretion, we believe doing so is required or appropriate to: (i) comply with relevant law enforcement or national security requests and legal procedure in any applicable jurisdiction(s), such as a court order or a subpoena; (ii) protect your, our, or others’ rights, property, or safety; (iii) enforce our applicable service terms, user agreement, trading rules, operational rules, policies or any other agreements; (iv) collect amounts owed to us; or (v) assist with an investigation or prosecution of suspected or actual illegal activity.
+13.3 When using our Services, you acknowledge, represent and undertake and agree that all your actions on and off this OKX Platform are made in a legal and proper manner and your sources of Digital Assets and Fiat Currency are not from illegal activities. If in our sole discretion we believe that you are in breach of the above representation and undertaking, we may discretionarily or in coordination with local law enforcement authorities seize, freeze, restrict or close-out your Account and any Fiat Currency and Digital Assets held on your Account.
+14. PRIVACY POLICY
+14.1 Please refer to our Privacy Notice for information about how we collect, use, and share your information.
+15. LIMITATION OF LIABILITY, WARRANTIES AND INDEMNIFICATION
+Exclusion of liability
+15.1 Neither OKX nor any of its Related Parties shall be liable for any Loss arising, directly or indirectly, from:
+(a) any dispute between you and one or more other Users;
+(b) any Losses arising from your breach of these Terms;
+(c) any Losses arising from your violation of any Applicable Laws and Regulations; or
+(d) any act or omission by a third party with access to your Account.
+Limitation of liability
+15.2 OKX, ITS AFFILIATES, AND ITS AND THEIR OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, CONTRACTORS, AND REPRESENTATIVES WILL NOT BE LIABLE FOR ANY INDIRECT, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR IN CONNECTION WITH THE OKX PLATFORM OR THE SERVICES, TO THE EXTENT ALLOWED UNDER APPLICABLE LAWS AND REGULATIONS. YOU AGREE THAT OKX WILL NOT BE LIABLE FOR: (A) ANY AMOUNT GREATER THAN THE VALUE OF THE SUPPORTED ASSET AT ISSUE IN A DISPUTE OR THE TOTAL VALUE OF THE SUPPORTED ASSETS IN YOUR ACCOUNT, WHICHEVER IS LESS, AT THE TIME THE EVENT GIVING RISE TO YOUR CLAIM FIRST AROSE; OR (B) ANY LOST PROFITS; LOST DATA; DIMINUTION IN VALUE OR BUSINESS OPPORTUNITY, LOSS OF GOODWILL OR REPUTATION, INTERRUPTION OF SERVICE OR SYSTEM FAILURE; LOSS, DAMAGE, CORRUPTION OR BREACH OF DATA OR ANY OTHER INTANGIBLE PROPERTY; OR ANY OTHER SPECIAL, INCIDENTAL, INDIRECT, INTANGIBLE, OR CONSEQUENTIAL DAMAGES, WHETHER BASED IN CONTRACT, TORT, NEGLIGENCE, STRICT LIABILITY, OR OTHERWISE, ARISING OUT OF OR IN CONNECTION WITH AUTHORIZED OR UNAUTHORIZED USE OF THE OKX SERVICES, OR THESE TERMS, EVEN IF OKX HAS BEEN ADVISED OF OR KNEW OR SHOULD HAVE KNOWN OF THE POSSIBILITY OF SUCH DAMAGES BEFOREHAND, EXCEPT TO THE EXTENT OF A FINAL JUDICIAL DETERMINATION THAT SUCH DAMAGES WERE A RESULT OF GROSS NEGLIGENCE, FRAUD, WILLFUL MISCONDUCT OR INTENTIONAL VIOLATION OF LAW BY OKX. FOR EXAMPLE, WITHOUT LIMITING THE SCOPE OF THE PRECEDING SENTENCE, IF YOU CLAIM OKX FAILED TO PROCESS A TRANSACTION PROPERLY, YOUR RECOVERABLE DAMAGES WOULD BE LIMITED TO NO MORE THAN THE LESSER OF THE VALUE OF THE DIGITAL ASSETS AT ISSUE IN THE TRANSACTION OR THE TOTAL VALUE OF THE DIGITAL ASSETS IN YOUR ACCOUNT, AND YOU MAY NOT RECOVER FOR LOST PROFITS, LOST BUSINESS OPPORTUNITIES, LOSS OF GOODWILL OR REPUTATION, DIMINUTION IN VALUE OR OTHER TYPES OF SPECIAL, INCIDENTAL, INDIRECT, INTANGIBLE, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES. FOR THE PURPOSE OF THIS CLAUSE 15.2, A SUPPORTED ASSET MEANS AN ASSET THAT YOU ARE ABLE TO FREELY TRADE ON THE OKX CENTRALIZED EXCHANGE AND DOES NOT INCLUDE DIGITAL ASSETS AVAILABLE EXCLUSIVELY VIA A DECENTRALIZED EXCHANGE.
+15.3 WHERE A CLAIM ARISES IN RELATION TO A SPECIFIC TRADE, THE TOTAL LIABILITY OF OKX TO THE USER IS LIMITED TO THE PURCHASE / SALE AMOUNT OF THE TRADE IN DISPUTE BY REFERENCE TO THE PRICE FOR SUCH TRADE AT THE TIME IT TOOK PLACE OR OUGHT REASONABLY TO HAVE TAKEN PLACE.
+15.4 NOTHING IN THESE TERMS SHALL LIMIT OKX’S OR ITS RELATED PARTIES’ LIABILITY TO YOU RESULTING FROM OKX’S:
+(a) FRAUD OR FRAUDULENT MISREPRESENTATION;
+(b) DELIBERATE MISCONDUCT; OR
+(c) FOR DEATH OR PERSONAL INJURY RESULTING FROM THEIR ACTIONS.
+15.5 ANY EXCLUSIONS OR LIMITATIONS OF LIABILITY CONTAINED IN THIS CLAUSE 15 WILL NOT LIMIT OKX’S LIABILITY WHICH CANNOT BE EXCLUDED OR LIMITED UNDER THE RELEVANT APPLICABLE LAWS AND REGULATIONS. DESPITE ANYTHING ELSE IN THESE TERMS, IF AN APPLICABLE LAW IMPOSES A LIABILITY ON OKX WHICH CANNOT BE EXCLUDED, BUT PERMITS THE PARTY TO LIMIT THAT LIABILITY, OKX’S LIABILITY IS LIMITED TO THE MAXIMUM EXTENT PERMITTED BY LAW. IF THE JURISDICTION OF THE PARTY DOES NOT ALLOW FOR THE EXCLUSION OF CERTAIN WARRANTIES OR THE LIMITATION OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES, SOME OF THE LIMITATIONS SET FORTH ABOVE MAY NOT APPLY TO YOU.
+Force Majeure Events
+15.6 We will not be liable for any delay or failure to perform as required by these Terms to the extent the delay or failure is caused by a Force Majeure Event. We may take any action we consider appropriate in connection with these Terms. 
+Indemnification
+15.7 To the fullest extent permitted by the Applicable Laws and Regulations, you hereby agree to indemnify, hold harmless, and promptly defend OKX and OKX’s affiliates and associates (including our and their respective agents (if any) and the shareholders, directors, officers and employees of OKX and OKX’s affiliates and associates) (each an “Indemnified Party”) from and against any and all losses arising from or in connection with any third-party claims, losses, liabilities, damages, judgments, penalties, fines, costs and expenses of whatever kind (including professional fees and reasonable attorney’s fees) which may be suffered or incurred by any of the Indemnified Party arising out of or related to:
+(a) your (or any of the User’s Authorized Representatives’) access to or use of your Account, the OKX Platform, or the Services;
+(b) your breach of these Terms;
+(c) your violation of any Applicable Laws and Regulations;
+(d) your violation of the rights of any third party;
+(e) any false, inaccurate, misleading or deceptive information provided by you to OKX in the course of OKX providing you with the Services under these Terms;
+(f) any investigation, claim, suit, action or other proceeding against us relating to or arising out of your use of the Services by a governmental authority or regulatory or self-regulatory agency or organization in any applicable jurisdiction(s); or
+(g) any breach by the User of any of the representations, warranties and undertakings made by the User to us under these Terms.
+15.8 If you are obligated to indemnify or defend OKX or any of its Related Parties pursuant to Clause 15.7, OKX will have the right, at its sole and absolute discretion, to control any action or proceeding and to determine whether it wishes to settle and, if so, on what terms.
+Disclaimer of Warranties
+15.9 THE SERVICES AND ANY INFORMATION OR MATERIALS PROVIDED ON THE OKX PLATFORM ARE PROVIDED ON AN “AS-IS” AND “AS AVAILABLE” BASIS AT YOUR OWN RISK, WITHOUT ANY REPRESENTATION OR WARRANTY, WHETHER EXPRESS, IMPLIED OR STATUTORY. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAWS AND REGULATIONS, OKX EXPRESSLY DISCLAIMS AND THE USER WAIVES ANY AND ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION: UNINTERRUPTED OR CONTINUOUS AVAILABILITY OF SERVICES, IMPLIED WARRANTIES OF TITLE, MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND/OR NON-INFRINGEMENT; AND WARRANTIES ARISING FROM THE COURSE OF PERFORMANCE, COURSE OF DEALING OR USAGE IN TRADE.
+WE DO NOT MAKE ANY REPRESENTATIONS OR WARRANTIES THAT ACCESS TO THE OKX PLATFORM, ANY PART OF THE SERVICES, OR ANY OF THE MATERIALS CONTAINED THEREIN, WILL BE CONTINUOUS, UNINTERRUPTED, TIMELY, OR ERROR-FREE, AND THAT THERE ARE NO VIRUSES OR OTHER HARMFUL COMPONENTS ON THE OKX PLATFORM. WE DO NOT GUARANTEE THAT ANY ORDER WILL BE EXECUTED, ACCEPTED, RECORDED OR REMAIN OPEN. EXCEPT FOR THE EXPRESS STATEMENTS SET FORTH IN THESE TERMS, YOU HEREBY ACKNOWLEDGE AND AGREE THAT YOU HAVE NOT RELIED UPON ANY OTHER STATEMENT OR UNDERSTANDING, WHETHER WRITTEN OR ORAL, WITH RESPECT TO YOUR ACCESS OF THE OKX PLATFORM AND/OR USE OF THE SERVICES . WITHOUT LIMITING THE FOREGOING, YOU HEREBY UNDERSTAND AND AGREE THAT WE WILL NOT BE LIABLE FOR ANY LOSSES OR DAMAGES ARISING OUT OF OR RELATING TO: (A) ANY INACCURACY, DEFECT OR OMISSION OF DIGITAL ASSETS PRICE DATA, (B) ANY ERROR OR DELAY IN THE TRANSMISSION OF SUCH DATA, OR (C) INTERRUPTION IN ANY SUCH DATA.
+15.10 Without limiting Clause 15.9, the User acknowledges that:
+(a) OKX does not represent or warrant that the Services, the OKX Platform, or any information or materials provided or made available by OKX are accurate, complete, reliable, current, error-free, free of viruses or other harmful components, or any other defects; and
+(b) OKX does not guarantee that any Order will be executed, accepted, recorded or remain open.
+15.11 Except for the express statements set forth in these Terms, you hereby acknowledge and agree that you have not relied upon any other statement or understanding, whether written or oral, with respect to its use and access by you of the OKX Platform and/or the Services.
+15.12 You hereby understand and agree that OKX will not be liable for any Losses arising out of or relating to:
+(a) any inaccuracy, defect or omission of any pricing information relating to a Digital Asset;
+(b) interruption in any such data;
+(c) any error or delay in the transmission of such information; and
+(d) any damages incurred by another User’s actions, omissions or violation of these Terms.
+15.13 OKX cannot ensure or warrant the security or confidentiality of information transmitted to OKX or received from OKX through electronic means, which includes the internet, wireless connection, email, phone, and SMS, since OKX has no way of ensuring that the transmission of such information is protected at all times. If you have reason to believe that your data is no longer secure, you should contact OKX using the contact details published on the OKX Platform or as notified to the Users from time to time.
+16. VARIATIONS
+16.1 OKX has the right to amend, replace, supplement or delete (each, an “Amendment”) these Terms or any part of these Terms.
+16.2 OKX will make reasonable efforts to provide you with notice of an Amendment by posting the revised Terms and changing the "Last updated" date at the top of the Terms, or by emailing Users at their provided email addresses, or by any other means as determined by us at our sole discretion. An Amendment will be effective immediately upon posting the revisions to the OKX Platform or at the instant that we transmit the information. These Amendments will apply at that instant to all then current and subsequent uses or Services.However, we may occasionally need to make changes without notifying you. This may include but is not limited to circumstances where:
+(a) we are making the change as a result of legal and/or regulatory changes;
+(b) the changes are to make these Terms clearer to you; and/or
+(c) any other reason for which means there is no time to give you notice.
+16.3 If you do not accept an Amendment, your sole remedy will be to stop using the Services and close your Account in accordance with the provision of the Terms. Continued use of the Services will constitute agreement with the revised Terms.
+17. TRANSFER OF BUSINESS
+17.1 In the event of a transfer of the whole of part of the business of OKX to any third party, the User consents to the transfer of the business relationship between the User and OKX, which includes but is not limited to the User’s:
+(a) Account;
+(b) Assets;
+(c) liabilities; and
+(d) Protected Data.
+17.2 In the event that OKX is acquired by or merged with a third-party entity, OKX reserves the right to transfer or assign the information collected from Users as part of the acquisition, merger, sale or other change of control.
+18. DISCLAIMER
+18.1 Service Interruption: based on the special nature of the Internet, we do not guarantee that the Service will not be interrupted. The timeliness and security of the Services are also not guaranteed, and we do not bear the responsibility for any Services interruption which is not caused by us.
+18.2 Safety of the Network: we try to provide a safe network environment to Users; however, we do not guarantee that the OKX Platform or its servers are free of viruses or other potentially harmful factors. We are not liable for any damage or interruptions caused by any computer viruses, spyware, scareware, Trojan horses, worms, or other malware that may affect your computer or other equipment, or any phishing, spoofing, or other attack. It is your responsibility to ensure that you have adequate protection against such threats. We are not responsible for any claim or losses resulting from your failure to comply with this clause.
+18.3 User Information: we are not responsible for the failure of preservation, modification, deletion or storage of the information provided by the user. Nor will we be liable for the typographical errors, negligence, etc. not intentionally caused by us. Except as provided by Applicable Laws and Regulations, you are responsible for backing up and maintaining duplicate copies of any information you store or transfer through the Services. We have the right but no obligation to improve or correct any omission or error of any part of the OKX Platform.
+18.4 Accuracy, Completeness, and Reliability of the OKX Platform: unless we have expressly agreed in writing, we do not guarantee the accuracy, completeness, reliability of any content, such as, but not limited to, information relating to the Services, advertising of any manner on the OKX Platform. We are not responsible for any products, services, information, or materials purchased or obtained by the user according to the information obtained from the Services or the OKX Platform.
+18.5 User Opinion: any comments published by users of the Website or Services are solely that of said users and not the views or opinions of OKX. We disclaim any liability arising from such user comments. We shall have the right at our sole and absolute discretion to remove, modify or reject any content or comment that a user submits to, post or display on the OKX Platform for any reason. We reserve the right to take any actions as we deem appropriate at our sole discretion.
+18.6 Notices: regarding notices issued to the users, we will only deliver such notices through a formal page announcement on the OKX Platform, e-mail, customer service phone call, SMS, or regular mail delivery.
+18.7 Commissions and other Charges: we have the right to adjust the commission, spread, or other charge rates from time to time according to market conditions or as otherwise necessary. We may also introduce new fees and/or charges. Any calculations made by us in connection with the Services are final and binding on you.
+19. GOVERNING LAW
+19.1 The Terms, your use of the Services, any claim, counterclaim or dispute of any kind or nature whatsoever arising out of the Terms, directly or indirectly, shall be governed by, and construed in accordance with, the laws of England and Wales without regard to the principles of conflicts of laws thereof.
+20. JURISDICTION AND DISPUTE RESOLUTION (“Arbitration Agreement”)
+20.1 You acknowledge and agree that in the event of any dispute, controversy, difference or claim arising out of or relating to the Terms, including the existence, validity, interpretation, performance, breach or termination hereof (the “Dispute”), the parties shall first refer the Dispute to proceedings at the Hong Kong International Arbitration Centre (the “HKIAC”) in accordance with the HKIAC’s Mediation Rules in effect at the time.
+20.2 If the Dispute has not been settled upon the signing of a settlement agreement within ninety (90) days following the filing of a request for mediation set forth in Clause 20.1, such Dispute shall be referred to and finally resolved by arbitration administered by the HKIAC under the HKIAC Administered Arbitration Rules in force when the Notice of Arbitration is submitted. The law of this arbitration clause shall be the laws of the Hong Kong Special Administrative Region of People’s Republic of China (“Hong Kong”).
+20.3 You agree that the seat of arbitration shall be Hong Kong. Unless otherwise mutually agreed between You and OKX, the number of arbitrators shall be three (3). We shall appoint one (1) arbitrator and you shall appoint one (1) arbitrator. The third arbitrator shall be appointed by the Chairman of the HKIAC. Such arbitrators shall be freely selected, and the parties shall not be limited in their selection to any prescribed list. The arbitration proceedings shall be conducted in English. You agree that we shall not be required to provide general discovery of documents, but may be required only to produce specific, identified documents which are relevant and material to the outcome of the Dispute. Any arbitral award shall be final and binding upon the parties hereto and shall be enforceable in any competent court which has jurisdiction.
+20.4 Waiver of Jury Trial: YOU AND OKX AGREE TO WAIVE ANY RIGHT TO SUE IN COURT AND HAVE A TRIAL IN FRONT OF A JUDGE OR JURY. You and OKX are instead electing that all Disputes be resolved by arbitration under this Arbitration Agreement, except as otherwise specified herein. This Arbitration Agreement is intended to and shall require arbitration of every claim or dispute that can lawfully be arbitrated, except for those claims and disputes which by the terms of this Arbitration Agreement are expressly excluded from the requirement to arbitrate.
+20.5 Waiver of Class and Other Non-Individualized Relief:YOU AND OKX AGREE THAT EACH OF US MAY BRING CLAIMS AGAINST THE OTHER ONLY ON AN INDIVIDUAL BASIS AND NOT AS A PLAINTIFF, PRIVATE ATTORNEY GENERAL, CLASS REPRESENTATIVE OR CLASS MEMBER IN ANY PURPORTED CLASS ACTION, COLLECTIVE ACTION, OR REPRESENTATIVE PROCEEDING, AND FURTHER AGREE TO WAIVE THE RIGHT TO HAVE ANY CLAIM OR DISPUTE BROUGHT, HEARD, ADMINISTERED, RESOLVED, OR ARBITRATED ON A CLASS, COLLECTIVE, REPRESENTATIVE, OR MASS ACTION BASIS. Unless you and OKX agree in writing, Disputes of more than one user cannot be arbitrated or consolidated with those of any other user, and the arbitrator shall have no authority to resolve any Dispute or issue any relief other than on an individual basis and only to the extent necessary to provide relief warranted by the claimant’s individual Dispute.
+Notwithstanding anything to the contrary in this Arbitration Agreement, disputes relating to the interpretation, applicability, validity or enforceability of this Section 20.5 titled “Waiver of Class and Other Non-Individualized Relief” shall be resolved only by a court of competent jurisdiction and not by an arbitrator. If a court decides by means of a final decision not subject to further appeal or recourse that the limitations of this Section 20.5 are invalid or unenforceable as to a particular Dispute or request for relief (such as a request for public injunctive relief), you and OKX agree that the particular challenged Dispute or requested relief – and only that particular Dispute or requested relief – shall be severed from the arbitration and may be litigated in court as specified in Section 19 (Governing Law) of the Terms. This Section 20.5 shall be enforced in arbitration on an individual basis as to all other Disputes or remedies to the fullest extent permitted by law. Nothing in this section shall prevent you or OKX from participating in a class-wide settlement of claims, nor prevent OKX from consolidating arbitration proceedings. Consolidation of arbitration proceedings will not in no way be interpreted as authorizing a class, collective, and/or mass arbitration or action of any kind, or arbitration involving joint or consolidated claims under any circumstances, except as expressly set forth in this provision. The arbitration award in any consolidation will not control with respect to any Disputes not assigned to that consolidation.
+20.6 Any claim arising out of or related to the Terms must be filed within one year after such claim arose. Otherwise, the claim is permanently barred, which means that the Users will not have the right to assert the claim.
+20.7 The provisions set forth in this clause will survive termination of the Terms.
+21. SEPARABILITY, COMPLAINTS AND MISCELLANEOUS
+21.1 Separability: if any provision of these Terms is deemed or becomes illegal, invalid, or unenforceable in any respect, for any reason, such provision shall be deemed to be divisible and shall not affect or impair the legality, validity or enforceability of any other provision in any way.
+21.2 Complaints: if you have any complaints, feedback, or questions, you may contact us through our Support Center. When you contact us, please provide your name, email address and any other information we may need to identify you and/or identify the transaction for which you have feedback, questions, or complaints. You must make sure that your contact details are correct and up to date and notify us immediately if there are any changes. If you did not do so, you may not be able to receive information from us.
+21.3 Miscellaneous: these Terms detail the complete understanding of the parties with respect to the subject matter hereof and supersedes all prior understandings and communications relating thereto. No term or condition of any other document provided to us which is different from, inconsistent with, or in addition to the terms and conditions set forth herein will be binding upon the Parties. You represent and warrant that all information disclosed to us in connection with these Terms is true, accurate, and complete.
+22. DEFINITIONS AND INTERPRETATION
+Interpretation
+22.1 In these Terms and unless otherwise specified, references to:
+(a) “party” means either OKX or a User, and “parties” means both OKX and a User;
+(b) “writing” includes any record capable of being published, whether or not in electronic form;
+(c) a “person,” whether his/her name is capitalized or not, shall include a natural or legal person, as the context requires;
+(d) “Clauses” and “Schedules” are to the clauses and schedules of these Terms respectively;
+(e) “including,” “include” and “not limited to” or any similar expression in any phrase shall be construed as illustrative only and shall not limit the words preceding that term;
+(f) a “day,” “week,” “month,” “year” are to be construed by reference to the Gregorian calendar;
+(g) an act or course of conduct shall include positive acts as well as omissions;
+(h) terms importing the singular include the plural and vice versa; and
+(i) terms defined in Applicable Laws and Regulations have the same meaning as provided in such Applicable Laws and Regulations.
+22.2 Where a word or expression is given a particular meaning, other parts of speech and grammatical forms of that word or expression have a corresponding meaning.
+22.3 The table of contents and the headings of Clauses and Schedules are provided for convenience only and shall not affect the interpretation of these Terms.
+22.4 The official language of these Terms and all referenced documents is English. Any translation of these Terms or its referenced documents are provided for convenience only and may not accurately represent the information contained in the original English. In the event of inconsistency or ambiguity, the English version of these Terms shall prevail.
+Definitions
+22.5 In these Terms, unless context otherwise requires, the following words in the table shall have the following meanings respectively attributed to them:
+
+Account 
+
+Account opened and maintained with OKX for the User to use the Services and to trade on the OKX Platform, including any Digital Asset sub-account that reflects a User’s Digital Asset balance. In the context of these Terms, "Your Account" means your Account and/or any Account for which you have control or access to, or if you are a representative, attorney or for which you hold a similar authority or role.
+
+Additional Services 
+
+Futures, Options, Index Tracker and Margin Lending offered by Aux Cayes FinTech Co. Ltd., a Seychelles registered company.
+
+AML Program 
+
+Program to reasonably prevent money laundering and terrorist financing through a risk-based, multi-layer control system. 
+
+API 
+
+Application Programming Interface which is a connectivity function that allows a User to operate its Account on the OKX Platform.
+
+Applicable Laws and Regulations
+
+The laws, regulations and rules of any Competent Authority that OKX determines to be applicable to OKX, the OKX Platform and/or OKX Users, as enacted, replaced, amended, extended, consolidated, substituted and/or re-enacted from time to time in any relevant jurisdiction(s).
+
+Applicant 
+
+Person who makes an application to open an Account with OKX to trade on the OKX Platform. 
+
+Asset 
+
+Digital Asset or Fiat Currency. 
+
+Competent Authorities 
+
+Any governmental, regulatory, judicial, law enforcement or public authority, whether in Bahamas, Brazil, Malta, Singapore, the Seychelles or any relevant jurisdictions, which have jurisdiction over the activities of OKX, the OKX Platform or any Users.
+
+Contract 
+
+Contract For Differences.
+
+Customer Service 
+
+Team that provides timely responses and resolutions for our customers and prospective customers concerning questions, feedback, or complaints. 
+
+Darknet 
+
+Hidden service markets or any other service or website that acts as a marketplace for illegal goods. 
+
+Digital Assets 
+
+Any digital asset which is based on the cryptographic protocol of a computer network that may be (i) centralized or decentralized, (ii) closed or open-source, and (iii) used as a medium of exchange and/or store of value. Furthermore, a Digital Asset is expressed as a unit; capable of being transferred, stored, and traded on a peer-to-peer basis with or without conditions or limitations; and approved by OKX for use in connection with the Exchange from time to time. For the avoidance of doubt, any Digital Asset that: (x) is transferred on any additional layer on top of a blockchain relating to another Digital Asset or any side chain; or (y) is a derivative of another Digital Asset, has enhanced features or functionality that supplements or interacts with another Digital Asset; is to be treated as a distinct Digital Asset from such other Digital Asset, and its use in connection with the Services will be subject to OKX’s approval. Digital Assets also include NFTs and other digital collectibles.
+
+Enhanced Due Diligence 
+
+Program whereby Users who have been designated as high risk undergo enhanced scrutiny and diligence. 
+
+Event of Default 
+
+Any of the following events:
+
+(a) you stop or suspend payment of any of your debts, loans, line of credit, facility or any equivalence, or is unable to, or admits your inability to, pay your debts, loans, line of credit, facility or any equivalence as they fall due;
+
+(b) you commence negotiations, or enter into any composition, compromise, assignment or arrangement, with one or more of your creditors with a view to rescheduling any of your indebtedness (because of actual or anticipated financial difficulties);
+
+(c) a moratorium is declared in respect of any of your indebtedness;
+
+(d) any action, proceedings, procedure or step is taken in relation to:
+
+(i) your indebtedness, insolvency, bankruptcy, judicial management, winding up, dissolution, administration or reorganisation (using a voluntary arrangement, scheme of arrangement or otherwise), as may be applicable (each, an "Insolvency Event");
+
+  (ii) the suspension of payments or a moratorium in preparation, anticipation or respect of any Insolvency Event;
+
+  (iii) a composition, compromise, assignment or arrangement with any of your creditors;
+
+  (iv) the appointment of a liquidator, receiver, administrative receiver, trustee, judicial manager, administrator, compulsory manager or other similar officer over you or any of your assets (or if applicable, business); or
+
+(v) the protection of your creditors' rights.
+
+(e) the value of your assets is less than the value of your liabilities (taking into account contingent and prospective liabilities);
+
+(f) you breached any provision in these Terms;
+
+(g) if you are not a natural person, you cease or threaten to cease your business;
+
+(h) you become unable to legally perform or comply with any obligation under these Terms;
+
+(i) a distress, attachment, execution, expropriation, sequestration or other analogous legal process is levied, enforced or sued out on, or against, your assets and is not discharged or stayed within 21 days;
+
+(j) any security in respect of indebtedness on or over your assets ("Security") becomes enforceable;
+
+(k) any Security, which may include but is not limited to a Margin:
+
+(i) ceases to be in full force and effect; or
+
+  (ii) is alleged by the relevant secured creditor to be ineffective;
+
+(l) you repudiate, rescind or show an intention to repudiate or rescind any financing agreement which you are a borrowing party to; and/or
+
+(m) any event occurring in relation to you that is analogous to those set out in the foregoing provisions under this definition in any jurisdiction. 
+
+Fiat Currency 
+
+Government-issued currency that is designated as legal tender in its country of issuance through government decree, regulation or law.
+
+Fill
+
+Complete or partial matching of two Orders on the OKX Platform which results in a Trade and Filling or Filled shall be construed accordingly.
+
+Financial Crime 
+
+Money laundering, terrorist financing, evasion of economic sanctions, tax evasion, bribery and corruption, including but not limited to the crimes of money laundering and terrorist financing, and behaviour which may amount to "Market Abuse", as defined under Applicable the Laws and Regulations as may be applicable to OKX EU, OKX Bahamas, OKX Brazil, OKX Singapore, or Aux Cayes as the case may be and as amended from time to time.
+
+Force Majeure Event 
+
+Event beyond the reasonable control of OKX or a User which prevents or substantially hinders OKX or the User from complying with any of their obligations, including but not limited to:
+
+(a)acts of God, fire, storm, tempest, explosion, flood, earthquake, subsidence or any other natural physical disasters;
+
+(b)acts of war, terrorism, riots, civil commotion, military action, insurrections, rebellions or revolutions and any other similar acts;
+
+(c)pandemics or epidemics;
+
+(d)failures or interruptions in power, communication channels, hardware, software, Internet connections and information systems;
+
+(e)acts of state or government, political interference, sanctions and embargos;
+
+(f) any other similar acts or events, disruptions, errors, distortions or delays,
+
+provided such events are not the result of a party's fraud, gross negligence or wilful default. 
+
+Futures 
+
+Legal contracts to buy or sell cryptocurrency at a later date. 
+
+Hard Fork 
+
+Occurs when a blockchain protocol is radically changed such that it becomes incompatible with older versions. Parties taking part in transactions on the old blockchain must upgrade to the new one in order to continue validating transactions. However, the parties that do not upgrade may continue to support and validate transactions on the older blockchain protocol separately. A Hard Fork can be planned, or unplanned (contentious). 
+
+Indirect Losses 
+
+Any loss related in any way to special, indirect, incidental, exemplary, punitive, multiple or consequential Loss including Loss of business or opportunity, customers or contracts, Loss of overheads, management or staff time, Loss of anticipated profits or revenue or other financial benefit, Loss of use of hardware or software, Loss of data or information or corruption of data (including Loss arising out of or relating to any inaccuracy, defect or omission of digital currency price data; any error or delay in the transmission of such data; and / or any interruption in any such data), or Loss from business disruption, Loss of reputation or goodwill, regardless of whether:
+
+(a)a Party has been advised of the possibility or likelihood of recovery of such Loss; or
+
+(b)arising under contract, tort, strict liability or any other theory of law.
+
+Leverage 
+
+The use of borrowed funds to increase a user's trading position beyond what would be available from user’s balance alone.
+
+Losses 
+
+Any claim, demand, action, proceeding, liability, expense (including legal and professional expenses), cost, charge, injury, damages, fine, penalty or diminution of value. 
+
+Margin 
+
+Amount of money either in the form of Digital Assets or any Fiat Currency (or a combination of both) you are required to pay in order to open and maintain a Trade as described in Clauses 4 and Clause 5 above, respectively. 
+
+Margin Lending 
+
+Peer to Peer lending service allowing users to borrow/lend Digital Assets to one another and earn rewards. 
+
+Natural Person 
+
+Any individual and their estate and personal representatives. 
+
+Notice 
+
+A binding communication issued by OKX to the Users, informing the Users of specific matters of relevance with respect to the proper functioning of the OKX Platform and the User’s use of the Services, including but not limited to changes to the policies, fees or any other relevant matter, as may be required from time to time. 
+
+Notice of Arbitration 
+
+Document that signifies a party’s intent to submit a dispute to one or more arbitrators who make a binding decision on the dispute. 
+
+OKX 
+
+Either OKX Bahamas, OKX Brazil, OKX Singapore, or Aux Cayes as the case may be for their respective Users.
+
+OKX Platform 
+
+The online platform accessed either at okx.com (http://okx.com/), or via the API or the mobile application that is operated by OKX. 
+
+Order 
+
+An instruction in relation to a Trade. 
+
+P2P
+
+Peer to Peer matching service, allowing users to exchange their Fiat Currency and Digital Assets with each other. 
+
+Prohibited Business 
+
+The list of Prohibited Businesses as set out in Clause 3. 
+
+Related Parties 
+
+Any companies which are affiliate companies, subsidiary companies, sister companies, associated companies, or related companies of OKX.
+
+Restricted Locations 
+
+Locations in which OKX offers no or only limited services, as indicated in Clause 2.2 and may be updated from time to time. 
+
+Risk Statement 
+
+Statement made by OKX to the Users in relation to the risks involved in trading on the OKX Platform as set out in Clause 6. 
+
+Services 
+
+Products, services, and other features provided by OKX to its Users under these Terms, including trading on the OKX Platform and the custody of Users’ Digital Assets. 
+
+Spot Services	 
+
+Spot transactions in Digital Assets through (a) P2P (Peer-to-Peer) or (b) Centralised exchange platform offered by OKX. 
+
+Stop Order 
+
+The stop loss function as described in Clause 6.74. 
+
+Trade 
+
+Transaction on the OKX Platform which results from the Fill of two Orders. 
+
+User 
+
+A Natural Person or legal entity (e.g. corporate or institutional customers) who uses the OKX Platform and to whom OKX provides its Services pursuant to these Terms, and who has agreed to these Terms. For the avoidance of doubt, Users may include Related Parties who engage in trading activity as described in Clause 4.4.
+
+1. INTRODUCTION
+
+2. ELIGIBILITY AND PROHIBITION OF USING OUR SERVICES & BUSINESS
+
+3. PROHIBITED BUSINESSES
+
+4. DESCRIPTION OF OUR SERVICES
+
+CONFLICTS OF INTEREST
+
+5. TRADING ON THE OKX PLATFORM
+
+Suspension of Services
+
+6. RISK STATEMENT
+
+Introduction
+
+Overview of risks
+
+Nature of Digital Assets
+
+Value of Digital Assets and the Risk of Loss
+
+Past performance
+
+Suitability
+
+Availability of Digital Assets
+
+Currency & Conversion
+
+Custody
+
+OKX Trading Platform
+
+Financial and Cyber Crime
+
+Technology
+
+Legal
+
+Market
+
+Regulatory
+
+Stop Loss
+
+Margin, Gearing, and Leverage
+
+Not a Bank
+
+Other Potential Risks
+
+7. YOUR OKX ACCOUNT
+
+Right of Offset and Recoveries
+
+Electronic Communications
+
+8. USERS’ RIGHTS AND LIMITATIONS TO LICENSE USE
+
+9. USER OBLIGATIONS
+
+10. FEES
+
+11. CHANGE, INTERRUPTION, TERMINATION, AND DISCONTINUANCE OF SERVICES
+
+12. UNCLAIMED PROPERTY
+
+Obligations of OKX
+
+Expenses
+
+13. COMPLIANCE WITH YOUR LOCAL LAWS AND TAXES
+
+14. PRIVACY POLICY
+
+15. LIMITATION OF LIABILITY, WARRANTIES AND INDEMNIFICATION
+
+Exclusion of liability
+
+Limitation of liability
+
+Force Majeure Events
+
+Indemnification
+
+Disclaimer of Warranties
+
+16. VARIATIONS
+
+17. TRANSFER OF BUSINESS
+
+18. DISCLAIMER
+
+19. GOVERNING LAW
+
+20. JURISDICTION AND DISPUTE RESOLUTION (“Arbitration Agreement”)
+
+21. SEPARABILITY, COMPLAINTS AND MISCELLANEOUS
+
+22. DEFINITIONS AND INTERPRETATION
+
+Interpretation
+
+Definitions
+
+©2026 OKX.COM. One Sansome Street, Suite 1400 PMB 6005, San Francisco, CA 94104.
+NMLS #1767779
+
+More about OKX
+About usCareersContact usTerms of ServicePrivacy NoticeDisclosuresWhistleblower noticeLaw enforcementOKX app
+
+Products
+Buy cryptoConvertCrypto calculatorAll cryptocurrenciesTradingView
+
+Services
+APIHistorical market dataCEX fee scheduleListing application
+
+Support
+Support centerChannel verificationAnnouncements
+
+Buy crypto
+Buy USDTBuy USDCBuy BitcoinBuy EthereumBuy Litecoin
+
+Crypto calculator
+BTC to USDETH to USDUSDT to USD
+
+Trade
+Bitcoin priceEthereum price
+
+Trade on the go with OKXRegister
