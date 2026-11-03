@@ -1,0 +1,10 @@
+=== EXECUTION-TEST REHEARSAL (read-only) 2026-11-03T09:04:01Z  amount $10.00
+
+--- quote-only round trip (no wallet; nothing built or simulated)
+sample 1: buy $10.00 -> 0.108827 SOL (cost 8.3 bps vs reference, router metis); sell back -> $9.9977 (cost -6.0 bps); round trip 2.3 bps = $0.0023
+sample 2: buy $10.00 -> 0.108795 SOL (cost 11.8 bps vs reference, router metis); sell back -> $9.9981 (cost -4.9 bps); round trip 1.9 bps = $0.0019
+sample 3: buy $10.00 -> 0.108774 SOL (cost 8.7 bps vs reference, router metis); sell back -> $9.9963 (cost -4.9 bps); round trip 3.7 bps = $0.0037
+
+no owner test wallet configured (deploy/exec_test_wallet.txt); skipping the funded-wallet search
+
+read-only: no signature was requested and nothing was submitted.
