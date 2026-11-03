@@ -35,7 +35,8 @@ def binance(dirp: str, pair: str, itv: str) -> pd.Series:
     if not os.path.exists(p):
         return pd.Series(dtype=float)
     b = pd.read_csv(p)
-    return pd.Series(b["close"].values, index=pd.to_datetime(b["open_ms"], unit="ms", utc=True))
+    r = pd.Series(b["close"].values, index=pd.to_datetime(b["open_ms"], unit="ms", utc=True))
+    return r[~r.index.duplicated(keep="last")]
 
 
 def main() -> None:
@@ -61,6 +62,7 @@ def main() -> None:
             ref = binance(a.dir, pair, "1d")
             for pool, gg in g.groupby("pool"):
                 s = pd.Series(gg["close"].values, index=pd.to_datetime(gg["ts"], unit="s", utc=True)).sort_index()
+                s = s[~s.index.duplicated(keep="last")]
                 j = pd.concat([s, ref], axis=1, keys=["pool", "ref"]).dropna()
                 st = dev_stats((j["pool"] / j["ref"] - 1) * 1e4)
                 st["median_daily_volume_usd"] = round(float(gg["volume_usd"].median()), 0)
@@ -69,6 +71,7 @@ def main() -> None:
             g = pd.read_csv(p)
             ref = binance(a.dir, pair, "1h")
             s = pd.Series(g["close"].values, index=pd.to_datetime(g["ts"], unit="s", utc=True)).sort_index()
+            s = s[~s.index.duplicated(keep="last")]
             j = pd.concat([s, ref], axis=1, keys=["pool", "ref"]).dropna()
             st = dev_stats((j["pool"] / j["ref"] - 1) * 1e4)
             st["median_hourly_volume_usd"] = round(float(g["volume_usd"].median()), 0)

@@ -4,7 +4,7 @@ Date 2026-11-03.
 
 | Evidence class | Status |
 |---|---|
-| Historical results | `STRATEGY_AUDIT_GO_NOGO.md`, `OPPORTUNITY_LAB_RESULTS.md` |
+| Historical results | `STRATEGY_AUDIT_GO_NOGO.md`, `OPPORTUNITY_LAB_RESULTS.md`, `FEASIBILITY_LONG_SHORT.md` (long/short and alternative horizons: all 12 pre-registered configurations rejected) |
 | Forward paper results | Section 3 |
 | Real fills | **None.** No real transaction has ever been signed or sent |
 
@@ -27,7 +27,7 @@ Date 2026-11-03.
 
 ## 2. Tests and failure injection (this commit)
 
-The full suite has **300 passed**, and `tradebot selftest` passes 10/10. These cover:
+The full suite has **306 passed** (2026-11-03, including the long/short study accounting tests), and `tradebot selftest` passes 10/10. These cover:
 
 | Check | Tests |
 |---|---|
@@ -63,7 +63,7 @@ roughly 6–10 months.
 | Capability | Status |
 |---|---|
 | Spot buy and sell (USDC ↔ SOL, cbBTC, WETH via Jupiter) | Paper: yes. Live: built, disabled |
-| Short positions | **No.** Selling only reduces a held position |
+| Short positions | **No.** Selling only reduces a held position. A perpetual venue would be needed; the minimum changes are in `FEASIBILITY_LONG_SHORT.md` §1. Not built, because no long/short rule qualified |
 | Leverage | **No** |
 | Decision frequency | Loop every 60 s. tsmom decides once a day (00 UTC); momentum on 4h closes. About 0.1 trades/day across 3 assets historically. Not a seconds-based system |
 | AI | Off. Not in the execution path |
@@ -119,7 +119,7 @@ The only control over the size of those losses is the position and exposure limi
 ## 5. Live blockers, in order
 
 1. **Forward evidence (section 3).**
-2. **Persistent machine.** The forward-paper engine must run continuously on your PC or a VPS. GitHub runs are bounded experiments of at most 6 h.
+2. **Persistent machine.** The forward-paper engine must run continuously on your PC or a VPS. GitHub runs are bounded experiments of at most 6 h. `windows/install_autostart.bat` starts the paper engine at sign-in and turns off mains-power sleep; it asks before each change.
 3. **Independent exit protection.** No process-independent stop exists for live positions. Options:
    - a separate watchdog process that can only sell;
    - Jupiter Trigger orders, which change custody and need explaining and your approval first.
