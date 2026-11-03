@@ -1,0 +1,111 @@
+# Opportunity Lab ("the employees"): PAPER ONLY, on a GitHub-hosted runner with live Solana market data.
+# Scanner -> security agent -> analyst -> simulated entries/exits. No wallet, no key, no secrets; the lab cannot sign.
+#
+# Start: write an end time (UTC, ISO 8601) into TRADEBOT/deploy/lab_run.trigger and push it.
+#        Each run lasts up to ~5.3 h, then starts the next one itself until that end time.
+# Stop:  push a file TRADEBOT/deploy/LAB_STOP, or cancel the run in the Actions tab.
+# Evidence: status + report snapshots are committed to TRADEBOT/lab_evidence/ ~20 min into each run and at its end.
+name: opportunity-lab
+
+on:
+  push:
+    branches: [claude/inspiring-edison-6xsm35]
+    paths: [TRADEBOT/deploy/lab_run.trigger]
+  workflow_dispatch:
+
+concurrency:
+  group: tradebot-lab
+  cancel-in-progress: false
+
+permissions:
+  contents: write  # commit evidence snapshots to this branch
+  actions: write   # dispatch the next run of this workflow
+
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    defaults:
+      run:
+        working-directory: TRADEBOT
+    env:
+      LAB_CONFIG: lab.toml
+      LAB_DATA_DIR: data_lab
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: pip install -q -e .
+      - name: Work out this run's length from the end time
+        run: |
+          END=$(head -1 deploy/lab_run.trigger | tr -d '[:space:]')
+          END_TS=$(date -u -d "$END" +%s)
+          LEFT=$(( (END_TS - $(date +%s)) / 60 ))
+          MIN=$(( LEFT < 320 ? LEFT : 320 ))
+          echo "end time $END, $LEFT min left, this run $MIN min"
+          echo "LAB_END_TS=$END_TS" >> "$GITHUB_ENV"
+          echo "LAB_MINUTES=$MIN" >> "$GITHUB_ENV"
+      - name: Restore lab state from the previous run
+        uses: actions/cache/restore@v4
+        with:
+          path: TRADEBOT/data_lab
+          key: tradebot-lab-${{ github.run_id }}
+          restore-keys: tradebot-lab-
+      - name: Start the lab (background, paper only)
+        if: env.LAB_MINUTES >= 15
+        run: |
+          cp lab.toml.example lab.toml
+          mkdir -p data_lab
+          nohup python -m opportunity_lab run --source live --minutes "$LAB_MINUTES" > data_lab/run_stdout.log 2>&1 &
+          echo $! > data_lab/lab.pid
+          echo "LAB_STARTED=$(date +%s)" >> "$GITHUB_ENV"
+          sleep 20
+          kill -0 "$(cat data_lab/lab.pid)" && echo "lab started, pid $(cat data_lab/lab.pid)" || { tail -50 data_lab/run_stdout.log; exit 1; }
+      - name: Early snapshot (+20 min)
+        if: env.LAB_MINUTES >= 15
+        run: |
+          sleep 1200
+          bash deploy/lab_snapshot.sh early
+      - name: Wait for the run to finish (stops early on LAB_STOP)
+        if: env.LAB_MINUTES >= 15
+        run: |
+          PID=$(cat data_lab/lab.pid)
+          while kill -0 "$PID" 2>/dev/null; do
+            sleep 120
+            git fetch -q origin "$GITHUB_REF_NAME" 2>/dev/null || continue
+            if git cat-file -e "origin/$GITHUB_REF_NAME:TRADEBOT/deploy/LAB_STOP" 2>/dev/null; then
+              echo "LAB_STOP pushed: stopping"; kill -INT "$PID" 2>/dev/null; sleep 30; break
+            fi
+          done
+      - name: Final snapshot
+        if: always() && env.LAB_MINUTES >= 15
+        run: |
+          kill -INT "$(cat data_lab/lab.pid 2>/dev/null)" 2>/dev/null || true
+          sleep 5
+          bash deploy/lab_snapshot.sh final
+      - name: Save lab state for the next run
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: TRADEBOT/data_lab
+          key: tradebot-lab-${{ github.run_id }}
+      - name: Start the next run (until the end time)
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch -q origin "$GITHUB_REF_NAME" || true
+          if git cat-file -e "origin/$GITHUB_REF_NAME:TRADEBOT/deploy/LAB_STOP" 2>/dev/null; then echo "LAB_STOP present: done"; exit 0; fi
+          LEFT=$(( (LAB_END_TS - $(date +%s)) / 60 ))
+          if [ "$LEFT" -lt 15 ]; then echo "end time reached: done"; exit 0; fi
+          RAN=$(( $(date +%s) - ${LAB_STARTED:-$(date +%s)} ))
+          if [ "$RAN" -lt 3600 ]; then
+            echo "::warning::lab ran only ${RAN}s in this run; not restarting automatically. Check lab_evidence/ and the run log."; exit 0
+          fi
+          gh workflow run opportunity-lab.yml --ref "$GITHUB_REF_NAME"
+          echo "next lab run dispatched ($LEFT min left)"
