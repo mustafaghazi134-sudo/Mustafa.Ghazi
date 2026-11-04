@@ -7,6 +7,7 @@ from types import SimpleNamespace
 import pytest
 from solders.keypair import Keypair
 
+from gate_helpers import arm_for_test
 from tradebot.config import DataConfig, ExecutionConfig, Settings, UniverseConfig, jupiter_endpoints
 from tradebot.data.live import LiveProvider
 from tradebot.execution.base import ExecutionError, Quote
@@ -104,7 +105,7 @@ def _broker(tmp_path, armed=True, monkeypatch=None, key="k"):
     gate = LiveGate(s)
     if armed and monkeypatch is not None:
         monkeypatch.setenv("TRADEBOT_LIVE_TRADING", "I_ACCEPT_THE_RISK")
-        gate.arm(s.engine.live_confirm_phrase, force=True)
+        arm_for_test(s, gate=gate)
     risk = RiskEngine(s.risk, KillSwitch(tmp_path / "KILL"))
     return s, JupiterLiveBroker(risk, s, _provider(key), Keypair(), gate)
 
@@ -156,6 +157,7 @@ def test_execute_success_uses_actual_amounts_and_requestid(tmp_path, monkeypatch
 def test_execute_retryable_code_requotes_then_non_retryable_raises(tmp_path, monkeypatch):
     s, b = _broker(tmp_path, monkeypatch=monkeypatch)
     s.execution.execute_max_retries = 1
+    arm_for_test(s, gate=b.gate)     # [execution] is part of the activation binding: re-arm after editing it
     calls = []
 
     def fake_request(client, method, url, **kw):

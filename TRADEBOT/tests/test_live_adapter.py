@@ -17,6 +17,7 @@ from solders.keypair import Keypair
 from solders.transaction import VersionedTransaction
 
 from jupiter_fixtures import FakeChain, build_tx, order_response, sys_transfer, swap_ix, cu_limit
+from gate_helpers import arm_for_test
 from tradebot.config import Settings
 from tradebot.engine.bot import TradingBot
 from tradebot.execution import submission
@@ -151,8 +152,7 @@ def live(tmp_path, monkeypatch):
     kill = KillSwitch(s.kill_file)
     risk = RiskEngine(s.risk, kill, clock=clock)
     monkeypatch.setenv(ENV_LIVE, ENV_LIVE_VALUE)
-    gate = LiveGate(s, ledger)
-    gate.arm(s.engine.live_confirm_phrase, force=True)
+    gate = arm_for_test(s, ledger)
     controls = LiveControls(s.live, ledger, kill, s.live_halt_file, clock=clock)
     prov = Prov(s, clock)
     adapter = JupiterExecutionAdapter(risk, s, prov, gate=gate, controls=controls, signer=signer, dry_run=False,

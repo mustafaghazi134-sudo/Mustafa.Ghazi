@@ -172,7 +172,20 @@ class EngineConfig(BaseModel):
     min_paper_days_before_live: float = 60.0
     min_paper_coverage_before_live: float = Field(0.8, ge=0.0, le=1.0,
                                                   description="Share of the paper period covered by equity snapshots")
+    # No longer used for arming (arm-live now issues a one-time challenge); kept so existing config files still load.
     live_confirm_phrase: str = "I UNDERSTAND THIS TRADES REAL MONEY WITHOUT APPROVAL"
+    # ---- live activation record (docs/LIVE_GATE_HARDENING.md). None of these change the thresholds above. ----
+    live_arm_ttl_hours: float = Field(12.0, gt=0, le=24.0, description="default life of an arm-live activation; 24 h is a hard cap in code")
+    # Measurement parameter, not a readiness threshold: two equity snapshots further apart than this many snapshot
+    # intervals are an outage, and the gap earns no coverage. PENDING OWNER APPROVAL of the value 3.
+    paper_gap_tolerance_intervals: float = Field(3.0, ge=1.0)
+    # If true, an activation record must carry a signature checked by an independent Attestor. No Attestor ships in
+    # this change, so true means "nothing can be armed" until one is approved and installed.
+    require_external_attestation: bool = False
+    # Imported (GitHub) paper evidence is ignored for arming unless this is true AND its provenance is independently
+    # authenticated. No provenance verifier ships in this change.
+    accept_imported_paper_evidence: bool = False
+    evidence_allowed_repositories: list[str] = Field(default_factory=list, description="owner/repo names an evidence bundle may come from")
 
 
 class ScannerConfig(BaseModel):
@@ -324,6 +337,10 @@ class Settings(BaseModel):
         return self.data_path / "LIVE_ARMED"
 
     @property
+    def audit_log_file(self) -> Path:
+        return self.data_path / "LIVE_AUDIT.jsonl"
+
+    @property
     def live_halt_file(self) -> Path:
         return self.data_path / "LIVE_HALT"
 
@@ -445,5 +462,6 @@ flatten_on_kill = true
 flatten_on_daily_halt = true
 min_paper_trades_before_live = 5     # closed paper trades (exercises every order path)
 min_paper_days_before_live = 60      # calendar days since the first paper event
-min_paper_coverage_before_live = 0.8 # share of those days the engine was actually running
+min_paper_coverage_before_live = 0.8 # share of the paper period covered by gap-free equity snapshots
+# live_arm_ttl_hours = 12            # life of an arm-live activation (hard cap 24 in code)
 """

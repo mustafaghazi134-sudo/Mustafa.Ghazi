@@ -167,15 +167,17 @@ def cmd_status(args) -> int:
     kill = KillSwitch(settings.kill_file)
     gate = LiveGate(settings, ledger)
     st = gate.status()
-    trades, days = gate.paper_record()
+    res = gate.evaluate_readiness()
     print(f"mode:          {settings.mode}" + (f"  (showing ledger: {ledger.mode})" if ledger.mode != settings.mode else ""))
     print(f"kill switch:   {'TRIPPED - ' + str(kill.reason()) if kill.is_tripped() else 'clear'}")
-    print(f"live gate:     {'ARMED' if st['armed'] else 'not armed'}  (env_ok={st['env_ok']} armed_file={st['armed_file']} limits_match={st['limits_match']})")
-    cov = gate.paper_coverage()
+    print(f"live gate:     {'ARMED' if st['armed'] else 'not armed'}  (env_ok={st['env_ok']} armed_file={st['armed_file']} record_valid={st['record_valid']})")
+    if st["armed_file"]:
+        print("  activation:  " + ("valid, " + f"{(st['seconds_remaining'] or 0) / 3600:.1f} h remaining, authenticated={st['authenticated']}"
+                                   if st["record_valid"] else "INVALID - " + "; ".join(st["problems"])))
     e = settings.engine
-    print(f"paper record:  {trades} closed trades over {days:.1f} days, engine running {cov:.0%} of that time "
-          f"(need {e.min_paper_trades_before_live} / {e.min_paper_days_before_live:g} days / "
-          f"{e.min_paper_coverage_before_live:.0%} to arm)")
+    print(f"paper record:  {res.trades} closed trades over {res.days:.1f} days, covered {res.coverage:.0%} of that time by gap-free snapshots "
+          f"(need {e.min_paper_trades_before_live} / {e.min_paper_days_before_live:g} days / {e.min_paper_coverage_before_live:.0%} to arm); "
+          f"{res.operating.outage_count} outage(s), longest {res.operating.longest_gap_sec / 3600:.1f} h")
     print(f"cash:          ${ledger.get('cash', settings.initial_capital_usd):,.2f}")
     pos = ledger.load_positions()
     print(f"positions:     {len(pos)}" + (" -> " + ", ".join(f"{p.symbol} {p.qty:.6g}@{p.avg_cost:.6g}" for p in pos.values()) if pos else ""))
@@ -210,28 +212,115 @@ def cmd_resume(args) -> int:
     return 0
 
 
+def _interactive() -> bool:
+    return bool(sys.stdin.isatty() and sys.stdout.isatty())
+
+
+def _print_readiness(res) -> None:
+    op = res.operating
+    print(f"  evidence source:   {res.source}")
+    print(f"  closed trades:     {res.trades}")
+    print(f"  span:              {res.days:.1f} days   covered by gap-free snapshots: {res.coverage:.0%}")
+    print(f"  outages:           {op.outage_count} (longest {op.longest_gap_sec / 3600:.1f} h), snapshots rejected: {op.snapshots_rejected}")
+    sr = res.strategy
+    print("  strategy evidence (REPORT ONLY, nothing here is a profitability test):")
+    print(f"    net P&L ${sr['net_pnl_usd']:+.2f}, mean/trade {sr['mean_pnl_usd']}, 95% bootstrap CI {sr['ci95_mean_pnl_usd']}, "
+          f"max drawdown {sr['max_drawdown_pct']}%")
+    print(f"    out-of-sample: {sr['out_of_sample']}")
+
+
 def cmd_arm_live(args) -> int:
+    """Interactive only: a terminal is required, readiness is shown, and a one-time challenge must be typed back.
+    There is no override flag."""
+    if not _interactive():
+        print("REFUSED: arm-live needs an interactive terminal (stdin and stdout must be a TTY). It cannot be scripted or piped.")
+        return 2
     settings = load_settings(args.config)
-    ledger = Ledger(settings.db_path, mode="paper")
-    gate = LiveGate(settings, ledger)
+    gate = LiveGate(settings, Ledger(settings.db_path, mode="paper"))
+    verdict = None
     try:
-        gate.arm(args.confirm, force=args.force)
-    except PermissionError as e:
+        if args.evidence:
+            from .execution.evidence_import import verify_bundle
+            verdict = verify_bundle(json.loads(Path(args.evidence).read_text()), settings, expected_sha256=args.evidence_sha256)
+        ch = gate.begin_arm(args.ttl_hours, verdict)
+        print("Readiness (existing thresholds, gap-based):")
+        _print_readiness(gate.evaluate_readiness(ch.evidence))
+        print(f"\nThis will arm LIVE trading for {ch.ttl_hours:g} h, bound to config digest {ch.digest[:12]}.")
+        print("Real submission also needs the build switch and the separate signer; this does not enable them.")
+        typed = input(f"To confirm, type exactly:  {ch.code}\n> ")
+        gate.complete_arm(ch, typed)
+    except (PermissionError, ValueError, OSError, EOFError) as e:
         print(f"REFUSED: {e}")
         return 2
-    print("Armed. Live orders will be sent only when ALL of these hold:")
+    st = gate.status()
+    print(f"Armed until {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime(st['expires_at']))}. Live orders are sent only when ALL hold:")
     print('  1. config.toml has mode = "live"')
     print("  2. env TRADEBOT_LIVE_TRADING=I_ACCEPT_THE_RISK")
-    print(f"  3. {settings.armed_file} exists with the current risk-limits hash (editing [risk] disarms)")
+    print(f"  3. {settings.armed_file} is valid, unexpired and matches the current configuration (editing it disarms)")
     print("  4. the signer service is running, activated by the owner, and the build allows submission")
+    print(f"  authenticated by an independent attestor: {st['authenticated']}")
+    a = gate.audit.anchor()
+    print(f"audit anchor: seq {a['seq']} head {a['hash']}\n  (keep this somewhere you alone control; `audit-verify --anchor-seq N --anchor-hash H` then detects a rewritten log)")
     return 0
 
 
 def cmd_disarm_live(args) -> int:
     settings = load_settings(args.config)
-    LiveGate(settings).disarm()
-    print("disarmed")
+    gate = LiveGate(settings)
+    gate.disarm("cli disarm-live")
+    a = gate.audit.anchor()
+    print(f"disarmed\naudit anchor: seq {a['seq']} head {a['hash']}")
     return 0
+
+
+def cmd_readiness(args) -> int:
+    """Read-only: the operational check with the existing thresholds, plus the report-only strategy statistics."""
+    settings = load_settings(args.config)
+    gate = LiveGate(settings, Ledger(settings.db_path, mode="paper"))
+    res = gate.evaluate_readiness()
+    print("Operational readiness (existing thresholds, gap-based):", "MET" if res.ok else "NOT MET")
+    for r in res.reasons:
+        print("  -", r)
+    _print_readiness(res)
+    return 0 if res.ok else 1
+
+
+def cmd_export_evidence(args) -> int:
+    """Read-only on the ledger. Writes a bundle for off-machine review; prints the hash to record out-of-band."""
+    from .execution.evidence_import import export_bundle
+    settings = load_settings(args.config)
+    prov = dict(kv.split("=", 1) for kv in args.provenance)
+    bundle = export_bundle(Ledger(settings.db_path, mode="paper"), settings, prov)
+    Path(args.out).write_text(json.dumps(bundle, sort_keys=True))
+    print(f"wrote {args.out}\ncontent_sha256 {bundle['content_sha256']}")
+    return 0
+
+
+def cmd_verify_evidence(args) -> int:
+    from .execution.evidence_import import verify_bundle
+    settings = load_settings(args.config)
+    v = verify_bundle(json.loads(Path(args.file).read_text()), settings, expected_sha256=args.expected_sha256)
+    for name, ok, detail in v.checks:
+        print(f"{'ok  ' if ok else 'FAIL'} {name:<30} {detail if not ok else ''}")
+    print("accepted for arming:", v.accepted, "| provenance authenticated:", v.authenticated)
+    if v.evidence is not None:
+        from .execution.readiness import evaluate
+        res = evaluate(settings, v.evidence)
+        print("(informational) operational readiness of this evidence:", "MET" if res.ok else "NOT MET")
+        _print_readiness(res)
+    return 0 if v.accepted else 1
+
+
+def cmd_audit_verify(args) -> int:
+    from .execution.audit_log import HashChainedAuditLog
+    settings = load_settings(args.config)
+    log = HashChainedAuditLog(settings.audit_log_file)
+    anchor = {"seq": args.anchor_seq, "hash": args.anchor_hash} if args.anchor_hash is not None else None
+    res = log.verify(anchor)
+    print(f"entries {res['entries']}  head {res['head']}  chain {'OK' if res['ok'] else 'BROKEN: ' + str(res['error'])}")
+    print("anchored to an externally preserved head:", res["anchored"],
+          "" if res["anchored"] else "(without an anchor a whole-file rewrite is undetectable; record `seq`/`head` somewhere you alone control)")
+    return 0 if res["ok"] else 1
 
 
 def cmd_preflight(args) -> int:
@@ -663,9 +752,17 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--mode", choices=["paper", "live", "replay"], default=None); p.set_defaults(fn=cmd_status)
     p = sub.add_parser("kill", help="EMERGENCY STOP: halt and flatten"); p.add_argument("--reason", default="manual kill"); p.set_defaults(fn=cmd_kill)
     p = sub.add_parser("resume", help="reset the kill switch after review"); p.set_defaults(fn=cmd_resume)
-    p = sub.add_parser("arm-live", help="arm real-money trading (deliberate, owner-only)")
-    p.add_argument("--confirm", required=True, help="exact confirmation phrase from [engine].live_confirm_phrase")
-    p.add_argument("--force", action="store_true", help="skip the minimum paper-record requirement"); p.set_defaults(fn=cmd_arm_live)
+    p = sub.add_parser("arm-live", help="arm real-money trading (interactive terminal only; one-time challenge; expires)")
+    p.add_argument("--ttl-hours", type=float, default=None, help="activation life; default [engine].live_arm_ttl_hours (12), hard maximum 24")
+    p.add_argument("--evidence", help="verified paper-evidence bundle (see verify-evidence); ignored unless imported evidence is enabled and authenticated")
+    p.add_argument("--evidence-sha256", help="bundle hash obtained out-of-band"); p.set_defaults(fn=cmd_arm_live)
+    p = sub.add_parser("readiness", help="read-only: paper-record readiness (gap-based) and report-only strategy statistics"); p.set_defaults(fn=cmd_readiness)
+    p = sub.add_parser("export-evidence", help="read-only: export the paper ledger as a hashed evidence bundle")
+    p.add_argument("--out", required=True); p.add_argument("--provenance", nargs="*", default=[], metavar="KEY=VALUE"); p.set_defaults(fn=cmd_export_evidence)
+    p = sub.add_parser("verify-evidence", help="read-only: check an evidence bundle's structure, integrity, correspondence and provenance")
+    p.add_argument("file"); p.add_argument("--expected-sha256", required=True, help="hash obtained out-of-band"); p.set_defaults(fn=cmd_verify_evidence)
+    p = sub.add_parser("audit-verify", help="verify the live-gate audit chain, optionally against an externally preserved anchor")
+    p.add_argument("--anchor-seq", type=int, default=0); p.add_argument("--anchor-hash"); p.set_defaults(fn=cmd_audit_verify)
     p = sub.add_parser("disarm-live", help="remove the armed file"); p.set_defaults(fn=cmd_disarm_live)
     p = sub.add_parser("preflight", help="read-only checks: network reachability, API key, kill switch, live gate"); p.set_defaults(fn=cmd_preflight)
     p = sub.add_parser("quote", help="read-only Jupiter quote with fee/rent/slippage breakdown (signs nothing)")

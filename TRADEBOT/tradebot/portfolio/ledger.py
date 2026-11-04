@@ -171,6 +171,12 @@ class Ledger:
     def count_equity(self, mode: str | None = None) -> int:
         return self._exec("SELECT COUNT(*) c FROM equity WHERE mode=?", (mode or self.mode,)).fetchone()["c"]
 
+    def equity_points(self, mode: str | None = None, since: float = 0.0) -> list[tuple[float, float]]:
+        """Read-only: (ts, equity_usd) for any mode, oldest first. Used by the live-readiness verifier."""
+        rows = self._exec("SELECT ts, equity_usd FROM equity WHERE mode=? AND ts>=? ORDER BY ts",
+                          (mode or self.mode, since)).fetchall()
+        return [(float(r["ts"]), float(r["equity_usd"])) for r in rows]
+
     def equity_curve(self, since: float = 0.0) -> list[EquityPoint]:
         rows = self._exec("SELECT * FROM equity WHERE mode=? AND ts>=? ORDER BY ts", (self.mode, since)).fetchall()
         return [EquityPoint(r["ts"], r["equity_usd"], r["cash_usd"], r["exposure_usd"], r["realized_pnl_usd"], r["unrealized_pnl_usd"])
@@ -191,6 +197,15 @@ class Ledger:
 
     def events(self, limit: int = 50) -> list[sqlite3.Row]:
         return self._exec("SELECT * FROM events WHERE mode=? ORDER BY ts DESC LIMIT ?", (self.mode, limit)).fetchall()
+
+    def events_of_kinds(self, kinds: tuple[str, ...], mode: str | None = None) -> list[tuple[float, str]]:
+        """Read-only: (ts, kind) of events of the given kinds for any mode, oldest first."""
+        if not kinds:
+            return []
+        marks = ",".join("?" for _ in kinds)
+        rows = self._exec(f"SELECT ts, kind FROM events WHERE mode=? AND kind IN ({marks}) ORDER BY ts",
+                          (mode or self.mode, *kinds)).fetchall()
+        return [(float(r["ts"]), str(r["kind"])) for r in rows]
 
     def first_event_ts(self, mode: str | None = None) -> float | None:
         r = self._exec("SELECT MIN(ts) t FROM events WHERE mode=?", (mode or self.mode,)).fetchone()

@@ -12,6 +12,7 @@ from solders.signature import Signature
 from solders.system_program import TransferParams, transfer
 from solders.transaction import VersionedTransaction
 
+from gate_helpers import arm_for_test
 from tradebot.config import Settings
 from tradebot.data.synthetic import SyntheticProvider
 from tradebot.engine.bot import TradingBot, build_bot
@@ -225,7 +226,7 @@ def _unsigned_tx_b64(payer: Keypair) -> str:
 def _live(tmp_path, monkeypatch):
     s = Settings(mode="live", data_dir=str(tmp_path)); s.data.jupiter_api_key = "k"
     monkeypatch.setenv("TRADEBOT_LIVE_TRADING", "I_ACCEPT_THE_RISK")
-    gate = LiveGate(s); gate.arm(s.engine.live_confirm_phrase, force=True)
+    gate = arm_for_test(s)
     from tradebot.config import DataConfig, ExecutionConfig, UniverseConfig
     from tradebot.data.live import LiveProvider
     kp = Keypair()

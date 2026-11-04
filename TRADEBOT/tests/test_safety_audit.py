@@ -15,6 +15,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent))
 from test_crash_protection import CrashingBroker, _bot, _buy, _decide  # noqa: E402
 from test_jupiter_api import ORDER, _broker  # noqa: E402
+from gate_helpers import arm_for_test  # noqa: E402
 
 from tradebot.data.synthetic import SyntheticProvider
 from tradebot.execution.base import ExecutionError, Quote, SubmittedUnknownError
@@ -118,6 +119,7 @@ def test_reconcile_never_books_an_order_that_already_has_a_fill(tmp_path):
 def test_ambiguous_execute_codes_are_unknown_and_never_resigned(tmp_path, monkeypatch, code):
     s, b = _broker(tmp_path, monkeypatch=monkeypatch)
     s.execution.execute_max_retries = 3
+    arm_for_test(s, gate=b.gate)     # [execution] is bound to the activation: re-arm after editing it
     calls, signs = [], []
     b._request = lambda client, method, url, **kw: calls.append(url.rsplit("/", 1)[-1]) or (
         ORDER if url.endswith("/order") else {"status": "Failed", "code": code, "error": "x"})
@@ -131,6 +133,7 @@ def test_ambiguous_execute_codes_are_unknown_and_never_resigned(tmp_path, monkey
 def test_rejected_execute_codes_fail_without_retry(tmp_path, monkeypatch, code):
     s, b = _broker(tmp_path, monkeypatch=monkeypatch)
     s.execution.execute_max_retries = 3
+    arm_for_test(s, gate=b.gate)     # [execution] is bound to the activation: re-arm after editing it
     calls = []
     b._request = lambda client, method, url, **kw: calls.append(url.rsplit("/", 1)[-1]) or {"status": "Failed", "code": code, "error": "x"}
     b._sign = lambda tx: ("signed", "SIG")
