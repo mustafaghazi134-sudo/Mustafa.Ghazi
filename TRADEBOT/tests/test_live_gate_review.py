@@ -364,7 +364,7 @@ def test_no_attestor_is_wired_into_production_code_paths():
     """Honest status: the signed-record path exists as an interface but nothing in production constructs one."""
     for p in (ROOT / "tradebot").rglob("*.py"):
         text = p.read_text()
-        if p.name == "live_gate.py":
+        if p.name in ("live_gate.py", "attestation.py"):          # the gate and the checker take the parameter; nobody else may
             continue
         assert "attestor=" not in text.replace("attestor: Attestor", ""), p
     assert "LiveGate(settings, ledger)" in (ROOT / "tradebot" / "engine" / "bot.py").read_text()

@@ -258,7 +258,9 @@ def cmd_arm_live(args) -> int:
     print("  2. env TRADEBOT_LIVE_TRADING=I_ACCEPT_THE_RISK")
     print(f"  3. {settings.armed_file} is valid, unexpired and matches the current configuration (editing it disarms)")
     print("  4. the signer service is running, activated by the owner, and the build allows submission")
-    print(f"  authenticated by an independent attestor: {st['authenticated']}")
+    print(f"  authenticated by an independent attestor: {st['authenticated']}"
+          + ("" if st["authenticated"] else "  (no independent verifier is configured: a process with write access to this file could forge it)"))
+    print("  Operational readiness is NOT evidence of profitability; unattended LIVE use also needs a separately approved strategy-evidence gate.")
     a = gate.audit.anchor()
     print(f"audit anchor: seq {a['seq']} head {a['hash']}\n  (keep this somewhere you alone control; `audit-verify --anchor-seq N --anchor-hash H` then detects a rewritten log)")
     return 0

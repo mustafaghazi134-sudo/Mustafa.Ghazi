@@ -9,6 +9,10 @@
 Plus, outside this module and unchanged: the build switch (execution/submission.py, MAINNET_SUBMISSION_ENABLED = False)
 and the separate signer service. There is no override flag: the readiness requirements cannot be skipped.
 
+`status()["authenticated"]` is True only if a configured independent Attestor verified the record's signature. No attestor
+is wired in production, so it is always False today. Operational readiness (this gate) does not establish profitability;
+unattended LIVE authorisation also needs a separately approved strategy-evidence gate (docs/LIVE_GATE_REVIEW_2.md).
+
 See docs/LIVE_GATE_HARDENING.md for the threat model and for what a record can and cannot protect against.
 """
 from __future__ import annotations
@@ -57,20 +61,21 @@ class LiveGate:
         return A.config_digest(self.s)
 
     # ---- state ---------------------------------------------------------------------------------------------------
-    def _read_record(self) -> tuple[dict | None, list[str]]:
+    def _read_record(self) -> tuple[dict | None, A.RecordCheck]:
         f = self.s.armed_file
         if not f.exists():
-            return None, ["not armed (run: tradebot arm-live)"]
+            return None, A.RecordCheck(["not armed (run: tradebot arm-live)"], False, None)
         try:
             data = json.loads(f.read_text())
         except (ValueError, OSError):
-            return None, ["armed file is unreadable or not valid JSON"]
-        return data, A.validate_record(data, now=self.clock(), expected_digest=self.config_digest(),
-                                       require_external=self.s.engine.require_external_attestation, attestor=self.attestor)
+            return None, A.RecordCheck(["armed file is unreadable or not valid JSON"], False, None)
+        return data, A.check_record(data, now=self.clock(), expected_digest=self.config_digest(),
+                                    require_external=self.s.engine.require_external_attestation, attestor=self.attestor)
 
     def status(self) -> dict:
         armed_file = self.s.armed_file
-        data, problems = self._read_record()
+        data, check = self._read_record()
+        problems = check.problems
         valid = data is not None and not problems
         d = data if isinstance(data, dict) else {}
         exp = d.get("expires_at") if A._num(d.get("expires_at")) else None
@@ -80,7 +85,11 @@ class LiveGate:
                 "limits_match": valid or (data is not None and d.get("config_digest") == self.config_digest()),
                 "armed_by": "interactive challenge" if valid else None, "armed_ts": d.get("issued_at") if A._num(d.get("issued_at")) else None,
                 "expires_at": exp, "seconds_remaining": max(0.0, exp - self.clock()) if exp is not None and valid else None,
-                "authenticated": bool(valid and (d.get("attestation") or {}).get("scheme") not in (None, "none")),
+                # True ONLY when a configured independent verifier validated the signature (derived in attestation.check_record).
+                # A record hash that matches, or a record that names a scheme, never sets this.
+                "authenticated": bool(valid and check.authenticated),
+                "auth_scheme": check.scheme if valid else None,
+                "attestor_configured": self.attestor is not None,
                 "evidence_source": (d.get("readiness") or {}).get("source") if valid and isinstance(d.get("readiness"), dict) else None}
         info["armed"] = bool(self.s.is_live and info["env_ok"] and info["armed_file"] and valid)
         return info
@@ -184,7 +193,10 @@ class LiveGate:
         rec = A.build_record(digest=challenge.digest, readiness=res.summary(), ttl_hours=challenge.ttl_hours, now=now,
                              attestor=self.attestor)
         self._audit("armed", {"expires_at": rec["expires_at"], "config_digest": rec["config_digest"], "nonce": rec["nonce"],
-                              "record_hash": rec["record_hash"], "source": res.source, "authenticated": self.attestor is not None},
+                              "record_hash": rec["record_hash"], "source": res.source,
+                              "authenticated": A.check_record(rec, now=now, expected_digest=challenge.digest,
+                                                              require_external=self.s.engine.require_external_attestation,
+                                                              attestor=self.attestor).authenticated},
                     required=True)
         self._write_record(rec)
         log.warning("LIVE TRADING ARMED until %s UTC (%s paper trades, %.1f days, %.0f%% coverage)",

@@ -3,6 +3,11 @@
 Branch `claude/live-gate-hardening`, based on `e15b997`. For independent review; **not merged, not deployed**.
 Nothing here enables real-money submission: `MAINNET_SUBMISSION_ENABLED = False` and `tradebot_signer/` are untouched.
 
+> **Scope of this gate.** Operational readiness (trades, span, coverage) **does not establish profitability**. A strategy
+> with negative PAPER returns can pass it. Unattended LIVE authorisation additionally requires a **separately approved
+> strategy-evidence gate** (design: `docs/LIVE_GATE_REVIEW_2.md` section 1), which does not exist yet and which no number in
+> this document defines.
+
 ## 1. What changed
 
 | Requirement | Change |
@@ -33,6 +38,23 @@ Consequences, stated plainly:
 * `record_hash` detects corruption and careless edits. **It is not authentication.** The report and `status` therefore print `authenticated: False` until an independent attestor signs the record.
 * A signing key stored under the trading user's account (a key file, or an environment variable) would give Tier 1 hygiene but **no independent security boundary**, because the attacker in Tier 2/3 is that user. No key is generated or stored by this change.
 * The real boundary remains the **separate signer account**, which holds the wallet key, requires a TTY-typed activation of at most 24 h, enforces per-transaction and daily caps, and is behind the build switch. This change leaves it untouched.
+
+### What `authenticated` means (corrected after review of commit `12c5dea`)
+
+`status()["authenticated"]` is **True only if a configured, independent verifier validated the record's signature.**
+
+* It is derived in one place, `attestation.check_record`, and only after `attestor.verify(...) is True` with the record's
+  scheme equal to the verifier's. Nothing a record contains (a scheme name, an `authenticated` field, a matching
+  `record_hash`) can set it.
+* With **no** verifier configured (always, in production today), a record must carry exactly the scheme `"none"` and no
+  signature. Any other scheme is rejected as unsupported, so a record cannot claim an authentication that nobody checked.
+  The earlier code accepted such a record and reported `authenticated=True`; that defect is fixed and pinned by
+  `tests/test_live_gate_authentication.py`.
+* With a verifier configured, an unsigned record, a record under a different scheme, a bad or empty signature, a verifier
+  that returns anything other than the literal `True`, or one that raises, are all rejected and unauthenticated.
+* A verifier that declares scheme `""` or `"none"` can neither sign nor authenticate.
+* A matching `record_hash` proves only that the file is internally consistent. It is unkeyed, so any process able to write
+  the file can produce it.
 
 ### How to protect activation independently of the trading engine (options, none implemented)
 

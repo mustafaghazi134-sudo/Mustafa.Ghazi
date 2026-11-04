@@ -2,7 +2,14 @@
 
 Branch `claude/live-gate-hardening` (base `e15b997`). Not merged, not deployed. No thresholds changed, no key generated,
 signer untouched, real-money submission still disabled (`MAINNET_SUBMISSION_ENABLED = False`).
-Test output for this exact tree: `docs/live_gate_test_output.txt` (542 passed; baseline before this work: 320).
+Test output for this exact tree: `docs/live_gate_test_output.txt` (601 passed; baseline before this work: 320).
+
+**Correction after ChatGPT's review of `12c5dea` (third round):** `LiveGate.status()["authenticated"]` could be `True` for a
+record that merely named an attestation scheme when no verifier was configured. Fixed: `authenticated` is now derived only
+from a successful signature check by a configured verifier; unsupported or unverifiable schemes are rejected. See
+`docs/LIVE_GATE_HARDENING.md` ("What `authenticated` means") and `tests/test_live_gate_authentication.py`. Operational
+readiness still **does not establish profitability**, and unattended LIVE authorisation still needs a separately approved
+strategy-evidence gate (section 1 below). Thresholds, the submission switch and the PAPER workflows are unchanged.
 
 What this round changed in code (small): one optional setting, `[engine] max_single_outage_hours`, default **None = not
 enforced** (section 4); it is part of the activation binding. Everything else is tests and this document.
