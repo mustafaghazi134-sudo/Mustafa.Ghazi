@@ -179,6 +179,9 @@ class EngineConfig(BaseModel):
     # Measurement parameter, not a readiness threshold: two equity snapshots further apart than this many snapshot
     # intervals are an outage, and the gap earns no coverage. PENDING OWNER APPROVAL of the value 3.
     paper_gap_tolerance_intervals: float = Field(3.0, ge=1.0)
+    # Optional cap on any ONE outage, in hours. None = not enforced: no numeric value is approved yet (a 60-day record at
+    # 0.8 coverage can otherwise hide a single ~12-day outage). When the owner sets a value it is enforced and bound.
+    max_single_outage_hours: float | None = Field(None, gt=0)
     # If true, an activation record must carry a signature checked by an independent Attestor. No Attestor ships in
     # this change, so true means "nothing can be armed" until one is approved and installed.
     require_external_attestation: bool = False

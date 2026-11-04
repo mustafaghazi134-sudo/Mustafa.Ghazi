@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import json
+import time
 from pathlib import Path
 
 import httpx
@@ -224,6 +225,16 @@ def test_dry_run_builds_verifies_and_simulates_but_never_signs_or_submits(live):
     (lambda e: e["controls"].halt("test", source="test"), "live halt"),
     (lambda e: e["chain"].lamports.__setitem__(e["w"], 200_000_000), "wallet exposure"),
     (lambda e: e["chain"].lamports.__setitem__(e["w"], 1_000_000), "SOL reserve"),
+    # The activation is bound to the configuration: editing it AFTER arming blocks the next order, with no re-arm in between.
+    (lambda e: setattr(e["s"].risk, "max_position_pct", 11.0), "configuration changed"),
+    (lambda e: setattr(e["s"].live, "max_order_usd", 11.0), "configuration changed"),
+    (lambda e: setattr(e["s"].execution, "execute_max_retries", 9), "configuration changed"),
+    (lambda e: e["s"].strategies[0].params.update(lookback_days=31), "configuration changed"),
+    (lambda e: setattr(e["s"].universe, "symbols", e["s"].universe.symbols + ["JUP"]), "configuration changed"),
+    (lambda e: setattr(e["s"].engine, "min_paper_trades_before_live", 1), "configuration changed"),
+    (lambda e: setattr(e["s"].engine, "paper_gap_tolerance_intervals", 20.0), "configuration changed"),
+    (lambda e: setattr(e["s"].engine, "max_single_outage_hours", 24.0), "configuration changed"),
+    (lambda e: setattr(e["gate"], "clock", lambda: time.time() + 13 * 3600), "expired"),
 ])
 def test_every_gate_blocks_before_anything_is_signed(live, switch_on, breaker, needle):
     breaker(live)

@@ -70,6 +70,7 @@ def config_binding(settings) -> dict:
             "min_paper_coverage_before_live": e.min_paper_coverage_before_live,
             "equity_snapshot_interval_sec": e.equity_snapshot_interval_sec,
             "paper_gap_tolerance_intervals": e.paper_gap_tolerance_intervals,
+            "max_single_outage_hours": e.max_single_outage_hours,
             "require_external_attestation": e.require_external_attestation,
             "accept_imported_paper_evidence": e.accept_imported_paper_evidence,
             "evidence_allowed_repositories": sorted(e.evidence_allowed_repositories),

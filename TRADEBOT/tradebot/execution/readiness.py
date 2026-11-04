@@ -193,4 +193,7 @@ def evaluate(settings, ev: PaperEvidence, *, now: float | None = None) -> Readin
     if op.coverage < e.min_paper_coverage_before_live:
         reasons.append(f"engine covered {op.coverage:.0%} of the period, {op.outage_count} outage(s), longest "
                        f"{op.longest_gap_sec / 3600:.1f} h (need {e.min_paper_coverage_before_live:.0%})")
+    cap = e.max_single_outage_hours
+    if cap is not None and op.longest_gap_sec > cap * 3600.0:
+        reasons.append(f"longest single outage {op.longest_gap_sec / 3600:.1f} h exceeds the {cap:g} h limit")
     return ReadinessResult(not reasons, reasons, trades, op.span_days, op.coverage, ev.source, op, strategy_report(ev))
