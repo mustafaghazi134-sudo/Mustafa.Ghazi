@@ -1,21 +1,55 @@
-=== OPPORTUNITY LAB SNAPSHOT early  2026-11-05T04:08:01Z  run 41963760629  (PAPER, SIMULATED FUNDS) ===
-lab: RUNNING (pid 2248)
+=== OPPORTUNITY LAB SNAPSHOT final  2026-11-05T09:08:46Z  run 41963760629  (PAPER, SIMULATED FUNDS) ===
+lab: NOT RUNNING
 
 mode: paper (only)   data: data_lab
 lab halt: clear   main kill: False
 cash: $1,000.00   open positions: 0   pending intents: 0
-snapshots: 562002
-opportunities: 53408
-assessments: 4012
+snapshots: 637970
+opportunities: 59726
+assessments: 4474
 proposals: 0
 trades: 0
 
 PAPER SIMULATION (not real-money results)
 trades 0  net $0  expectancy None bps CI95 None  win None  PF None  maxDD $0.0  equity $1000.0
-funnel: {'opportunities': 53408, 'eligible': 8735, 'assessed': 4012, 'security_approved': 0, 'proposals': 0, 'accepted': 0, 'entries': 0, 'filled': 0, 'failed_entries': 0, 'rejection_rate': 1.0, 'failed_entry_rate': None}
-security rejections: {'holders_unknown': 3063, 'low_liquidity': 2154, 'price_impact': 1646, 'too_new': 1461, 'no_route': 1458, 'facts_missing': 949, 'round_trip_loss': 899, 'jupiter_sus': 102, 'liquidity_withdrawal': 97, 'token2022_transferHook': 50, 'honeypot_suspect': 30, 'token2022_transferFeeConfig': 8, 'transfer_fee': 8, 'no_sellers': 7}
+funnel: {'opportunities': 59726, 'eligible': 9861, 'assessed': 4474, 'security_approved': 0, 'proposals': 0, 'accepted': 0, 'entries': 0, 'filled': 0, 'failed_entries': 0, 'rejection_rate': 1.0, 'failed_entry_rate': None}
+security rejections: {'holders_unknown': 3404, 'low_liquidity': 2377, 'price_impact': 1818, 'too_new': 1639, 'no_route': 1625, 'facts_missing': 1070, 'round_trip_loss': 968, 'jupiter_sus': 109, 'liquidity_withdrawal': 105, 'token2022_transferHook': 50, 'honeypot_suspect': 33, 'no_sellers': 9, 'token2022_transferFeeConfig': 8, 'transfer_fee': 8}
 analyst rejections: {}
 exits: {}  liquidity-related: {'trades': 0, 'pnl_usd': 0, 'writeoffs': 0}
 naive basket benchmark: n=0 expectancy None bps CI None
 
 --- log tail
+{
+ "cycles": 624,
+ "opportunities": 1210,
+ "assessed": 500,
+ "security_rejected": 500,
+ "no_strategy": 710,
+ "analyst_rejected": 0,
+ "proposals_accepted": 0,
+ "scanner": {
+  "observations": 81154,
+  "discovered": 4562,
+  "opportunities": 1210,
+  "ineligible": 5491,
+  "source_errors": 0
+ },
+ "executor": {
+  "entries_submitted": 0,
+  "entries_filled": 0,
+  "entries_failed": 0,
+  "partial_fills": 0,
+  "exits": 0,
+  "unsellable_events": 0,
+  "writeoffs": 0,
+  "risk_rejections": 0,
+  "duplicates_blocked": 0
+ }
+}
+PAPER SIMULATION (not real-money results)
+trades 0  net $0  expectancy None bps CI95 None  win None  PF None  maxDD $0.0  equity $1000.0
+funnel: {'opportunities': 59726, 'eligible': 9861, 'assessed': 4474, 'security_approved': 0, 'proposals': 0, 'accepted': 0, 'entries': 0, 'filled': 0, 'failed_entries': 0, 'rejection_rate': 1.0, 'failed_entry_rate': None}
+security rejections: {'holders_unknown': 3404, 'low_liquidity': 2377, 'price_impact': 1818, 'too_new': 1639, 'no_route': 1625, 'facts_missing': 1070, 'round_trip_loss': 968, 'jupiter_sus': 109, 'liquidity_withdrawal': 105, 'token2022_transferHook': 50, 'honeypot_suspect': 33, 'no_sellers': 9, 'token2022_transferFeeConfig': 8, 'transfer_fee': 8}
+analyst rejections: {}
+exits: {}  liquidity-related: {'trades': 0, 'pnl_usd': 0, 'writeoffs': 0}
+naive basket benchmark: n=0 expectancy None bps CI None
