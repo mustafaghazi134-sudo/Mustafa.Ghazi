@@ -1,0 +1,19 @@
+=== SIGNAL STATE 2026-11-03T17:07:02Z  interval 4h  (read-only)
+
+BTC: 999 candles, last bar opened 2026-11-03 12:00 UTC, close 77,688.4700
+  tsmom   last daily check bar 2026-11-03 00:00: 30d momentum -9.32% (FAIL > 0), close 76,937.0500 vs EMA100d 77,261.4340 (FAIL above) -> no entry; next check 2026-11-04 00:00 UTC
+    engine entry_signal(): None
+  momentum bar 2026-11-03 12:00: EMA12 77,443.3704 vs EMA26 77,882.0514 (below; fresh cross up: no), close vs EMA100 79,808.7956: below -> no entry
+    engine entry_signal(): None
+
+ETH: 999 candles, last bar opened 2026-11-03 12:00 UTC, close 2,299.4100
+  tsmom   last daily check bar 2026-11-03 00:00: 30d momentum -16.37% (FAIL > 0), close 2,253.4900 vs EMA100d 2,319.9172 (FAIL above) -> no entry; next check 2026-11-04 00:00 UTC
+    engine entry_signal(): None
+  momentum bar 2026-11-03 12:00: EMA12 2,270.8974 vs EMA26 2,274.7843 (below; fresh cross up: no), close vs EMA100 2,341.8951: below -> no entry
+    engine entry_signal(): None
+
+SOL: 999 candles, last bar opened 2026-11-03 12:00 UTC, close 93.7500
+  tsmom   last daily check bar 2026-11-03 00:00: 30d momentum -23.70% (FAIL > 0), close 92.1500 vs EMA100d 98.8429 (FAIL above) -> no entry; next check 2026-11-04 00:00 UTC
+    engine entry_signal(): None
+  momentum bar 2026-11-03 12:00: EMA12 93.3963 vs EMA26 94.7949 (below; fresh cross up: no), close vs EMA100 100.0382: below -> no entry
+    engine entry_signal(): None

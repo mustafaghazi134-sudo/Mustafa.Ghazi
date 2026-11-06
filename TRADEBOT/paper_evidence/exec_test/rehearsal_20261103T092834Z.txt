@@ -1,0 +1,54 @@
+=== EXECUTION-TEST REHEARSAL (read-only) 2026-11-03T09:28:34Z  amount $6.00  rpc https://api.mainnet-beta.solana.com
+
+--- 1. quote-only round trip (no taker)
+reference SOL price 92.0430
+sample 1: buy {"router": "jupiterz", "inAmount": "6000000", "outAmount": "65141204", "otherAmountThreshold": "65141204", "slippageBps": 0, "feeBps": 2, "priceImpact": -0.01070057332631682, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": true}
+          sell {"router": "metis", "inAmount": "65141204", "outAmount": "5998571", "otherAmountThreshold": "5968578", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.011813810331783131, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065141 SOL -> $5.9986: swap round trip 2.4 bps ($0.0014); sell floor at slippage limit $5.9686
+sample 2: buy {"router": "jupiterz", "inAmount": "6000000", "outAmount": "65124995", "otherAmountThreshold": "65124995", "slippageBps": 0, "feeBps": 2, "priceImpact": -0.036884155788744155, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": true}
+          sell {"router": "jupiterz", "inAmount": "65124995", "outAmount": "5997896", "otherAmountThreshold": "5997896", "slippageBps": 0, "feeBps": 2, "priceImpact": -0.021711724702445923, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": true}
+          => $6.00 -> 0.065125 SOL -> $5.9979: swap round trip 3.5 bps ($0.0021); sell floor at slippage limit $5.9979
+sample 3: buy {"router": "jupiterz", "inAmount": "6000000", "outAmount": "65132323", "otherAmountThreshold": "65132323", "slippageBps": 0, "feeBps": 2, "priceImpact": -0.002107137076794377, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": true}
+          sell {"router": "metis", "inAmount": "65132323", "outAmount": "5996492", "otherAmountThreshold": "5966509", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.041127253663566996, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065132 SOL -> $5.9965: swap round trip 5.8 bps ($0.0035); sell floor at slippage limit $5.9665
+
+--- SOL SELL route decode #1 (taker BXEHNbKP, decode only)
+  route router=metis mode=manual prioritizationFeeLamports=476 rentFeeLamports=0 signatureFeeLamports=5000
+  ix0 ComputeBudge data=025c5a0400 accounts=[]
+  ix1 ComputeBudge data=038206000000000000 accounts=[]
+  ix2 111111111111 data=02000000e910e20300000000 accounts=['WALLET', 'bWRG9MGK']
+  ix3 TokenkegQfeZ data=11 accounts=['bWRG9MGK']
+  ix4 JUP6LkbZbjS1 data=bb64facc31c4af14e910e203 accounts=['WALLET', 'bWRG9MGK', 'TxnPTwwy', 'So111111', 'EPjFWdd5', 'Tokenkeg', 'Tokenkeg', 'JUP6LkbZ'] ...
+  ix5 TokenkegQfeZ data=09 accounts=['bWRG9MGK', 'WALLET', 'WALLET']
+  verifier: ok=False problems=["ix3: SyncNative on an account other than the wallet's wSOL account", '65147113 lamports leave the wallet to third parties (max 500000)']
+
+--- SOL SELL route decode #2 (taker BXEHNbKP, decode only)
+  route router=metis mode=manual prioritizationFeeLamports=2054 rentFeeLamports=0 signatureFeeLamports=5000
+  ix0 ComputeBudge data=024ccd0100 accounts=[]
+  ix1 ComputeBudge data=03ef43000000000000 accounts=[]
+  ix2 111111111111 data=02000000e910e20300000000 accounts=['WALLET', 'bWRG9MGK']
+  ix3 TokenkegQfeZ data=11 accounts=['bWRG9MGK']
+  ix4 JUP6LkbZbjS1 data=bb64facc31c4af14e910e203 accounts=['WALLET', 'bWRG9MGK', 'TxnPTwwy', 'So111111', 'EPjFWdd5', 'Tokenkeg', 'Tokenkeg', 'JUP6LkbZ'] ...
+  ix5 TokenkegQfeZ data=09 accounts=['bWRG9MGK', 'WALLET', 'WALLET']
+  verifier: ok=False problems=["ix3: SyncNative on an account other than the wallet's wSOL account", '65147113 lamports leave the wallet to third parties (max 500000)']
+
+--- SOL SELL route decode #3 (taker BXEHNbKP, decode only)
+  route router=metis mode=manual prioritizationFeeLamports=29 rentFeeLamports=0 signatureFeeLamports=5000
+  ix0 ComputeBudge data=02a3e00000 accounts=[]
+  ix1 ComputeBudge data=03f401000000000000 accounts=[]
+  ix2 111111111111 data=02000000e910e20300000000 accounts=['WALLET', 'bWRG9MGK']
+  ix3 TokenkegQfeZ data=11 accounts=['bWRG9MGK']
+  ix4 JUP6LkbZbjS1 data=bb64facc31c4af14e910e203 accounts=['WALLET', 'bWRG9MGK', 'TxnPTwwy', 'So111111', 'EPjFWdd5', 'Tokenkeg', 'Tokenkeg', 'JUP6LkbZ'] ...
+  ix5 TokenkegQfeZ data=09 accounts=['bWRG9MGK', 'WALLET', 'WALLET']
+  verifier: ok=False problems=["ix3: SyncNative on an account other than the wallet's wSOL account", '65147113 lamports leave the wallet to third parties (max 500000)']
+
+--- cbBTC BUY route decode (taker BXEHNbKP, decode only)
+  route router=jupiterz mode=manual prioritizationFeeLamports=23 rentFeeLamports=1488440 signatureFeeLamports=10000
+  ix0 ComputeBudge data=03be05000000000000 accounts=[]
+  ix1 ComputeBudge data=02253c0000 accounts=[]
+  ix2 ATokenGPvbdG data=01 accounts=['WALLET', 'BHMHnJ9H', 'WALLET', 'cbbtcf3a', '11111111', 'Tokenkeg']
+  ix3 61DFfeTKM7tr data=a860b7a35c0a28a0808d5b00 accounts=['WALLET', '6UWsi9WK', 'TxnPTwwy', '9MLV5gWL', 'BHMHnJ9H', '727xraLV', 'EPjFWdd5', 'Tokenkeg'] ...
+
+no funded wallet found among recent Jupiter swaps
+
+read-only: no signature was requested and nothing was submitted.

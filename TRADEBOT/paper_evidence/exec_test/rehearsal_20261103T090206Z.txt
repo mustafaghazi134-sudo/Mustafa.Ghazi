@@ -1,0 +1,16 @@
+=== EXECUTION-TEST REHEARSAL (read-only) 2026-11-03T09:02:07Z  amount $10.00
+funded-wallet search via https://solana-rpc.publicnode.com attempt 1: HTTPStatusError: Client error '403 Forbidden' for url 'https://solana-rpc.publicnode.com'
+For more information check: https://developer.m
+funded-wallet search via https://solana-rpc.publicnode.com attempt 2: HTTPStatusError: Client error '403 Forbidden' for url 'https://solana-rpc.publicnode.com'
+For more information check: https://developer.m
+funded-wallet search via https://solana-rpc.publicnode.com attempt 3: HTTPStatusError: Client error '403 Forbidden' for url 'https://solana-rpc.publicnode.com'
+For more information check: https://developer.m
+funded-wallet search via https://api.mainnet-beta.solana.com attempt 1: HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://d
+funded-wallet search via https://api.mainnet-beta.solana.com attempt 2: HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://d
+funded-wallet search via https://api.mainnet-beta.solana.com attempt 3: HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://d
+rpc used for balances and simulation: https://api.mainnet-beta.solana.com
+
+read-only: no signature was requested and nothing was submitted.

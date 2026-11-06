@@ -1,0 +1,37 @@
+[
+ {
+  "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+  "name": "WETH / SOL",
+  "dex": "orca",
+  "reserve_usd": "6288966.0837",
+  "vol24h_usd": "7760734.58773281"
+ },
+ {
+  "pool": "A59MtPWamLSFb4o6fLWprNAsmJbMSxQ3yKBoZcsXDCmk",
+  "name": "WETH / USDC",
+  "dex": "zerofi",
+  "reserve_usd": "93906.6884",
+  "vol24h_usd": "4931132.95384014"
+ },
+ {
+  "pool": "3nLR2KnqC4ZHmPbjJgZCmfKazPjyxZEeqQv77sctcs4P",
+  "name": "WETH / SOL",
+  "dex": "pancakeswap-v3-solana",
+  "reserve_usd": "189192.8812",
+  "vol24h_usd": "539260.805801432"
+ },
+ {
+  "pool": "AU971DrPyhhrpRnmEBp5pDTWL2ny7nofb5vYBjDJkR2E",
+  "name": "WETH / USDC",
+  "dex": "orca",
+  "reserve_usd": "204828.024",
+  "vol24h_usd": "180534.205516253"
+ },
+ {
+  "pool": "3potGhhaNyzvCNq1CGh2wLbZLLMjpdPtG1Hpj8q2DDVR",
+  "name": "WETH / SOL",
+  "dex": "meteora",
+  "reserve_usd": "102094.6294",
+  "vol24h_usd": "249940.846328435"
+ }
+]

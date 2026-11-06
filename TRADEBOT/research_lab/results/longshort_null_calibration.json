@@ -1,0 +1,80 @@
+{
+ "seeds": 10,
+ "per_config": {
+  "C1_tsmom_ls_1d|long_short_perp": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 4
+  },
+  "C1_tsmom_ls_1d|long_only_spot": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 1,
+   "REJECTED": 9,
+   "E_ann_ret_pos": 6
+  },
+  "C2_ema_ls_4h|long_short_perp": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 1
+  },
+  "C2_ema_ls_4h|long_only_spot": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 2
+  },
+  "C3_donchian_ls_1d|long_short_perp": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 1,
+   "REJECTED": 9,
+   "E_ann_ret_pos": 4
+  },
+  "C3_donchian_ls_1d|long_only_spot": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 6
+  },
+  "C4_ewmac_ls_1d|long_short_perp": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 1,
+   "REJECTED": 9,
+   "E_ann_ret_pos": 4
+  },
+  "C4_ewmac_ls_1d|long_only_spot": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 9
+  },
+  "C5_ema_ls_1h|long_short_perp": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 1
+  },
+  "C5_ema_ls_1h|long_only_spot": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 0
+  },
+  "C6_meanrev_ls_1h|long_short_perp": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 0
+  },
+  "C6_meanrev_ls_1h|long_only_spot": {
+   "TIER_A": 0,
+   "TIER_B_forward_paper_only": 0,
+   "REJECTED": 10,
+   "E_ann_ret_pos": 0
+  }
+ },
+ "total_tier_A": 0,
+ "total_tier_A_or_B": 3,
+ "configs_x_seeds": 120
+}

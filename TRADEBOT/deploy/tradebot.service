@@ -1,0 +1,23 @@
+[Unit]
+Description=tradebot autonomous trading bot (paper by default)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tradebot
+WorkingDirectory=/opt/tradebot
+EnvironmentFile=/opt/tradebot/.env
+Environment=TRADEBOT_CONFIG=/opt/tradebot/config.toml
+ExecStart=/opt/tradebot/.venv/bin/tradebot run
+Restart=always
+RestartSec=15
+TimeoutStopSec=90
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/tradebot/data
+
+[Install]
+WantedBy=multi-user.target

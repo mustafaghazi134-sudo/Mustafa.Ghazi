@@ -1,0 +1,211 @@
+{
+ "llama_daily": {
+  "cbBTC": {
+   "n": 0
+  },
+  "WETH_wormhole": {
+   "n": 0
+  },
+  "SOL": {
+   "n": 0
+  }
+ },
+ "geckoterminal": {
+  "cbBTC": {
+   "CeaZcxBN_1d": {
+    "n": 184,
+    "first": "2026-05-04 00:00",
+    "last": "2026-11-03 00:00",
+    "mean_bps": -4.2,
+    "median_abs_bps": 18.7,
+    "p95_abs_bps": 48.1,
+    "p99_abs_bps": 71.9,
+    "max_abs_bps": 144.8,
+    "max_at": "2026-07-19 00:00",
+    "share_over_50bps_pct": 4.89,
+    "share_over_100bps_pct": 0.54,
+    "median_daily_volume_usd": 4427239.0
+   },
+   "HxA6SKW5_1d": {
+    "n": 184,
+    "first": "2026-05-04 00:00",
+    "last": "2026-11-03 00:00",
+    "mean_bps": -5.1,
+    "median_abs_bps": 16.5,
+    "p95_abs_bps": 45.0,
+    "p99_abs_bps": 58.9,
+    "max_abs_bps": 64.2,
+    "max_at": "2026-05-28 00:00",
+    "share_over_50bps_pct": 3.8,
+    "share_over_100bps_pct": 0.0,
+    "median_daily_volume_usd": 11260196.0
+   },
+   "CeaZcxBN_1h": {
+    "n": 989,
+    "first": "2026-09-22 16:00",
+    "last": "2026-11-03 07:00",
+    "mean_bps": -7.3,
+    "median_abs_bps": 18.6,
+    "p95_abs_bps": 57.5,
+    "p99_abs_bps": 82.3,
+    "max_abs_bps": 151.5,
+    "max_at": "2026-11-01 03:00",
+    "share_over_50bps_pct": 7.18,
+    "share_over_100bps_pct": 0.61,
+    "median_hourly_volume_usd": 161503.0,
+    "hours_with_zero_volume_pct": 0.0
+   },
+   "HxA6SKW5_1h": {
+    "n": 1000,
+    "first": "2026-09-22 16:00",
+    "last": "2026-11-03 07:00",
+    "mean_bps": -7.2,
+    "median_abs_bps": 17.8,
+    "p95_abs_bps": 50.7,
+    "p99_abs_bps": 69.0,
+    "max_abs_bps": 125.5,
+    "max_at": "2026-11-01 03:00",
+    "share_over_50bps_pct": 5.2,
+    "share_over_100bps_pct": 0.4,
+    "median_hourly_volume_usd": 313103.0,
+    "hours_with_zero_volume_pct": 0.0
+   }
+  },
+  "WETH_wormhole": {
+   "A59MtPWa_1d": {
+    "n": 138,
+    "first": "2026-06-17 00:00",
+    "last": "2026-11-03 00:00",
+    "mean_bps": -5.1,
+    "median_abs_bps": 9.4,
+    "p95_abs_bps": 46.0,
+    "p99_abs_bps": 85.5,
+    "max_abs_bps": 248.1,
+    "max_at": "2026-07-01 00:00",
+    "share_over_50bps_pct": 4.35,
+    "share_over_100bps_pct": 0.72,
+    "median_daily_volume_usd": 874489.0
+   },
+   "HktfL7iw_1d": {
+    "n": 184,
+    "first": "2026-05-04 00:00",
+    "last": "2026-11-03 00:00",
+    "mean_bps": -5.5,
+    "median_abs_bps": 14.7,
+    "p95_abs_bps": 36.1,
+    "p99_abs_bps": 43.9,
+    "max_abs_bps": 79.5,
+    "max_at": "2026-10-26 00:00",
+    "share_over_50bps_pct": 0.54,
+    "share_over_100bps_pct": 0.0,
+    "median_daily_volume_usd": 7260947.0
+   },
+   "A59MtPWa_1h": {
+    "n": 992,
+    "first": "2026-09-22 16:00",
+    "last": "2026-11-03 07:00",
+    "mean_bps": -4.9,
+    "median_abs_bps": 11.5,
+    "p95_abs_bps": 43.5,
+    "p99_abs_bps": 59.9,
+    "max_abs_bps": 90.8,
+    "max_at": "2026-09-29 00:00",
+    "share_over_50bps_pct": 2.42,
+    "share_over_100bps_pct": 0.0,
+    "median_hourly_volume_usd": 14189.0,
+    "hours_with_zero_volume_pct": 0.0
+   },
+   "HktfL7iw_1h": {
+    "n": 1000,
+    "first": "2026-09-22 16:00",
+    "last": "2026-11-03 07:00",
+    "mean_bps": -5.9,
+    "median_abs_bps": 13.8,
+    "p95_abs_bps": 40.6,
+    "p99_abs_bps": 55.0,
+    "max_abs_bps": 427.9,
+    "max_at": "2026-10-04 18:00",
+    "share_over_50bps_pct": 1.6,
+    "share_over_100bps_pct": 0.1,
+    "median_hourly_volume_usd": 273224.0,
+    "hours_with_zero_volume_pct": 0.0
+   }
+  }
+ },
+ "pools": {
+  "cbBTC": [
+   {
+    "pool": "HxA6SKW5qA4o12fjVgTpXdq2YnZ5Zv1s7SB4FFomsyLM",
+    "name": "cbBTC / USDC",
+    "dex": "orca",
+    "reserve_usd": "4972161.5155",
+    "vol24h_usd": "10558861.7019258"
+   },
+   {
+    "pool": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+    "name": "cbBTC / SOL",
+    "dex": "orca",
+    "reserve_usd": "7362628.5263",
+    "vol24h_usd": "3377250.86435175"
+   },
+   {
+    "pool": "7ubS3GccjhQY99AYNKXjNJqnXjaokEdfdV915xnCb96r",
+    "name": "cbBTC / USDC",
+    "dex": "meteora",
+    "reserve_usd": "1362743.5514",
+    "vol24h_usd": "3551486.66801569"
+   },
+   {
+    "pool": "4v8ufj8Hj7UvFgtofQJAtzUud5xomwZfEqfCTHZ4wM72",
+    "name": "cbBTC / WBTC",
+    "dex": "orca",
+    "reserve_usd": "1221222.7848",
+    "vol24h_usd": "1757679.42491395"
+   },
+   {
+    "pool": "H2USRSaWuUchkbdmSJgKNfAm7ocyD4ZnCm69oRGyecKw",
+    "name": "cbBTC / SOL",
+    "dex": "meteora",
+    "reserve_usd": "1607930.7419",
+    "vol24h_usd": "888689.361640489"
+   }
+  ],
+  "WETH_wormhole": [
+   {
+    "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+    "name": "WETH / SOL",
+    "dex": "orca",
+    "reserve_usd": "6288966.0837",
+    "vol24h_usd": "7760734.58773281"
+   },
+   {
+    "pool": "A59MtPWamLSFb4o6fLWprNAsmJbMSxQ3yKBoZcsXDCmk",
+    "name": "WETH / USDC",
+    "dex": "zerofi",
+    "reserve_usd": "93906.6884",
+    "vol24h_usd": "4931132.95384014"
+   },
+   {
+    "pool": "3nLR2KnqC4ZHmPbjJgZCmfKazPjyxZEeqQv77sctcs4P",
+    "name": "WETH / SOL",
+    "dex": "pancakeswap-v3-solana",
+    "reserve_usd": "189192.8812",
+    "vol24h_usd": "539260.805801432"
+   },
+   {
+    "pool": "AU971DrPyhhrpRnmEBp5pDTWL2ny7nofb5vYBjDJkR2E",
+    "name": "WETH / USDC",
+    "dex": "orca",
+    "reserve_usd": "204828.024",
+    "vol24h_usd": "180534.205516253"
+   },
+   {
+    "pool": "3potGhhaNyzvCNq1CGh2wLbZLLMjpdPtG1Hpj8q2DDVR",
+    "name": "WETH / SOL",
+    "dex": "meteora",
+    "reserve_usd": "102094.6294",
+    "vol24h_usd": "249940.846328435"
+   }
+  ]
+ }
+}

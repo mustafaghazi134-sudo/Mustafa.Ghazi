@@ -1,0 +1,20 @@
+=== EXECUTION-TEST REHEARSAL (read-only) 2026-11-03T09:20:30Z  amount $6.00  rpc https://api.mainnet-beta.solana.com
+
+--- 1. quote-only round trip (no taker)
+reference SOL price 92.0167
+sample 1: buy {"router": "metis", "inAmount": "6000000", "outAmount": "65154150", "otherAmountThreshold": "64828379", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.011732612187370825, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          sell {"router": "metis", "inAmount": "65154150", "outAmount": "5996805", "otherAmountThreshold": "5966820", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.04152225945829912, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065154 SOL -> $5.9968: swap round trip 5.3 bps ($0.0032); sell floor at slippage limit $5.9668
+sample 2: buy {"router": "metis", "inAmount": "6000000", "outAmount": "65180806", "otherAmountThreshold": "64854901", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.000903616047786819, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          sell {"router": "metis", "inAmount": "65180806", "outAmount": "5998555", "otherAmountThreshold": "5968562", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.023179926743074144, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065181 SOL -> $5.9986: swap round trip 2.4 bps ($0.0014); sell floor at slippage limit $5.9686
+sample 3: buy {"router": "metis", "inAmount": "6000000", "outAmount": "65178432", "otherAmountThreshold": "64852539", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.01080973095824176, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          sell {"router": "metis", "inAmount": "65178432", "outAmount": "5999173", "otherAmountThreshold": "5969177", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.0029739238482391146, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065178 SOL -> $5.9992: swap round trip 1.4 bps ($0.0008); sell floor at slippage limit $5.9692
+
+--- 2. funded wallet from a recent Jupiter swap (simulation only): BXEHNbKPGeUHaqpaiHR6hc9mQkTZ2WFCXh6kkHkhFnCY
+balances: {"SOL": 2.455659, "USDC": 867.847622, "PYTH": 0.0, "RAY": 0.0, "JUP": 0.068116, "ETH": 2e-06, "BTC": 0.0, "BONK": 0.0, "WIF": 0.0}
+BUY  verify+simulate: {"ok": true, "problems": [], "router": "jupiterz", "mode": "manual", "inAmount": "6000000", "outAmount": "65164208", "otherAmountThreshold": "65164208", "our_min_out": 64570395, "feeBps": 2, "priceImpact_bps": 2.2451378994601576, "programs": ["61DFfeTKM7trxYcPQCM78bJ794ddZprZpAwAnLiwTpYH", "ComputeBudget111111111111111111111111111111"], "signers": ["8ZgAmj7fSo2eTcwidgg4uUYLZRXi8vyeFuywmA8FBQAv", "BXEHNbKPGeUHaqpaiHR6hc9mQkTZ2WFCXh6kkHkhFnCY"], "priority_fee_lamports": 0, "wallet_sol_cost_lamports": 0, "simulation": {"err": null, "units": 21718, "native_delta_lamports": 65164208, "token_deltas": {"7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs": 0, "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": 0, "cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij": 0}}, "blocks_remaining": null, "timings_ms": {"order": 380.3, "verify_simulate": 119.1}}
+SELL verify+simulate: {"ok": false, "problems": ["ix3: SyncNative on an account other than the wallet's wSOL account", "65164208 lamports leave the wallet to third parties (max 500000)"], "router": null, "mode": null, "inAmount": null, "outAmount": null, "otherAmountThreshold": null, "our_min_out": null, "feeBps": null, "priceImpact_bps": null, "programs": null, "signers": null, "priority_fee_lamports": null, "wallet_sol_cost_lamports": null, "simulation": null, "blocks_remaining": null, "timings_ms": null}
+
+read-only: no signature was requested and nothing was submitted.

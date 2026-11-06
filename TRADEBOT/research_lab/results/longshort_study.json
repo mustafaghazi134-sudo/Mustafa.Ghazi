@@ -1,0 +1,1936 @@
+{
+ "preregistration": "docs/LONGSHORT_PREREGISTRATION.md",
+ "seed": 20261103,
+ "costs_bps_per_side": {
+  "perp": {
+   "base": 8.0,
+   "stress": 16.0
+  },
+  "spot": {
+   "base": 26.0,
+   "stress": 51.0
+  }
+ },
+ "windows": {
+  "E": [
+   "2024-01-01",
+   "2026-11-01"
+  ],
+  "P_end": "2024-01-01"
+ },
+ "data": {
+  "BTCUSDT": {
+   "first": "2019-01-01 00:00:00+00:00",
+   "last": "2026-10-24 23:00:00+00:00",
+   "hourly_bars": 68437,
+   "blocks": [
+    [
+     "2019-01-01",
+     "2026-10-24"
+    ]
+   ]
+  },
+  "ETHUSDT": {
+   "first": "2019-09-01 00:00:00+00:00",
+   "last": "2026-10-24 23:00:00+00:00",
+   "hourly_bars": 62629,
+   "blocks": [
+    [
+     "2019-09-01",
+     "2026-10-24"
+    ]
+   ]
+  },
+  "SOLUSDT": {
+   "first": "2022-01-01 00:00:00+00:00",
+   "last": "2026-10-24 23:00:00+00:00",
+   "hourly_bars": 42072,
+   "blocks": [
+    [
+     "2022-03-01",
+     "2026-10-24"
+    ]
+   ]
+  }
+ },
+ "funding": {
+  "BTCUSDT": {
+   "source": "binance data.binance.vision",
+   "first": "2020-01-01 00:00:00+00:00",
+   "last": "2026-10-31 16:00:00+00:00",
+   "events": 7488,
+   "mean_per_8h_bps": 1.063
+  },
+  "ETHUSDT": {
+   "source": "binance data.binance.vision",
+   "first": "2020-01-01 00:00:00+00:00",
+   "last": "2026-10-31 16:00:00+00:00",
+   "events": 7488,
+   "mean_per_8h_bps": 1.252
+  },
+  "SOLUSDT": {
+   "source": "binance data.binance.vision",
+   "first": "2020-09-13 16:00:00+00:00",
+   "last": "2026-10-31 16:00:00+00:00",
+   "events": 6793,
+   "mean_per_8h_bps": 0.024
+  }
+ },
+ "candidates": {
+  "C1_tsmom_ls_1d": {
+   "bar": "1D",
+   "lookahead": {
+    "BTCUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "ETHUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "SOLUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    }
+   },
+   "configs": {
+    "long_short_perp": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -14.1,
+      "ann_return_pct": -5.3,
+      "ann_vol_pct": 48.3,
+      "sharpe": 0.13,
+      "max_drawdown_pct": -52.7,
+      "p_boot": 0.405,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -28.5,
+       "ann_return_pct": -11.2,
+       "ann_vol_pct": 48.4,
+       "sharpe": -0.0,
+       "max_drawdown_pct": -56.7
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": 3.2,
+       "ann_return_pct": 1.1,
+       "ann_vol_pct": 48.8,
+       "sharpe": 0.27,
+       "max_drawdown_pct": -50.7
+      },
+      "gross_no_cost": {
+       "days": 1028,
+       "total_return_pct": 7.9,
+       "ann_return_pct": 2.7,
+       "ann_vol_pct": 48.4,
+       "sharpe": 0.3,
+       "max_drawdown_pct": -50.9
+      },
+      "components_pct": {
+       "gross": 40.6,
+       "cost": -11.2,
+       "funding": -11.7,
+       "long": 52.5,
+       "short": -34.7
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 22.7,
+        "round_trips": 74,
+        "long_eps": 34,
+        "short_eps": 40,
+        "time_in_market_pct": 73.8
+       },
+       "ETHUSDT": {
+        "net_pct": 72.7,
+        "round_trips": 69,
+        "long_eps": 33,
+        "short_eps": 36,
+        "time_in_market_pct": 72.6
+       },
+       "SOLUSDT": {
+        "net_pct": -42.1,
+        "round_trips": 68,
+        "long_eps": 24,
+        "short_eps": 44,
+        "time_in_market_pct": 77.8
+       }
+      },
+      "round_trips": 211,
+      "round_trips_per_day": 0.205,
+      "fills_per_day": 0.394,
+      "direction_null_percentile": 70.1
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 455.4,
+      "ann_return_pct": 45.3,
+      "ann_vol_pct": 68.9,
+      "sharpe": 0.89,
+      "max_drawdown_pct": -58.1,
+      "p_boot": 0.0242,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 301.4,
+       "ann_return_pct": 35.3,
+       "ann_vol_pct": 68.9,
+       "sharpe": 0.79,
+       "max_drawdown_pct": -61.2
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 251.1,
+       "ann_return_pct": 31.5,
+       "ann_vol_pct": 65.3,
+       "sharpe": 0.75,
+       "max_drawdown_pct": -66.6
+      },
+      "gross_no_cost": {
+       "days": 1676,
+       "total_return_pct": 1199.2,
+       "ann_return_pct": 74.8,
+       "ann_vol_pct": 68.5,
+       "sharpe": 1.16,
+       "max_drawdown_pct": -49.9
+      },
+      "components_pct": {
+       "gross": 363.8,
+       "cost": -14.4,
+       "funding": -68.7,
+       "long": 293.1,
+       "short": -12.3
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 250.8,
+        "round_trips": 90,
+        "long_eps": 42,
+        "short_eps": 48,
+        "time_in_market_pct": 76.9
+       },
+       "ETHUSDT": {
+        "net_pct": 239.3,
+        "round_trips": 76,
+        "long_eps": 40,
+        "short_eps": 36,
+        "time_in_market_pct": 80.6
+       },
+       "SOLUSDT": {
+        "net_pct": 99.2,
+        "round_trips": 31,
+        "long_eps": 12,
+        "short_eps": 19,
+        "time_in_market_pct": 82.1
+       }
+      },
+      "round_trips": 197,
+      "round_trips_per_day": 0.118,
+      "fills_per_day": 0.226,
+      "direction_null_percentile": 98.8
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": true,
+       "4_P_pos": true,
+       "5_two_of_three_assets": true,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true,
+       "6_beats_direction_null_p95": false,
+       "8_short_leg_pos": false
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    },
+    "long_only_spot": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": 49.1,
+      "ann_return_pct": 15.3,
+      "ann_vol_pct": 32.4,
+      "sharpe": 0.6,
+      "max_drawdown_pct": -32.0,
+      "p_boot": 0.1712,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": 28.5,
+       "ann_return_pct": 9.3,
+       "ann_vol_pct": 32.4,
+       "sharpe": 0.44,
+       "max_drawdown_pct": -35.1
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": 47.4,
+       "ann_return_pct": 14.8,
+       "ann_vol_pct": 33.3,
+       "sharpe": 0.58,
+       "max_drawdown_pct": -30.0
+      },
+      "components_pct": {
+       "gross": 70.2,
+       "cost": -15.5,
+       "funding": 0.0,
+       "long": 54.7,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 69.1,
+        "round_trips": 34,
+        "long_eps": 34,
+        "short_eps": 0,
+        "time_in_market_pct": 45.1
+       },
+       "ETHUSDT": {
+        "net_pct": 49.5,
+        "round_trips": 33,
+        "long_eps": 33,
+        "short_eps": 0,
+        "time_in_market_pct": 34.8
+       },
+       "SOLUSDT": {
+        "net_pct": 45.6,
+        "round_trips": 24,
+        "long_eps": 24,
+        "short_eps": 0,
+        "time_in_market_pct": 39.1
+       }
+      },
+      "round_trips": 91,
+      "round_trips_per_day": 0.089,
+      "fills_per_day": 0.177
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 1558.3,
+      "ann_return_pct": 84.3,
+      "ann_vol_pct": 49.0,
+      "sharpe": 1.49,
+      "max_drawdown_pct": -49.9,
+      "p_boot": 0.0032,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 1225.1,
+       "ann_return_pct": 75.6,
+       "ann_vol_pct": 49.0,
+       "sharpe": 1.39,
+       "max_drawdown_pct": -52.6
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 1481.2,
+       "ann_return_pct": 82.4,
+       "ann_vol_pct": 49.2,
+       "sharpe": 1.47,
+       "max_drawdown_pct": -45.7
+      },
+      "components_pct": {
+       "gross": 359.6,
+       "cost": -23.3,
+       "funding": 0.0,
+       "long": 336.3,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 272.8,
+        "round_trips": 42,
+        "long_eps": 42,
+        "short_eps": 0,
+        "time_in_market_pct": 44.9
+       },
+       "ETHUSDT": {
+        "net_pct": 331.3,
+        "round_trips": 40,
+        "long_eps": 40,
+        "short_eps": 0,
+        "time_in_market_pct": 51.8
+       },
+       "SOLUSDT": {
+        "net_pct": 137.9,
+        "round_trips": 12,
+        "long_eps": 12,
+        "short_eps": 0,
+        "time_in_market_pct": 34.9
+       }
+      },
+      "round_trips": 94,
+      "round_trips_per_day": 0.056,
+      "fills_per_day": 0.11
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": true,
+       "1_p_bonferroni": false,
+       "2_stress_pos": true,
+       "3_delay1_pos": true,
+       "4_P_pos": true,
+       "5_two_of_three_assets": true,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    }
+   }
+  },
+  "C2_ema_ls_4h": {
+   "bar": "4h",
+   "lookahead": {
+    "BTCUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "ETHUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "SOLUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    }
+   },
+   "configs": {
+    "long_short_perp": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -15.9,
+      "ann_return_pct": -6.0,
+      "ann_vol_pct": 49.2,
+      "sharpe": 0.12,
+      "max_drawdown_pct": -51.0,
+      "p_boot": 0.4228,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -51.5,
+       "ann_return_pct": -22.6,
+       "ann_vol_pct": 49.4,
+       "sharpe": -0.27,
+       "max_drawdown_pct": -66.4
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -29.4,
+       "ann_return_pct": -11.6,
+       "ann_vol_pct": 48.9,
+       "sharpe": -0.01,
+       "max_drawdown_pct": -56.9
+      },
+      "gross_no_cost": {
+       "days": 1028,
+       "total_return_pct": 37.7,
+       "ann_return_pct": 12.0,
+       "ann_vol_pct": 48.9,
+       "sharpe": 0.48,
+       "max_drawdown_pct": -47.5
+      },
+      "components_pct": {
+       "gross": 65.5,
+       "cost": -41.2,
+       "funding": -7.8,
+       "long": 54.3,
+       "short": -37.8
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -7.7,
+        "round_trips": 249,
+        "long_eps": 125,
+        "short_eps": 124,
+        "time_in_market_pct": 83.4
+       },
+       "ETHUSDT": {
+        "net_pct": 36.3,
+        "round_trips": 256,
+        "long_eps": 128,
+        "short_eps": 128,
+        "time_in_market_pct": 81.7
+       },
+       "SOLUSDT": {
+        "net_pct": 20.9,
+        "round_trips": 269,
+        "long_eps": 129,
+        "short_eps": 140,
+        "time_in_market_pct": 82.5
+       }
+      },
+      "round_trips": 774,
+      "round_trips_per_day": 0.753,
+      "fills_per_day": 1.425,
+      "direction_null_percentile": 84.2
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 148.1,
+      "ann_return_pct": 21.9,
+      "ann_vol_pct": 71.3,
+      "sharpe": 0.63,
+      "max_drawdown_pct": -60.1,
+      "p_boot": 0.0532,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": -7.1,
+       "ann_return_pct": -1.6,
+       "ann_vol_pct": 71.5,
+       "sharpe": 0.33,
+       "max_drawdown_pct": -72.6
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 134.7,
+       "ann_return_pct": 20.4,
+       "ann_vol_pct": 71.7,
+       "sharpe": 0.61,
+       "max_drawdown_pct": -55.3
+      },
+      "gross_no_cost": {
+       "days": 1676,
+       "total_return_pct": 727.6,
+       "ann_return_pct": 58.4,
+       "ann_vol_pct": 70.8,
+       "sharpe": 0.99,
+       "max_drawdown_pct": -50.3
+      },
+      "components_pct": {
+       "gross": 323.3,
+       "cost": -63.6,
+       "funding": -54.6,
+       "long": 247.0,
+       "short": -42.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 118.6,
+        "round_trips": 403,
+        "long_eps": 199,
+        "short_eps": 204,
+        "time_in_market_pct": 84.1
+       },
+       "ETHUSDT": {
+        "net_pct": 135.1,
+        "round_trips": 347,
+        "long_eps": 173,
+        "short_eps": 174,
+        "time_in_market_pct": 81.6
+       },
+       "SOLUSDT": {
+        "net_pct": 150.4,
+        "round_trips": 115,
+        "long_eps": 55,
+        "short_eps": 60,
+        "time_in_market_pct": 85.3
+       }
+      },
+      "round_trips": 865,
+      "round_trips_per_day": 0.516,
+      "fills_per_day": 0.985,
+      "direction_null_percentile": 98.9
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": true,
+       "5_two_of_three_assets": true,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true,
+       "6_beats_direction_null_p95": false,
+       "8_short_leg_pos": false
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    },
+    "long_only_spot": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": 5.6,
+      "ann_return_pct": 2.0,
+      "ann_vol_pct": 32.2,
+      "sharpe": 0.22,
+      "max_drawdown_pct": -46.8,
+      "p_boot": 0.386,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -44.4,
+       "ann_return_pct": -18.8,
+       "ann_vol_pct": 32.7,
+       "sharpe": -0.48,
+       "max_drawdown_pct": -63.6
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -19.8,
+       "ann_return_pct": -7.5,
+       "ann_vol_pct": 32.2,
+       "sharpe": -0.08,
+       "max_drawdown_pct": -53.6
+      },
+      "components_pct": {
+       "gross": 86.1,
+       "cost": -66.2,
+       "funding": 0.0,
+       "long": 19.8,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 3.9,
+        "round_trips": 125,
+        "long_eps": 125,
+        "short_eps": 0,
+        "time_in_market_pct": 44.6
+       },
+       "ETHUSDT": {
+        "net_pct": 28.8,
+        "round_trips": 128,
+        "long_eps": 128,
+        "short_eps": 0,
+        "time_in_market_pct": 39.2
+       },
+       "SOLUSDT": {
+        "net_pct": 26.8,
+        "round_trips": 129,
+        "long_eps": 129,
+        "short_eps": 0,
+        "time_in_market_pct": 40.2
+       }
+      },
+      "round_trips": 382,
+      "round_trips_per_day": 0.372,
+      "fills_per_day": 0.743
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 508.7,
+      "ann_return_pct": 48.2,
+      "ann_vol_pct": 46.1,
+      "sharpe": 1.08,
+      "max_drawdown_pct": -46.7,
+      "p_boot": 0.0242,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 127.1,
+       "ann_return_pct": 19.6,
+       "ann_vol_pct": 46.6,
+       "sharpe": 0.62,
+       "max_drawdown_pct": -63.1
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 490.5,
+       "ann_return_pct": 47.2,
+       "ann_vol_pct": 46.2,
+       "sharpe": 1.07,
+       "max_drawdown_pct": -53.7
+      },
+      "components_pct": {
+       "gross": 330.5,
+       "cost": -101.3,
+       "funding": 0.0,
+       "long": 229.2,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 146.7,
+        "round_trips": 199,
+        "long_eps": 199,
+        "short_eps": 0,
+        "time_in_market_pct": 44.2
+       },
+       "ETHUSDT": {
+        "net_pct": 190.9,
+        "round_trips": 173,
+        "long_eps": 173,
+        "short_eps": 0,
+        "time_in_market_pct": 45.7
+       },
+       "SOLUSDT": {
+        "net_pct": 132.4,
+        "round_trips": 55,
+        "long_eps": 55,
+        "short_eps": 0,
+        "time_in_market_pct": 42.5
+       }
+      },
+      "round_trips": 427,
+      "round_trips_per_day": 0.255,
+      "fills_per_day": 0.51
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": true,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": true,
+       "5_two_of_three_assets": true,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    }
+   }
+  },
+  "C3_donchian_ls_1d": {
+   "bar": "1D",
+   "lookahead": {
+    "BTCUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "ETHUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "SOLUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    }
+   },
+   "configs": {
+    "long_short_perp": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -42.3,
+      "ann_return_pct": -17.7,
+      "ann_vol_pct": 46.4,
+      "sharpe": -0.19,
+      "max_drawdown_pct": -58.3,
+      "p_boot": 0.6266,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -49.7,
+       "ann_return_pct": -21.7,
+       "ann_vol_pct": 46.4,
+       "sharpe": -0.29,
+       "max_drawdown_pct": -62.8
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -43.2,
+       "ann_return_pct": -18.2,
+       "ann_vol_pct": 46.8,
+       "sharpe": -0.2,
+       "max_drawdown_pct": -58.1
+      },
+      "gross_no_cost": {
+       "days": 1028,
+       "total_return_pct": -33.2,
+       "ann_return_pct": -13.3,
+       "ann_vol_pct": 46.4,
+       "sharpe": -0.08,
+       "max_drawdown_pct": -54.5
+      },
+      "components_pct": {
+       "gross": -9.8,
+       "cost": -5.0,
+       "funding": -9.6,
+       "long": 3.1,
+       "short": -27.6
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -6.1,
+        "round_trips": 32,
+        "long_eps": 17,
+        "short_eps": 15,
+        "time_in_market_pct": 71.6
+       },
+       "ETHUSDT": {
+        "net_pct": -8.6,
+        "round_trips": 31,
+        "long_eps": 19,
+        "short_eps": 12,
+        "time_in_market_pct": 73.1
+       },
+       "SOLUSDT": {
+        "net_pct": -58.9,
+        "round_trips": 33,
+        "long_eps": 17,
+        "short_eps": 16,
+        "time_in_market_pct": 74.7
+       }
+      },
+      "round_trips": 96,
+      "round_trips_per_day": 0.093,
+      "fills_per_day": 0.165,
+      "direction_null_percentile": 36.1
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 119.2,
+      "ann_return_pct": 18.6,
+      "ann_vol_pct": 68.8,
+      "sharpe": 0.59,
+      "max_drawdown_pct": -70.1,
+      "p_boot": 0.0896,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 69.5,
+       "ann_return_pct": 12.2,
+       "ann_vol_pct": 68.8,
+       "sharpe": 0.51,
+       "max_drawdown_pct": -72.2
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 68.6,
+       "ann_return_pct": 12.0,
+       "ann_vol_pct": 67.3,
+       "sharpe": 0.5,
+       "max_drawdown_pct": -75.5
+      },
+      "gross_no_cost": {
+       "days": 1676,
+       "total_return_pct": 356.0,
+       "ann_return_pct": 39.2,
+       "ann_vol_pct": 68.5,
+       "sharpe": 0.82,
+       "max_drawdown_pct": -63.3
+      },
+      "components_pct": {
+       "gross": 258.8,
+       "cost": -6.9,
+       "funding": -64.5,
+       "long": 268.3,
+       "short": -80.9
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 122.5,
+        "round_trips": 44,
+        "long_eps": 23,
+        "short_eps": 21,
+        "time_in_market_pct": 75.1
+       },
+       "ETHUSDT": {
+        "net_pct": 205.7,
+        "round_trips": 36,
+        "long_eps": 19,
+        "short_eps": 17,
+        "time_in_market_pct": 75.8
+       },
+       "SOLUSDT": {
+        "net_pct": 53.7,
+        "round_trips": 16,
+        "long_eps": 9,
+        "short_eps": 7,
+        "time_in_market_pct": 76.0
+       }
+      },
+      "round_trips": 96,
+      "round_trips_per_day": 0.057,
+      "fills_per_day": 0.102,
+      "direction_null_percentile": 90.0
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": true,
+       "5_two_of_three_assets": false,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true,
+       "6_beats_direction_null_p95": false,
+       "8_short_leg_pos": false
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    },
+    "long_only_spot": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -4.8,
+      "ann_return_pct": -1.7,
+      "ann_vol_pct": 31.1,
+      "sharpe": 0.1,
+      "max_drawdown_pct": -40.7,
+      "p_boot": 0.434,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -12.6,
+       "ann_return_pct": -4.7,
+       "ann_vol_pct": 31.1,
+       "sharpe": 0.0,
+       "max_drawdown_pct": -42.7
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -8.6,
+       "ann_return_pct": -3.1,
+       "ann_vol_pct": 31.8,
+       "sharpe": 0.06,
+       "max_drawdown_pct": -41.5
+      },
+      "components_pct": {
+       "gross": 17.6,
+       "cost": -8.9,
+       "funding": 0.0,
+       "long": 8.7,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 43.4,
+        "round_trips": 17,
+        "long_eps": 17,
+        "short_eps": 0,
+        "time_in_market_pct": 48.0
+       },
+       "ETHUSDT": {
+        "net_pct": -40.7,
+        "round_trips": 19,
+        "long_eps": 19,
+        "short_eps": 0,
+        "time_in_market_pct": 36.7
+       },
+       "SOLUSDT": {
+        "net_pct": 23.4,
+        "round_trips": 17,
+        "long_eps": 17,
+        "short_eps": 0,
+        "time_in_market_pct": 41.0
+       }
+      },
+      "round_trips": 53,
+      "round_trips_per_day": 0.052,
+      "fills_per_day": 0.103
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 1262.5,
+      "ann_return_pct": 76.6,
+      "ann_vol_pct": 49.3,
+      "sharpe": 1.4,
+      "max_drawdown_pct": -44.1,
+      "p_boot": 0.0048,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 1120.4,
+       "ann_return_pct": 72.4,
+       "ann_vol_pct": 49.3,
+       "sharpe": 1.35,
+       "max_drawdown_pct": -45.9
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 1019.0,
+       "ann_return_pct": 69.2,
+       "ann_vol_pct": 49.4,
+       "sharpe": 1.31,
+       "max_drawdown_pct": -51.3
+      },
+      "components_pct": {
+       "gross": 328.3,
+       "cost": -11.4,
+       "funding": 0.0,
+       "long": 316.9,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 205.9,
+        "round_trips": 23,
+        "long_eps": 23,
+        "short_eps": 0,
+        "time_in_market_pct": 49.5
+       },
+       "ETHUSDT": {
+        "net_pct": 343.9,
+        "round_trips": 19,
+        "long_eps": 19,
+        "short_eps": 0,
+        "time_in_market_pct": 47.2
+       },
+       "SOLUSDT": {
+        "net_pct": 121.3,
+        "round_trips": 9,
+        "long_eps": 9,
+        "short_eps": 0,
+        "time_in_market_pct": 37.2
+       }
+      },
+      "round_trips": 51,
+      "round_trips_per_day": 0.03,
+      "fills_per_day": 0.059
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": true,
+       "5_two_of_three_assets": true,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    }
+   }
+  },
+  "C4_ewmac_ls_1d": {
+   "bar": "1D",
+   "lookahead": {
+    "BTCUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "ETHUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "SOLUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    }
+   },
+   "configs": {
+    "long_short_perp": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -31.4,
+      "ann_return_pct": -12.5,
+      "ann_vol_pct": 51.8,
+      "sharpe": 0.0,
+      "max_drawdown_pct": -66.2,
+      "p_boot": 0.4998,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -39.0,
+       "ann_return_pct": -16.1,
+       "ann_vol_pct": 51.9,
+       "sharpe": -0.08,
+       "max_drawdown_pct": -68.0
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -36.8,
+       "ann_return_pct": -15.0,
+       "ann_vol_pct": 51.5,
+       "sharpe": -0.06,
+       "max_drawdown_pct": -68.2
+      },
+      "gross_no_cost": {
+       "days": 1028,
+       "total_return_pct": -20.7,
+       "ann_return_pct": -7.9,
+       "ann_vol_pct": 51.9,
+       "sharpe": 0.1,
+       "max_drawdown_pct": -64.1
+      },
+      "components_pct": {
+       "gross": 14.9,
+       "cost": -2.6,
+       "funding": -12.0,
+       "long": 24.0,
+       "short": -23.6
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 7.9,
+        "round_trips": 18,
+        "long_eps": 10,
+        "short_eps": 8,
+        "time_in_market_pct": 90.6
+       },
+       "ETHUSDT": {
+        "net_pct": 52.7,
+        "round_trips": 13,
+        "long_eps": 6,
+        "short_eps": 7,
+        "time_in_market_pct": 85.2
+       },
+       "SOLUSDT": {
+        "net_pct": -59.6,
+        "round_trips": 20,
+        "long_eps": 10,
+        "short_eps": 10,
+        "time_in_market_pct": 84.2
+       }
+      },
+      "round_trips": 51,
+      "round_trips_per_day": 0.05,
+      "fills_per_day": 0.096,
+      "direction_null_percentile": 54.9
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 105.1,
+      "ann_return_pct": 16.9,
+      "ann_vol_pct": 68.7,
+      "sharpe": 0.58,
+      "max_drawdown_pct": -75.5,
+      "p_boot": 0.0942,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 62.1,
+       "ann_return_pct": 11.1,
+       "ann_vol_pct": 68.7,
+       "sharpe": 0.5,
+       "max_drawdown_pct": -77.1
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 116.3,
+       "ann_return_pct": 18.3,
+       "ann_vol_pct": 68.1,
+       "sharpe": 0.59,
+       "max_drawdown_pct": -74.3
+      },
+      "gross_no_cost": {
+       "days": 1676,
+       "total_return_pct": 347.6,
+       "ann_return_pct": 38.6,
+       "ann_vol_pct": 68.4,
+       "sharpe": 0.82,
+       "max_drawdown_pct": -70.1
+      },
+      "components_pct": {
+       "gross": 258.5,
+       "cost": -3.3,
+       "funding": -72.9,
+       "long": 255.3,
+       "short": -73.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 168.8,
+        "round_trips": 21,
+        "long_eps": 13,
+        "short_eps": 8,
+        "time_in_market_pct": 92.5
+       },
+       "ETHUSDT": {
+        "net_pct": 166.5,
+        "round_trips": 18,
+        "long_eps": 10,
+        "short_eps": 8,
+        "time_in_market_pct": 91.9
+       },
+       "SOLUSDT": {
+        "net_pct": 26.7,
+        "round_trips": 9,
+        "long_eps": 4,
+        "short_eps": 5,
+        "time_in_market_pct": 88.5
+       }
+      },
+      "round_trips": 48,
+      "round_trips_per_day": 0.029,
+      "fills_per_day": 0.055,
+      "direction_null_percentile": 82.7
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": true,
+       "5_two_of_three_assets": true,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true,
+       "6_beats_direction_null_p95": false,
+       "8_short_leg_pos": false
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    },
+    "long_only_spot": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": 18.2,
+      "ann_return_pct": 6.1,
+      "ann_vol_pct": 36.4,
+      "sharpe": 0.34,
+      "max_drawdown_pct": -47.3,
+      "p_boot": 0.2658,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": 13.8,
+       "ann_return_pct": 4.7,
+       "ann_vol_pct": 36.4,
+       "sharpe": 0.31,
+       "max_drawdown_pct": -48.7
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": 19.7,
+       "ann_return_pct": 6.6,
+       "ann_vol_pct": 36.4,
+       "sharpe": 0.36,
+       "max_drawdown_pct": -45.3
+      },
+      "components_pct": {
+       "gross": 39.3,
+       "cost": -4.0,
+       "funding": 0.0,
+       "long": 35.3,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 52.1,
+        "round_trips": 10,
+        "long_eps": 10,
+        "short_eps": 0,
+        "time_in_market_pct": 55.4
+       },
+       "ETHUSDT": {
+        "net_pct": 63.5,
+        "round_trips": 6,
+        "long_eps": 6,
+        "short_eps": 0,
+        "time_in_market_pct": 42.6
+       },
+       "SOLUSDT": {
+        "net_pct": -9.6,
+        "round_trips": 10,
+        "long_eps": 10,
+        "short_eps": 0,
+        "time_in_market_pct": 42.1
+       }
+      },
+      "round_trips": 26,
+      "round_trips_per_day": 0.025,
+      "fills_per_day": 0.048
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 1096.4,
+      "ann_return_pct": 71.7,
+      "ann_vol_pct": 53.9,
+      "sharpe": 1.28,
+      "max_drawdown_pct": -48.2,
+      "p_boot": 0.0072,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 1031.4,
+       "ann_return_pct": 69.6,
+       "ann_vol_pct": 53.9,
+       "sharpe": 1.25,
+       "max_drawdown_pct": -48.9
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 1154.0,
+       "ann_return_pct": 73.5,
+       "ann_vol_pct": 54.6,
+       "sharpe": 1.29,
+       "max_drawdown_pct": -53.7
+      },
+      "components_pct": {
+       "gross": 321.4,
+       "cost": -5.8,
+       "funding": 0.0,
+       "long": 315.6,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 216.7,
+        "round_trips": 13,
+        "long_eps": 13,
+        "short_eps": 0,
+        "time_in_market_pct": 54.8
+       },
+       "ETHUSDT": {
+        "net_pct": 315.7,
+        "round_trips": 10,
+        "long_eps": 10,
+        "short_eps": 0,
+        "time_in_market_pct": 60.4
+       },
+       "SOLUSDT": {
+        "net_pct": 134.6,
+        "round_trips": 4,
+        "long_eps": 4,
+        "short_eps": 0,
+        "time_in_market_pct": 34.9
+       }
+      },
+      "round_trips": 27,
+      "round_trips_per_day": 0.016,
+      "fills_per_day": 0.03
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": true,
+       "1_p_bonferroni": false,
+       "2_stress_pos": true,
+       "3_delay1_pos": true,
+       "4_P_pos": true,
+       "5_two_of_three_assets": true,
+       "7_min_30_round_trips": false,
+       "9_lookahead_pass": true
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    }
+   }
+  },
+  "C5_ema_ls_1h": {
+   "bar": "1h",
+   "lookahead": {
+    "BTCUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "ETHUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "SOLUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    }
+   },
+   "configs": {
+    "long_short_perp": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -39.0,
+      "ann_return_pct": -16.1,
+      "ann_vol_pct": 48.4,
+      "sharpe": -0.12,
+      "max_drawdown_pct": -60.6,
+      "p_boot": 0.5752,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -72.2,
+       "ann_return_pct": -36.5,
+       "ann_vol_pct": 48.8,
+       "sharpe": -0.69,
+       "max_drawdown_pct": -77.1
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -41.2,
+       "ann_return_pct": -17.2,
+       "ann_vol_pct": 48.0,
+       "sharpe": -0.16,
+       "max_drawdown_pct": -64.1
+      },
+      "gross_no_cost": {
+       "days": 1028,
+       "total_return_pct": 28.1,
+       "ann_return_pct": 9.2,
+       "ann_vol_pct": 48.0,
+       "sharpe": 0.42,
+       "max_drawdown_pct": -39.8
+      },
+      "components_pct": {
+       "gross": 56.7,
+       "cost": -65.7,
+       "funding": -8.0,
+       "long": 21.4,
+       "short": -38.3
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -10.2,
+        "round_trips": 402,
+        "long_eps": 204,
+        "short_eps": 198,
+        "time_in_market_pct": 78.9
+       },
+       "ETHUSDT": {
+        "net_pct": 15.4,
+        "round_trips": 401,
+        "long_eps": 202,
+        "short_eps": 199,
+        "time_in_market_pct": 75.9
+       },
+       "SOLUSDT": {
+        "net_pct": -55.9,
+        "round_trips": 430,
+        "long_eps": 210,
+        "short_eps": 220,
+        "time_in_market_pct": 77.2
+       }
+      },
+      "round_trips": 1233,
+      "round_trips_per_day": 1.199,
+      "fills_per_day": 2.371,
+      "direction_null_percentile": 83.3
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 208.0,
+      "ann_return_pct": 27.8,
+      "ann_vol_pct": 69.0,
+      "sharpe": 0.69,
+      "max_drawdown_pct": -55.7,
+      "p_boot": 0.0396,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": -16.3,
+       "ann_return_pct": -3.8,
+       "ann_vol_pct": 69.4,
+       "sharpe": 0.28,
+       "max_drawdown_pct": -69.1
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 181.6,
+       "ann_return_pct": 25.3,
+       "ann_vol_pct": 69.0,
+       "sharpe": 0.66,
+       "max_drawdown_pct": -56.5
+      },
+      "gross_no_cost": {
+       "days": 1676,
+       "total_return_pct": 1360.4,
+       "ann_return_pct": 79.3,
+       "ann_vol_pct": 68.3,
+       "sharpe": 1.18,
+       "max_drawdown_pct": -49.8
+      },
+      "components_pct": {
+       "gross": 371.7,
+       "cost": -98.3,
+       "funding": -54.6,
+       "long": 287.0,
+       "short": -68.2
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 136.2,
+        "round_trips": 629,
+        "long_eps": 308,
+        "short_eps": 321,
+        "time_in_market_pct": 78.8
+       },
+       "ETHUSDT": {
+        "net_pct": 149.8,
+        "round_trips": 530,
+        "long_eps": 262,
+        "short_eps": 268,
+        "time_in_market_pct": 76.9
+       },
+       "SOLUSDT": {
+        "net_pct": 149.4,
+        "round_trips": 186,
+        "long_eps": 82,
+        "short_eps": 104,
+        "time_in_market_pct": 81.8
+       }
+      },
+      "round_trips": 1345,
+      "round_trips_per_day": 0.803,
+      "fills_per_day": 1.581,
+      "direction_null_percentile": 99.8
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": true,
+       "5_two_of_three_assets": false,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true,
+       "6_beats_direction_null_p95": false,
+       "8_short_leg_pos": false
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    },
+    "long_only_spot": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -42.9,
+      "ann_return_pct": -18.1,
+      "ann_vol_pct": 32.6,
+      "sharpe": -0.45,
+      "max_drawdown_pct": -60.8,
+      "p_boot": 0.7264,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -79.8,
+       "ann_return_pct": -43.3,
+       "ann_vol_pct": 33.7,
+       "sharpe": -1.52,
+       "max_drawdown_pct": -84.1
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -34.2,
+       "ann_return_pct": -13.8,
+       "ann_vol_pct": 31.9,
+       "sharpe": -0.31,
+       "max_drawdown_pct": -56.6
+      },
+      "components_pct": {
+       "gross": 65.4,
+       "cost": -106.8,
+       "funding": 0.0,
+       "long": -41.4,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -42.7,
+        "round_trips": 204,
+        "long_eps": 204,
+        "short_eps": 0,
+        "time_in_market_pct": 42.4
+       },
+       "ETHUSDT": {
+        "net_pct": -18.6,
+        "round_trips": 202,
+        "long_eps": 202,
+        "short_eps": 0,
+        "time_in_market_pct": 36.5
+       },
+       "SOLUSDT": {
+        "net_pct": -62.8,
+        "round_trips": 210,
+        "long_eps": 210,
+        "short_eps": 0,
+        "time_in_market_pct": 37.6
+       }
+      },
+      "round_trips": 616,
+      "round_trips_per_day": 0.599,
+      "fills_per_day": 1.198
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": 565.1,
+      "ann_return_pct": 51.1,
+      "ann_vol_pct": 43.2,
+      "sharpe": 1.17,
+      "max_drawdown_pct": -41.9,
+      "p_boot": 0.0142,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": 50.5,
+       "ann_return_pct": 9.3,
+       "ann_vol_pct": 44.1,
+       "sharpe": 0.42,
+       "max_drawdown_pct": -70.1
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": 570.2,
+       "ann_return_pct": 51.3,
+       "ann_vol_pct": 43.1,
+       "sharpe": 1.17,
+       "max_drawdown_pct": -45.5
+      },
+      "components_pct": {
+       "gross": 384.7,
+       "cost": -152.8,
+       "funding": 0.0,
+       "long": 231.9,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": 135.1,
+        "round_trips": 308,
+        "long_eps": 308,
+        "short_eps": 0,
+        "time_in_market_pct": 41.5
+       },
+       "ETHUSDT": {
+        "net_pct": 189.4,
+        "round_trips": 262,
+        "long_eps": 262,
+        "short_eps": 0,
+        "time_in_market_pct": 43.4
+       },
+       "SOLUSDT": {
+        "net_pct": 140.2,
+        "round_trips": 82,
+        "long_eps": 82,
+        "short_eps": 0,
+        "time_in_market_pct": 40.3
+       }
+      },
+      "round_trips": 652,
+      "round_trips_per_day": 0.389,
+      "fills_per_day": 0.778
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": true,
+       "5_two_of_three_assets": false,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    }
+   }
+  },
+  "C6_meanrev_ls_1h": {
+   "bar": "1h",
+   "lookahead": {
+    "BTCUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "ETHUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    },
+    "SOLUSDT": {
+     "cuts": 50,
+     "mismatches": 0,
+     "pass": true
+    }
+   },
+   "configs": {
+    "long_short_perp": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -78.5,
+      "ann_return_pct": -42.1,
+      "ann_vol_pct": 24.9,
+      "sharpe": -2.07,
+      "max_drawdown_pct": -79.9,
+      "p_boot": 0.9998,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -92.1,
+       "ann_return_pct": -59.4,
+       "ann_vol_pct": 25.1,
+       "sharpe": -3.46,
+       "max_drawdown_pct": -92.4
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -72.9,
+       "ann_return_pct": -37.1,
+       "ann_vol_pct": 22.5,
+       "sharpe": -1.94,
+       "max_drawdown_pct": -74.1
+      },
+      "gross_no_cost": {
+       "days": 1028,
+       "total_return_pct": -44.4,
+       "ann_return_pct": -18.8,
+       "ann_vol_pct": 24.8,
+       "sharpe": -0.71,
+       "max_drawdown_pct": -51.7
+      },
+      "components_pct": {
+       "gross": -49.9,
+       "cost": -95.3,
+       "funding": 0.5,
+       "long": -58.1,
+       "short": -86.5
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -138.2,
+        "round_trips": 625,
+        "long_eps": 312,
+        "short_eps": 313,
+        "time_in_market_pct": 15.5
+       },
+       "ETHUSDT": {
+        "net_pct": -217.8,
+        "round_trips": 608,
+        "long_eps": 315,
+        "short_eps": 293,
+        "time_in_market_pct": 15.2
+       },
+       "SOLUSDT": {
+        "net_pct": -78.1,
+        "round_trips": 554,
+        "long_eps": 300,
+        "short_eps": 254,
+        "time_in_market_pct": 13.8
+       }
+      },
+      "round_trips": 1787,
+      "round_trips_per_day": 1.738,
+      "fills_per_day": 3.446,
+      "direction_null_percentile": 5.4
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": -91.2,
+      "ann_return_pct": -41.1,
+      "ann_vol_pct": 30.3,
+      "sharpe": -1.59,
+      "max_drawdown_pct": -91.8,
+      "p_boot": 1.0,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": -98.4,
+       "ann_return_pct": -59.4,
+       "ann_vol_pct": 30.6,
+       "sharpe": -2.78,
+       "max_drawdown_pct": -98.4
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": -90.5,
+       "ann_return_pct": -40.1,
+       "ann_vol_pct": 28.7,
+       "sharpe": -1.64,
+       "max_drawdown_pct": -91.2
+      },
+      "gross_no_cost": {
+       "days": 1676,
+       "total_return_pct": -59.3,
+       "ann_return_pct": -17.8,
+       "ann_vol_pct": 30.2,
+       "sharpe": -0.5,
+       "max_drawdown_pct": -68.2
+      },
+      "components_pct": {
+       "gross": -69.1,
+       "cost": -153.2,
+       "funding": 0.5,
+       "long": -44.5,
+       "short": -177.3
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -243.6,
+        "round_trips": 988,
+        "long_eps": 489,
+        "short_eps": 499,
+        "time_in_market_pct": 15.1
+       },
+       "ETHUSDT": {
+        "net_pct": -166.5,
+        "round_trips": 792,
+        "long_eps": 405,
+        "short_eps": 387,
+        "time_in_market_pct": 14.0
+       },
+       "SOLUSDT": {
+        "net_pct": -20.6,
+        "round_trips": 275,
+        "long_eps": 118,
+        "short_eps": 157,
+        "time_in_market_pct": 13.2
+       }
+      },
+      "round_trips": 2055,
+      "round_trips_per_day": 1.226,
+      "fills_per_day": 2.432,
+      "direction_null_percentile": 18.0
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": false,
+       "5_two_of_three_assets": false,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true,
+       "6_beats_direction_null_p95": false,
+       "8_short_leg_pos": false
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    },
+    "long_only_spot": {
+     "E": {
+      "days": 1028,
+      "total_return_pct": -82.4,
+      "ann_return_pct": -46.0,
+      "ann_vol_pct": 19.5,
+      "sharpe": -3.06,
+      "max_drawdown_pct": -83.1,
+      "p_boot": 1.0,
+      "stress": {
+       "days": 1028,
+       "total_return_pct": -96.3,
+       "ann_return_pct": -69.0,
+       "ann_vol_pct": 20.9,
+       "sharpe": -5.47,
+       "max_drawdown_pct": -96.4
+      },
+      "delay1": {
+       "days": 1028,
+       "total_return_pct": -80.3,
+       "ann_return_pct": -43.9,
+       "ann_vol_pct": 17.9,
+       "sharpe": -3.13,
+       "max_drawdown_pct": -80.6
+      },
+      "components_pct": {
+       "gross": -7.5,
+       "cost": -160.6,
+       "funding": 0.0,
+       "long": -168.1,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -173.8,
+        "round_trips": 312,
+        "long_eps": 312,
+        "short_eps": 0,
+        "time_in_market_pct": 7.7
+       },
+       "ETHUSDT": {
+        "net_pct": -223.8,
+        "round_trips": 315,
+        "long_eps": 315,
+        "short_eps": 0,
+        "time_in_market_pct": 7.9
+       },
+       "SOLUSDT": {
+        "net_pct": -106.8,
+        "round_trips": 300,
+        "long_eps": 300,
+        "short_eps": 0,
+        "time_in_market_pct": 7.4
+       }
+      },
+      "round_trips": 927,
+      "round_trips_per_day": 0.902,
+      "fills_per_day": 1.804
+     },
+     "P": {
+      "days": 1676,
+      "total_return_pct": -89.6,
+      "ann_return_pct": -38.9,
+      "ann_vol_pct": 23.1,
+      "sharpe": -2.02,
+      "max_drawdown_pct": -89.8,
+      "p_boot": 1.0,
+      "stress": {
+       "days": 1676,
+       "total_return_pct": -99.1,
+       "ann_return_pct": -63.9,
+       "ann_vol_pct": 24.2,
+       "sharpe": -4.08,
+       "max_drawdown_pct": -99.1
+      },
+      "delay1": {
+       "days": 1676,
+       "total_return_pct": -91.2,
+       "ann_return_pct": -41.2,
+       "ann_vol_pct": 22.5,
+       "sharpe": -2.24,
+       "max_drawdown_pct": -91.9
+      },
+      "components_pct": {
+       "gross": 34.9,
+       "cost": -248.7,
+       "funding": 0.0,
+       "long": -213.8,
+       "short": 0.0
+      },
+      "per_asset": {
+       "BTCUSDT": {
+        "net_pct": -226.5,
+        "round_trips": 489,
+        "long_eps": 489,
+        "short_eps": 0,
+        "time_in_market_pct": 7.5
+       },
+       "ETHUSDT": {
+        "net_pct": -173.9,
+        "round_trips": 405,
+        "long_eps": 405,
+        "short_eps": 0,
+        "time_in_market_pct": 7.2
+       },
+       "SOLUSDT": {
+        "net_pct": -46.6,
+        "round_trips": 118,
+        "long_eps": 118,
+        "short_eps": 0,
+        "time_in_market_pct": 5.7
+       }
+      },
+      "round_trips": 1012,
+      "round_trips_per_day": 0.604,
+      "fills_per_day": 1.207
+     },
+     "acceptance": {
+      "criteria": {
+       "1_ann_ret_pos": false,
+       "1_p_bonferroni": false,
+       "2_stress_pos": false,
+       "3_delay1_pos": false,
+       "4_P_pos": false,
+       "5_two_of_three_assets": false,
+       "7_min_30_round_trips": true,
+       "9_lookahead_pass": true
+      },
+      "bonferroni_alpha": 0.00417,
+      "verdict": "REJECTED"
+     }
+    }
+   }
+  }
+ },
+ "buy_and_hold_equal_weight": {
+  "E": {
+   "days": 1028,
+   "total_return_pct": 39.3,
+   "ann_return_pct": 12.5,
+   "ann_vol_pct": 59.7,
+   "sharpe": 0.49,
+   "max_drawdown_pct": -64.3
+  },
+  "P": {
+   "days": 1825,
+   "total_return_pct": 2224.0,
+   "ann_return_pct": 87.6,
+   "ann_vol_pct": 78.3,
+   "sharpe": 1.21,
+   "max_drawdown_pct": -85.2
+  }
+ },
+ "runtime_sec": 14.5
+}

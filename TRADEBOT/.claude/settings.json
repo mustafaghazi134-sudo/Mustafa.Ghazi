@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__alpaca",
+      "mcp__alpaca__place_stock_order",
+      "mcp__alpaca__place_crypto_order",
+      "mcp__alpaca__place_option_order",
+      "mcp__ibkr",
+      "Bash(*trader-broker*)",
+      "Bash(*ticket.py*)",
+      "Read(./.env)",
+      "Read(**/.env)",
+      "Read(./backups/**)",
+      "Read(**/*keypair*.json)",
+      "Read(./data/LIVE_ARMED)",
+      "Edit(./data/LIVE_ARMED)",
+      "Bash(*arm-live*)",
+      "Bash(*tradebot_signer*)",
+      "Read(**/activation_secret)",
+      "Read(**/client_secret)",
+      "Edit(**/activation_secret)",
+      "Edit(**/client_secret)",
+      "Read(**/ACTIVATION.json)",
+      "Edit(**/ACTIVATION.json)",
+      "Edit(./tradebot/execution/submission.py)",
+      "Bash(*MAINNET_SUBMISSION_ENABLED*)",
+      "Bash(*approve-exec-test*)",
+      "Edit(**/EXEC_TEST_APPROVAL.json)",
+      "Bash(*EXEC_TEST_APPROVAL*)"
+    ]
+  }
+}

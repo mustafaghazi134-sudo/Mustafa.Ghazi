@@ -1,0 +1,54 @@
+2026-11-03T07:36:24Z
+wrote funding_binance_BTCUSDT.csv: 7488 rows
+wrote funding_binance_ETHUSDT.csv: 7488 rows
+wrote funding_binance_SOLUSDT.csv: 6793 rows
+wrote funding_hyperliquid_BTC.csv: 29942 rows
+wrote funding_hyperliquid_ETH.csv: 29942 rows
+wrote funding_hyperliquid_SOL.csv: 29942 rows
+HTTP 400 https://coins.llama.fi/chart/solana:cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij?start=1640995200&span=2000&period=1d&sea
+HTTP 400 https://coins.llama.fi/chart/solana:cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij?start=1640995200&span=2000&period=1d&sea
+HTTP 400 https://coins.llama.fi/chart/solana:cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij?start=1640995200&span=2000&period=1d&sea
+HTTP 400 https://coins.llama.fi/chart/solana:cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij?start=1640995200&span=2000&period=1d&sea
+llama solana:cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij: no data
+HTTP 400 https://coins.llama.fi/chart/coingecko:bitcoin?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:bitcoin?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:bitcoin?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:bitcoin?start=1640995200&span=2000&period=1d&searchWidth=600
+llama coingecko:bitcoin: no data
+wrote wrapped_llama_cbBTC.csv: 0 rows
+HTTP 400 https://coins.llama.fi/chart/solana:7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs?start=1640995200&span=2000&period=1d&se
+HTTP 400 https://coins.llama.fi/chart/solana:7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs?start=1640995200&span=2000&period=1d&se
+HTTP 400 https://coins.llama.fi/chart/solana:7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs?start=1640995200&span=2000&period=1d&se
+HTTP 400 https://coins.llama.fi/chart/solana:7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs?start=1640995200&span=2000&period=1d&se
+llama solana:7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs: no data
+HTTP 400 https://coins.llama.fi/chart/coingecko:ethereum?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:ethereum?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:ethereum?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:ethereum?start=1640995200&span=2000&period=1d&searchWidth=600
+llama coingecko:ethereum: no data
+wrote wrapped_llama_WETH_wormhole.csv: 0 rows
+HTTP 400 https://coins.llama.fi/chart/solana:So11111111111111111111111111111111111111112?start=1640995200&span=2000&period=1d&sea
+HTTP 400 https://coins.llama.fi/chart/solana:So11111111111111111111111111111111111111112?start=1640995200&span=2000&period=1d&sea
+HTTP 400 https://coins.llama.fi/chart/solana:So11111111111111111111111111111111111111112?start=1640995200&span=2000&period=1d&sea
+HTTP 400 https://coins.llama.fi/chart/solana:So11111111111111111111111111111111111111112?start=1640995200&span=2000&period=1d&sea
+llama solana:So11111111111111111111111111111111111111112: no data
+HTTP 400 https://coins.llama.fi/chart/coingecko:solana?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:solana?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:solana?start=1640995200&span=2000&period=1d&searchWidth=600
+HTTP 400 https://coins.llama.fi/chart/coingecko:solana?start=1640995200&span=2000&period=1d&searchWidth=600
+llama coingecko:solana: no data
+wrote wrapped_llama_SOL.csv: 0 rows
+gt cbBTC top pools: cbBTC / USDC orca reserve $4,972,162 vol24h $10,558,862; cbBTC / SOL orca reserve $7,362,629 vol24h $3,377,251; cbBTC / USDC meteora reserve $1,362,744 vol24h $3,551,487; cbBTC / WBTC orca reserve $1,221,223 vol24h $1,757,679; cbBTC / SOL meteora reserve $1,607,931 vol24h $888,689
+wrote wrapped_gt_cbBTC_HxA6SKW5_1h.csv: 1000 rows
+wrote wrapped_gt_cbBTC_CeaZcxBN_1h.csv: 1000 rows
+wrote wrapped_gt_cbBTC_1d.csv: 368 rows
+gt WETH_wormhole top pools: WETH / SOL orca reserve $6,288,966 vol24h $7,760,735; WETH / USDC zerofi reserve $93,907 vol24h $4,931,133; WETH / SOL pancakeswap-v3-solana reserve $189,193 vol24h $539,261; WETH / USDC orca reserve $204,828 vol24h $180,534; WETH / SOL meteora reserve $102,095 vol24h $249,941
+wrote wrapped_gt_WETH_wormhole_HktfL7iw_1h.csv: 1000 rows
+wrote wrapped_gt_WETH_wormhole_A59MtPWa_1h.csv: 1000 rows
+wrote wrapped_gt_WETH_wormhole_1d.csv: 322 rows
+wrote binance_BTCUSDT_1d.csv: 1000 rows
+wrote binance_BTCUSDT_1h.csv: 1000 rows
+wrote binance_ETHUSDT_1d.csv: 1000 rows
+wrote binance_ETHUSDT_1h.csv: 1000 rows
+wrote binance_SOLUSDT_1d.csv: 1000 rows
+wrote binance_SOLUSDT_1h.csv: 1000 rows

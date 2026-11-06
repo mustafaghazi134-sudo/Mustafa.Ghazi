@@ -1,0 +1,46 @@
+{
+ "cycles": 300,
+ "symbols": [
+  "SOL",
+  "JUP",
+  "BONK"
+ ],
+ "cycle_ms": {
+  "median": 6.83,
+  "p95": 10.47,
+  "max": 18.08
+ },
+ "time_share_pct": {
+  "other": 52.3,
+  "strategies": 45.1,
+  "engine": 0.9,
+  "provider": 0.6,
+  "accounting": 0.5,
+  "ledger(sqlite)": 0.4,
+  "risk": 0.1,
+  "execution": 0.0
+ },
+ "strategy_eval_ms_per_symbol_1000_bars": {
+  "tsmom": 0.31,
+  "momentum": 0.3
+ },
+ "ledger_write_ms": 0.144,
+ "live_path_budget": {
+  "scan_interval_sec": 60.0,
+  "candle_interval": "4h",
+  "strategy_evaluation": "tsmom: once per UTC day (00:00 bar); momentum: on each completed 4h bar",
+  "http_requests_per_cycle_live": {
+   "jupiter_price_v3": 1,
+   "jupiter_tokens_v2_search": "1 (cached 60s)",
+   "binance_ticker_price": 1,
+   "binance_klines_per_symbol": "0 most cycles (cached 25% of bar)",
+   "total_typical": "3"
+  },
+  "quote_timeout_sec": 5.0,
+  "execute_timeout_sec": 30.0,
+  "execute_max_retries": 2,
+  "worst_case_order_path_sec": 105.0,
+  "typical_order_path_sec": "quote ~0.3-1.0 + sign <0.01 + execute ~2-8 (Jupiter submits and confirms)  [UNMEASURED here: no network]",
+  "reaction_time_bound": "signal can only be seen at the next 60 s poll after a 4h bar closes; the strategy itself only looks once a day"
+ }
+}

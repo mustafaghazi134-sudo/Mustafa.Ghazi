@@ -1,0 +1,105 @@
+=== PAPER TRADING CHECKPOINT cp8_300m  2026-11-03T12:15:11Z  (SIMULATED FUNDS) ===
+engine: RUNNING (pid 2551)
+
+mode:          paper
+kill switch:   clear
+live gate:     not armed  (env_ok=False armed_file=False limits_match=False)
+paper record:  0 closed trades over 0.2 days (need 30 / 14.0 to arm)
+cash:          $1,000.00
+positions:     0
+pending intents: 0
+  event 2026-11-03 11:37 basis_block: BTC +121 bps (jup 78009.3 vs ref 77080)
+  event 2026-11-03 07:14 start: mode=paper provider=LiveProvider symbols=['BTC', 'ETH', 'SOL']
+  event 2026-11-03 07:10 start: mode=paper provider=LiveProvider symbols=['BTC', 'ETH', 'SOL']
+  event 2026-11-03 07:07 start: mode=paper provider=LiveProvider symbols=['BTC', 'ETH', 'SOL']
+
+=== tradebot performance (paper) ===
+Equity          $1,000.00   (cash $1,000.00, exposure $0.00)
+Initial capital $1,000.00
+Realized P&L    $0.00
+Unrealized P&L  $0.00
+Trading fees    $0.00   (included in P&L above)
+Claude API cost $0.00
+NET PROFIT      $0.00   (+0.00%)
+Max drawdown    0.00%    Sharpe 0.00
+Trades 0  wins 0  losses 0  win rate 0.0%  profit factor 0.00
+Avg trade $0.00   best $0.00   worst $0.00
+
+Recent decisions:
+  2026-11-03 11:37 entry_blocked BTC                    {"reason": "basis vs reference price exceeds max_basis_bps"}
+
+--- orders (last 20)
+  (none)
+--- fills (last 20)
+  (none)
+--- closed trades (last 20)
+  (none)
+--- events (last 25)
+  ts=2026-11-03 11:37:22 | kind=basis_block | message=BTC +121 bps (jup 78009.3 vs ref 77080)
+  ts=2026-11-03 07:14:51 | kind=start | message=mode=paper provider=LiveProvider symbols=['BTC', 'ETH', 'SOL']
+  ts=2026-11-03 07:10:25 | kind=start | message=mode=paper provider=LiveProvider symbols=['BTC', 'ETH', 'SOL']
+  ts=2026-11-03 07:07:32 | kind=start | message=mode=paper provider=LiveProvider symbols=['BTC', 'ETH', 'SOL']
+--- decision counts by kind
+  kind=entry_blocked | n=1 | first_ts=1793705842.0290184 | last_ts=1793705842.0290184
+
+--- log tail
+2026-11-03 11:55:34,694 INFO     tradebot.engine.bot: cycle 278 prices: BTC=76929.6, ETH=2263.14, SOL=92.323 | positions: none
+2026-11-03 11:55:35,225 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-14, SOL=-19
+2026-11-03 11:55:35,229 INFO     tradebot.engine.bot: cycle 278: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 11:56:35,433 INFO     tradebot.engine.bot: cycle 279 prices: BTC=76934, ETH=2262.82, SOL=92.3374 | positions: none
+2026-11-03 11:56:36,144 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-22, ETH=-20, SOL=-22
+2026-11-03 11:56:36,148 INFO     tradebot.engine.bot: cycle 279: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 11:57:36,293 INFO     tradebot.engine.bot: cycle 280 prices: BTC=76940.6, ETH=2262.37, SOL=92.3176 | positions: none
+2026-11-03 11:57:36,799 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-19, SOL=-21
+2026-11-03 11:57:36,804 INFO     tradebot.engine.bot: cycle 280: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 11:58:37,085 INFO     tradebot.engine.bot: cycle 281 prices: BTC=76954.8, ETH=2262.6, SOL=92.3482 | positions: none
+2026-11-03 11:58:37,825 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-19, SOL=-20
+2026-11-03 11:58:37,830 INFO     tradebot.engine.bot: cycle 281: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 11:59:37,976 INFO     tradebot.engine.bot: cycle 282 prices: BTC=76945.3, ETH=2262.71, SOL=92.3587 | positions: none
+2026-11-03 11:59:38,513 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-21, ETH=-20, SOL=-21
+2026-11-03 11:59:38,518 INFO     tradebot.engine.bot: cycle 282: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:00:38,698 INFO     tradebot.engine.bot: cycle 283 prices: BTC=76898.5, ETH=2262.33, SOL=92.3009 | positions: none
+2026-11-03 12:00:39,209 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-18, ETH=-10, SOL=-19
+2026-11-03 12:00:39,213 INFO     tradebot.engine.bot: cycle 283: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:01:39,340 INFO     tradebot.engine.bot: cycle 284 prices: BTC=76873.6, ETH=2259.8, SOL=92.274 | positions: none
+2026-11-03 12:01:39,989 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-19, ETH=-21, SOL=-20
+2026-11-03 12:01:39,994 INFO     tradebot.engine.bot: cycle 284: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:02:40,205 INFO     tradebot.engine.bot: cycle 285 prices: BTC=76844.4, ETH=2259.72, SOL=92.2134 | positions: none
+2026-11-03 12:02:40,716 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-21, SOL=-21
+2026-11-03 12:02:40,720 INFO     tradebot.engine.bot: cycle 285: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:03:40,928 INFO     tradebot.engine.bot: cycle 286 prices: BTC=76898.6, ETH=2260.9, SOL=92.2805 | positions: none
+2026-11-03 12:03:41,433 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-19, ETH=-21, SOL=-22
+2026-11-03 12:03:41,438 INFO     tradebot.engine.bot: cycle 286: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:04:41,650 INFO     tradebot.engine.bot: cycle 287 prices: BTC=76909.3, ETH=2261.66, SOL=92.3072 | positions: none
+2026-11-03 12:04:42,171 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-19, SOL=-19
+2026-11-03 12:04:42,175 INFO     tradebot.engine.bot: cycle 287: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:05:42,297 INFO     tradebot.engine.bot: cycle 288 prices: BTC=76914.3, ETH=2261.72, SOL=92.3048 | positions: none
+2026-11-03 12:05:42,804 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-20, SOL=-20
+2026-11-03 12:05:42,809 INFO     tradebot.engine.bot: cycle 288: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:06:43,052 INFO     tradebot.engine.bot: cycle 289 prices: BTC=76419.1, ETH=2259.34, SOL=92.2872 | positions: none
+2026-11-03 12:06:43,569 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-82, ETH=-30, SOL=-21
+2026-11-03 12:06:43,573 INFO     tradebot.engine.bot: cycle 289: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:07:43,715 INFO     tradebot.engine.bot: cycle 290 prices: BTC=76925.8, ETH=2260.63, SOL=92.3128 | positions: none
+2026-11-03 12:07:44,230 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-25, SOL=-21
+2026-11-03 12:07:44,235 INFO     tradebot.engine.bot: cycle 290: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:08:44,510 INFO     tradebot.engine.bot: cycle 291 prices: BTC=76901, ETH=2261.4, SOL=92.2911 | positions: none
+2026-11-03 12:08:45,029 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-22, ETH=-22, SOL=-20
+2026-11-03 12:08:45,034 INFO     tradebot.engine.bot: cycle 291: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:09:45,262 INFO     tradebot.engine.bot: cycle 292 prices: BTC=76997, ETH=2262.02, SOL=92.3294 | positions: none
+2026-11-03 12:09:45,773 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-9, ETH=-21, SOL=-20
+2026-11-03 12:09:45,777 INFO     tradebot.engine.bot: cycle 292: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:10:45,976 INFO     tradebot.engine.bot: cycle 293 prices: BTC=76953.6, ETH=2263.49, SOL=92.3501 | positions: none
+2026-11-03 12:10:46,478 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-20, SOL=-20
+2026-11-03 12:10:46,483 INFO     tradebot.engine.bot: cycle 293: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:11:46,625 INFO     tradebot.engine.bot: cycle 294 prices: BTC=76967.7, ETH=2262.79, SOL=92.4549 | positions: none
+2026-11-03 12:11:47,130 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-19, ETH=-23, SOL=-14
+2026-11-03 12:11:47,134 INFO     tradebot.engine.bot: cycle 294: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:12:47,336 INFO     tradebot.engine.bot: cycle 295 prices: BTC=76951.2, ETH=2262.89, SOL=92.4018 | positions: none
+2026-11-03 12:12:47,871 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-20, ETH=-19, SOL=-20
+2026-11-03 12:12:47,876 INFO     tradebot.engine.bot: cycle 295: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:13:48,006 INFO     tradebot.engine.bot: cycle 296 prices: BTC=76914.3, ETH=2263.37, SOL=92.3818 | positions: none
+2026-11-03 12:13:48,518 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-22, ETH=-15, SOL=-19
+2026-11-03 12:13:48,522 INFO     tradebot.engine.bot: cycle 296: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)
+2026-11-03 12:14:48,756 INFO     tradebot.engine.bot: cycle 297 prices: BTC=77020.9, ETH=2265.36, SOL=92.5004 | positions: none
+2026-11-03 12:14:49,266 INFO     tradebot.engine.bot: basis vs Binance (bps): BTC=-21, ETH=-18, SOL=-22
+2026-11-03 12:14:49,271 INFO     tradebot.engine.bot: cycle 297: no entry signals from ['tsmom', 'momentum'] (expected most cycles for a daily-evaluated 4h trend system)

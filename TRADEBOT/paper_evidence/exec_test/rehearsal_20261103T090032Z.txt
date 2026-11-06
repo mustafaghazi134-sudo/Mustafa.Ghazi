@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/runner/work/Mustafa.Ghazi/Mustafa.Ghazi/TRADEBOT/deploy/exec_test_readonly.py", line 106, in <module>
+    main()
+    ~~~~^^
+  File "/home/runner/work/Mustafa.Ghazi/Mustafa.Ghazi/TRADEBOT/deploy/exec_test_readonly.py", line 57, in main
+    url = s.data.rpc_url
+          ^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.17/x64/lib/python3.13/site-packages/pydantic/main.py", line 1110, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'DataConfig' object has no attribute 'rpc_url'

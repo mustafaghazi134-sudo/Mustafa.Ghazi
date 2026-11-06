@@ -1,0 +1,139 @@
+# TRADEBOT 4h engine: PAPER TRADING on live market data, on a GitHub-hosted runner.
+# Simulated funds only. TRADEBOT_FORCE_PAPER=1 makes live mode impossible; no keys or secrets are used.
+#
+# Start: push a change to TRADEBOT/deploy/paper_run.trigger on this branch, or "Run workflow" in the Actions tab.
+# Stop:  push a file TRADEBOT/deploy/PAPER_STOP (the watcher trips the kill switch, which flattens paper positions,
+#        then stops the engine), or cancel the run in the Actions tab.
+# Evidence while running: checkpoint artifacts paper-cp-* (status, decisions, orders, fills, events, log tail) at
+#        about +4, +15, +30, +60, +120, +180, +240 and +300 minutes; final artifact paper-final-* at the end.
+# State: the paper ledger is restored from the previous run's cache and saved at the end of each run.
+# Continuous: at the end of each run (~5.6 h) the workflow starts the next one itself, so paper trading runs around
+#        the clock. It does NOT chain when PAPER_STOP exists, when the engine was not alive at the end, or when the
+#        kill switch tripped; those stop the chain and leave the evidence in the run for review.
+name: paper-trading
+
+on:
+  push:
+    branches: [claude/inspiring-edison-6xsm35]
+    paths: [TRADEBOT/deploy/paper_run.trigger]
+  workflow_dispatch:
+
+concurrency:
+  group: tradebot-paper
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: write   # only to dispatch the next run of this workflow
+
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    defaults:
+      run:
+        working-directory: TRADEBOT
+    env:
+      TRADEBOT_FORCE_PAPER: "1"
+      TRADEBOT_CONFIG: deploy/paper_ci.toml
+      TRADEBOT_DATA_DIR: data_paper
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: pip install -q -e .
+      - name: Restore paper ledger from the previous run
+        uses: actions/cache/restore@v4
+        with:
+          path: TRADEBOT/data_paper
+          key: tradebot-paper-${{ github.run_id }}
+          restore-keys: tradebot-paper-
+      - name: Self-test (offline execution checks)
+        run: python -m tradebot selftest
+      - name: Preflight and read-only probe (connectivity, data freshness, executable quotes, signal-vs-asset basis)
+        run: |
+          mkdir -p data_paper/checkpoints
+          { python -m tradebot preflight; echo; python deploy/paper_probe.py; } > data_paper/checkpoints/cp0_preflight.txt 2>&1 || true
+          cat data_paper/checkpoints/cp0_preflight.txt
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp0-preflight, path: TRADEBOT/data_paper/checkpoints/}}
+      - name: Start paper trading engine (background)
+        run: |
+          mkdir -p data_paper
+          rm -f data_paper/KILL
+          nohup python -m tradebot run --paper > data_paper/run_stdout.log 2>&1 &
+          echo $! > data_paper/bot.pid
+          BRANCH="${GITHUB_REF_NAME}"
+          nohup bash -c '
+            while kill -0 "$(cat data_paper/bot.pid)" 2>/dev/null; do
+              sleep 120
+              git fetch -q origin "'"$BRANCH"'" 2>/dev/null || continue
+              if git cat-file -e "origin/'"$BRANCH"':TRADEBOT/deploy/PAPER_STOP" 2>/dev/null; then
+                echo "{\"reason\": \"PAPER_STOP pushed\", \"source\": \"ci\"}" > data_paper/KILL
+                sleep 150
+                kill -TERM "$(cat data_paper/bot.pid)" 2>/dev/null
+                break
+              fi
+            done' > data_paper/watcher.log 2>&1 &
+          sleep 5
+          kill -0 "$(cat data_paper/bot.pid)" && echo "engine started, pid $(cat data_paper/bot.pid)"
+      - {name: Checkpoint +4m, run: bash deploy/paper_checkpoint.sh cp1_4m 240}
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp1-4m, path: TRADEBOT/data_paper/checkpoints/}}
+      - {name: Checkpoint +15m, run: bash deploy/paper_checkpoint.sh cp2_15m 660}
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp2-15m, path: TRADEBOT/data_paper/checkpoints/}}
+      - {name: Checkpoint +30m, run: bash deploy/paper_checkpoint.sh cp3_30m 900}
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp3-30m, path: TRADEBOT/data_paper/checkpoints/}}
+      - {name: Checkpoint +60m, run: bash deploy/paper_checkpoint.sh cp4_60m 1800}
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp4-60m, path: TRADEBOT/data_paper/checkpoints/}}
+      - {name: Checkpoint +120m, run: bash deploy/paper_checkpoint.sh cp5_120m 3600}
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp5-120m, path: TRADEBOT/data_paper/checkpoints/}}
+      - {name: Checkpoint +180m, run: bash deploy/paper_checkpoint.sh cp6_180m 3600}
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp6-180m, path: TRADEBOT/data_paper/checkpoints/}}
+      - {name: Checkpoint +240m, run: bash deploy/paper_checkpoint.sh cp7_240m 3600}
+      - {uses: actions/upload-artifact@v4, with: {name: paper-cp7-240m, path: TRADEBOT/data_paper/checkpoints/}}
+      - {name: Checkpoint +300m, run: bash deploy/paper_checkpoint.sh cp8_300m 3600}
+      - name: Stop engine and final report
+        if: always()
+        run: |
+          if kill -0 "$(cat data_paper/bot.pid 2>/dev/null)" 2>/dev/null; then echo "ENGINE_ALIVE_AT_END=1" >> "$GITHUB_ENV"; fi
+          if [ -f data_paper/KILL ]; then echo "KILL_AT_END=1" >> "$GITHUB_ENV"; cat data_paper/KILL; fi
+          kill -TERM "$(cat data_paper/bot.pid 2>/dev/null)" 2>/dev/null || true
+          sleep 3
+          bash deploy/paper_checkpoint.sh final 0
+      - name: Save paper ledger for the next run
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: TRADEBOT/data_paper
+          key: tradebot-paper-${{ github.run_id }}
+      - name: Upload ledger, logs and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-final-${{ github.run_id }}
+          path: |
+            TRADEBOT/data_paper/ledger.sqlite
+            TRADEBOT/data_paper/tradebot.log
+            TRADEBOT/data_paper/run_stdout.log
+            TRADEBOT/data_paper/checkpoints/
+            TRADEBOT/data_paper/reports/
+          retention-days: 90
+      - name: Start the next run (continuous paper trading)
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch -q origin "$GITHUB_REF_NAME" || true
+          if git cat-file -e "origin/$GITHUB_REF_NAME:TRADEBOT/deploy/PAPER_STOP" 2>/dev/null; then
+            echo "PAPER_STOP is present: not starting another run."; exit 0
+          fi
+          if [ "${KILL_AT_END:-0}" = "1" ]; then
+            echo "::warning::kill switch tripped during this run; not restarting automatically. Review the final artifact, then push the trigger file."; exit 0
+          fi
+          if [ "${ENGINE_ALIVE_AT_END:-0}" != "1" ]; then
+            echo "::warning::engine was not running at the end of this run; not restarting automatically. Review run_stdout.log, then push the trigger file."; exit 0
+          fi
+          gh workflow run paper-trading.yml --ref "$GITHUB_REF_NAME"
+          echo "next paper run dispatched"

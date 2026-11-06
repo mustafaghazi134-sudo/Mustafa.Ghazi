@@ -1,0 +1,40 @@
+OK    mode                   paper
+WARN  ANTHROPIC_API_KEY      missing: Claude research/vetting disabled, deterministic strategies still run
+FAIL  jupiter_api_key        missing: Jupiter REST requires an x-api-key (free at developers.jup.ag); set JUPITER_API_KEY
+OK    net:jupiter_price_v3   HTTP 200
+OK    net:jupiter_tokens_v2  HTTP 200
+OK    net:jupiter_swap_v2_order HTTP 200
+OK    net:binance_klines     HTTP 200
+OK    net:dexscreener        HTTP 200
+OK    net:coingecko          HTTP 200
+OK    net:anthropic          reachable (401 without key is expected)
+OK    net:solana_rpc         ok
+OK    kill_switch            clear
+OK    live_gate              not armed (paper only)
+OK    SOLANA_PRIVATE_KEY     not set (correct: the key belongs to the signer service)
+
+result: FAILURES: live market data unavailable
+
+=== READ-ONLY PROBE 2026-11-03T07:14:34Z  jupiter key: no (keyless)
+binance BTCUSDT  last 4h candle opened  194.6 min ago, close 76600.6800  -> FRESH
+binance ETHUSDT  last 4h candle opened  194.6 min ago, close 2247.6800  -> FRESH
+binance SOLUSDT  last 4h candle opened  194.6 min ago, close 91.7900  -> FRESH
+jupiter price v3 HTTP 200
+  BTC  mint cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij  jupiter $76,458.4317  binance $76,600.6800  basis -18.6 bps
+  ETH  mint 7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs  jupiter $2,243.1430  binance $2,247.6800  basis -20.2 bps
+  SOL  mint So11111111111111111111111111111111111111112  jupiter $91.6117  binance $91.7900  basis -19.4 bps
+quote $100 USDC->BTC->USDC worst-case round trip   71.2 bps (router metis, fee 10 bps, impact -0.10477768380515404%) + 2 network fees
+quote $100 USDC->ETH->USDC worst-case round trip  120.0 bps (router metis, fee 10 bps, impact -0.09621233527463348%) + 2 network fees
+quote $100 USDC->SOL->USDC worst-case round trip   54.3 bps (router metis, fee 2 bps, impact -0.016081442585392066%) + 2 network fees
+{
+ "signal_instruments": {
+  "BTC": "BTCUSDT",
+  "ETH": "ETHUSDT",
+  "SOL": "SOLUSDT"
+ },
+ "executable_mints": {
+  "BTC": "cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij",
+  "ETH": "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
+  "SOL": "So11111111111111111111111111111111111111112"
+ }
+}

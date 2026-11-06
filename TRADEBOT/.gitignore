@@ -1,0 +1,28 @@
+/data/
+.env
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+__pycache__/
+*.egg-info/
+.pytest_cache/
+config.toml
+/trader/
+# secrets in backup copies (update scripts and apply-profile write these; they contain API keys)
+/backups/
+config.toml.bak-*
+config.toml.*
+.env.*
+!.env.example
+*keypair*.json
+*.lock
+
+# signer service files (must live outside the repo, in the signer account's own home)
+activation_secret
+client_secret
+ACTIVATION.json
+signing_log.sqlite
+/signer_home/
+
+# Opportunity Lab local config (copy of lab.toml.example)
+lab.toml

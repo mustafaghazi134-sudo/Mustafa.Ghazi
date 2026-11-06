@@ -1,0 +1,63 @@
+{
+ "cost_x1": {
+  "null_edge": true,
+  "seeds": 20,
+  "cost_multiplier": 1.0,
+  "unsellable_rate": 0.0,
+  "pooled": {
+   "n": 130,
+   "net_usd": -54.21,
+   "win_rate": 0.277,
+   "loss_rate": 0.723,
+   "profit_factor": 0.66,
+   "expectancy_usd": -0.417,
+   "expectancy_bps": -166.8,
+   "expectancy_ci_bps": [
+    -340.3,
+    21.3
+   ],
+   "per_trade_sharpe": -0.159,
+   "avg_win_usd": 2.983,
+   "avg_loss_usd": -1.719
+  },
+  "seed_net_usd_ci": [
+   -5.6615,
+   0.4955
+  ],
+  "trades_on_trap_tokens": 0,
+  "mean_bps": -166.8,
+  "note": "synthetic: tests mechanics and bias controls only; not evidence about real markets"
+ },
+ "cost_x2": {
+  "null_edge": true,
+  "seeds": 20,
+  "cost_multiplier": 2.0,
+  "unsellable_rate": 0.0,
+  "pooled": {
+   "n": 0
+  },
+  "seed_net_usd_ci": [
+   0.0,
+   0.0
+  ],
+  "trades_on_trap_tokens": 0,
+  "mean_bps": null,
+  "note": "synthetic: tests mechanics and bias controls only; not evidence about real markets"
+ },
+ "cost_x3": {
+  "null_edge": true,
+  "seeds": 20,
+  "cost_multiplier": 3.0,
+  "unsellable_rate": 0.0,
+  "pooled": {
+   "n": 0
+  },
+  "seed_net_usd_ci": [
+   0.0,
+   0.0
+  ],
+  "trades_on_trap_tokens": 0,
+  "mean_bps": null,
+  "note": "synthetic: tests mechanics and bias controls only; not evidence about real markets"
+ }
+}

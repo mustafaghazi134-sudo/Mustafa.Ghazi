@@ -1,0 +1,670 @@
+SOURCE https://support.kraken.com/articles/where-is-kraken-licensed-or-regulated
+FETCHED 2026-11-03T07:36:40Z HTTP 200
+
+
+
+Where Is Kraken Licensed or Regulated? | Kraken Support
+
+EN
+
+EN
+
+Buy crypto in minutes
+Get the Kraken app
+
+EN
+
+Ask AI
+
+All
+Filter by:
+Select Product
+
+How do I deposit cash into my account?
+
+I need help with account verification
+
+Why can't I access my account?
+
+Are there any crypto withdrawal fees?
+
+I need help signing into my account
+
+Support
+
+Getting Started
+
+Signing Up
+
+Where is Kraken licensed or regulated?
+
+Last updated: November 2, 2026
+
+We welcome clients from all over the world, with a few specific exceptions due to international and local regulations. Depending on your verified residency, you may have certain restrictions on your account, including with respect to the crypto assets you can buy, sell and deposit. Refer to our Terms of Service for complete information on our eligibility criteria. Some account features are only available at certain verification levels.
+
+Create a Kraken account
+
+Our funding providers may, at their own discretion, deny funding to certain geographical locations.
+
+Some regions are not yet able to use debit or credit cards for funding. Please refer to our FAQ on debit and credit cards for the full list of accepted regions.
+
+As jurisdictions continue to develop cryptocurrency regulatory frameworks for local operations, we engage with regulators globally in order to serve clients in a compliant manner. We currently hold the following registrations, licenses, authorizations and approvals:
+
+ Europe 
+
+Cyprus
+
+In Cyprus, Payward Europe Digital Solutions (CY) Limited is regulated by CYSEC as an Investment Firm (MiFID) with licence number 342/17, authorised to offer certain investment and ancillary services.
+
+European Economic Area (EEA)
+
+In Ireland, Kraken has the following licenses, which it has passported to all EEA countries. All EEA customers will contract with these entities if they avail of the services provided:
+
+•
+
+Payward Ireland Limited, trading as “Kraken”, is licensed as an E-Money Institution (EMI) with the Central Bank of Ireland (CBI) (Registration no. C453020) to provide e-money and related payments services including credit transfer services.
+
+•
+
+Payward Europe Solutions Limited, trading as “Kraken”, is licensed as a Crypto Asset Service Provider (CASP under MiCA) with the CBI (Registration No. C468360) to provide:
+
+The custody and administration of crypto-assets on behalf of clients
+
+The exchange of crypto-assets for funds or other crypto-assets
+
+The execution of orders for crypto-assets on behalf of clients
+
+The reception and transmission of orders for crypto-assets on behalf of clients
+
+Providing placing of crypto-assets services
+
+Providing transfer services for crypto-assets on behalf of clients
+
+Providing portfolio management on crypto-asset
+
+In Ireland, Payward Global Solutions Limited, trading as “Kraken”, is licensed as a CASP (under MiCA) with the CBI (Registration No C559106),  to operate a trading platform for crypto-assets.
+
+EEA Clients are subject to the following restrictions:
+
+•
+
+Cannot deposit or trade: AKE, ALEO, APXUSD, AUDX, AUGUR, AUSD, BASED, BNKR, BRL1, CASH, CHECK, COPM, DAI, DCR, DEBIT, DNA, ESX, EVAA, FF, FIDD, FOLKS, FRNT, MXNB, NOCK, OPN, OUSD, PACT, PONS, PWT, PYUSD, QCAD, RLUSD, RNBW, SN44, SN51, SN62, SN64, SN75, SN8, SOFID, SOMI, ST, STABLE, STBL, TAKE, TCS, TEA, TGBP, TREMP, U2U, UAI, UMXM, UNITAS, USAT, USD1, USDD, USDE, USDGO, USDPT, USDS, USDSUI, USDT, USTABLES, VELVET, VOOI, WAR, WEMIX, WFB, XAUT, XMR, ZCHF.
+* Restricted in Germany only.
+
+•
+
+USDG Rewards is not available to clients residing in the EEA.
+
+•
+
+Clients residing in the EEA cannot use Babylon Bitcoin Staking.
+
+•
+
+Opt-in Rewards (OIR) in the EEA is only available for Bitcoin.
+
+* EEA - Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden
+
+United Kingdom
+
+In the United Kingdom, Kraken operates locally as a Financial Conduct Authority (FCA)
+Registered Cryptoasset Firm (Payward Limited, FRN 928768) under the Money Laundering, Terrorist Financing and Transfer of Funds (Information on the Payer) Regulations 2017.
+Kraken is also authorised by the FCA as an Electronic Money Institution (Payward Services Limited, FRN 1010381) under the Electronic Money Regulations 2011.
+To offer certain crypto asset-related services to eligible clients, Kraken also maintains a FCA Authorised Investment Firm (FRN 757895) through its subsidiary Crypto Facilities Limited.
+Under UK regulatory requirements, all newly verified UK retail Kraken accounts are subject to a mandatory 24-hour cooling-off period before trading can begin.
+Clients residing in the UK are subject to the following restrictions:
+
+Opt-in reward restrictions
+
+•
+
+Clients residing in the United Kingdom cannot use Opt-in Rewards.
+
+Defi Earn restrictions
+
+•
+
+DeFi Earn is not available in the United Kingdom.
+
+Krak restrictions
+
+•
+
+Krakbacks are not available for clients in the UK.
+
+Cryptocurrency restrictions
+
+•
+
+Cannot deposit or trade LCAP, TREMP, WAR, and XMR
+
+•
+
+Cannot buy or sell HNT.
+
+Derivatives trading restrictions
+
+•
+
+Retail clients living in the United Kingdom cannot trade derivatives. Clients categorized as elective professional clients may be eligible to trade derivatives, subject to meeting the applicable qualification criteria. For details on categorization and eligibility, see Futures trading for clients in the United Kingdom.
+
+Kraken Drops restrictions
+
+•
+
+Clients located in the UK cannot participate in the Kraken Drops program.
+
+xStocks restrictions
+
+•
+
+xStocks are not available in United Kingdom.
+
+•
+
+The SpaceX IPO via xStocks is not available to clients in United Kingdom.
+
+ North America 
+
+Canada
+
+To serve clients in Canada, Kraken operates as a registered Restricted Dealer, registered with the Ontario Securities Commission and the securities regulators in each of the provinces and territories of Canada. Kraken also maintains registration as a Money Services Business with FINTRAC (‘Payward Canada, Inc.’, MSB Registration No. M19343731). For a complete overview of all regulatory updates and what they mean for Canadian clients, please visit: Canada regulatory updates.
+Clients residing in Canada are subject to the following restrictions:
+
+ Account verification 
+
+•
+
+Clients in Canada will need to verify their account.
+
+ Earn restrictions 
+
+•
+
+Cannot use Opt-in Rewards.
+
+•
+
+Cannot stake GRT or FLR.
+
+•
+
+Clients residing in Canada cannot use Babylon Bitcoin Staking
+
+ Cryptocurrency restrictions 
+
+•
+
+Cannot trade ETH2.S, however can stake ETH.
+
+•
+
+Cannot deposit, hold or trade ACA, AIN, AKE, ALCH, ALICE, ALIGN, APXUSD, ARC, ATLAS, AUDX, AUGUR, AUSD, AVAAI, BASED, BDXN, BILL, BKS, BLESS, BLUAI, BNKR, BODEN, BRL1, C98, CASH, CHECK, CHEX, CLOUD, CMETH, COOKIE, COPM, CORN, CTC, DAI, DBR, DCR, DEBIT, DMC, DNA, DOLO, DUCK, EDGE, EPT, ESX, EURC, EUROP, EURQ, EURR, EV, EVAA, FF, FIDD, FLOCK, FOLKS, FOREST, FRNT, GAIA, GENIUS, GMX, GRASS, HDX, HMSTR, HOLO, HSK, IR, JITOSOL, KERNEL, KIN, KMNO, KNTQ, KOBAN, L3, LAYER, LINEA, LMWR, LSETH, MAT, METH, MXNB, NEXO, NMR, NOCK, NODE, OBOL, OMNI, ONE, OPN, ORDER, OUSD, PACT, PARTI, PAXG, PIPE, PONS, PORTAL, PRCL, PWT, PYUSD, REQ, REZ, RLUSD, RNBW, RVV, SCA, SIDEKICK, SN44, SN51, SN62, SN64, SN75, SN8, SOFID, SOMI, ST, STABLE, STBL, SWARMS, TAC, TBTC, TCS, TEA, TGBP, TNSR, TREE, TREMP, U, U2U, UAI, UMXM, UNITAS, USAT, USD1, USDD, USDE, USDG, USDGO, USDPT, USDQ, USDR, USDS, USDSM, USDSUI, USDT, USTABLES, VELVET, VOOI, WAR, WAXL, WBTC, WEMIX, WEN, WFB, XAUT, XMR, YALA, YB, YGG, ZCHF, and ZEX.
+
+ Krak restrictions 
+
+•
+
+USDG is not available to clients residing in Canada.
+
+ Margin trading restrictions 
+
+•
+
+Clients residing in Canada cannot trade using margin.
+
+ Derivatives trading restrictions 
+
+•
+
+Clients residing in Canada cannot trade derivatives.
+
+XStocks Limitations:
+
+•
+
+xStocks are not available in Canada.
+
+•
+
+The SpaceX IPO via xStocks is not available to clients in Canada.
+
+United States
+
+To serve clients in the United States (US), Kraken maintains a registration as a Money Services Business with FinCEN (‘Payward Interactive, Inc.’, MSB Registration No. 31000270997766). To offer digital asset custody services to eligible clients, Kraken also maintains through its subsidiary ‘Kraken Financial’ a Wyoming-chartered Special Purpose Depository Institution. Kraken offers equities trading in the US through its subsidiary Kraken Securities LLC, a broker-dealer registered with the Securities and Exchange Commission and a member of the Financial Industry Regulatory Authority (www.finra.org) and the Securities Investor Protection Corporation (www.sipc.org). Kraken offers investment advisory services for equities and equities combination bundles through Kraken Adviser LLC, an investment adviser registered with the Securities and Exchange Commission.
+
+Clients residing in the US are subject to the following restrictions:
+
+ Geographic restrictions 
+
+At this time, Kraken (including Kraken Securities LLC and Kraken Adviser LLC) does not offer services to residents of:
+
+•
+
+Maine
+
+•
+
+New York
+
+If you move outside of these states, you can use your new address for regular verification. Be sure to provide a Proof of Residence document so we can legally provide our services to you.
+
+Krak restrictions
+
+•
+
+Crypto transfers are not available in the following states we serve: Indiana
+
+•
+
+Fiat transfers are not available in the following states we serve: Indiana, Louisiana, Massachusetts, and Utah
+
+•
+
+Residents of Texas and New Hampshire cannot deposit or hold EUR, nor trade EUR pairs.
+
+•
+
+Residents of the United States cannot deposit fiat currencies other than USD.
+
+State-by-state custody restrictions
+
+•
+
+Services provided by Kraken Financial are only available to eligible clients in certain states. More information on the services provided by Kraken Financial can be found here.
+
+Cryptocurrency restrictions
+
+•
+
+The following assets are restricted for US clients: ACA, AIN, ALCH, ALICE, ALIGN, ARC, ATLAS, AUDIO, AVAAI, BDXN, BILL, BKS, BLESS, BLUAI, C98, CHECK, CLOUD, COOKIE, CORN, CTC, DBR, DMC, DOLO, DUCK, EDGE, EPT, ESX, EV, EVAA, FF, FLOCK, FOLKS, FOREST, GAIA, GENIUS, GRASS, HDX, HMSTR, HOLO, HSK, IR, KERNEL, KIN, KMNO, KNTQ, KOBAN, L3, LAYER, LINEA, LMWR, MAT, NEXO, NMR, NODE, OBOL, OMNI, ONE, ORDER, PARTI, PERP, PIPE, PONS, PORTAL, PRCL, REQ, REZ, RNBW, RVV, SCA, SIDEKICK, SWARMS, TAC, TEA, TREE, U, VELVET, VOOI, WEN, WOO, YALA, YB, YGG, ZEX.
+
+Derivatives trading
+
+Brokerage services are provided by NinjaTrader Clearing, LLC doing business as Kraken Derivatives US, a Futures Commission Merchant registered with the Commodity Futures Trading Commission (CFTC) and a member of the National Futures Association (NFA ID #0309379).
+
+Margin trading requirements
+
+•
+
+Margin trading is available to eligible US retail clients, and to US clients who self-certify as an Eligible Contract Participant (ECP).
+
+Earn restrictions
+
+•
+
+US clients (except US Accredited Investors) cannot use Opt-In Rewards.
+
+•
+
+Rewards feature on Kraken is only available to select US states.
+
+•
+
+Flare (FLR) staking is not available in the US.
+
+xStocks limitations:
+
+•
+
+xStocks are not available in United States.
+
+•
+
+The SpaceX IPO via xStocks is not available to clients in the United States.
+
+ Rest of World (ROW) 
+
+Clients from around the world are welcome. We serve countries, including those not named below, unless they are listed in the Prohibited Regions section.
+
+Argentina
+
+To service clients in Argentina, Payward Trading Limited - Argentinian Branch is registered as a Virtual Asset Service Provider with the Argentinian national securities commission (Comision Nacional de Valores, CNV). This registration permits Kraken to offer crypto custody and exchange services in the region.
+
+Defi Earn restrictions
+
+•
+
+DeFi Earn is not available in Argentina.
+
+Australia
+
+In Australia, Kraken maintains local operations as a registered Digital Currency Exchange (DCE) and Independent Remittance Dealer with AUSTRAC (Bit Trade Pty Ltd, ACN 163 237 634). Kraken Derivatives are offered via Beaufort Fiduciaries Pty Ltd (ACN 162 139 871, AFSL 545124), a Kraken group company.
+
+ Derivatives trading restrictions: 
+
+•
+
+Australian wholesale clients are able to access Kraken Derivatives via its Australian financial services licensed broker, Beaufort Fiduciaries Pty Ltd (ACN 162 139 871,  AFSL 545124)
+
+ Krak restrictions: 
+
+•
+
+Crypto and fiat transfers are available through Krak to clients residing in Australia.
+
+ Earn restrictions: 
+
+•
+
+Opt-In Rewards are not available in Australia.
+
+•
+
+DeFi Earn is not available in Australia.
+
+ Cryptocurrency restrictions: 
+
+•
+
+Australian clients cannot deposit, hold or trade DASH, FIDD, LCAP, QCAD, SOFID, USAT, WAR, XMR, ZCHF, and ZEC.
+
+ Margin trading restrictions 
+
+•
+
+Retail clients who reside in Australia cannot access fiat extensions when trading with margin without first passing a suitability test to confirm they are within the target market for the product.
+
+XStocks Limitations:
+
+•
+
+xStocks are not available in Australia.
+
+•
+
+The SpaceX IPO via xStocks is not available to clients in Australia.
+
+Bermuda
+
+In Bermuda, Payward Digital Solutions Ltd (PDSL) holds a Class F Digital Asset Business license and is overseen by the Bermuda Monetary Authority (BMA) (registration number 202403268). PDSL serves as a broker for certain spot, derivatives and tokenized equities clients as well as a market venue for certain futures contracts (not available to customers in the EU).
+
+Clients residing in Bermuda cannot use Babylon Bitcoin Staking.
+
+Clients residing in Bermuda cannot use DeFi Earn.
+
+Singapore
+
+Kraken is not licensed or regulated in Singapore.
+DeFi Earn is not available in Singapore.
+
+ Prohibited Regions 
+
+We do not serve clients, or permit cash and crypto deposits, from the following regions:
+
+•
+
+Afghanistan
+
+•
+
+Belarus
+
+•
+
+Crimea, Donetsk, and Luhansk regions of Ukraine
+
+•
+
+Cuba
+
+•
+
+Democratic Republic of the Congo
+
+•
+
+Iran
+
+•
+
+Iraq
+
+•
+
+Japan
+
+•
+
+Libya
+
+•
+
+North Korea
+
+•
+
+Russia
+
+•
+
+Sudan
+
+•
+
+South Sudan
+
+•
+
+Syria
+
+ Europe 
+
+ North America 
+
+ Rest of World (ROW) 
+
+ Prohibited Regions 
+
+Create accountCreate accountSign in
+
+Create accountCreate accountSign in
+
+Features →
+
+Buy Crypto
+
+Sell Crypto
+
+Margin Trading
+
+Futures Trading
+
+OTC Trading
+
+Institutions
+
+API Trading
+
+Staking Rewards
+
+Recurring buys
+
+Kraken Borrow
+
+Kraken Funded
+
+About Kraken →
+
+Kraken Security
+
+Kraken Careers
+
+Kraken Blog
+
+Kraken Developer
+
+Press Room
+
+Affiliate Program
+
+Asset Listings
+
+Kraken Status
+
+Support Center
+
+Complaints
+
+Crypto Prices →
+
+Bitcoin Price
+
+Ethereum Price
+
+Dogecoin Price
+
+XRP Price
+
+Cardano Price
+
+Solana Price
+
+Litecoin Price
+
+Crypto categories
+
+Price predictions
+
+Convert Crypto →
+
+BTC to USD
+
+ETH to USD
+
+XRP to USD
+
+BNB to USD
+
+SOL to USD
+
+DOGE to USD
+
+ADA to USD
+
+TRX to USD
+
+LTC to USD
+
+Buy Crypto →
+
+Buy Bitcoin
+
+Buy Ethereum
+
+Buy Dogecoin
+
+Buy XRP
+
+Buy Cardano
+
+Buy Solana
+
+Buy Litecoin
+
+Buy Stocks →
+
+Buy Nvidia
+
+Buy Tesla
+
+Buy Apple
+
+Buy Amazon
+
+Buy Palantir
+
+Buy Microsoft
+
+Buy Tokenized Equities →
+
+Buy NVDAx
+
+Buy TSLAx
+
+Buy AAPLx
+
+Buy SPYx
+
+Buy AMZNx
+
+Financial Education →
+
+What is cryptocurrency?
+
+What are Smart Contracts?
+
+What is Bitcoin?
+
+What is tokenization
+
+Best Crypto apps
+
+Best crypto exchanges
+
+Kraken vs Coinbase
+
+Privacy Hub
+
+Privacy Notice
+
+Cookies Policy
+
+Do Not Sell/Share
+
+Compliance Hub
+
+Terms of Service
+
+Exchange Trading Rules
+
+Disclosures
+
+by PAYWARD
+
+© 2011–2026 Payward, Inc.
+
+Trading
+
+Kraken
+
+Kraken Pro
+
+NinjaTrader
+
+Breakout
+
+VIP
+
+API Trading
+
+|
+
+Services
+
+Payward Services
+
+xStocks
+
+CF Benchmarks
+
+Reap
+
+|
+
+Banking
+
+Krak
+
+Prime
+
+OTC
+
+Custody
+
+|
+
+Asset Management
+
+These materials are for general information purposes only and are not investment or financial product advice or a recommendation or solicitation to buy, sell, stake or hold any cryptoasset or to engage in any specific trading strategy. Kraken does not and will not work to increase or decrease the price of any particular cryptoasset it makes available. The unpredictable nature of the crypto-asset markets can lead to loss of funds. Tax may be payable on any return and/or on any increase in the value of your cryptoassets and you should seek independent advice on your taxation position. Geographic restrictions may apply. Some crypto products and markets are unregulated. Kraken’s regulatory status for its various products and services differs per jurisdiction and you may not be protected by government compensation and/or regulatory protection schemes. See Legal Disclosures for each jurisdiction.
+

@@ -1,0 +1,46 @@
+# Opportunity Lab configuration (PAPER ONLY). Copy to lab.toml and edit. Every section is optional; defaults are in
+# opportunity_lab/config.py. This file never contains keys: AI and RPC keys come from environment variables.
+
+data_dir = "data/lab"            # the lab's own folder: ledger, events, halt file
+main_kill_file = "data/KILL"     # the main bot's emergency stop, read-only for the lab
+
+[sources]
+dexscreener = true
+geckoterminal = true
+jupiter_tokens = true
+jupiter_quotes = true
+solana_rpc = true
+rpc_url = "https://api.mainnet-beta.solana.com"   # HELIUS_API_KEY in the environment switches to Helius
+
+[scan]
+poll_sec = 30
+min_liquidity_usd = 20000
+
+[security]
+min_liquidity_usd = 50000
+min_age_min = 30
+max_top10_holder_pct = 35
+max_round_trip_loss_bps = 250
+
+[analyst]
+max_total_cost_bps = 300
+require_calibrated_edge = false   # paper exploration; must be true before anything is ever considered for real money
+
+[exits]
+stop_loss_pct = 12
+take_profit_pct = 30
+max_hold_min = 240
+
+[risk]
+paper_capital_usd = 1000
+position_usd = 25
+max_exposure_usd = 100
+max_daily_loss_usd = 50
+max_drawdown_usd = 150
+
+[ai]                               # shadow scoring only; costs money when enabled
+claude_enabled = false
+grok_enabled = false
+grok_model = "grok-4.3"
+max_calls_per_day = 100
+max_spend_usd_per_day = 1.0

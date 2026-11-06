@@ -1,0 +1,68 @@
+=== EXECUTION-TEST REHEARSAL (read-only) 2026-11-03T09:29:44Z  amount $6.00  rpc https://api.mainnet-beta.solana.com
+
+--- 1. quote-only round trip (no taker)
+reference SOL price 92.0202
+sample 1: buy {"router": "jupiterz", "inAmount": "6000000", "outAmount": "65155352", "otherAmountThreshold": "65155352", "slippageBps": 0, "feeBps": 2, "priceImpact": -0.021115022204539577, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": true}
+          sell {"router": "metis", "inAmount": "65155352", "outAmount": "5999015", "otherAmountThreshold": "5969019", "slippageBps": 50, "feeBps": 2, "priceImpact": 0.00469934780620103, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065155 SOL -> $5.9990: swap round trip 1.6 bps ($0.0010); sell floor at slippage limit $5.9690
+sample 2: buy {"router": "metis", "inAmount": "6000000", "outAmount": "65146491", "otherAmountThreshold": "64820758", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.013111742680174251, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          sell {"router": "metis", "inAmount": "65146491", "outAmount": "5998275", "otherAmountThreshold": "5968283", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.015640308036768774, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065146 SOL -> $5.9983: swap round trip 2.9 bps ($0.0017); sell floor at slippage limit $5.9683
+sample 3: buy {"router": "metis", "inAmount": "6000000", "outAmount": "65149212", "otherAmountThreshold": "64823465", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.00706623422246741, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          sell {"router": "metis", "inAmount": "65149212", "outAmount": "5998422", "otherAmountThreshold": "5968429", "slippageBps": 50, "feeBps": 2, "priceImpact": -0.017105973560636867, "signatureFeeLamports": 0, "prioritizationFeeLamports": 0, "rentFeeLamports": 0, "gasless": false}
+          => $6.00 -> 0.065149 SOL -> $5.9984: swap round trip 2.6 bps ($0.0016); sell floor at slippage limit $5.9684
+
+--- FRESH EMPTY WALLET F8TX7fWFDYW7X7AuFjGrZTDm63MMY7d9BgJWGyv2RoVF (random public key; decode + verifier only, simulation will fail for lack of funds)
+SOL BUY #1:
+  route router=jupiterz mode=manual prioritizationFeeLamports=0 rentFeeLamports=0 signatureFeeLamports=0
+  FAIL VerificationError: no transaction to verify
+SOL BUY #2:
+  route router=jupiterz mode=manual prioritizationFeeLamports=0 rentFeeLamports=0 signatureFeeLamports=0
+  FAIL VerificationError: no transaction to verify
+SOL SELL #1:
+  route router=jupiterz mode=manual prioritizationFeeLamports=0 rentFeeLamports=0 signatureFeeLamports=0
+  FAIL VerificationError: no transaction to verify
+SOL SELL #2:
+  route router=jupiterz mode=manual prioritizationFeeLamports=0 rentFeeLamports=0 signatureFeeLamports=0
+  FAIL VerificationError: no transaction to verify
+
+--- SOL SELL route decode #1 (taker BXEHNbKP, decode only)
+  route router=metis mode=manual prioritizationFeeLamports=3660 rentFeeLamports=0 signatureFeeLamports=5000
+  ix0 ComputeBudge data=02ad950500 accounts=[]
+  ix1 ComputeBudge data=031027000000000000 accounts=[]
+  ix2 111111111111 data=020000009dd8e20300000000 accounts=['WALLET', 'bWRG9MGK']
+  ix3 TokenkegQfeZ data=11 accounts=['bWRG9MGK']
+  ix4 JUP6LkbZbjS1 data=d19853937cfed8e90a9dd8e2 accounts=['69yhtoJR', 'WALLET', 'bWRG9MGK', 'qqdJ4z1y', 'E6LAwCLS', 'TxnPTwwy', 'So111111', 'EPjFWdd5'] ...
+  ix5 TokenkegQfeZ data=09 accounts=['bWRG9MGK', 'WALLET', 'WALLET']
+  verifier: ok=False problems=["ix3: SyncNative on an account other than the wallet's wSOL account", '65198237 lamports leave the wallet to third parties (max 500000)']
+
+--- SOL SELL route decode #2 (taker BXEHNbKP, decode only)
+  route router=metis mode=manual prioritizationFeeLamports=6999 rentFeeLamports=0 signatureFeeLamports=5000
+  ix0 ComputeBudge data=0291560500 accounts=[]
+  ix1 ComputeBudge data=03244e000000000000 accounts=[]
+  ix2 111111111111 data=020000009dd8e20300000000 accounts=['WALLET', 'bWRG9MGK']
+  ix3 TokenkegQfeZ data=11 accounts=['bWRG9MGK']
+  ix4 JUP6LkbZbjS1 data=d19853937cfed8e90c9dd8e2 accounts=['3LoAYHuS', 'WALLET', 'bWRG9MGK', '6AMWTvaL', '819hAmNK', 'TxnPTwwy', 'So111111', 'EPjFWdd5'] ...
+  ix5 TokenkegQfeZ data=09 accounts=['bWRG9MGK', 'WALLET', 'WALLET']
+  verifier: ok=False problems=["ix3: SyncNative on an account other than the wallet's wSOL account", '65198237 lamports leave the wallet to third parties (max 500000)']
+
+--- SOL SELL route decode #3 (taker BXEHNbKP, decode only)
+  route router=metis mode=manual prioritizationFeeLamports=17241 rentFeeLamports=0 signatureFeeLamports=5000
+  ix0 ComputeBudge data=02c17e0100 accounts=[]
+  ix1 ComputeBudge data=034caf020000000000 accounts=[]
+  ix2 111111111111 data=020000009dd8e20300000000 accounts=['WALLET', 'bWRG9MGK']
+  ix3 TokenkegQfeZ data=11 accounts=['bWRG9MGK']
+  ix4 JUP6LkbZbjS1 data=bb64facc31c4af149dd8e203 accounts=['WALLET', 'bWRG9MGK', 'TxnPTwwy', 'So111111', 'EPjFWdd5', 'Tokenkeg', 'Tokenkeg', 'JUP6LkbZ'] ...
+  ix5 TokenkegQfeZ data=09 accounts=['bWRG9MGK', 'WALLET', 'WALLET']
+  verifier: ok=False problems=["ix3: SyncNative on an account other than the wallet's wSOL account", '65198237 lamports leave the wallet to third parties (max 500000)']
+
+--- cbBTC BUY route decode (taker BXEHNbKP, decode only)
+  route router=jupiterz mode=manual prioritizationFeeLamports=10 rentFeeLamports=1488440 signatureFeeLamports=10000
+  ix0 ComputeBudge data=035d02000000000000 accounts=[]
+  ix1 ComputeBudge data=02253c0000 accounts=[]
+  ix2 ATokenGPvbdG data=01 accounts=['WALLET', 'BHMHnJ9H', 'WALLET', 'cbbtcf3a', '11111111', 'Tokenkeg']
+  ix3 61DFfeTKM7tr data=a860b7a35c0a28a0808d5b00 accounts=['WALLET', '6UWsi9WK', 'TxnPTwwy', '9MLV5gWL', 'BHMHnJ9H', '727xraLV', 'EPjFWdd5', 'Tokenkeg'] ...
+
+no funded wallet found among recent Jupiter swaps
+
+read-only: no signature was requested and nothing was submitted.

@@ -1,0 +1,1324 @@
+{
+ "preregistration": "docs/INTRADAY_EDGE_CEILING_PREREG.md",
+ "seed": 20261104,
+ "costs_bps_round_trip": {
+  "taker": 11.0,
+  "maker_bound": 3.0
+ },
+ "bonferroni_alpha": 0.0017857142857142859,
+ "data": {
+  "BTCUSDT": {
+   "bars": 2005840,
+   "first": "2023-01-01 00:00:00+00:00",
+   "last": "2026-10-24 23:59:00+00:00",
+   "train_bars": 1052560,
+   "holdout_bars": 953280
+  },
+  "ETHUSDT": {
+   "bars": 1480320,
+   "first": "2024-01-01 00:00:00+00:00",
+   "last": "2026-10-24 23:59:00+00:00",
+   "train_bars": 527040,
+   "holdout_bars": 953280
+  },
+  "SOLUSDT": {
+   "bars": 2005839,
+   "first": "2023-01-01 00:00:00+00:00",
+   "last": "2026-10-24 23:59:00+00:00",
+   "train_bars": 1052559,
+   "holdout_bars": 953280
+  }
+ },
+ "rows": [
+  {
+   "feature": "F1_ofi_5m",
+   "horizon_min": 5,
+   "n": 235824,
+   "gross_bps": 0.18,
+   "net_taker_bps": -10.82,
+   "net_taker_ci95_bps": [
+    -10.9,
+    -10.75
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.82,
+   "net_taker_2025": -10.81,
+   "net_taker_2026": -10.83,
+   "events_per_day": 356.23,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 90932,
+     "gross_bps": 0.15,
+     "net_taker_bps": -10.85,
+     "sign": "reversal",
+     "train_spread_bps": -0.24
+    },
+    "ETHUSDT": {
+     "n": 73072,
+     "gross_bps": 0.19,
+     "net_taker_bps": -10.81,
+     "sign": "reversal",
+     "train_spread_bps": -0.33
+    },
+    "SOLUSDT": {
+     "n": 71820,
+     "gross_bps": 0.2,
+     "net_taker_bps": -10.8,
+     "sign": "reversal",
+     "train_spread_bps": -0.53
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F1_ofi_5m",
+   "horizon_min": 15,
+   "n": 124908,
+   "gross_bps": 0.46,
+   "net_taker_bps": -10.54,
+   "net_taker_ci95_bps": [
+    -10.72,
+    -10.35
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.54,
+   "net_taker_2025": -10.45,
+   "net_taker_2026": -10.63,
+   "events_per_day": 188.68,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 45458,
+     "gross_bps": 0.39,
+     "net_taker_bps": -10.61,
+     "sign": "reversal",
+     "train_spread_bps": -0.58
+    },
+    "ETHUSDT": {
+     "n": 39786,
+     "gross_bps": 0.47,
+     "net_taker_bps": -10.53,
+     "sign": "reversal",
+     "train_spread_bps": -0.6
+    },
+    "SOLUSDT": {
+     "n": 39664,
+     "gross_bps": 0.55,
+     "net_taker_bps": -10.45,
+     "sign": "reversal",
+     "train_spread_bps": -1.21
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F1_ofi_5m",
+   "horizon_min": 60,
+   "n": 41551,
+   "gross_bps": 1.17,
+   "net_taker_bps": -9.83,
+   "net_taker_ci95_bps": [
+    -10.45,
+    -9.22
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -1.83,
+   "net_taker_2025": -9.5,
+   "net_taker_2026": -10.22,
+   "events_per_day": 62.77,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 14346,
+     "gross_bps": 0.79,
+     "net_taker_bps": -10.21,
+     "sign": "reversal",
+     "train_spread_bps": -1.01
+    },
+    "ETHUSDT": {
+     "n": 13603,
+     "gross_bps": 1.31,
+     "net_taker_bps": -9.69,
+     "sign": "reversal",
+     "train_spread_bps": -1.13
+    },
+    "SOLUSDT": {
+     "n": 13602,
+     "gross_bps": 1.44,
+     "net_taker_bps": -9.56,
+     "sign": "reversal",
+     "train_spread_bps": -2.93
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F1_ofi_5m",
+   "horizon_min": 240,
+   "n": 11457,
+   "gross_bps": -0.58,
+   "net_taker_bps": -11.58,
+   "net_taker_ci95_bps": [
+    -13.99,
+    -9.17
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -3.58,
+   "net_taker_2025": -11.96,
+   "net_taker_2026": -11.12,
+   "events_per_day": 17.31,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 3862,
+     "gross_bps": 3.15,
+     "net_taker_bps": -7.85,
+     "sign": "reversal",
+     "train_spread_bps": -1.53
+    },
+    "ETHUSDT": {
+     "n": 3796,
+     "gross_bps": -0.5,
+     "net_taker_bps": -11.5,
+     "sign": "momentum",
+     "train_spread_bps": 1.41
+    },
+    "SOLUSDT": {
+     "n": 3799,
+     "gross_bps": -4.46,
+     "net_taker_bps": -15.46,
+     "sign": "reversal",
+     "train_spread_bps": -4.93
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F2_ofi_60m",
+   "horizon_min": 5,
+   "n": 183298,
+   "gross_bps": 0.08,
+   "net_taker_bps": -10.92,
+   "net_taker_ci95_bps": [
+    -10.99,
+    -10.84
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.92,
+   "net_taker_2025": -10.9,
+   "net_taker_2026": -10.94,
+   "events_per_day": 276.89,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 72581,
+     "gross_bps": 0.14,
+     "net_taker_bps": -10.86,
+     "sign": "reversal",
+     "train_spread_bps": -0.22
+    },
+    "ETHUSDT": {
+     "n": 53678,
+     "gross_bps": -0.12,
+     "net_taker_bps": -11.12,
+     "sign": "momentum",
+     "train_spread_bps": 0.11
+    },
+    "SOLUSDT": {
+     "n": 57039,
+     "gross_bps": 0.2,
+     "net_taker_bps": -10.8,
+     "sign": "reversal",
+     "train_spread_bps": -0.61
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F2_ofi_60m",
+   "horizon_min": 15,
+   "n": 80022,
+   "gross_bps": 0.31,
+   "net_taker_bps": -10.69,
+   "net_taker_ci95_bps": [
+    -10.93,
+    -10.46
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.69,
+   "net_taker_2025": -10.52,
+   "net_taker_2026": -10.88,
+   "events_per_day": 120.88,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 31433,
+     "gross_bps": 0.31,
+     "net_taker_bps": -10.69,
+     "sign": "reversal",
+     "train_spread_bps": -0.35
+    },
+    "ETHUSDT": {
+     "n": 23613,
+     "gross_bps": 0.24,
+     "net_taker_bps": -10.76,
+     "sign": "reversal",
+     "train_spread_bps": -0.02
+    },
+    "SOLUSDT": {
+     "n": 24976,
+     "gross_bps": 0.37,
+     "net_taker_bps": -10.63,
+     "sign": "reversal",
+     "train_spread_bps": -1.02
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F2_ofi_60m",
+   "horizon_min": 60,
+   "n": 29363,
+   "gross_bps": 0.23,
+   "net_taker_bps": -10.77,
+   "net_taker_ci95_bps": [
+    -11.41,
+    -10.11
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.77,
+   "net_taker_2025": -10.5,
+   "net_taker_2026": -11.06,
+   "events_per_day": 44.35,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 11119,
+     "gross_bps": 0.85,
+     "net_taker_bps": -10.15,
+     "sign": "reversal",
+     "train_spread_bps": -2.25
+    },
+    "ETHUSDT": {
+     "n": 8929,
+     "gross_bps": -0.75,
+     "net_taker_bps": -11.75,
+     "sign": "momentum",
+     "train_spread_bps": 0.33
+    },
+    "SOLUSDT": {
+     "n": 9315,
+     "gross_bps": 0.44,
+     "net_taker_bps": -10.56,
+     "sign": "reversal",
+     "train_spread_bps": -3.65
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F2_ofi_60m",
+   "horizon_min": 240,
+   "n": 10115,
+   "gross_bps": -0.32,
+   "net_taker_bps": -11.32,
+   "net_taker_ci95_bps": [
+    -13.75,
+    -8.84
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -3.32,
+   "net_taker_2025": -10.68,
+   "net_taker_2026": -12.08,
+   "events_per_day": 15.28,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 3566,
+     "gross_bps": -0.26,
+     "net_taker_bps": -11.26,
+     "sign": "reversal",
+     "train_spread_bps": -1.7
+    },
+    "ETHUSDT": {
+     "n": 3240,
+     "gross_bps": -1.07,
+     "net_taker_bps": -12.07,
+     "sign": "momentum",
+     "train_spread_bps": 4.56
+    },
+    "SOLUSDT": {
+     "n": 3309,
+     "gross_bps": 0.34,
+     "net_taker_bps": -10.66,
+     "sign": "reversal",
+     "train_spread_bps": -6.41
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F3_ret_5m",
+   "horizon_min": 5,
+   "n": 159706,
+   "gross_bps": 0.09,
+   "net_taker_bps": -10.91,
+   "net_taker_ci95_bps": [
+    -11.0,
+    -10.83
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.91,
+   "net_taker_2025": -10.94,
+   "net_taker_2026": -10.87,
+   "events_per_day": 241.25,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 55489,
+     "gross_bps": 0.19,
+     "net_taker_bps": -10.81,
+     "sign": "reversal",
+     "train_spread_bps": -0.25
+    },
+    "ETHUSDT": {
+     "n": 60387,
+     "gross_bps": -0.19,
+     "net_taker_bps": -11.19,
+     "sign": "momentum",
+     "train_spread_bps": 0.34
+    },
+    "SOLUSDT": {
+     "n": 43830,
+     "gross_bps": 0.34,
+     "net_taker_bps": -10.66,
+     "sign": "reversal",
+     "train_spread_bps": -0.41
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F3_ret_5m",
+   "horizon_min": 15,
+   "n": 88674,
+   "gross_bps": 0.48,
+   "net_taker_bps": -10.52,
+   "net_taker_ci95_bps": [
+    -10.77,
+    -10.25
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.52,
+   "net_taker_2025": -10.62,
+   "net_taker_2026": -10.35,
+   "events_per_day": 133.95,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 30283,
+     "gross_bps": 0.55,
+     "net_taker_bps": -10.45,
+     "sign": "reversal",
+     "train_spread_bps": -0.38
+    },
+    "ETHUSDT": {
+     "n": 32680,
+     "gross_bps": -0.13,
+     "net_taker_bps": -11.13,
+     "sign": "momentum",
+     "train_spread_bps": 0.32
+    },
+    "SOLUSDT": {
+     "n": 25711,
+     "gross_bps": 1.17,
+     "net_taker_bps": -9.83,
+     "sign": "reversal",
+     "train_spread_bps": -1.12
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F3_ret_5m",
+   "horizon_min": 60,
+   "n": 33340,
+   "gross_bps": 0.57,
+   "net_taker_bps": -10.43,
+   "net_taker_ci95_bps": [
+    -11.35,
+    -9.52
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.43,
+   "net_taker_2025": -10.69,
+   "net_taker_2026": -10.06,
+   "events_per_day": 50.36,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 11243,
+     "gross_bps": 0.38,
+     "net_taker_bps": -10.62,
+     "sign": "reversal",
+     "train_spread_bps": -0.69
+    },
+    "ETHUSDT": {
+     "n": 11872,
+     "gross_bps": 1.03,
+     "net_taker_bps": -9.97,
+     "sign": "reversal",
+     "train_spread_bps": -1.01
+    },
+    "SOLUSDT": {
+     "n": 10225,
+     "gross_bps": 0.24,
+     "net_taker_bps": -10.76,
+     "sign": "reversal",
+     "train_spread_bps": -2.43
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F3_ret_5m",
+   "horizon_min": 240,
+   "n": 10299,
+   "gross_bps": -0.91,
+   "net_taker_bps": -11.91,
+   "net_taker_ci95_bps": [
+    -14.51,
+    -9.24
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -3.91,
+   "net_taker_2025": -10.98,
+   "net_taker_2026": -13.16,
+   "events_per_day": 15.56,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 3455,
+     "gross_bps": -2.19,
+     "net_taker_bps": -13.19,
+     "sign": "reversal",
+     "train_spread_bps": -0.19
+    },
+    "ETHUSDT": {
+     "n": 3549,
+     "gross_bps": -0.22,
+     "net_taker_bps": -11.22,
+     "sign": "reversal",
+     "train_spread_bps": -2.17
+    },
+    "SOLUSDT": {
+     "n": 3295,
+     "gross_bps": -0.3,
+     "net_taker_bps": -11.3,
+     "sign": "reversal",
+     "train_spread_bps": -5.85
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F4_ret_60m",
+   "horizon_min": 5,
+   "n": 108898,
+   "gross_bps": 0.26,
+   "net_taker_bps": -10.74,
+   "net_taker_ci95_bps": [
+    -10.98,
+    -10.51
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.74,
+   "net_taker_2025": -10.8,
+   "net_taker_2026": -10.65,
+   "events_per_day": 166.26,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 38277,
+     "gross_bps": 0.23,
+     "net_taker_bps": -10.77,
+     "sign": "reversal",
+     "train_spread_bps": -0.28
+    },
+    "ETHUSDT": {
+     "n": 41730,
+     "gross_bps": 0.07,
+     "net_taker_bps": -10.93,
+     "sign": "reversal",
+     "train_spread_bps": -0.44
+    },
+    "SOLUSDT": {
+     "n": 28891,
+     "gross_bps": 0.57,
+     "net_taker_bps": -10.43,
+     "sign": "reversal",
+     "train_spread_bps": -0.67
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F4_ret_60m",
+   "horizon_min": 15,
+   "n": 51351,
+   "gross_bps": 0.42,
+   "net_taker_bps": -10.58,
+   "net_taker_ci95_bps": [
+    -11.16,
+    -10.0
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.58,
+   "net_taker_2025": -10.66,
+   "net_taker_2026": -10.44,
+   "events_per_day": 78.4,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 18001,
+     "gross_bps": 0.34,
+     "net_taker_bps": -10.66,
+     "sign": "reversal",
+     "train_spread_bps": -0.67
+    },
+    "ETHUSDT": {
+     "n": 19537,
+     "gross_bps": 0.21,
+     "net_taker_bps": -10.79,
+     "sign": "reversal",
+     "train_spread_bps": -1.54
+    },
+    "SOLUSDT": {
+     "n": 13813,
+     "gross_bps": 0.83,
+     "net_taker_bps": -10.17,
+     "sign": "reversal",
+     "train_spread_bps": -2.0
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F4_ret_60m",
+   "horizon_min": 60,
+   "n": 20357,
+   "gross_bps": 0.83,
+   "net_taker_bps": -10.17,
+   "net_taker_ci95_bps": [
+    -11.79,
+    -8.62
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.17,
+   "net_taker_2025": -10.77,
+   "net_taker_2026": -9.22,
+   "events_per_day": 31.08,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 7060,
+     "gross_bps": 1.12,
+     "net_taker_bps": -9.88,
+     "sign": "reversal",
+     "train_spread_bps": -2.14
+    },
+    "ETHUSDT": {
+     "n": 7618,
+     "gross_bps": 0.14,
+     "net_taker_bps": -10.86,
+     "sign": "reversal",
+     "train_spread_bps": -7.16
+    },
+    "SOLUSDT": {
+     "n": 5679,
+     "gross_bps": 1.39,
+     "net_taker_bps": -9.61,
+     "sign": "reversal",
+     "train_spread_bps": -5.43
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F4_ret_60m",
+   "horizon_min": 240,
+   "n": 7792,
+   "gross_bps": -1.83,
+   "net_taker_bps": -12.83,
+   "net_taker_ci95_bps": [
+    -15.95,
+    -9.68
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -4.83,
+   "net_taker_2025": -14.95,
+   "net_taker_2026": -9.72,
+   "events_per_day": 11.9,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 2646,
+     "gross_bps": -1.23,
+     "net_taker_bps": -12.23,
+     "sign": "momentum",
+     "train_spread_bps": 0.28
+    },
+    "ETHUSDT": {
+     "n": 2789,
+     "gross_bps": -2.87,
+     "net_taker_bps": -13.87,
+     "sign": "reversal",
+     "train_spread_bps": -5.34
+    },
+    "SOLUSDT": {
+     "n": 2357,
+     "gross_bps": -1.29,
+     "net_taker_bps": -12.29,
+     "sign": "reversal",
+     "train_spread_bps": -14.7
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F5_vol_burst",
+   "horizon_min": 5,
+   "n": 188100,
+   "gross_bps": 0.15,
+   "net_taker_bps": -10.85,
+   "net_taker_ci95_bps": [
+    -10.93,
+    -10.77
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.85,
+   "net_taker_2025": -10.83,
+   "net_taker_2026": -10.87,
+   "events_per_day": 284.14,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 64432,
+     "gross_bps": 0.21,
+     "net_taker_bps": -10.79,
+     "sign": "reversal",
+     "train_spread_bps": -0.19
+    },
+    "ETHUSDT": {
+     "n": 60444,
+     "gross_bps": -0.13,
+     "net_taker_bps": -11.13,
+     "sign": "momentum",
+     "train_spread_bps": 0.22
+    },
+    "SOLUSDT": {
+     "n": 63224,
+     "gross_bps": 0.37,
+     "net_taker_bps": -10.63,
+     "sign": "reversal",
+     "train_spread_bps": -0.33
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F5_vol_burst",
+   "horizon_min": 15,
+   "n": 104928,
+   "gross_bps": 0.4,
+   "net_taker_bps": -10.6,
+   "net_taker_ci95_bps": [
+    -10.81,
+    -10.4
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.6,
+   "net_taker_2025": -10.42,
+   "net_taker_2026": -10.84,
+   "events_per_day": 158.5,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 35340,
+     "gross_bps": 0.52,
+     "net_taker_bps": -10.48,
+     "sign": "reversal",
+     "train_spread_bps": -0.19
+    },
+    "ETHUSDT": {
+     "n": 34090,
+     "gross_bps": -0.39,
+     "net_taker_bps": -11.39,
+     "sign": "momentum",
+     "train_spread_bps": 0.36
+    },
+    "SOLUSDT": {
+     "n": 35498,
+     "gross_bps": 1.03,
+     "net_taker_bps": -9.97,
+     "sign": "reversal",
+     "train_spread_bps": -1.17
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F5_vol_burst",
+   "horizon_min": 60,
+   "n": 38117,
+   "gross_bps": 1.25,
+   "net_taker_bps": -9.75,
+   "net_taker_ci95_bps": [
+    -10.6,
+    -8.94
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -1.75,
+   "net_taker_2025": -9.42,
+   "net_taker_2026": -10.17,
+   "events_per_day": 57.58,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 12706,
+     "gross_bps": 0.71,
+     "net_taker_bps": -10.29,
+     "sign": "reversal",
+     "train_spread_bps": -0.32
+    },
+    "ETHUSDT": {
+     "n": 12568,
+     "gross_bps": 0.69,
+     "net_taker_bps": -10.31,
+     "sign": "reversal",
+     "train_spread_bps": -0.36
+    },
+    "SOLUSDT": {
+     "n": 12843,
+     "gross_bps": 2.33,
+     "net_taker_bps": -8.67,
+     "sign": "reversal",
+     "train_spread_bps": -1.96
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F5_vol_burst",
+   "horizon_min": 240,
+   "n": 11087,
+   "gross_bps": -3.47,
+   "net_taker_bps": -14.47,
+   "net_taker_ci95_bps": [
+    -17.24,
+    -11.66
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -6.47,
+   "net_taker_2025": -15.67,
+   "net_taker_2026": -12.97,
+   "events_per_day": 16.75,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 3688,
+     "gross_bps": -0.58,
+     "net_taker_bps": -11.58,
+     "sign": "momentum",
+     "train_spread_bps": 0.73
+    },
+    "ETHUSDT": {
+     "n": 3676,
+     "gross_bps": -2.07,
+     "net_taker_bps": -13.07,
+     "sign": "reversal",
+     "train_spread_bps": -1.08
+    },
+    "SOLUSDT": {
+     "n": 3723,
+     "gross_bps": -7.71,
+     "net_taker_bps": -18.71,
+     "sign": "reversal",
+     "train_spread_bps": -3.84
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F6_funding",
+   "horizon_min": 5,
+   "n": 70030,
+   "gross_bps": -0.11,
+   "net_taker_bps": -11.11,
+   "net_taker_ci95_bps": [
+    -11.25,
+    -10.97
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -3.11,
+   "net_taker_2025": -11.19,
+   "net_taker_2026": -11.03,
+   "events_per_day": 146.51,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 12990,
+     "gross_bps": -0.15,
+     "net_taker_bps": -11.15,
+     "sign": "momentum",
+     "train_spread_bps": 0.2
+    },
+    "ETHUSDT": {
+     "n": 49840,
+     "gross_bps": 0.0,
+     "net_taker_bps": -11.0,
+     "sign": "reversal",
+     "train_spread_bps": -0.36
+    },
+    "SOLUSDT": {
+     "n": 7200,
+     "gross_bps": -0.81,
+     "net_taker_bps": -11.81,
+     "sign": "momentum",
+     "train_spread_bps": 0.05
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F6_funding",
+   "horizon_min": 15,
+   "n": 26819,
+   "gross_bps": -0.22,
+   "net_taker_bps": -11.22,
+   "net_taker_ci95_bps": [
+    -11.59,
+    -10.84
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -3.22,
+   "net_taker_2025": -11.26,
+   "net_taker_2026": -11.18,
+   "events_per_day": 56.11,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 5029,
+     "gross_bps": -0.69,
+     "net_taker_bps": -11.69,
+     "sign": "momentum",
+     "train_spread_bps": 0.42
+    },
+    "ETHUSDT": {
+     "n": 19007,
+     "gross_bps": 0.13,
+     "net_taker_bps": -10.87,
+     "sign": "reversal",
+     "train_spread_bps": -1.02
+    },
+    "SOLUSDT": {
+     "n": 2783,
+     "gross_bps": -1.76,
+     "net_taker_bps": -12.76,
+     "sign": "momentum",
+     "train_spread_bps": 0.15
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F6_funding",
+   "horizon_min": 60,
+   "n": 6995,
+   "gross_bps": -0.55,
+   "net_taker_bps": -11.55,
+   "net_taker_ci95_bps": [
+    -12.97,
+    -10.11
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -3.55,
+   "net_taker_2025": -11.81,
+   "net_taker_2026": -11.32,
+   "events_per_day": 14.63,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 1299,
+     "gross_bps": -2.32,
+     "net_taker_bps": -13.32,
+     "sign": "momentum",
+     "train_spread_bps": 1.58
+    },
+    "ETHUSDT": {
+     "n": 4976,
+     "gross_bps": 0.88,
+     "net_taker_bps": -10.12,
+     "sign": "reversal",
+     "train_spread_bps": -3.01
+    },
+    "SOLUSDT": {
+     "n": 720,
+     "gross_bps": -7.25,
+     "net_taker_bps": -18.25,
+     "sign": "momentum",
+     "train_spread_bps": 2.24
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F6_funding",
+   "horizon_min": 240,
+   "n": 2374,
+   "gross_bps": -3.2,
+   "net_taker_bps": -14.2,
+   "net_taker_ci95_bps": [
+    -18.82,
+    -9.79
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -6.2,
+   "net_taker_2025": -16.74,
+   "net_taker_2026": -11.84,
+   "events_per_day": 4.99,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 515,
+     "gross_bps": -11.86,
+     "net_taker_bps": -22.86,
+     "sign": "momentum",
+     "train_spread_bps": 5.33
+    },
+    "ETHUSDT": {
+     "n": 1574,
+     "gross_bps": 0.27,
+     "net_taker_bps": -10.73,
+     "sign": "reversal",
+     "train_spread_bps": -1.86
+    },
+    "SOLUSDT": {
+     "n": 285,
+     "gross_bps": -6.74,
+     "net_taker_bps": -17.74,
+     "sign": "momentum",
+     "train_spread_bps": 18.66
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F7_ret60_z",
+   "horizon_min": 5,
+   "n": 121881,
+   "gross_bps": 0.16,
+   "net_taker_bps": -10.84,
+   "net_taker_ci95_bps": [
+    -11.05,
+    -10.63
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.84,
+   "net_taker_2025": -10.85,
+   "net_taker_2026": -10.83,
+   "events_per_day": 184.95,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 43122,
+     "gross_bps": 0.24,
+     "net_taker_bps": -10.76,
+     "sign": "reversal",
+     "train_spread_bps": -0.21
+    },
+    "ETHUSDT": {
+     "n": 38827,
+     "gross_bps": 0.05,
+     "net_taker_bps": -10.95,
+     "sign": "reversal",
+     "train_spread_bps": -0.3
+    },
+    "SOLUSDT": {
+     "n": 39932,
+     "gross_bps": 0.19,
+     "net_taker_bps": -10.81,
+     "sign": "reversal",
+     "train_spread_bps": -0.56
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F7_ret60_z",
+   "horizon_min": 15,
+   "n": 57377,
+   "gross_bps": 0.32,
+   "net_taker_bps": -10.68,
+   "net_taker_ci95_bps": [
+    -11.19,
+    -10.16
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.68,
+   "net_taker_2025": -10.56,
+   "net_taker_2026": -10.83,
+   "events_per_day": 87.07,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 20201,
+     "gross_bps": 0.41,
+     "net_taker_bps": -10.59,
+     "sign": "reversal",
+     "train_spread_bps": -0.47
+    },
+    "ETHUSDT": {
+     "n": 18313,
+     "gross_bps": 0.12,
+     "net_taker_bps": -10.88,
+     "sign": "reversal",
+     "train_spread_bps": -1.39
+    },
+    "SOLUSDT": {
+     "n": 18863,
+     "gross_bps": 0.43,
+     "net_taker_bps": -10.57,
+     "sign": "reversal",
+     "train_spread_bps": -1.56
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F7_ret60_z",
+   "horizon_min": 60,
+   "n": 22675,
+   "gross_bps": 0.36,
+   "net_taker_bps": -10.64,
+   "net_taker_ci95_bps": [
+    -12.05,
+    -9.18
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -2.64,
+   "net_taker_2025": -10.99,
+   "net_taker_2026": -10.21,
+   "events_per_day": 34.41,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 7814,
+     "gross_bps": 1.01,
+     "net_taker_bps": -9.99,
+     "sign": "reversal",
+     "train_spread_bps": -1.43
+    },
+    "ETHUSDT": {
+     "n": 7333,
+     "gross_bps": 0.23,
+     "net_taker_bps": -10.77,
+     "sign": "reversal",
+     "train_spread_bps": -7.21
+    },
+    "SOLUSDT": {
+     "n": 7528,
+     "gross_bps": -0.2,
+     "net_taker_bps": -11.2,
+     "sign": "reversal",
+     "train_spread_bps": -5.02
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  },
+  {
+   "feature": "F7_ret60_z",
+   "horizon_min": 240,
+   "n": 8406,
+   "gross_bps": -0.44,
+   "net_taker_bps": -11.44,
+   "net_taker_ci95_bps": [
+    -14.59,
+    -8.23
+   ],
+   "p_one_sided": 1.0,
+   "net_maker_bound_bps": -3.44,
+   "net_taker_2025": -9.17,
+   "net_taker_2026": -14.24,
+   "events_per_day": 12.76,
+   "per_asset": {
+    "BTCUSDT": {
+     "n": 2817,
+     "gross_bps": -2.47,
+     "net_taker_bps": -13.47,
+     "sign": "momentum",
+     "train_spread_bps": 2.44
+    },
+    "ETHUSDT": {
+     "n": 2740,
+     "gross_bps": 0.89,
+     "net_taker_bps": -10.11,
+     "sign": "reversal",
+     "train_spread_bps": -4.95
+    },
+    "SOLUSDT": {
+     "n": 2849,
+     "gross_bps": 0.28,
+     "net_taker_bps": -10.72,
+     "sign": "reversal",
+     "train_spread_bps": -9.78
+    }
+   },
+   "criteria": {
+    "1_net_pos_bonferroni": false,
+    "2_two_of_three_assets": false,
+    "3_both_halves": false,
+    "4_min_200_events": true
+   },
+   "PASS": false
+  }
+ ],
+ "passes": [],
+ "runtime_sec": 8.3
+}

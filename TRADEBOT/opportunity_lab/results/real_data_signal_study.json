@@ -1,0 +1,1153 @@
+{
+ "dataset": "ian05012/solana-memecoin-dataset",
+ "evidence_class": "HISTORICAL BACKTEST, survivorship-biased (upper bound)",
+ "pre_registered": "(written before any result was looked at; not changed afterwards):\n  entry   : open of the first 15-min candle starting at or after the detection time (no look-ahead); one entry per token\n            (its first qualifying snapshot); candles must start within 20 minutes of detection\n  exits   : lab defaults: stop -12% (gap: fill at the bar open if it opens below the stop), target +30%, time 240 min\n            (exit at the close of the last bar inside the window); stop checked before target in the same bar\n  costs   : lab cost model: DEX fee 30 bps/leg, constant-product impact from liquidity at detection, $0.01 network per\n            tx, $0.40 token-account rent, x1 / x2 / x3 stress\n  security: liquidity >= L, age >= 30 min, top-10 holders <= 35%, LP burned >= 90% (mint/freeze revoked for all rows)\n  variants: L in {$20k, $50k}  x  size in {$25, $100}  x  signal in\n            {all (naive basket), momentum_flow: price_change_1h > 0 and 1h buy share >= 0.6,\n             strong_flow: price_change_1h >= 20% and 1h buy share >= 0.65}\n            -> 12 variants; Bonferroni alpha = 0.05 / 12\n  windows : development 06-10..06-19, validation 06-20..06-24, holdout 06-25..06-29 (by detection date)\n  promising only if: validation AND holdout expectancy CI lower bound > 0 at x2 costs, n >= 30 in each",
+ "alpha_bonferroni": 0.004166666666666667,
+ "price_change_1h_quantiles": [
+  -8.281,
+  2.55,
+  406.0
+ ],
+ "variants": {
+  "liq>=20k|size$25|all": {
+   "development": {
+    "cost_x1": {
+     "n": 250,
+     "expectancy_bps": -510.1,
+     "win_rate": 0.224,
+     "profit_factor": 0.54,
+     "ci_bps": [
+      -814.5,
+      -197.1
+     ]
+    },
+    "cost_x2": {
+     "n": 250,
+     "expectancy_bps": -601.4,
+     "win_rate": 0.224,
+     "profit_factor": 0.48,
+     "ci_bps": [
+      -902.6,
+      -292.6
+     ]
+    },
+    "cost_x3": {
+     "n": 250,
+     "expectancy_bps": -692.1,
+     "win_rate": 0.224,
+     "profit_factor": 0.44,
+     "ci_bps": [
+      -990.0,
+      -387.4
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 139,
+     "expectancy_bps": -129.3,
+     "win_rate": 0.317,
+     "profit_factor": 0.87,
+     "ci_bps": [
+      -570.1,
+      339.3
+     ]
+    },
+    "cost_x2": {
+     "n": 139,
+     "expectancy_bps": -225.3,
+     "win_rate": 0.317,
+     "profit_factor": 0.78,
+     "ci_bps": [
+      -661.1,
+      236.1
+     ]
+    },
+    "cost_x3": {
+     "n": 139,
+     "expectancy_bps": -320.7,
+     "win_rate": 0.317,
+     "profit_factor": 0.7,
+     "ci_bps": [
+      -751.4,
+      133.7
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 153,
+     "expectancy_bps": -417.0,
+     "win_rate": 0.248,
+     "profit_factor": 0.61,
+     "ci_bps": [
+      -791.2,
+      -6.0
+     ]
+    },
+    "cost_x2": {
+     "n": 153,
+     "expectancy_bps": -508.2,
+     "win_rate": 0.248,
+     "profit_factor": 0.55,
+     "ci_bps": [
+      -877.6,
+      -102.2
+     ]
+    },
+    "cost_x3": {
+     "n": 153,
+     "expectancy_bps": -598.8,
+     "win_rate": 0.248,
+     "profit_factor": 0.5,
+     "ci_bps": [
+      -963.3,
+      -197.7
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "stop": 402,
+    "time": 4,
+    "target": 136
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=20k|size$25|momentum_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 197,
+     "expectancy_bps": -504.9,
+     "win_rate": 0.223,
+     "profit_factor": 0.54,
+     "ci_bps": [
+      -836.5,
+      -144.6
+     ]
+    },
+    "cost_x2": {
+     "n": 197,
+     "expectancy_bps": -595.6,
+     "win_rate": 0.223,
+     "profit_factor": 0.49,
+     "ci_bps": [
+      -923.2,
+      -239.9
+     ]
+    },
+    "cost_x3": {
+     "n": 197,
+     "expectancy_bps": -685.6,
+     "win_rate": 0.223,
+     "profit_factor": 0.44,
+     "ci_bps": [
+      -1009.4,
+      -334.6
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 88,
+     "expectancy_bps": -215.7,
+     "win_rate": 0.295,
+     "profit_factor": 0.78,
+     "ci_bps": [
+      -772.2,
+      342.1
+     ]
+    },
+    "cost_x2": {
+     "n": 88,
+     "expectancy_bps": -310.9,
+     "win_rate": 0.295,
+     "profit_factor": 0.71,
+     "ci_bps": [
+      -860.5,
+      241.1
+     ]
+    },
+    "cost_x3": {
+     "n": 88,
+     "expectancy_bps": -405.5,
+     "win_rate": 0.295,
+     "profit_factor": 0.64,
+     "ci_bps": [
+      -948.3,
+      140.8
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 105,
+     "expectancy_bps": -368.3,
+     "win_rate": 0.257,
+     "profit_factor": 0.65,
+     "ci_bps": [
+      -837.2,
+      173.9
+     ]
+    },
+    "cost_x2": {
+     "n": 105,
+     "expectancy_bps": -459.6,
+     "win_rate": 0.257,
+     "profit_factor": 0.59,
+     "ci_bps": [
+      -923.4,
+      75.5
+     ]
+    },
+    "cost_x3": {
+     "n": 105,
+     "expectancy_bps": -550.2,
+     "win_rate": 0.257,
+     "profit_factor": 0.53,
+     "ci_bps": [
+      -1009.0,
+      -22.2
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "stop": 291,
+    "target": 97,
+    "time": 2
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=20k|size$25|strong_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 167,
+     "expectancy_bps": -560.2,
+     "win_rate": 0.21,
+     "profit_factor": 0.5,
+     "ci_bps": [
+      -927.6,
+      -212.5
+     ]
+    },
+    "cost_x2": {
+     "n": 167,
+     "expectancy_bps": -650.1,
+     "win_rate": 0.21,
+     "profit_factor": 0.45,
+     "ci_bps": [
+      -1013.6,
+      -305.9
+     ]
+    },
+    "cost_x3": {
+     "n": 167,
+     "expectancy_bps": -739.3,
+     "win_rate": 0.21,
+     "profit_factor": 0.41,
+     "ci_bps": [
+      -1099.1,
+      -400.8
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 79,
+     "expectancy_bps": -130.1,
+     "win_rate": 0.316,
+     "profit_factor": 0.87,
+     "ci_bps": [
+      -698.6,
+      592.3
+     ]
+    },
+    "cost_x2": {
+     "n": 79,
+     "expectancy_bps": -226.5,
+     "win_rate": 0.316,
+     "profit_factor": 0.78,
+     "ci_bps": [
+      -788.2,
+      485.9
+     ]
+    },
+    "cost_x3": {
+     "n": 79,
+     "expectancy_bps": -322.3,
+     "win_rate": 0.316,
+     "profit_factor": 0.7,
+     "ci_bps": [
+      -877.1,
+      380.2
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 75,
+     "expectancy_bps": -274.4,
+     "win_rate": 0.28,
+     "profit_factor": 0.73,
+     "ci_bps": [
+      -820.6,
+      376.3
+     ]
+    },
+    "cost_x2": {
+     "n": 75,
+     "expectancy_bps": -366.8,
+     "win_rate": 0.28,
+     "profit_factor": 0.66,
+     "ci_bps": [
+      -907.2,
+      275.6
+     ]
+    },
+    "cost_x3": {
+     "n": 75,
+     "expectancy_bps": -458.5,
+     "win_rate": 0.28,
+     "profit_factor": 0.6,
+     "ci_bps": [
+      -993.7,
+      175.7
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "stop": 238,
+    "target": 81,
+    "time": 2
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=20k|size$100|all": {
+   "development": {
+    "cost_x1": {
+     "n": 250,
+     "expectancy_bps": -497.4,
+     "win_rate": 0.224,
+     "profit_factor": 0.54,
+     "ci_bps": [
+      -800.8,
+      -188.1
+     ]
+    },
+    "cost_x2": {
+     "n": 250,
+     "expectancy_bps": -689.9,
+     "win_rate": 0.224,
+     "profit_factor": 0.43,
+     "ci_bps": [
+      -985.4,
+      -390.3
+     ]
+    },
+    "cost_x3": {
+     "n": 250,
+     "expectancy_bps": -878.9,
+     "win_rate": 0.224,
+     "profit_factor": 0.34,
+     "ci_bps": [
+      -1166.7,
+      -583.5
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 139,
+     "expectancy_bps": -120.1,
+     "win_rate": 0.317,
+     "profit_factor": 0.87,
+     "ci_bps": [
+      -558.1,
+      340.6
+     ]
+    },
+    "cost_x2": {
+     "n": 139,
+     "expectancy_bps": -325.2,
+     "win_rate": 0.317,
+     "profit_factor": 0.7,
+     "ci_bps": [
+      -750.2,
+      115.9
+     ]
+    },
+    "cost_x3": {
+     "n": 139,
+     "expectancy_bps": -526.4,
+     "win_rate": 0.317,
+     "profit_factor": 0.56,
+     "ci_bps": [
+      -938.8,
+      -103.7
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 153,
+     "expectancy_bps": -401.5,
+     "win_rate": 0.248,
+     "profit_factor": 0.62,
+     "ci_bps": [
+      -771.7,
+      6.4
+     ]
+    },
+    "cost_x2": {
+     "n": 153,
+     "expectancy_bps": -592.4,
+     "win_rate": 0.248,
+     "profit_factor": 0.49,
+     "ci_bps": [
+      -949.2,
+      -192.5
+     ]
+    },
+    "cost_x3": {
+     "n": 153,
+     "expectancy_bps": -779.8,
+     "win_rate": 0.248,
+     "profit_factor": 0.4,
+     "ci_bps": [
+      -1123.7,
+      -387.7
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "stop": 402,
+    "time": 4,
+    "target": 136
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=20k|size$100|momentum_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 197,
+     "expectancy_bps": -490.2,
+     "win_rate": 0.223,
+     "profit_factor": 0.55,
+     "ci_bps": [
+      -819.4,
+      -133.5
+     ]
+    },
+    "cost_x2": {
+     "n": 197,
+     "expectancy_bps": -680.3,
+     "win_rate": 0.223,
+     "profit_factor": 0.44,
+     "ci_bps": [
+      -999.3,
+      -335.0
+     ]
+    },
+    "cost_x3": {
+     "n": 197,
+     "expectancy_bps": -867.0,
+     "win_rate": 0.223,
+     "profit_factor": 0.35,
+     "ci_bps": [
+      -1177.6,
+      -529.2
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 88,
+     "expectancy_bps": -206.5,
+     "win_rate": 0.295,
+     "profit_factor": 0.79,
+     "ci_bps": [
+      -758.1,
+      349.9
+     ]
+    },
+    "cost_x2": {
+     "n": 88,
+     "expectancy_bps": -409.8,
+     "win_rate": 0.295,
+     "profit_factor": 0.63,
+     "ci_bps": [
+      -943.2,
+      132.8
+     ]
+    },
+    "cost_x3": {
+     "n": 88,
+     "expectancy_bps": -609.4,
+     "win_rate": 0.295,
+     "profit_factor": 0.5,
+     "ci_bps": [
+      -1124.9,
+      -80.1
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 105,
+     "expectancy_bps": -351.5,
+     "win_rate": 0.257,
+     "profit_factor": 0.66,
+     "ci_bps": [
+      -818.6,
+      184.7
+     ]
+    },
+    "cost_x2": {
+     "n": 105,
+     "expectancy_bps": -541.6,
+     "win_rate": 0.257,
+     "profit_factor": 0.53,
+     "ci_bps": [
+      -996.5,
+      -24.8
+     ]
+    },
+    "cost_x3": {
+     "n": 105,
+     "expectancy_bps": -728.3,
+     "win_rate": 0.257,
+     "profit_factor": 0.43,
+     "ci_bps": [
+      -1171.3,
+      -229.2
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "stop": 291,
+    "target": 97,
+    "time": 2
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=20k|size$100|strong_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 167,
+     "expectancy_bps": -544.7,
+     "win_rate": 0.21,
+     "profit_factor": 0.51,
+     "ci_bps": [
+      -911.1,
+      -200.2
+     ]
+    },
+    "cost_x2": {
+     "n": 167,
+     "expectancy_bps": -732.4,
+     "win_rate": 0.21,
+     "profit_factor": 0.41,
+     "ci_bps": [
+      -1087.8,
+      -394.1
+     ]
+    },
+    "cost_x3": {
+     "n": 167,
+     "expectancy_bps": -916.9,
+     "win_rate": 0.21,
+     "profit_factor": 0.33,
+     "ci_bps": [
+      -1260.1,
+      -586.7
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 79,
+     "expectancy_bps": -122.1,
+     "win_rate": 0.316,
+     "profit_factor": 0.87,
+     "ci_bps": [
+      -686.1,
+      591.1
+     ]
+    },
+    "cost_x2": {
+     "n": 79,
+     "expectancy_bps": -328.8,
+     "win_rate": 0.316,
+     "profit_factor": 0.69,
+     "ci_bps": [
+      -874.9,
+      357.0
+     ]
+    },
+    "cost_x3": {
+     "n": 79,
+     "expectancy_bps": -531.7,
+     "win_rate": 0.316,
+     "profit_factor": 0.55,
+     "ci_bps": [
+      -1060.2,
+      127.7
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 75,
+     "expectancy_bps": -258.2,
+     "win_rate": 0.28,
+     "profit_factor": 0.74,
+     "ci_bps": [
+      -803.7,
+      386.2
+     ]
+    },
+    "cost_x2": {
+     "n": 75,
+     "expectancy_bps": -451.3,
+     "win_rate": 0.28,
+     "profit_factor": 0.6,
+     "ci_bps": [
+      -984.7,
+      171.1
+     ]
+    },
+    "cost_x3": {
+     "n": 75,
+     "expectancy_bps": -640.9,
+     "win_rate": 0.28,
+     "profit_factor": 0.48,
+     "ci_bps": [
+      -1162.5,
+      -39.9
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "stop": 238,
+    "target": 81,
+    "time": 2
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=50k|size$25|all": {
+   "development": {
+    "cost_x1": {
+     "n": 25,
+     "expectancy_bps": -420.9,
+     "win_rate": 0.24,
+     "profit_factor": 0.61,
+     "ci_bps": [
+      -1241.7,
+      564.2
+     ]
+    },
+    "cost_x2": {
+     "n": 25,
+     "expectancy_bps": -492.6,
+     "win_rate": 0.24,
+     "profit_factor": 0.56,
+     "ci_bps": [
+      -1307.6,
+      485.8
+     ]
+    },
+    "cost_x3": {
+     "n": 25,
+     "expectancy_bps": -564.0,
+     "win_rate": 0.24,
+     "profit_factor": 0.52,
+     "ci_bps": [
+      -1373.1,
+      407.8
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 15,
+     "expectancy_bps": 234.2,
+     "win_rate": 0.4,
+     "profit_factor": 1.28,
+     "ci_bps": [
+      -1132.3,
+      1873.7
+     ]
+    },
+    "cost_x2": {
+     "n": 15,
+     "expectancy_bps": 156.4,
+     "win_rate": 0.4,
+     "profit_factor": 1.18,
+     "ci_bps": [
+      -1199.0,
+      1782.5
+     ]
+    },
+    "cost_x3": {
+     "n": 15,
+     "expectancy_bps": 79.0,
+     "win_rate": 0.4,
+     "profit_factor": 1.09,
+     "ci_bps": [
+      -1265.4,
+      1691.6
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 24,
+     "expectancy_bps": -796.2,
+     "win_rate": 0.167,
+     "profit_factor": 0.32,
+     "ci_bps": [
+      -1405.1,
+      58.3
+     ]
+    },
+    "cost_x2": {
+     "n": 24,
+     "expectancy_bps": -864.6,
+     "win_rate": 0.167,
+     "profit_factor": 0.29,
+     "ci_bps": [
+      -1469.1,
+      -16.4
+     ]
+    },
+    "cost_x3": {
+     "n": 24,
+     "expectancy_bps": -932.7,
+     "win_rate": 0.167,
+     "profit_factor": 0.27,
+     "ci_bps": [
+      -1532.9,
+      -90.9
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "target": 15,
+    "stop": 48,
+    "time": 1
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=50k|size$25|momentum_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 11,
+     "expectancy_bps": 86.0,
+     "win_rate": 0.364,
+     "profit_factor": 1.1,
+     "ci_bps": [
+      -1405.5,
+      1950.2
+     ]
+    },
+    "cost_x2": {
+     "n": 11,
+     "expectancy_bps": 10.4,
+     "win_rate": 0.364,
+     "profit_factor": 1.01,
+     "ci_bps": [
+      -1469.9,
+      1860.2
+     ]
+    },
+    "cost_x3": {
+     "n": 11,
+     "expectancy_bps": -64.9,
+     "win_rate": 0.364,
+     "profit_factor": 0.93,
+     "ci_bps": [
+      -1534.0,
+      1770.6
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 5,
+     "expectancy_bps": 1054.2,
+     "win_rate": 0.6,
+     "profit_factor": 2.87
+    },
+    "cost_x2": {
+     "n": 5,
+     "expectancy_bps": 970.0,
+     "win_rate": 0.6,
+     "profit_factor": 2.65
+    },
+    "cost_x3": {
+     "n": 5,
+     "expectancy_bps": 886.2,
+     "win_rate": 0.6,
+     "profit_factor": 2.44
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 7,
+     "expectancy_bps": -817.1,
+     "win_rate": 0.143,
+     "profit_factor": 0.32
+    },
+    "cost_x2": {
+     "n": 7,
+     "expectancy_bps": -883.6,
+     "win_rate": 0.143,
+     "profit_factor": 0.3
+    },
+    "cost_x3": {
+     "n": 7,
+     "expectancy_bps": -949.7,
+     "win_rate": 0.143,
+     "profit_factor": 0.27
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0022,
+   "exit_reasons_x1": {
+    "target": 8,
+    "stop": 15
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=50k|size$25|strong_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 9,
+     "expectancy_bps": -38.2,
+     "win_rate": 0.333,
+     "profit_factor": 0.96
+    },
+    "cost_x2": {
+     "n": 9,
+     "expectancy_bps": -112.9,
+     "win_rate": 0.333,
+     "profit_factor": 0.88
+    },
+    "cost_x3": {
+     "n": 9,
+     "expectancy_bps": -187.3,
+     "win_rate": 0.333,
+     "profit_factor": 0.82
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 4,
+     "expectancy_bps": 645.6,
+     "win_rate": 0.5,
+     "profit_factor": 1.92
+    },
+    "cost_x2": {
+     "n": 4,
+     "expectancy_bps": 566.0,
+     "win_rate": 0.5,
+     "profit_factor": 1.77
+    },
+    "cost_x3": {
+     "n": 4,
+     "expectancy_bps": 486.8,
+     "win_rate": 0.5,
+     "profit_factor": 1.64
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 2,
+     "expectancy_bps": -1405.3,
+     "win_rate": 0.0,
+     "profit_factor": 0.0
+    },
+    "cost_x2": {
+     "n": 2,
+     "expectancy_bps": -1469.5,
+     "win_rate": 0.0,
+     "profit_factor": 0.0
+    },
+    "cost_x3": {
+     "n": 2,
+     "expectancy_bps": -1533.4,
+     "win_rate": 0.0,
+     "profit_factor": 0.0
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "target": 5,
+    "stop": 10
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=50k|size$100|all": {
+   "development": {
+    "cost_x1": {
+     "n": 25,
+     "expectancy_bps": -346.5,
+     "win_rate": 0.24,
+     "profit_factor": 0.66,
+     "ci_bps": [
+      -1173.3,
+      646.8
+     ]
+    },
+    "cost_x2": {
+     "n": 25,
+     "expectancy_bps": -460.7,
+     "win_rate": 0.24,
+     "profit_factor": 0.58,
+     "ci_bps": [
+      -1277.8,
+      522.0
+     ]
+    },
+    "cost_x3": {
+     "n": 25,
+     "expectancy_bps": -573.9,
+     "win_rate": 0.24,
+     "profit_factor": 0.51,
+     "ci_bps": [
+      -1381.3,
+      398.4
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 15,
+     "expectancy_bps": 309.1,
+     "win_rate": 0.4,
+     "profit_factor": 1.39,
+     "ci_bps": [
+      -1063.3,
+      1954.9
+     ]
+    },
+    "cost_x2": {
+     "n": 15,
+     "expectancy_bps": 181.4,
+     "win_rate": 0.4,
+     "profit_factor": 1.21,
+     "ci_bps": [
+      -1169.4,
+      1800.2
+     ]
+    },
+    "cost_x3": {
+     "n": 15,
+     "expectancy_bps": 55.0,
+     "win_rate": 0.4,
+     "profit_factor": 1.06,
+     "ci_bps": [
+      -1274.4,
+      1647.0
+     ]
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 24,
+     "expectancy_bps": -722.6,
+     "win_rate": 0.167,
+     "profit_factor": 0.35,
+     "ci_bps": [
+      -1335.8,
+      137.2
+     ]
+    },
+    "cost_x2": {
+     "n": 24,
+     "expectancy_bps": -829.8,
+     "win_rate": 0.167,
+     "profit_factor": 0.3,
+     "ci_bps": [
+      -1435.5,
+      18.4
+     ]
+    },
+    "cost_x3": {
+     "n": 24,
+     "expectancy_bps": -936.0,
+     "win_rate": 0.167,
+     "profit_factor": 0.26,
+     "ci_bps": [
+      -1534.3,
+      -99.2
+     ]
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0,
+   "exit_reasons_x1": {
+    "target": 15,
+    "stop": 48,
+    "time": 1
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=50k|size$100|momentum_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 11,
+     "expectancy_bps": 163.0,
+     "win_rate": 0.364,
+     "profit_factor": 1.19,
+     "ci_bps": [
+      -1337.4,
+      2037.4
+     ]
+    },
+    "cost_x2": {
+     "n": 11,
+     "expectancy_bps": 41.3,
+     "win_rate": 0.364,
+     "profit_factor": 1.05,
+     "ci_bps": [
+      -1438.7,
+      1888.9
+     ]
+    },
+    "cost_x3": {
+     "n": 11,
+     "expectancy_bps": -79.4,
+     "win_rate": 0.364,
+     "profit_factor": 0.92,
+     "ci_bps": [
+      -1539.1,
+      1741.9
+     ]
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 5,
+     "expectancy_bps": 1133.1,
+     "win_rate": 0.6,
+     "profit_factor": 3.11
+    },
+    "cost_x2": {
+     "n": 5,
+     "expectancy_bps": 993.0,
+     "win_rate": 0.6,
+     "profit_factor": 2.72
+    },
+    "cost_x3": {
+     "n": 5,
+     "expectancy_bps": 854.3,
+     "win_rate": 0.6,
+     "profit_factor": 2.38
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 7,
+     "expectancy_bps": -738.2,
+     "win_rate": 0.143,
+     "profit_factor": 0.35
+    },
+    "cost_x2": {
+     "n": 7,
+     "expectancy_bps": -837.9,
+     "win_rate": 0.143,
+     "profit_factor": 0.31
+    },
+    "cost_x3": {
+     "n": 7,
+     "expectancy_bps": -936.8,
+     "win_rate": 0.143,
+     "profit_factor": 0.28
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0099,
+   "exit_reasons_x1": {
+    "target": 8,
+    "stop": 15
+   },
+   "verdict": "REJECTED"
+  },
+  "liq>=50k|size$100|strong_flow": {
+   "development": {
+    "cost_x1": {
+     "n": 9,
+     "expectancy_bps": 38.1,
+     "win_rate": 0.333,
+     "profit_factor": 1.04
+    },
+    "cost_x2": {
+     "n": 9,
+     "expectancy_bps": -81.8,
+     "win_rate": 0.333,
+     "profit_factor": 0.91
+    },
+    "cost_x3": {
+     "n": 9,
+     "expectancy_bps": -200.6,
+     "win_rate": 0.333,
+     "profit_factor": 0.8
+    }
+   },
+   "validation": {
+    "cost_x1": {
+     "n": 4,
+     "expectancy_bps": 726.8,
+     "win_rate": 0.5,
+     "profit_factor": 2.09
+    },
+    "cost_x2": {
+     "n": 4,
+     "expectancy_bps": 598.4,
+     "win_rate": 0.5,
+     "profit_factor": 1.83
+    },
+    "cost_x3": {
+     "n": 4,
+     "expectancy_bps": 471.3,
+     "win_rate": 0.5,
+     "profit_factor": 1.62
+    }
+   },
+   "holdout": {
+    "cost_x1": {
+     "n": 2,
+     "expectancy_bps": -1336.6,
+     "win_rate": 0.0,
+     "profit_factor": 0.0
+    },
+    "cost_x2": {
+     "n": 2,
+     "expectancy_bps": -1437.1,
+     "win_rate": 0.0,
+     "profit_factor": 0.0
+    },
+    "cost_x3": {
+     "n": 2,
+     "expectancy_bps": -1536.7,
+     "win_rate": 0.0,
+     "profit_factor": 0.0
+    }
+   },
+   "breakeven_writeoff_rate_x1": 0.0038,
+   "exit_reasons_x1": {
+    "target": 5,
+    "stop": 10
+   },
+   "verdict": "REJECTED"
+  }
+ },
+ "coverage": {
+  "snapshots": 44460,
+  "with_candles_after_detection": 542
+ }
+}

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tradebot"
+version = "0.1.0"
+description = "Autonomous Solana trading bot: Claude research, independent risk engine, kill switch, paper-first"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=1.0",
+    "httpx>=0.27",
+    "pydantic>=2.6",
+    "solders>=0.21",
+    "base58>=2.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+research = ["numpy>=1.26", "pandas>=2.2"]   # research_lab only; the live bot is pure Python + httpx/pydantic/solders
+fast = ["websockets>=12"]                    # optional Binance WebSocket reference feed for the fast engine
+
+[project.scripts]
+tradebot = "tradebot.cli:main"
+tradebot-lab = "opportunity_lab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["tradebot*", "opportunity_lab*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
