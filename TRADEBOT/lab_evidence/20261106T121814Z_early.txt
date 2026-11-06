@@ -1,0 +1,21 @@
+=== OPPORTUNITY LAB SNAPSHOT early  2026-11-06T12:18:14Z  run 42214038385  (PAPER, SIMULATED FUNDS) ===
+lab: RUNNING (pid 2498)
+
+mode: paper (only)   data: data_lab
+lab halt: clear   main kill: False
+cash: $1,000.00   open positions: 0   pending intents: 0
+snapshots: 1034681
+opportunities: 97575
+assessments: 7181
+proposals: 0
+trades: 0
+
+PAPER SIMULATION (not real-money results)
+trades 0  net $0  expectancy None bps CI95 None  win None  PF None  maxDD $0.0  equity $1000.0
+funnel: {'opportunities': 97575, 'eligible': 16174, 'assessed': 7181, 'security_approved': 0, 'proposals': 0, 'accepted': 0, 'entries': 0, 'filled': 0, 'failed_entries': 0, 'rejection_rate': 1.0, 'failed_entry_rate': None}
+security rejections: {'holders_unknown': 5444, 'low_liquidity': 3772, 'price_impact': 2808, 'too_new': 2623, 'no_route': 2585, 'facts_missing': 1737, 'round_trip_loss': 1479, 'liquidity_withdrawal': 180, 'jupiter_sus': 156, 'token2022_transferHook': 97, 'honeypot_suspect': 46, 'no_sellers': 10, 'token2022_transferFeeConfig': 9, 'transfer_fee': 9}
+analyst rejections: {}
+exits: {}  liquidity-related: {'trades': 0, 'pnl_usd': 0, 'writeoffs': 0}
+naive basket benchmark: n=0 expectancy None bps CI None
+
+--- log tail
