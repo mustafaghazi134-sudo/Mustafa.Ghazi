@@ -234,14 +234,14 @@ def _live(tmp_path, monkeypatch):
     return s, b, kp
 
 
-def test_live_sign_derives_signature_before_broadcast(tmp_path, monkeypatch):
+def test_live_sign_derives_signature_before_broadcast(tmp_path, monkeypatch, legacy_switch_on):
     s, b, kp = _live(tmp_path, monkeypatch)
     signed_b64, sig = b._sign(_unsigned_tx_b64(kp))
     tx = VersionedTransaction.from_bytes(base64.b64decode(signed_b64))
     assert str(tx.signatures[0]) == sig and sig != str(Signature.default())
 
 
-def test_live_timeout_resends_same_payload_and_reports_unknown_not_new_order(tmp_path, monkeypatch):
+def test_live_timeout_resends_same_payload_and_reports_unknown_not_new_order(tmp_path, monkeypatch, legacy_switch_on):
     s, b, kp = _live(tmp_path, monkeypatch)
     order = {"transaction": _unsigned_tx_b64(kp), "requestId": "req-9", "outAmount": "554000000", "priceImpactPct": "0.0001", "feeBps": 2}
     sent, hooks = [], []

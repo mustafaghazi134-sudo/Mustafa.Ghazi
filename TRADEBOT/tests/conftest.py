@@ -37,3 +37,13 @@ def limits():
 @pytest.fixture
 def risk(limits, kill, clock):
     return RiskEngine(limits, kill, clock=clock)
+
+
+@pytest.fixture
+def legacy_switch_on(monkeypatch):
+    """TEST-ONLY: turns the build switch ON for the duration of ONE test so the quarantined legacy broker's own logic
+    (gate, retries, resend behaviour) can still be exercised with mocked network and a throwaway key. It is restored
+    automatically. Tests that prove the lock (tests/test_legacy_broker_quarantine.py) never use it."""
+    from tradebot.execution import submission
+    monkeypatch.setattr(submission, "MAINNET_SUBMISSION_ENABLED", True)
+

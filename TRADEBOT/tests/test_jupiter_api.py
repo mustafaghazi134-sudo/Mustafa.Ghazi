@@ -128,7 +128,7 @@ def test_quote_uses_swap_v2_order_with_taker_and_raw_amounts(tmp_path, monkeypat
     assert q.fee_usd == pytest.approx(100 * 2 / 1e4)   # feeBps from the order
 
 
-def test_execute_blocked_when_not_armed_before_any_network_call(tmp_path, monkeypatch):
+def test_execute_blocked_when_not_armed_before_any_network_call(tmp_path, monkeypatch, legacy_switch_on):
     monkeypatch.delenv("TRADEBOT_LIVE_TRADING", raising=False)
     s, b = _broker(tmp_path, armed=False)
     b._request = lambda *a, **k: pytest.fail("network call attempted while disarmed")
@@ -137,7 +137,7 @@ def test_execute_blocked_when_not_armed_before_any_network_call(tmp_path, monkey
         b._execute(OrderRequest(symbol="SOL", side=Side.BUY, notional_usd=100), 0.554, q)
 
 
-def test_execute_success_uses_actual_amounts_and_requestid(tmp_path, monkeypatch):
+def test_execute_success_uses_actual_amounts_and_requestid(tmp_path, monkeypatch, legacy_switch_on):
     s, b = _broker(tmp_path, monkeypatch=monkeypatch)
     posted = {}
 
@@ -154,7 +154,7 @@ def test_execute_success_uses_actual_amounts_and_requestid(tmp_path, monkeypatch
     assert fill.tx_signature == "sig123" and fill.qty == pytest.approx(0.553) and fill.notional_usd == pytest.approx(100.0)
 
 
-def test_execute_retryable_code_requotes_then_non_retryable_raises(tmp_path, monkeypatch):
+def test_execute_retryable_code_requotes_then_non_retryable_raises(tmp_path, monkeypatch, legacy_switch_on):
     s, b = _broker(tmp_path, monkeypatch=monkeypatch)
     s.execution.execute_max_retries = 1
     arm_for_test(s, gate=b.gate)     # [execution] is part of the activation binding: re-arm after editing it

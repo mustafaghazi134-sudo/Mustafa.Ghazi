@@ -1,6 +1,13 @@
 """LEGACY (not used by the engine): superseded by jupiter_adapter.JupiterExecutionAdapter, which keeps the key in
 the separate signer service and verifies every transaction before signing. Kept only for its existing tests.
 
+QUARANTINED: this broker holds a private key in-process and POSTs to /execute, so it must never act while the build
+switch is off. Every method that can sign or submit (`execute`, `_execute`, `_sign`, any non-GET `_request`, any
+`send*` JSON-RPC call) first calls the central guard `submission_enabled()` (execution/submission.py), the same check the
+adapter and the signer make, and refuses with `DISABLED_REASON` BEFORE touching the key, building a signature or making
+any execution-related request. There is no other switch, flag or setting. Nothing in production code constructs this
+class (tests/test_legacy_broker_quarantine.py audits that).
+
 Live execution via the Jupiter Swap API v2 (official `integrating-jupiter` / `jupiter-swap-migration` skills).
 
 Flow per order: LiveGate.assert_armed -> RiskEngine.verify -> GET /swap/v2/order?taker=<wallet> -> sign the
@@ -28,6 +35,7 @@ from ..models import Fill, OrderRequest, Side
 from ..risk.engine import RiskEngine
 from .base import Broker, ExecutionError, Quote, SubmittedUnknownError
 from .live_gate import LiveGate
+from .submission import DISABLED_REASON, submission_enabled
 from .wallet import redact
 
 log = logging.getLogger(__name__)
@@ -62,6 +70,17 @@ class JupiterLiveBroker(Broker):
         self.usdc_mint = settings.universe.mints["USDC"]
         log.warning("live broker (Swap API v2) initialised for wallet %s via %s", redact(self.pubkey), self.jup.swap)
 
+    # ------------------------------------------------------------------ build-level lock
+    @staticmethod
+    def _require_submission_enabled() -> None:
+        """Central lock (execution/submission.py). Called first in every method that can sign or submit."""
+        if not submission_enabled():
+            raise ExecutionError(DISABLED_REASON)
+
+    def execute(self, order: OrderRequest, qty: float, approval) -> Fill:
+        self._require_submission_enabled()      # before the risk approval is consumed, before anything else
+        return super().execute(order, qty, approval)
+
     # ------------------------------------------------------------------ helpers
     def _mint_dec(self, symbol: str) -> tuple[str, int]:
         mint = self.provider.mint_for(symbol)
@@ -78,6 +97,8 @@ class JupiterLiveBroker(Broker):
 
     def _request(self, client: httpx.Client, method: str, url: str, **kw) -> dict:
         """GET/POST with 429 backoff + jitter and typed errors, per the skill's cross-cutting pattern."""
+        if method.upper() != "GET":                 # POST /execute and anything else that can change state
+            self._require_submission_enabled()
         last = None
         for attempt in range(3):
             try:
@@ -97,6 +118,8 @@ class JupiterLiveBroker(Broker):
         raise ExecutionError(f"{method} {url} failed after retries: {last}")
 
     def _rpc(self, method: str, params: list) -> dict:
+        if method.lower().startswith("send"):       # sendTransaction / sendRawTransaction submit; the rest are reads
+            self._require_submission_enabled()
         r = self.rpc.post(self.s.execution.rpc_url, json={"jsonrpc": "2.0", "id": 1, "method": method, "params": params})
         r.raise_for_status()
         data = r.json()
@@ -106,6 +129,7 @@ class JupiterLiveBroker(Broker):
 
     def _sign(self, tx_b64: str) -> tuple[str, str]:
         """Returns (signed tx base64, transaction signature). The signature is known before broadcast."""
+        self._require_submission_enabled()          # before the transaction is parsed and before self.kp is touched
         tx = VersionedTransaction.from_bytes(base64.b64decode(tx_b64))
         signed = VersionedTransaction(tx.message, [self.kp])
         return base64.b64encode(bytes(signed)).decode(), str(signed.signatures[0])
@@ -166,6 +190,7 @@ class JupiterLiveBroker(Broker):
         return self._to_quote(symbol, side, amount, order, out_dec)
 
     def _execute(self, order_req: OrderRequest, qty: float, q: Quote) -> Fill:
+        self._require_submission_enabled()          # first line: nothing below runs while the build switch is off
         self.gate.assert_armed()  # re-checked on every single order, before anything is signed
         if q.raw is None:
             raise ExecutionError("quote has no order")

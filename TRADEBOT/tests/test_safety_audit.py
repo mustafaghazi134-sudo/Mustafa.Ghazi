@@ -116,7 +116,7 @@ def test_reconcile_never_books_an_order_that_already_has_a_fill(tmp_path):
 
 # 4. ambiguous Jupiter execute codes never lead to a second signed transaction ---------------------------------------
 @pytest.mark.parametrize("code", [-1000, -1001, -1004, -2000, -2001, -2004, 4242])
-def test_ambiguous_execute_codes_are_unknown_and_never_resigned(tmp_path, monkeypatch, code):
+def test_ambiguous_execute_codes_are_unknown_and_never_resigned(tmp_path, monkeypatch, code, legacy_switch_on):
     s, b = _broker(tmp_path, monkeypatch=monkeypatch)
     s.execution.execute_max_retries = 3
     arm_for_test(s, gate=b.gate)     # [execution] is bound to the activation: re-arm after editing it
@@ -130,7 +130,7 @@ def test_ambiguous_execute_codes_are_unknown_and_never_resigned(tmp_path, monkey
 
 
 @pytest.mark.parametrize("code", [-2, -3, -1002, -1003, -2002])
-def test_rejected_execute_codes_fail_without_retry(tmp_path, monkeypatch, code):
+def test_rejected_execute_codes_fail_without_retry(tmp_path, monkeypatch, code, legacy_switch_on):
     s, b = _broker(tmp_path, monkeypatch=monkeypatch)
     s.execution.execute_max_retries = 3
     arm_for_test(s, gate=b.gate)     # [execution] is bound to the activation: re-arm after editing it
